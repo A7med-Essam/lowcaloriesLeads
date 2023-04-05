@@ -1,0 +1,185 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="mb-3">
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;openFilter()">
+        </p-button>
+        <!-- <p-button (click)="uploadModal = true" class="mb-3 mx-2" icon="pi pi-external-link"
+            label="Upload"></p-button> -->
+        <p-button class="mb-3 mx-2" icon="pi pi-trash" label="Recycle Bin"
+            routerLink="./recycle-bin"></p-button>
+        <p-button class="mb-3 mx-2" icon="pi pi-plus" label="Add Row"
+            routerLink="./insert-question">
+        </p-button>
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
+        </p-button>
+    </div>
+</div>
+
+<div class="card" *ngIf="!filterStatus">
+    <p-table [value]="Survey" [paginator]="true" [rows]="PaginationInfo?.per_page"
+        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        responsiveLayout="scroll" (onLazyLoad)="loadPatientListing($event)"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries"
+        [rowsPerPageOptions]="[10,25,50,100]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center"><button class="btn btn-danger"
+                        (click)="confirm2()">Delete Rows</button></th>
+                <th class="text-center" *ngIf="columns[0].status">id</th>
+                <th class="text-center" *ngIf="columns[1].status">Label en</th>
+                <th class="text-center" *ngIf="columns[2].status">Label ar</th>
+                <th class="text-center" *ngIf="columns[3].status">Type</th>
+                <th class="text-center" *ngIf="columns[4].status">Answers Count</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-survey>
+            <tr>
+                <td class="text-center"><input type="checkbox" #surveyIdInput
+                        (click)="getSpecificRows(surveyIdInput)" [value]="survey?.id">
+                </td>
+                <td class="text-center" *ngIf="columns[0].status">{{survey?.id}}</td>
+                <td class="text-center" (click)="update(col1_e1,col1_e2)" *ngIf="columns[1].status">
+                    <div #col1_e1>{{survey?.question}}</div>
+                    <input #col1_e2 class="d-none" type="text"
+                        (blur)="confirmUpdate(survey,col1_e1, col1_e2,'question')" [value]="survey?.question">
+                </td>
+                <td class="text-center" (click)="update(col2_e1,col2_e2)" *ngIf="columns[2].status">
+                    <div #col2_e1>{{survey?.question_ar}}</div>
+                    <input #col2_e2 class="d-none" type="text"
+                        (blur)="confirmUpdate(survey,col2_e1, col2_e2,'question_ar')" [value]="survey?.question_ar">
+                </td>
+                <td class="text-center" *ngIf="columns[3].status">{{survey?.type}}</td>
+                <td class="text-center" *ngIf="columns[4].status">{{survey?.answers.length}}</td>
+                <td class="text-center">
+                    <button  pButton type="button" icon="pi pi-trash"
+                        (click)="confirm(survey?.id)" class="m-1 p-button-danger p-button-sm"></button>
+                    <button  pButton type="button" icon="pi pi-pencil"
+                        (click)="updateRow(survey?.id)" class="m-1 p-button-warning p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(survey?.id)"
+                        class="m-1 p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-check-square"
+                        (click)="insertAnswer(survey)" class="m-1 p-button-success p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<div class="card" *ngIf="filterStatus">
+    <p-table [value]="surveyFilter" [paginator]="true" [rows]="PaginationInfo2?.per_page"
+        [totalRecords]="PaginationInfo2?.total" [lazy]="true" (onPage)="paginate2($event)"
+        [showCurrentPageReport]="true" responsiveLayout="scroll" (onLazyLoad)="loadPatientListing($event)"
+        currentPageReportTemplate="Showing {{PaginationInfo2?.from}} to {{PaginationInfo2?.to}} of {{PaginationInfo2?.total}} entries"
+        [rowsPerPageOptions]="[10,25,50,100]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Username</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Mobile</th>
+                <th class="text-center">Answers Count</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-filter>
+            <tr>
+                <td class="text-center">{{filter?.name}}</td>
+                <td class="text-center">{{filter.email}}</td>
+                <td class="text-center">{{filter.mobile}}</td>
+                <td class="text-center">{{filter?.survey_user_count}}</td>
+                <td>
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRowFiltered(filter?.id)"
+                        class="m-1 p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container" #checkboxContainer>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" value="id" [(ngModel)]="selectedColumns" inputId="c1"></p-checkbox>
+            <label class="mx-3" for="c1">Id</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" value="question" [(ngModel)]="selectedColumns" inputId="c2"></p-checkbox>
+            <label class="mx-3" for="c2">Auestion En <i class="fa-solid fa-check"></i></label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" value="question_ar" [(ngModel)]="selectedColumns" inputId="c3"></p-checkbox>
+            <label class="mx-3" for="c3">Question Ar <i class="fa-solid fa-check"></i></label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" value="type" [(ngModel)]="selectedColumns" inputId="c4"></p-checkbox>
+            <label class="mx-3" for="c4">Type</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" value="answers_count" [(ngModel)]="selectedColumns" inputId="c5"></p-checkbox>
+            <label class="mx-3" for="c5">Answers Count</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+                value="selectAll" inputId="c100"></p-checkbox>
+            <label class="mx-3" for="c100">Select All</label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+
+<p-dialog header="Set Custom Info" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <div class="row mx-0">
+            <div class="col-12 my-3">
+                <label for="">Questions</label>
+                <p-dropdown #filter1 [options]="questions" optionLabel="question" optionValue="id" styleClass="w-100"
+                    appendTo="body" (onChange)="onSelectQuestion($event)" placeholder="Select Question">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Answers</label>
+                <p-dropdown #filter2 [options]="answers" optionLabel="type_value" optionValue="id" styleClass="w-100"
+                    appendTo="body" placeholder="Select Answer">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-3">
+                <label for="range">Date Range</label>
+                <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" inputId="range"
+                    #filter3 ngClass="w-100" appendTo="body">
+                </p-calendar>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filter(filter1,filter2,filter3);filterModal = false;">
+                Apply Filter
+            </button>
+            <button class="btn btn-secondary" (click)="resetFilter(filter1,filter2,filter3)">
+                Reset Filter
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
+    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="getSample()">Download Sample</button>
+        </div>
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary">Upload a file</button>
+            <input type="file" name="myfile" (change)="onFileSelected($event)" />
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,26 @@
+<div class="container">
+    <form [formGroup]="insertForm" (ngSubmit)='insertRow()'>
+        <div class="row mx-0">
+            <div class="col-12 my-3">
+                <label for="">Type</label>
+                <p-dropdown [options]="types" optionLabel="name" optionValue="value"  formControlName='type' styleClass="w-100" placeholder="Select Type">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Label</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='question' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('question')?.touched &&
+                insertForm.get('question')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Label Ar</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='question_ar' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('question_ar')?.touched &&
+                insertForm.get('question_ar')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">Insert</button>
+            </div>
+        </div>
+    </form>
+</div>

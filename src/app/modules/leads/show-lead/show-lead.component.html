@@ -1,0 +1,28 @@
+<div class="card">
+    <p-table [value]="leads" [paginator]="true" [rows]="PaginationInfo?.per_page"
+        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Date</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Mobile</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-lead>
+            <tr>
+                <td class="text-center">{{lead?.created_at | date}}</td>
+                <td class="text-center">{{lead?.customer_name}}</td>
+                <td class="text-center">{{lead?.customer_mobile}}</td>
+                <td class="text-center">{{lead?.customer_email}}</td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(lead?.id)"
+                        class="m-1 p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

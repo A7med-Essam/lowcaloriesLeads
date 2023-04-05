@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 mb-4 align-items-stretch">
+            <div class="card border-0 rounded-0 h-100">
+                <div class="card-title mb-1 p-3">
+                    <h5>Login Form</h5>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]='loginForm' (ngSubmit)='login(loginForm)'>
+                        <div class="form-group my-3">
+                            <label>Email</label>
+                            <input type="text" class="form-control rounded-0" placeholder="Enter Your Email"
+                                formControlName="email"
+                                [class.is-invalid]="loginForm.get('email')?.errors != null && loginForm.get('email')?.touched">
+                            <div class="text-start">
+                                <small class="text-danger ms-1" *ngIf="loginForm.get('email')?.touched &&
+                                loginForm.get('email')?.hasError('email')">Email is not valid.</small>
+                                <small class="text-danger ms-1" *ngIf="loginForm.get('email')?.touched &&
+                                loginForm.get('email')?.hasError('required')">This field is required.</small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label>Password</label>
+                            <input type="password" class="form-control rounded-0" placeholder="Enter Your Password"
+                                formControlName="password"
+                                [class.is-invalid]="loginForm.get('password')?.errors != null && loginForm.get('password')?.touched">
+                            <small class="text-danger"
+                                *ngIf="loginForm.get('password')?.errors != null && loginForm.get('password')?.touched">
+                                Password is required
+                            </small>
+                        </div>
+                        <button type="submit" class="btn btn-lightning rounded-0 px-4"> Sign In</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

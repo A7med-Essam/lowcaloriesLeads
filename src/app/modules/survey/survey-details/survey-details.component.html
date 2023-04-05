@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <h4>Survey Details</h4>
+        <button class="btn btn-primary" (click)="goBack()">Back</button>
+    </div>
+    <hr>
+    <div class="row mx-0">
+        <div class="col-lg-6 col-xl-4 my-3">
+            <div class="item shadow-lg rounded-lg bg-white text-center p-3">
+                <b>Survey Question</b> : {{survey?.question}}
+            </div>
+        </div>
+        <div class="col-lg-6 col-xl-4 my-3">
+            <div class="item shadow-lg rounded-lg bg-white text-center p-3">
+                <b>Survey Question Ar</b> : {{survey?.question_ar}}
+            </div>
+        </div>
+        <div class="col-lg-6 col-xl-4 my-3">
+            <div class="item shadow-lg rounded-lg bg-white text-center p-3">
+                <b>Type</b> : {{survey?.type}}
+            </div>
+        </div>
+        <div class="col-lg-6 col-xl-12 my-3" *ngFor="let answer of survey?.answers; let i = index">
+            <div class="item shadow-lg rounded-lg bg-white text-center p-3">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <b>Answer {{i+1}}</b> : {{answer?.type_value}} - {{answer?.type_value_ar}}
+                    </div>
+                    <div>
+                        <button pButton type="button" icon="pi pi-pencil"
+                            (click)="updateRow(answer)" class="m-1 p-button-warning p-button-sm"></button>
+                        <button pButton type="button" icon="pi pi-trash"
+                            (click)="deleteAnswers(survey?.id, answer.id)"
+                            class="m-1 p-button-danger p-button-sm"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

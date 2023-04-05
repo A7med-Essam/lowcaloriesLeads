@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <h4>Survey Details</h4>
+        <button class="btn btn-primary" (click)="goBack()">Back</button>
+    </div>
+    <hr>
+    <div class="row mx-0">
+        <div class="col-lg-6 col-xl-12 my-3" *ngFor="let user of survey?.survey_user; let i = index">
+            <div class="item shadow-lg rounded-lg bg-white text-center p-3">
+                <span>{{user?.question?.question}}</span>
+                <br>
+                <span class="text-success">{{user.answer? user.answer.type_value:user.suggest_answer}}</span>
+            </div>
+        </div>
+    </div>
+</div>

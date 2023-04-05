@@ -1,0 +1,35 @@
+<div class="d-flex justify-content-between">
+    <h4>Survey Recycle Bin</h4>
+    <button class="btn btn-primary" (click)="goBack()">Back</button>
+</div>
+<hr>
+<div class="card" *ngIf="recycle.length > 0; else other_content">
+    <p-table [value]="recycle" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Survey Question</th>
+                <th class="text-center">Survey Question Ar</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-recycle>
+            <tr>
+                <td class="text-center">{{recycle?.question}}</td>
+                <td class="text-center">{{recycle?.question_ar}}</td>
+                <td class="text-center">
+                    <button pButton type="button" (click)="restore(recycle?.id)" icon="pi pi-replay"
+                        class="m-1 p-button-success p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-trash" (click)="confirm(recycle?.id)"
+                        class="m-1 p-button-danger p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<ng-template #other_content>
+    <h1 class="text-center mt-5">Recycle Bin is clean!</h1>
+</ng-template>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

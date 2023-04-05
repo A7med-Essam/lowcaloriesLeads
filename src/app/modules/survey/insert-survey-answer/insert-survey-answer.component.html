@@ -1,0 +1,23 @@
+<div class="container">
+    <h1>Insert Answer</h1>
+    <form [formGroup]="insertForm" (ngSubmit)='insertRow()'>
+        <div class="row mx-0">
+          
+            <div class="col-12 my-3">
+                <label for="">Value</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='type_value' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('type_value')?.touched &&
+                insertForm.get('type_value')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Value Ar</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='type_value_ar' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('type_value_ar')?.touched &&
+                insertForm.get('type_value_ar')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">Insert</button>
+            </div>
+        </div>
+    </form>
+</div>
