@@ -5,7 +5,7 @@
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center">Date</th>
+                <!-- <th class="text-center">Date</th> -->
                 <th class="text-center">Name</th>
                 <th class="text-center">Mobile</th>
                 <th class="text-center">Email</th>
@@ -14,7 +14,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-lead>
             <tr>
-                <td class="text-center">{{lead?.created_at | date}}</td>
+                <!-- <td class="text-center">{{lead?.created_at | date}}</td> -->
                 <td class="text-center">{{lead?.customer_name}}</td>
                 <td class="text-center">{{lead?.customer_mobile}}</td>
                 <td class="text-center">{{lead?.customer_email}}</td>

@@ -128,7 +128,7 @@ export class SurveyService {
   }
 
   getAllAgents(): Observable<any> {
-    return this._ApiConfigService.postReq(`leads/getAgents`, {
+    return this._ApiConfigService.postReq(`getAgents`, {
       withoutPagination: true,
     });
   }

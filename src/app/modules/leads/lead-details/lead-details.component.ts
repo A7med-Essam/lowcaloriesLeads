@@ -12,12 +12,25 @@ import { SurveyService } from 'src/services/survey.service';
   styleUrls: ['./lead-details.component.scss'],
 })
 export class LeadDetailsComponent implements OnInit, OnDestroy {
+  isSuperAdmin:boolean = false;
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _FormBuilder: FormBuilder,
     private _AuthService: AuthService
-  ) {}
+  ) {
+
+    _AuthService.currentUser.subscribe((data) => {
+      if (data != null) {
+        data.role == 'super_admin'
+          ? (this.isSuperAdmin = true)
+          : (this.isSuperAdmin = false);
+      } else {
+        this.isSuperAdmin = false;
+      }
+    });
+
+  }
   private unsubscribe$ = new Subject<void>();
 
   ngOnInit(): void {
@@ -115,7 +128,7 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.assignModal = false;
-          // this.getLeadById(this.currentLead.id);
+          this.lead.lead_users = res.data.lead_users
         },
       });
   }

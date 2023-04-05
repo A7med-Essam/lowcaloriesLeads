@@ -12,7 +12,7 @@ import { AuthService } from 'src/services/auth.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   role: string = '';
-  agent_id: string = '';
+  agentId: string = '';
   constructor(
     private _AuthService: AuthService,
     private _Router: Router
@@ -20,10 +20,10 @@ export class AuthInterceptor implements HttpInterceptor {
     _AuthService.currentUser.subscribe((res: any) => {
       if (res == null) {
         this.role = '';
-        this.agent_id = '0';
+        this.agentId = '0';
       } else {
         this.role = res.role;
-        this.agent_id = res.id.toString()
+        this.agentId = res.id
         // setTimeout(() => {
         //   switch (res.country) {
         //     case 'ae':
@@ -114,7 +114,7 @@ export class AuthInterceptor implements HttpInterceptor {
       headers: request.headers
         .set('Accept', ['application/json'])
         // .set('Authorization', `Bearer ${this.token}`),
-        .set('agent_id', this.agent_id)
+        .set('agentId', `${this.agentId}`)
         .set('role', this.role),
       // .set("api_password",`eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTY1Mjg2NjczOSwiZXhwIjoxNjUyODcwMzM5LCJuYmYiOjE2NTI4NjY3MzksImp0aSI6InFkTnN1NTZ2ZFYwQkhjOU4iLCJzdWIiOjQsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Dk_4v17X5MuTD16LCZImtB4BvwvN30HgTM-OtNtE-Ck`)
     });

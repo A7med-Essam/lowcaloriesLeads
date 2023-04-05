@@ -20,12 +20,6 @@
     </div>
     <ul class="menu-items" *ngIf="isSuperAdmin">
       <li *ngIf="isLogin">
-        <a routerLink="leads/create" routerLinkActive="active">
-          <i class="fas fa-gem"></i>
-          <span>Create Lead</span>
-        </a>
-      </li>
-      <li *ngIf="isLogin">
         <a routerLink="/dashboard/leads" routerLinkActive="active">
           <i class="fa fa-align-center"></i>
           <span>Lead Inputs</span>
@@ -47,6 +41,12 @@
         <a routerLink="/leads/show" routerLinkActive="active">
           <i class="fa fa-star"></i>
           <span>My Leads</span>
+        </a>
+      </li>
+      <li *ngIf="isLogin">
+        <a routerLink="leads/create" routerLinkActive="active">
+          <i class="fas fa-gem"></i>
+          <span>Create Lead</span>
         </a>
       </li>
     </ul>
