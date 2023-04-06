@@ -10,6 +10,7 @@ import { SurveyService } from 'src/services/survey.service';
 })
 export class CreateleadComponent implements OnInit {
   questions: any[] = [];
+  questionsClone: any[] = [];
   selectedValues: any;
   selectedDropDownValues: any;
   selectedCustomerName: any;
@@ -29,6 +30,7 @@ export class CreateleadComponent implements OnInit {
     this._SurveyService.getCreateLeadsInfo().subscribe({
       next: (res) => {
         this.questions = res.data;
+        this.questionsClone = res.data;
       },
     });
   }
@@ -89,9 +91,9 @@ export class CreateleadComponent implements OnInit {
       survey_answer_id: '',
       suggest_answer: surveyTextInput.value,
     };
-    // if (surveyTextInput.value == '') {
-    //   delete this.questions.filter((a: any) => a.id == survey.id)[0].userAnswer;
-    // }
+    if (surveyTextInput.value == '') {
+      delete this.questions.filter((a: any) => a.id == survey.id)[0].userAnswer;
+    }
   }
 
   setDropdownAnswer(
@@ -107,6 +109,8 @@ export class CreateleadComponent implements OnInit {
   }
 
   createLead() {
+    this.questions = this.questions.filter(e=> e.userAnswer != null)
+
     let lead: any = {
       customer_name: this.selectedCustomerName,
       customer_email: this.selectedCustomerEmail,
@@ -132,12 +136,22 @@ export class CreateleadComponent implements OnInit {
 
     this._SurveyService.createLead(lead).subscribe({
       next: (res) => {
+        this.selectedCustomerEmail = null
+        this.selectedCustomerMobile = null
+        this.selectedCustomerName = null
+        this.questions = [];
+        setTimeout(() => {
+          this.questions = this.questionsClone
+        }, 1);
         this._MessageService.add({
           severity: 'success',
           summary: 'Notification',
           detail: res.message,
         });
       },
+      error: err=>{
+        this.questions = this.questionsClone
+      }
     });
   }
 }

@@ -27,8 +27,8 @@
                 <th class="text-center" *ngIf="columns[0].status">id</th>
                 <th class="text-center" *ngIf="columns[1].status">Label en</th>
                 <th class="text-center" *ngIf="columns[2].status">Label ar</th>
-                <th class="text-center" *ngIf="columns[3].status">Type</th>
-                <th class="text-center" *ngIf="columns[4].status">Answers Count</th>
+                <th class="text-center" *ngIf="columns[3].status">Input Type</th>
+                <th class="text-center" *ngIf="columns[4].status">Input Value Count</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -104,19 +104,19 @@
         </div>
         <div class="field-checkbox my-3">
             <p-checkbox name="group1" value="question" [(ngModel)]="selectedColumns" inputId="c2"></p-checkbox>
-            <label class="mx-3" for="c2">Auestion En <i class="fa-solid fa-check"></i></label>
+            <label class="mx-3" for="c2">Input Label En <i class="fas fa-check"></i></label>
         </div>
         <div class="field-checkbox my-3">
             <p-checkbox name="group1" value="question_ar" [(ngModel)]="selectedColumns" inputId="c3"></p-checkbox>
-            <label class="mx-3" for="c3">Question Ar <i class="fa-solid fa-check"></i></label>
+            <label class="mx-3" for="c3">Input Label Ar <i class="fas fa-check"></i></label>
         </div>
         <div class="field-checkbox my-3">
             <p-checkbox name="group1" value="type" [(ngModel)]="selectedColumns" inputId="c4"></p-checkbox>
-            <label class="mx-3" for="c4">Type</label>
+            <label class="mx-3" for="c4">Input Type</label>
         </div>
         <div class="field-checkbox my-3">
             <p-checkbox name="group1" value="answers_count" [(ngModel)]="selectedColumns" inputId="c5"></p-checkbox>
-            <label class="mx-3" for="c5">Answers Count</label>
+            <label class="mx-3" for="c5">Input Value Count</label>
         </div>
         <div class="field-checkbox my-3">
             <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"

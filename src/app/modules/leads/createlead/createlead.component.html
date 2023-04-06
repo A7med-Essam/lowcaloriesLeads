@@ -51,14 +51,17 @@
                         </div>
                         <div *ngIf="survey?.type == 'text'" class="mx-3 w-100">
                             <input type="text" class="w-100 py-2" pInputText #surveyText
-                                (keyup)="setTextAnswer(surveyText, survey)">
+                                (keypress)="setTextAnswer(surveyText, survey)">
                         </div>
                     </div>
                     <hr style="height: 0.5px;" class="my-4">
                 </div>
 
                 <div class="text-end">
-                    <button class="btn btn-success px-4" (click)="createLead()"><b>Create</b></button>
+                    <button class="btn btn-success px-4"
+                        [disabled]="!selectedCustomerEmail||!selectedCustomerName||!selectedCustomerMobile"
+                     (click)="createLead()"><b>Create</b>
+                    </button>
                 </div>
             </div>
         </ng-template>

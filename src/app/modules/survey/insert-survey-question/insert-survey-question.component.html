@@ -2,7 +2,7 @@
     <form [formGroup]="insertForm" (ngSubmit)='insertRow()'>
         <div class="row mx-0">
             <div class="col-12 my-3">
-                <label for="">Type</label>
+                <label for="">Input Type</label>
                 <p-dropdown [options]="types" optionLabel="name" optionValue="value"  formControlName='type' styleClass="w-100" placeholder="Select Type">
                 </p-dropdown>
             </div>

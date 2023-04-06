@@ -34,11 +34,14 @@
                                         <tr *ngFor="let q of lead?.inputs">
                                             <td *ngIf="q.question||q.suggest_answer">{{q?.question?.question}}</td>
                                             <td *ngIf="q?.suggest_answer">{{q?.suggest_answer}}</td>
-                                            <td *ngIf="!q?.suggest_answer && q.question">
+                                            <td *ngIf="q?.answer">{{q?.answer.type_value}}</td>
+
+
+                                            <!-- <td *ngIf="!q?.suggest_answer && q.question">
                                                 <div *ngFor="let answer of q?.question?.answers">
                                                     {{answer.type_value}}
                                                 </div>
-                                            </td>
+                                            </td> -->
                                         </tr>
 
                                         <tr>

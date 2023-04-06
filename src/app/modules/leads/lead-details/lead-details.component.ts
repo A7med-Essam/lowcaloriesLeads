@@ -39,7 +39,7 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
         if (res == 0) {
           this._Router.navigate(['leads/show']);
         } else {
-          this.getLeadDetails();
+          this.getLeadDetails(res);
           this.getAgents();
           this.setAdminForm();
         }
@@ -48,8 +48,8 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
   }
 
   lead: any;
-  getLeadDetails(page: number = 1) {
-    this._SurveyService.showLead(page).subscribe({
+  getLeadDetails(id:number) {
+    this._SurveyService.showLead(id).subscribe({
       next: (res) => {
         this.lead = res.data;
       },

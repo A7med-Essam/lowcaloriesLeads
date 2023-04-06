@@ -2,18 +2,18 @@
     <form [formGroup]="updateForm" (ngSubmit)='update()'>
         <div class="row mx-0">
             <div class="col-12 my-3">
-                <label for="">Type</label>
+                <label for="">Input Type</label>
                 <p-dropdown [options]="types" optionLabel="name" optionValue="value" formControlName='type' styleClass="w-100" placeholder="Select Type">
                 </p-dropdown>
             </div>
             <div class="col-12 my-3">
-                <label for="">Question</label>
+                <label for="">Label</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='question' />
                 <small class="text-danger ms-1" *ngIf="updateForm.get('question')?.touched &&
                 updateForm.get('question')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3">
-                <label for="">Question Ar</label>
+                <label for="">Label Ar</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='question_ar' />
                 <small class="text-danger ms-1" *ngIf="updateForm.get('question_ar')?.touched &&
                 updateForm.get('question_ar')?.hasError('required')">This field is required.</small>
