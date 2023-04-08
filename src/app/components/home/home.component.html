@@ -1,0 +1,185 @@
+<div class="row">
+    <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <i class="fa fa-star text-warning"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Leads</p>
+                <p class="card-title">{{totalLeads}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <hr>
+          <div class="stats">
+            <i class="fas fa-sync-alt"></i> Update Now
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <i class="fa fa-star text-success"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">New Leads</p>
+                <p class="card-title">{{reminded}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fas fa-sync-alt"></i> Update Now
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <i class="fa fa-star text-muted"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Old Leads</p>
+                <p class="card-title">{{oldLeads}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fas fa-sync-alt"></i> Update Now
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <!-- <i class="fa fa-star text-danger"></i> -->
+                <i class="far fa-comment-dots text-danger"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Leads Messages</p>
+                <p class="card-title">{{leadsMessages}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fas fa-sync-alt"></i> Update Now
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                <i class="fab fa-twitter text-primary"></i>
+              </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Followers</p>
+                <p class="card-title">+95K</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fas fa-sync-alt"></i> Update now
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-md-12 my-2">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">Company Income</h5>
+          <p class="card-category">24 Hours Statistics</p>
+        </div>
+        <div class="card-body ">
+          <div class="chart-container">
+            <canvas id="MyChart">{{ chart }}</canvas>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-history"></i> Updated 3 minutes ago
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 my-2">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">Company Social Media</h5>
+          <p class="card-category">Followers</p>
+        </div>
+        <div class="card-body ">
+          <div class="chart-container">
+            <canvas id="MyChart2">{{ chart2 }}</canvas>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-history"></i> Updated 2 hours ago
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 my-2">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">Departments</h5>
+          <p class="card-category">Performance</p>
+        </div>
+        <div class="card-body ">
+          <div class="chart-container">
+            <canvas id="MyChart3">{{ chart3 }}</canvas>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-history"></i> Updated 30 minutes ago
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

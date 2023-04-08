@@ -1,0 +1,71 @@
+.card-stats .icon-big {
+    font-size: 3em;
+    min-height: 64px;
+}
+
+.nc-icon {
+    display: inline-block;
+    font: 14px/1 nucleo-icons;
+    font-size: inherit;
+    speak: none;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.card-stats .card-body .numbers .card-category {
+    color: #9a9a9a;
+    font-size: 16px;
+    line-height: 1.4em;
+}
+
+.card-stats .card-body .numbers {
+    text-align: right;
+    font-size: 2em;
+}
+
+.card-title {
+    border: none !important;
+}
+
+.card-footer {
+    padding-top: 0 !important;
+    border: none !important;
+}
+
+.card-title {
+    margin: 0 !important;
+}
+
+.card-body {
+    padding-bottom: 0 !important;
+}
+
+.card {
+    border-radius: 12px !important;
+    box-shadow: 0 6px 10px -4px #00000026 !important;
+    background-color: #fff !important;
+    color: #252422 !important;
+    margin-bottom: 20px !important;
+    position: relative !important;
+    border: 0 none !important;
+    transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease !important;
+}.card-stats .card-footer .stats {
+    color: #9a9a9a;
+}.card .card-footer .stats i {
+    margin-right: 5px;
+    position: relative;
+    top: 0;
+    color: #66615b;
+}
+
+
+.text-danger, a.text-danger:focus, a.text-danger:hover {
+    color: #ef8157!important;
+}.text-primary, a.text-primary:focus, a.text-primary:hover {
+    color: #51cbce!important;
+}.text-success, a.text-success:focus, a.text-success:hover {
+    color: #6bd098!important;
+}.text-warning, a.text-warning:focus, a.text-warning:hover {
+    color: #fbc658!important;
+}

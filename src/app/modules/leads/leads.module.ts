@@ -10,6 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { CalendarModule } from 'primeng/calendar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShowLeadComponent } from './show-lead/show-lead.component';
 import { LeadDetailsComponent } from './lead-details/lead-details.component';
@@ -19,7 +20,7 @@ const APP_PRIMENG_MODULE = [
   CardModule,
   DropdownModule,
   InputTextModule,
-  TableModule,DialogModule
+  TableModule,DialogModule,CalendarModule
 ];
 
 @NgModule({

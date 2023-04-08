@@ -4,17 +4,15 @@
         </p-button> -->
         <!-- <p-button (click)="uploadModal = true" class="mb-3 mx-2" icon="pi pi-external-link"
             label="Upload"></p-button> -->
-        <p-button class="mb-3 mx-2" icon="pi pi-trash" label="Recycle Bin"
-            routerLink="./recycle-bin"></p-button>
-        <p-button class="mb-3 mx-2" icon="pi pi-plus" label="Add Row"
-            routerLink="./insert-question">
+        <p-button class="mb-3 mx-2" icon="pi pi-trash" label="Recycle Bin" routerLink="./recycle-bin"></p-button>
+        <p-button class="mb-3 mx-2" icon="pi pi-plus" label="Add Row" routerLink="./insert-question">
         </p-button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
     </div>
 </div>
 
-<div class="card" *ngIf="!filterStatus">
+<div class="card">
     <p-table [value]="Survey" [paginator]="true" [rows]="PaginationInfo?.per_page"
         [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
         responsiveLayout="scroll" (onLazyLoad)="loadPatientListing($event)"
@@ -22,8 +20,7 @@
         [rowsPerPageOptions]="[10,25,50,100]">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center"><button class="btn btn-danger"
-                        (click)="confirm2()">Delete Rows</button></th>
+                <th class="text-center"><button class="btn btn-danger" (click)="confirm2()">Delete Rows</button></th>
                 <th class="text-center" *ngIf="columns[0].status">id</th>
                 <th class="text-center" *ngIf="columns[1].status">Label en</th>
                 <th class="text-center" *ngIf="columns[2].status">Label ar</th>
@@ -34,8 +31,8 @@
         </ng-template>
         <ng-template pTemplate="body" let-survey>
             <tr>
-                <td class="text-center"><input type="checkbox" #surveyIdInput
-                        (click)="getSpecificRows(surveyIdInput)" [value]="survey?.id">
+                <td class="text-center"><input type="checkbox" #surveyIdInput (click)="getSpecificRows(surveyIdInput)"
+                        [value]="survey?.id">
                 </td>
                 <td class="text-center" *ngIf="columns[0].status">{{survey?.id}}</td>
                 <td class="text-center" (click)="update(col1_e1,col1_e2)" *ngIf="columns[1].status">
@@ -51,21 +48,21 @@
                 <td class="text-center" *ngIf="columns[3].status">{{survey?.type}}</td>
                 <td class="text-center" *ngIf="columns[4].status">{{survey?.answers.length}}</td>
                 <td class="text-center">
-                    <button  pButton type="button" icon="pi pi-trash"
-                        (click)="confirm(survey?.id)" class="m-1 p-button-danger p-button-sm"></button>
-                    <button  pButton type="button" icon="pi pi-pencil"
-                        (click)="updateRow(survey?.id)" class="m-1 p-button-warning p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-trash" (click)="confirm(survey?.id)"
+                        class="m-1 p-button-danger p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-pencil" (click)="updateRow(survey?.id)"
+                        class="m-1 p-button-warning p-button-sm"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(survey?.id)"
                         class="m-1 p-button-sm"></button>
-                    <button pButton type="button" icon="pi pi-check-square"
-                        (click)="insertAnswer(survey)" class="m-1 p-button-success p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-check-square" (click)="insertAnswer(survey)"
+                        class="m-1 p-button-success p-button-sm"></button>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
-<div class="card" *ngIf="filterStatus">
+<!-- <div class="card" *ngIf="filterStatus">
     <p-table [value]="surveyFilter" [paginator]="true" [rows]="PaginationInfo2?.per_page"
         [totalRecords]="PaginationInfo2?.total" [lazy]="true" (onPage)="paginate2($event)"
         [showCurrentPageReport]="true" responsiveLayout="scroll" (onLazyLoad)="loadPatientListing($event)"
@@ -93,7 +90,7 @@
             </tr>
         </ng-template>
     </p-table>
-</div>
+</div> -->
 
 <p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
     [draggable]="false" [resizable]="false">
@@ -138,19 +135,35 @@
     [draggable]="false" [resizable]="false">
     <div class="container">
         <div class="row mx-0">
-            <div class="col-12 my-3">
+            <div class="col-md-6 my-3">
                 <label for="">Questions</label>
                 <p-dropdown #filter1 [options]="questions" optionLabel="question" optionValue="id" styleClass="w-100"
-                    appendTo="body" (onChange)="onSelectQuestion($event)" placeholder="Select Question">
+                    appendTo="body" placeholder="Select Question">
                 </p-dropdown>
             </div>
-            <div class="col-12 my-3">
-                <label for="">Answers</label>
-                <p-dropdown #filter2 [options]="answers" optionLabel="type_value" optionValue="id" styleClass="w-100"
-                    appendTo="body" placeholder="Select Answer">
+            <div class="col-md-6 my-3">
+                <label for="">Lead Assigned</label>
+                <p-dropdown #filter2 [options]="agents" optionLabel="name" optionValue="id" styleClass="w-100"
+                    appendTo="body" placeholder="Select Agent">
                 </p-dropdown>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 my-3">
+                <label for="">customer_name</label>
+                <input type="text" pInputText ngClass="w-100"  #filter4 />
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">customer_mobile</label>
+                <input type="text" pInputText ngClass="w-100" #filter5 />
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">customer_email</label>
+                <input type="text" pInputText ngClass="w-100" #filter6 />
+            </div>
+            <!-- <div class="col-md-6 my-3">
+                <label for="">Agent Created Lead</label>
+                <input type="text" pInputText ngClass="w-100" />
+            </div> -->
+            <div class="col-md-6 my-3">
                 <label for="range">Date Range</label>
                 <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" inputId="range"
                     #filter3 ngClass="w-100" appendTo="body">
@@ -160,10 +173,10 @@
     </div>
     <ng-template pTemplate="footer">
         <div class="upload-btn-wrapper">
-            <button class="btn btn-primary" (click)="filter(filter1,filter2,filter3);filterModal = false;">
+            <button class="btn btn-primary" (click)="filter(filter1,filter2,filter3,filter4,filter5,filter6);filterModal = false;">
                 Apply Filter
             </button>
-            <button class="btn btn-secondary" (click)="resetFilter(filter1,filter2,filter3)">
+            <button class="btn btn-secondary" (click)="resetFilter(filter1,filter2,filter3,filter4,filter5,filter6)">
                 Reset Filter
             </button>
         </div>

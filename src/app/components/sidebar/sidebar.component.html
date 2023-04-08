@@ -25,6 +25,12 @@
           <span>Lead Inputs</span>
         </a>
       </li>
+      <li *ngIf="isLogin">
+        <a routerLink="leads/create" routerLinkActive="active">
+          <i class="fas fa-gem"></i>
+          <span>Create Lead</span>
+        </a>
+      </li>
     </ul>
     <div class="menu-header mt-3 mb-2">
       Components
@@ -36,17 +42,18 @@
           <span>Dashboard</span>
         </a>
       </li> -->
-    
+      <li *ngIf="isLogin">
+        <a routerLink="/home" routerLinkActive="active">
+          <!-- <i class="fas fa-tachometer-alt"></i> -->
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+          <!-- <span>Dashboard</span> -->
+        </a>
+      </li>
       <li *ngIf="isLogin">
         <a routerLink="/leads/show" routerLinkActive="active">
           <i class="fa fa-star"></i>
           <span>My Leads</span>
-        </a>
-      </li>
-      <li *ngIf="isLogin">
-        <a routerLink="leads/create" routerLinkActive="active">
-          <i class="fas fa-gem"></i>
-          <span>Create Lead</span>
         </a>
       </li>
     </ul>

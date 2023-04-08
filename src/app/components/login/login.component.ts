@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.status == 1) {
           this._AuthService.saveUser(res.data);
-          this._Router.navigate(['./leads/show']);
+          this._Router.navigate(['./home']);
         }
       });
   }
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     });
 
     if (this._AuthService.currentUser.getValue() != null) {
-      this._Router.navigate(['./leads/show']);
+      this._Router.navigate(['./home']);
     }
   }
 }

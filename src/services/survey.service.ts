@@ -81,9 +81,10 @@ export class SurveyService {
     return this._ApiConfigService.postReq(`answers/addAnswers`, row);
   }
 
-  getFilter(filter: any, page: number, paginate?: any): Observable<any> {
-    paginate ? (filter.paginate = paginate) : false;
-    return this._ApiConfigService.postReq(`survies?page=${page}`, filter);
+  getFilter(filter: any): Observable<any> {
+    // paginate && (filter.paginate = paginate);
+    filter.withoutPagination = true;
+    return this._ApiConfigService.postReq(`lead_questions`, filter);
   }
 
   getAnswers(): Observable<any> {
@@ -115,6 +116,12 @@ export class SurveyService {
     return this._ApiConfigService.getReq(`leads?page=${page}`);
   }
 
+  filterLeads(filter: any): Observable<any> {
+    // paginate && (filter.paginate = paginate);
+    // filter.withoutPagination = true;
+    return this._ApiConfigService.getReq(`leads`, filter);
+  }
+
   showLead(id: number): Observable<any> {
     return this._ApiConfigService.postReq(`leads/show`, { id });
   }
@@ -136,4 +143,16 @@ export class SurveyService {
   assignLead(lead: any): Observable<any> {
     return this._ApiConfigService.postReq(`leads/assign`, lead);
   }
+  // =========================================================================
+
+  allReminderLeads(): Observable<any> {
+    return this._ApiConfigService.postReq(`leads/allReminderLeads`, {
+      withoutPagination: true,
+    });
+  }
+
+  addReminderLead(reminder:any): Observable<any> {
+    return this._ApiConfigService.postReq(`leads/addReminderLead`, reminder);
+  }
+
 }

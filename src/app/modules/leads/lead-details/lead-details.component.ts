@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Calendar } from 'primeng/calendar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/services/auth.service';
@@ -182,5 +183,39 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
         i++;
       });
     }
+  }
+
+  // ====================================================
+  addReminder: boolean = false;
+  minimumDate = new Date();
+  reminderNotice: string = "";
+  getReminderNotice(note:any) {
+    this.reminderNotice = note.value;
+    note.value = "";
+  }
+
+  addReminderLead(calendar: Calendar) {
+    setTimeout(() => {
+      if (calendar.inputFieldValue != "") {
+        const lead = {
+          remind_data: this.reminderNotice,
+          lead_id: this.lead.id,
+          remind_date: new Date(calendar.inputFieldValue).toLocaleDateString(
+            "en-CA"
+          ),
+          reminded: false,
+          add: true,
+        };
+        this._SurveyService.addReminderLead(lead).subscribe({
+          next: (res) => {
+            if (res.status == 1) {
+              this.addReminder = false;
+              this.addReplayModal = false;
+              calendar.clear();
+            }
+          },
+        });
+      }
+    }, 1);
   }
 }

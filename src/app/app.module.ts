@@ -32,6 +32,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { Error404Component } from './components/error404/error404.component';
 import { AuthInterceptor } from './core/http.interceptor';
+import { HomeComponent } from './components/home/home.component';
 
 const APP_PRIMENG_MODULE = [
   SharedModule,
@@ -64,6 +65,7 @@ const APP_PRIMENG_MODULE = [
     NavbarComponent,
     LoginComponent,
     Error404Component,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
