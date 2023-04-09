@@ -67,7 +67,7 @@ export class ShowLeadComponent implements OnInit {
     let FILTER: any = {
       lead_question_id: filter1.value || null,
       assigned_id: filter2.value || null,
-      date: !filter3?.value[1] ? new Date(filter3?.value[0]).toLocaleDateString() : null,
+      date: (filter3?.value[0]&&!filter3?.value[1]) ? new Date(filter3?.value[0]).toLocaleDateString() : null,
       from: filter3?.value[1] ? new Date(filter3?.value[0]).toLocaleDateString() : null,
       to: filter3?.value[1] ? new Date(filter3?.value[1]).toLocaleDateString() : null,
       customer_name: filter4.value || null,
