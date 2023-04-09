@@ -14,6 +14,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShowLeadComponent } from './show-lead/show-lead.component';
 import { LeadDetailsComponent } from './lead-details/lead-details.component';
+import { LeadReminderComponent } from './lead-reminder/lead-reminder.component';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   CheckboxModule,
@@ -24,7 +25,7 @@ const APP_PRIMENG_MODULE = [
 ];
 
 @NgModule({
-  declarations: [CreateleadComponent, ShowLeadComponent, LeadDetailsComponent],
+  declarations: [CreateleadComponent, ShowLeadComponent, LeadDetailsComponent, LeadReminderComponent],
   imports: [CommonModule, LeadsRoutingModule, APP_PRIMENG_MODULE, FormsModule, ReactiveFormsModule],
 })
 export class LeadsModule {}

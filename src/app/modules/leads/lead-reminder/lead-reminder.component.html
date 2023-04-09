@@ -1,0 +1,28 @@
+<div class="row my-3 animated">
+    <div class="col-12">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Leads Reminder</span>
+            </div>
+            <div class="card-body ">
+                <div class="table table-responsive overflow-auto">
+                    <table class="table">
+                        <thead class="text-secondary text-center">
+                            <th class="py-3">#</th>
+                            <th class="py-3">Remind Date</th>
+                            <th class="py-3">Note</th>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr *ngFor="let remind of leads; let i = index"
+                                [style.opacity]="remind.reminded ? '0.3' : '1'">
+                                <td class="py-3">{{i+1}}</td>
+                                <td class="py-3">{{remind.remind_date | date}}</td>
+                                <td class="py-3">{{remind.remind_data}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
