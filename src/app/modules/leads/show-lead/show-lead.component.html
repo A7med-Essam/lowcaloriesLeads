@@ -39,7 +39,13 @@
             <div class="col-md-6 my-3">
                 <label for="">Questions</label>
                 <p-dropdown #filter1 [options]="questions" optionLabel="question" optionValue="id" styleClass="w-100"
-                    appendTo="body" placeholder="Select Question">
+                    appendTo="body" placeholder="Select Question" (onChange)="onSelectQuestion($event)">
+                </p-dropdown>
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">Answers</label>
+                <p-dropdown #filter7 [options]="answers" optionLabel="type_value" optionValue="id" styleClass="w-100"
+                    appendTo="body" placeholder="Select Answer">
                 </p-dropdown>
             </div>
             <div class="col-md-6 my-3">
@@ -74,10 +80,10 @@
     </div>
     <ng-template pTemplate="footer">
         <div class="upload-btn-wrapper">
-            <button class="btn btn-primary" (click)="filter(filter1,filter2,filter3,filter4,filter5,filter6);filterModal = false;">
+            <button class="btn btn-primary" (click)="filter(filter1,filter2,filter3,filter4,filter5,filter6,filter7);filterModal = false;">
                 Apply Filter
             </button>
-            <button class="btn btn-secondary" (click)="resetFilter(filter1,filter2,filter3,filter4,filter5,filter6)">
+            <button class="btn btn-secondary" (click)="resetFilter(filter1,filter2,filter3,filter4,filter5,filter6,filter7)">
                 Reset Filter
             </button>
         </div>

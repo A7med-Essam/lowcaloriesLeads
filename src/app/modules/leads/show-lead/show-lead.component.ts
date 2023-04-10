@@ -61,18 +61,27 @@ export class ShowLeadComponent implements OnInit {
     filter3?: any,
     filter4?: any,
     filter5?: any,
-    filter6?: any
+    filter6?: any,
+    filter7?: any
   ) {
     filter3.value == undefined && (filter3.value = []);
     let FILTER: any = {
       lead_question_id: filter1.value || null,
       assigned_id: filter2.value || null,
-      date: (filter3?.value[0]&&!filter3?.value[1]) ? new Date(filter3?.value[0]).toLocaleDateString() : null,
-      from: filter3?.value[1] ? new Date(filter3?.value[0]).toLocaleDateString() : null,
-      to: filter3?.value[1] ? new Date(filter3?.value[1]).toLocaleDateString() : null,
+      date:
+        filter3?.value[0] && !filter3?.value[1]
+          ? new Date(filter3?.value[0]).toLocaleDateString()
+          : null,
+      from: filter3?.value[1]
+        ? new Date(filter3?.value[0]).toLocaleDateString()
+        : null,
+      to: filter3?.value[1]
+        ? new Date(filter3?.value[1]).toLocaleDateString()
+        : null,
       customer_name: filter4.value || null,
       customer_mobile: filter5.value || null,
       customer_email: filter6.value || null,
+      lead_answer_id: filter7.value || null,
     };
 
     this.appliedFilters = [
@@ -82,6 +91,7 @@ export class ShowLeadComponent implements OnInit {
       filter4,
       filter5,
       filter6,
+      filter7,
     ];
     Object.keys(FILTER).forEach((k) => FILTER[k] == null && delete FILTER[k]);
     this._SurveyService.filterLeads(FILTER).subscribe((res) => {
@@ -96,7 +106,8 @@ export class ShowLeadComponent implements OnInit {
     filter3: any,
     filter4: any,
     filter5: any,
-    filter6: any
+    filter6: any,
+    filter7: any
   ) {
     this.filterModal = false;
     filter1.value = null;
@@ -105,10 +116,12 @@ export class ShowLeadComponent implements OnInit {
     filter4.value = null;
     filter5.value = null;
     filter6.value = null;
+    filter7.value = null;
     this.rangeDates = null;
     this.getLeads();
     this.getAgents();
     this.appliedFilters = null;
+    this.answers = [];
   }
 
   agents: any[] = [];
@@ -118,5 +131,16 @@ export class ShowLeadComponent implements OnInit {
         this.agents = res.data;
       },
     });
+  }
+
+  answers: any[] = [];
+
+  onSelectQuestion(e: any) {
+    console.log(e);
+    this.answers = [];
+    let [currentQuestion] = this.questions.filter(f=>f.id == e.value)
+    this.answers = currentQuestion?.answers
+    // this.answers = this.questions[e.value]?.answers;
+    // BUG: check this code in manager survey
   }
 }
