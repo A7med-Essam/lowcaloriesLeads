@@ -1,4 +1,6 @@
-<div class="row animated">
+<app-create-lead-questions  *ngIf="lead?.inputs.length == 0" [lead_id]="lead_id"></app-create-lead-questions>
+
+<div class="row animated" *ngIf="lead?.inputs.length">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
@@ -30,13 +32,6 @@
                                             <td>Mobile</td>
                                             <td>{{lead?.customer_mobile}}</td>
                                         </tr>
-
-                                        <!-- <tr *ngFor="let q of lead?.inputs">
-                                            <td *ngIf="q.question||q.suggest_answer">{{q?.question?.question}}</td>
-                                            <td *ngIf="q?.suggest_answer">{{q?.suggest_answer}}</td>
-                                            <td *ngIf="q?.answer">{{q?.answer.type_value}}</td>
-                                        </tr> -->
-
                                         <tr>
                                             <td>Replies</td>
                                             <td>
@@ -152,16 +147,31 @@
             <form [formGroup]='AssignForm' #AssignUsersForm (ngSubmit)='assignUsers(AssignForm)' id="AssignUsersForm">
                 <div *ngFor="let user of agents; let i = index;">
                     <div class="d-flex justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <img src="../../../../assets/images/default-avatar.png" class="rounded-circle"
-                                style="width: 40px;height: 40px;" alt="user image">
-                            <div class="px-2 py-1 my-3 mx-2 rounded-lg" style="background-color: rgb(238, 238, 238);">
-                                <small>{{user.name}}</small>
+                        <div>
+                            <div class="d-flex align-items-center">
+                                <img src="../../../../assets/images/default-avatar.png" class="rounded-circle"
+                                    style="width: 40px;height: 40px;" alt="user image">
+                                <div class="px-2 py-1 my-3 mx-2 rounded-lg" style="background-color: rgb(238, 238, 238);">
+                                    <small>{{user.name}}</small> 
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div style="font-size: 12px;" class="mx-1">
+                                    <small>Open Leads</small>
+                                    <small> ({{user.open_lead_counts}})</small>
+                                </div>
+                                -
+                                <div style="font-size: 12px;" class="mx-1">
+                                    <small>Close Leads</small>
+                                    <small> ({{user.close_lead_counts}})</small>
+                                </div>
                             </div>
                         </div>
-                        <input [id]="'ckb_'+i" class="ckb ckb-primary" type="checkbox" [value]="user.id"
+                        <div>
+                            <input [id]="'ckb_'+i" class="ckb ckb-primary" type="checkbox" [value]="user.id"
                             (change)="onCheckChange($event)" />
-                        <label class="hidden" [for]="'ckb_'+i"></label>
+                            <label class="hidden" [for]="'ckb_'+i"></label>
+                        </div>
                     </div>
                     <hr>
                 </div>

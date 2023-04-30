@@ -1,0 +1,74 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="">Customer ID</label>
+                    <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter CID" maxlength="30"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <div class="text-end">
+                        <button class="btn btn-success px-4" (click)="getCustomerInfo()">
+                            <b>Get Customer Info</b>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive overflow-auto">
+                    <table class="table">
+                        <thead class="text-muted">
+                            <th class="py-3">Title</th>
+                            <th class="py-3">Description</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Customer Name</td>
+                                <td>ahmed</td>
+                            </tr>
+                            <tr>
+                                <td>Customer Email</td>
+                                <td>ahmed@gmail.com</td>
+                            </tr>
+                            <tr>
+                                <td>Customer Mobile</td>
+                                <td>01210043454</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center" style="height: 50px;">
+                                        Reason
+                                    </div>
+                                </td>
+                                <td>
+                                    <p-dropdown [options]="Reasons" styleClass="w-100" placeholder="Select Reason" appendTo="body">
+                                    </p-dropdown>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center" style="height: 50px;">
+                                        Sent By
+                                    </div>
+                                </td>
+                                <td>
+                                    <p-dropdown [options]="branches" styleClass="w-100" placeholder="Select Branch" appendTo="body">
+                                    </p-dropdown>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button class="btn btn-primary py-2 px-4 w-100" (click)="getCustomerInfo()">
+                                        <b>Add Dislike Info</b>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

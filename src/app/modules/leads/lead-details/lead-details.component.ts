@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/services/auth.service';
 import { SurveyService } from 'src/services/survey.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-lead-details',
@@ -13,14 +14,15 @@ import { SurveyService } from 'src/services/survey.service';
   styleUrls: ['./lead-details.component.scss'],
 })
 export class LeadDetailsComponent implements OnInit, OnDestroy {
-  isSuperAdmin:boolean = false;
+  isSuperAdmin: boolean = false;
+  lead_id: number = 0;
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _FormBuilder: FormBuilder,
+    private _MessageService: MessageService,
     private _AuthService: AuthService
   ) {
-
     _AuthService.currentUser.subscribe((data) => {
       if (data != null) {
         data.role == 'super_admin'
@@ -30,7 +32,6 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
         this.isSuperAdmin = false;
       }
     });
-
   }
   private unsubscribe$ = new Subject<void>();
 
@@ -43,13 +44,14 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
           this.getLeadDetails(res);
           this.getAgents();
           this.setAdminForm();
+          this.lead_id = res;
         }
       },
     });
   }
 
   lead: any;
-  getLeadDetails(id:number) {
+  getLeadDetails(id: number) {
     this._SurveyService.showLead(id).subscribe({
       next: (res) => {
         this.lead = res.data;
@@ -129,7 +131,7 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.assignModal = false;
-          this.lead.lead_users = res.data.lead_users
+          this.lead.lead_users = res.data.lead_users;
         },
       });
   }
@@ -139,7 +141,7 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
       user_ids: new FormArray([]),
     });
   }
-  @ViewChild("AssignUsersForm") AssignUsersForm!: HTMLFormElement;
+  @ViewChild('AssignUsersForm') AssignUsersForm!: HTMLFormElement;
 
   getAssignedUsers() {
     this.resetAssignForm();
@@ -165,8 +167,8 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
   resetAssignForm() {
     this.AssignForm.reset();
     this.AssignUsersForm.nativeElement
-      .querySelectorAll("input")
-      .forEach((u:any) => (u.checked = false));
+      .querySelectorAll('input')
+      .forEach((u: any) => (u.checked = false));
   }
 
   onCheckChange(event: any, status: string = 'edit') {
@@ -188,20 +190,20 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
   // ====================================================
   addReminder: boolean = false;
   minimumDate = new Date();
-  reminderNotice: string = "";
-  getReminderNotice(note:any) {
+  reminderNotice: string = '';
+  getReminderNotice(note: any) {
     this.reminderNotice = note.value;
-    note.value = "";
+    note.value = '';
   }
 
   addReminderLead(calendar: Calendar) {
     setTimeout(() => {
-      if (calendar.inputFieldValue != "") {
+      if (calendar.inputFieldValue != '') {
         const lead = {
           remind_data: this.reminderNotice,
           lead_id: this.lead.id,
           remind_date: new Date(calendar.inputFieldValue).toLocaleDateString(
-            "en-CA"
+            'en-CA'
           ),
           reminded: false,
           add: true,
@@ -212,6 +214,16 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
               this.addReminder = false;
               this.addReplayModal = false;
               calendar.clear();
+            }
+          },
+          error: (err) => {
+            for (const [key, value] of Object.entries(err.error.errors)) {
+              const x: any = value;
+              this._MessageService.add({
+                severity: 'warn',
+                summary: 'Notification',
+                detail: x[0],
+              });
             }
           },
         });

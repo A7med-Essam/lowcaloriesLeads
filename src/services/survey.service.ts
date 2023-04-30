@@ -110,6 +110,10 @@ export class SurveyService {
   createLead(lead: any): Observable<any> {
     return this._ApiConfigService.postReq(`leads`, lead);
   }
+
+  createLeadDetails(lead: any): Observable<any> {
+    return this._ApiConfigService.postReq(`addLeadDetails`, lead);
+  }
   // =========================================================================
 
   getLeads(page: number): Observable<any> {

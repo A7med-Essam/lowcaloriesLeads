@@ -15,17 +15,34 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShowLeadComponent } from './show-lead/show-lead.component';
 import { LeadDetailsComponent } from './lead-details/lead-details.component';
 import { LeadReminderComponent } from './lead-reminder/lead-reminder.component';
+import { CreateLeadQuestionsComponent } from './create-lead-questions/create-lead-questions.component';
+import { DislikeComponent } from './dislike/dislike.component';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   CheckboxModule,
   CardModule,
   DropdownModule,
   InputTextModule,
-  TableModule,DialogModule,CalendarModule
+  TableModule,
+  DialogModule,
+  CalendarModule,
 ];
 
 @NgModule({
-  declarations: [CreateleadComponent, ShowLeadComponent, LeadDetailsComponent, LeadReminderComponent],
-  imports: [CommonModule, LeadsRoutingModule, APP_PRIMENG_MODULE, FormsModule, ReactiveFormsModule],
+  declarations: [
+    CreateleadComponent,
+    ShowLeadComponent,
+    LeadDetailsComponent,
+    LeadReminderComponent,
+    CreateLeadQuestionsComponent,
+    DislikeComponent,
+  ],
+  imports: [
+    CommonModule,
+    LeadsRoutingModule,
+    APP_PRIMENG_MODULE,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
 export class LeadsModule {}

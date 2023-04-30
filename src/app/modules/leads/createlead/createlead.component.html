@@ -3,9 +3,9 @@
         <ng-template pTemplate="title">
             Create Lead
         </ng-template>
-        <ng-template pTemplate="subtitle">
-            Answer lead questions
-        </ng-template>
+        <!-- <ng-template pTemplate="subtitle">
+            Add New Lead
+        </ng-template> -->
         <ng-template pTemplate="content">
             <div class="mx-4">
                 <div class="form-group mb-3 row">
@@ -19,47 +19,15 @@
                     </div>
                     <div class="col-xl-4">
                         <label for="">Customer Mobile</label>
-                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer mobile" [(ngModel)]="selectedCustomerMobile">
+                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer mobile" [(ngModel)]="selectedCustomerMobile"
+                        maxlength="11"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                     </div>
-                </div>
-
-                <div *ngFor="let survey of questions;let i = index">
-                    <h6>{{i+1}} - {{survey?.question}}</h6>
-                    <div class="d-flex flex-wrap questions">
-
-                        <div *ngFor="let answer of survey.answers;let j = index">
-                            <div *ngIf="survey?.type == 'radio'" class="mx-3">
-                                <input type="radio" [name]="'surveyRadio'+i" [value]="answer?.id" [id]="'radio'+i+j"
-                                    (click)="setRadioAnswer(answer.id,survey.id,'')">
-                                <label [for]="'radio'+i+j" class="mx-1">{{answer?.type_value | titlecase}}</label>
-                            </div>
-                            <div *ngIf="survey?.type == 'check'" class="mx-3">
-                                <p-checkbox [value]="{questionId:survey.id,answerId:answer.id}"
-                                    [label]="answer.type_value | titlecase" [(ngModel)]="selectedValues"
-                                    (onChange)="setCheckAnswer()">
-                                </p-checkbox>
-                            </div>
-                        </div>
-
-                        <div *ngFor="let answer of survey.answers;let j = index" class="drop">
-                            <div *ngIf="survey?.type == 'drop'" class="mx-3">
-                                    <p-dropdown [options]="survey.answers" [(ngModel)]="selectedDropDownValues"
-                                    optionLabel="type_value" optionValue="type_value"
-                                    (click)="setDropdownAnswer(answer.id,survey.id,'')"
-                                        placeholder="Select an answer" [editable]="true"></p-dropdown>
-                            </div>
-                        </div>
-                        <div *ngIf="survey?.type == 'text'" class="mx-3 w-100">
-                            <input type="text" class="w-100 py-2" pInputText #surveyText
-                                (keypress)="setTextAnswer(surveyText, survey)">
-                        </div>
-                    </div>
-                    <hr style="height: 0.5px;" class="my-4">
                 </div>
 
                 <div class="text-end">
                     <button class="btn btn-success px-4"
-                        [disabled]="!selectedCustomerEmail||!selectedCustomerName||!selectedCustomerMobile"
+                        [disabled]="!selectedCustomerName||!selectedCustomerMobile"
                      (click)="createLead()"><b>Create</b>
                     </button>
                 </div>
