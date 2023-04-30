@@ -5,17 +5,17 @@
                 <div class="form-group">
                     <label for="">Customer ID</label>
                     <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter CID" maxlength="30"
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" #CID_INPUT>
                     <div class="text-end">
-                        <button class="btn btn-success px-4" (click)="getCustomerInfo()">
+                        <button class="btn btn-success px-4" (click)="getCustomerInfo(CID_INPUT)">
                             <b>Get Customer Info</b>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <hr>
-        <div class="card">
+        <hr *ngIf="customerInfo.length">
+        <div class="card" *ngIf="customerInfo.length">
             <div class="card-body">
                 <div class="table-responsive overflow-auto">
                     <table class="table">
@@ -26,15 +26,34 @@
                         <tbody>
                             <tr>
                                 <td>Customer Name</td>
-                                <td>ahmed</td>
+                                <td>{{customerInfo[0]?.CustomerName}}</td>
                             </tr>
                             <tr>
                                 <td>Customer Email</td>
-                                <td>ahmed@gmail.com</td>
+                                <td>{{customerInfo[0]?.CustomerEmail}}</td>
                             </tr>
                             <tr>
                                 <td>Customer Mobile</td>
-                                <td>01210043454</td>
+                                <td>
+                                    <span *ngIf="customerInfo[0]?.CustomerMobile">{{customerInfo[0]?.CustomerMobile}} - </span>
+                                    <span *ngIf="customerInfo[0]?.CustomerPhone">{{customerInfo[0]?.CustomerPhone}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Related Branch</td>
+                                <td>{{customerInfo[0]?.CustomerAddress3}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center" style="height: 50px;">
+                                        Dislike Meals
+                                    </div>
+                                </td>
+                                <td>
+                                    <p-multiSelect [options]="meals"  appendTo="body" optionLabel="ITEM" optionValue="ITEM"
+                                     defaultLabel="Select Meals" styleClass="w-100" [(ngModel)]="selectedMeals"
+                                        display="chip"></p-multiSelect>
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -43,8 +62,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p-dropdown [options]="Reasons" styleClass="w-100" placeholder="Select Reason" appendTo="body">
-                                    </p-dropdown>
+                                    <p-chips [addOnTab]="true" [addOnBlur]="true"
+                                    [(ngModel)]="selectedReason" styleClass="w-100" placeholder="Enter Your Reasons"></p-chips>
                                 </td>
                             </tr>
                             <tr>
@@ -54,13 +73,16 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p-dropdown [options]="branches" styleClass="w-100" placeholder="Select Branch" appendTo="body">
+                                    <p-dropdown [options]="branches" styleClass="w-100" placeholder="Select Branch" optionLabel="name"
+                                     [(ngModel)]="selectedBranch" optionValue="name" appendTo="body">
                                     </p-dropdown>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <button class="btn btn-primary py-2 px-4 w-100" (click)="getCustomerInfo()">
+                                    <button class="btn btn-primary py-2 px-4 w-100"
+                                    [disabled]="selectedBranch.length == 0 || selectedReason.length == 0 || selectedMeals.length == 0"
+                                     (click)="storeDislikeRequest()">
                                         <b>Add Dislike Info</b>
                                     </button>
                                 </td>

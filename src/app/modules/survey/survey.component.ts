@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Checkbox } from 'primeng/checkbox';
-import { SurveyService } from 'src/services/survey.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-survey',

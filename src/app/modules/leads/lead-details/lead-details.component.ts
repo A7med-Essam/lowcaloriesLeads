@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Calendar } from 'primeng/calendar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AuthService } from 'src/services/auth.service';
-import { SurveyService } from 'src/services/survey.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { SurveyService } from 'src/app/services/survey.service';
 import { MessageService } from 'primeng/api';
 
 @Component({

@@ -1,0 +1,17 @@
+::ng-deep{
+    .p-multiselect-label {
+        display: contents !important;
+        }
+        .p-multiselect-token{
+          margin: 3px;
+        }
+        .p-multiselect-label-container{
+          padding: 12px;
+        }
+        .p-chips-token{
+          margin-top: 3px;
+        }
+        .p-chips-multiple-container{
+          width: 100% !important;
+        }
+}

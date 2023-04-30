@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SurveyService } from 'src/services/survey.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-insert-survey-question',

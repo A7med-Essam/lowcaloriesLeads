@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js/auto'
-import { SurveyService } from 'src/services/survey.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-home',

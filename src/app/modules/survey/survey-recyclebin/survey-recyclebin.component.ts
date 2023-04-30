@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
-import { SurveyService } from 'src/services/survey.service';
+import { SurveyService } from 'src/app/services/survey.service';
 // import { AppService } from 'src/app/shared/services/app.service';
 // import { SurveyService } from 'src/app/shared/services/eg/dashboard/survey.service';
 

@@ -10,6 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShowLeadComponent } from './show-lead/show-lead.component';
@@ -17,6 +18,7 @@ import { LeadDetailsComponent } from './lead-details/lead-details.component';
 import { LeadReminderComponent } from './lead-reminder/lead-reminder.component';
 import { CreateLeadQuestionsComponent } from './create-lead-questions/create-lead-questions.component';
 import { DislikeComponent } from './dislike/dislike.component';
+import { ChipsModule } from 'primeng/chips';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   CheckboxModule,
@@ -26,6 +28,8 @@ const APP_PRIMENG_MODULE = [
   TableModule,
   DialogModule,
   CalendarModule,
+  MultiSelectModule,
+  ChipsModule,
 ];
 
 @NgModule({

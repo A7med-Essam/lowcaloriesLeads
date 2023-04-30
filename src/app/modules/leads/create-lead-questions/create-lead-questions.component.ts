@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { SurveyService } from 'src/services/survey.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-create-lead-questions',
