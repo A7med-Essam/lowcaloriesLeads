@@ -28,7 +28,7 @@
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(dislike)"
                         class="m-1 p-button-sm"></button>
-                    <button *ngIf="userId == dislike.agent_id" pButton type="button" icon="pi pi-pencil"
+                    <button *ngIf="userId == dislike.agent_id || role == 'super_admin'" pButton type="button" icon="pi pi-pencil"
                         (click)="updateRow(dislike)" class="m-1 p-button-sm p-button-warning"></button>
                 </td>
             </tr>

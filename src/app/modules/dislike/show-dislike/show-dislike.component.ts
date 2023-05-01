@@ -11,12 +11,14 @@ import { LocalService } from 'src/app/services/local.service';
 export class ShowDislikeComponent implements OnInit {
 
   userId:number = 0;
+  role:string = ''
   constructor(
     private _Router: Router,
     private _DislikeService: DislikeService,
     private _LocalService:LocalService
   ) {
     this.userId = this._LocalService.getJsonValue("userInfo_oldLowCalories").id
+    this.role = this._LocalService.getJsonValue("userInfo_oldLowCalories").role
   }
 
   branches: any[] = [];
