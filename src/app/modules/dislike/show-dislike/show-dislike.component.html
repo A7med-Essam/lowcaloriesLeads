@@ -1,0 +1,91 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="mb-3">
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+        </p-button>
+    </div>
+</div>
+<div class="card">
+    <p-table [value]="dislikes" [paginator]="true" [rows]="PaginationInfo?.per_page"
+        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Date</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Mobile</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dislike>
+            <tr>
+                <td class="text-center">{{dislike?.created_at | date}}</td>
+                <td class="text-center">{{dislike?.name}}</td>
+                <td class="text-center">{{dislike?.mobile}}</td>
+                <td class="text-center">{{dislike?.email}}</td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(dislike)"
+                        class="m-1 p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Filter dislike Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <div class="row mx-0">
+            <div class="col-md-6 my-3">
+                <label for="">Sent By</label>
+                <p-dropdown [options]="branches" optionLabel="name" optionValue="name" styleClass="w-100"
+                    appendTo="body" placeholder="Select Option" [(ngModel)]="filter_selectedSentBy">
+                </p-dropdown>
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">Meal</label>
+                <p-dropdown [options]="meals" optionLabel="ITEM" optionValue="ITEM" styleClass="w-100"
+                    appendTo="body" placeholder="Select Meal" [(ngModel)]="filter_selectedMeal">
+                </p-dropdown>
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">Reason</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedReason" />
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">Name</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedName" />
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">Branch</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedBranch" />
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">Email</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedEmail" />
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="">Mobile</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedMobile" maxlength="11"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+            </div>
+            <div class="col-md-6 my-3">
+                <label for="range">Date Range</label>
+                <p-calendar [(ngModel)]="filter_selectedDates" selectionMode="range" [readonlyInput]="true"
+                    inputId="range" ngClass="w-100" appendTo="body">
+                </p-calendar>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filter();filterModal = false;">
+                Apply Filter
+            </button>
+            <button class="btn btn-secondary" (click)="resetFilter()">
+                Reset Filter
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -140,7 +140,5 @@ export class ShowLeadComponent implements OnInit {
     this.answers = [];
     let [currentQuestion] = this.questions.filter(f=>f.id == e.value)
     this.answers = currentQuestion?.answers
-    // this.answers = this.questions[e.value]?.answers;
-    // BUG: check this code in manager survey
   }
 }

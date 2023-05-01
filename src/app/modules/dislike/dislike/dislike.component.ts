@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { DislikeService } from 'src/app/services/dislike.service';
 import { LocalService } from 'src/app/services/local.service';
 
@@ -15,7 +17,7 @@ export class DislikeComponent implements OnInit {
   selectedBranch:any[]=[]
   selectedReason:any[]=[]
 
-  constructor(private _DislikeService: DislikeService, private _LocalService:LocalService) {}
+  constructor(private _DislikeService: DislikeService, private _LocalService:LocalService, private _MessageService:MessageService, private _Router:Router) {}
   ngOnInit(): void {
     this.getMeals();
     this.getAgentBranches();
@@ -53,7 +55,12 @@ export class DislikeComponent implements OnInit {
 
     this._DislikeService.storeDislikeRequest(data).subscribe({
       next: (res) => {
-        console.log(res);
+        this._MessageService.add({
+          severity: 'success',
+          summary: 'Notification',
+          detail: res.message,
+        })
+        this._Router.navigate(['dislike/show'])
       },
     });
   }

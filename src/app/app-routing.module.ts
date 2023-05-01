@@ -23,6 +23,12 @@ const routes: Routes = [
       import('./modules/leads/leads.module').then((m) => m.LeadsModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'dislike',
+    loadChildren: () =>
+      import('./modules/dislike/dislike.module').then((m) => m.DislikeModule),
+    canActivate: [AuthGuard],
+  },
   { path: '**', component: Error404Component },
 ];
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiConfigService } from '../core/api-config.service';
 
 @Injectable({
@@ -10,6 +10,7 @@ export class DislikeService {
   constructor(
     private _ApiConfigService: ApiConfigService
   )  { }
+  dislikeDetails: BehaviorSubject<any> = new BehaviorSubject(null);
 
   getCustomerInfo(CID: number): Observable<any> {
     return this._ApiConfigService.getReq2(`Subscription/SqlQuery?Qry=SELECT * FROM [KOTDB].[dbo].[Customers] WHERE [CustomerId] =${CID}`);
@@ -25,5 +26,22 @@ export class DislikeService {
 
   getAgentBranches(): Observable<any> {
     return this._ApiConfigService.postReq(`getAgentBranches`,'');
+  }
+
+  getDislikes(page:number):Observable<any> {
+    return this._ApiConfigService.postReq(`allDislikeRequests?page=${page}`,'')
+  }
+
+  updateDislikes(dislike:any):Observable<any> {
+    return this._ApiConfigService.postReq('updateDislikeRequest',dislike)
+  }
+
+  getDislikesDetails(dislike_request_id:number):Observable<any> {
+    return this._ApiConfigService.postReq('showDislikeRequest',{dislike_request_id})
+  }
+
+  filterDislikes(filter: any): Observable<any> {
+    filter.withoutPagination = true;
+    return this._ApiConfigService.postReq(`allDislikeRequests`, filter);
   }
 }

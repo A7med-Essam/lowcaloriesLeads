@@ -1,8 +1,6 @@
+import { DislikeRoutingModule } from './dislike-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { LeadsRoutingModule } from './leads-routing.module';
-import { CreateleadComponent } from './createlead/createlead.component';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
@@ -12,16 +10,14 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ShowLeadComponent } from './show-lead/show-lead.component';
-import { LeadDetailsComponent } from './lead-details/lead-details.component';
-import { LeadReminderComponent } from './lead-reminder/lead-reminder.component';
-import { CreateLeadQuestionsComponent } from './create-lead-questions/create-lead-questions.component';
+import { FormsModule } from '@angular/forms';
 import { ChipsModule } from 'primeng/chips';
+import { ShowDislikeComponent } from './show-dislike/show-dislike.component';
+import { UpdateDislikeComponent } from './update-dislike/update-dislike.component';
+import { DislikeDetailsComponent } from './dislike-details/dislike-details.component';
+import { DislikeComponent } from './dislike/dislike.component';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
-  CheckboxModule,
-  CardModule,
   DropdownModule,
   InputTextModule,
   TableModule,
@@ -33,18 +29,16 @@ const APP_PRIMENG_MODULE = [
 
 @NgModule({
   declarations: [
-    CreateleadComponent,
-    ShowLeadComponent,
-    LeadDetailsComponent,
-    LeadReminderComponent,
-    CreateLeadQuestionsComponent,
+    ShowDislikeComponent,
+    DislikeComponent,
+    UpdateDislikeComponent,
+    DislikeDetailsComponent,
   ],
   imports: [
     CommonModule,
-    LeadsRoutingModule,
+    DislikeRoutingModule,
     APP_PRIMENG_MODULE,
     FormsModule,
-    ReactiveFormsModule,
   ],
 })
-export class LeadsModule {}
+export class DislikeModule {}
