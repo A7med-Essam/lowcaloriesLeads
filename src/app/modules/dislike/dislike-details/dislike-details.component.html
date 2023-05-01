@@ -50,7 +50,7 @@
                                             <td>Reasons</td>
                                             <td>
                                                 <span *ngFor="let reason of dislike?.reasons;let i = index">
-                                                    {{reason}} <br>
+                                                    <i class="fas fa-info-circle mx-2 text-muted"></i> {{reason}} <br>
                                                 </span>
                                             </td>
                                         </tr>
@@ -58,7 +58,7 @@
                                             <td>Dislike Meals</td>
                                             <td>
                                                 <span *ngFor="let meal of dislike?.dislike_meals;let i = index">
-                                                    {{meal}} <br>
+                                                    <i class="fas fa-utensils mx-2 text-muted"></i> {{meal}} <br>
                                                 </span>
                                             </td>
                                         </tr>

@@ -136,7 +136,6 @@ export class ShowLeadComponent implements OnInit {
   answers: any[] = [];
 
   onSelectQuestion(e: any) {
-    console.log(e);
     this.answers = [];
     let [currentQuestion] = this.questions.filter(f=>f.id == e.value)
     this.answers = currentQuestion?.answers

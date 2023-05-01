@@ -1,5 +1,6 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="mb-3">
+        <button pButton pRipple label="Add Dislike" class="p-button-success" icon="pi pi-plus" routerLink="../create"></button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
     </div>
@@ -27,6 +28,8 @@
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(dislike)"
                         class="m-1 p-button-sm"></button>
+                    <button *ngIf="userId == dislike.agent_id" pButton type="button" icon="pi pi-pencil"
+                        (click)="updateRow(dislike)" class="m-1 p-button-sm p-button-warning"></button>
                 </td>
             </tr>
         </ng-template>
@@ -45,8 +48,8 @@
             </div>
             <div class="col-md-6 my-3">
                 <label for="">Meal</label>
-                <p-dropdown [options]="meals" optionLabel="ITEM" optionValue="ITEM" styleClass="w-100"
-                    appendTo="body" placeholder="Select Meal" [(ngModel)]="filter_selectedMeal">
+                <p-dropdown [options]="meals" optionLabel="ITEM" optionValue="ITEM" styleClass="w-100" appendTo="body"
+                    placeholder="Select Meal" [(ngModel)]="filter_selectedMeal">
                 </p-dropdown>
             </div>
             <div class="col-md-6 my-3">
@@ -68,7 +71,7 @@
             <div class="col-md-6 my-3">
                 <label for="">Mobile</label>
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedMobile" maxlength="11"
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
             </div>
             <div class="col-md-6 my-3">
                 <label for="range">Date Range</label>

@@ -147,7 +147,6 @@ export class HomeComponent implements OnInit {
     };
     this._SurveyService.addReminderLead(lead).subscribe({
       next: (res) => {
-        console.log(res);
       },
     });
   }

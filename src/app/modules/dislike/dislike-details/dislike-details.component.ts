@@ -28,7 +28,6 @@ export class DislikeDetailsComponent implements OnInit {
             this._Router.navigate(['dislike/show']);
           } else {
             // this.getLeadDetails(res);
-            console.log(res);
             this.dislike = res
           }
         },

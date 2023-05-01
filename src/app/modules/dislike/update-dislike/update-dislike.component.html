@@ -1,1 +1,57 @@
-<p>update-dislike works!</p>
+<div class="container">
+    <form [formGroup]="updateForm" (ngSubmit)='update()'>
+        <div class="row mx-0">
+            <div class="col-12 my-3">
+                <label for="">Sent By</label>
+                <p-dropdown [options]="branches" styleClass="w-100" placeholder="Select Branch" optionLabel="name"
+                    formControlName='sent_by' optionValue="name" appendTo="body">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('sent_by')?.touched &&
+                updateForm.get('sent_by')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Reasons</label>
+                <p-chips [addOnTab]="true" [addOnBlur]="true" styleClass="w-100" formControlName='reasons'
+                    placeholder="Enter Your Reasons"></p-chips>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('reasons')?.touched &&
+                updateForm.get('reasons')?.hasError('required')">This field is required.</small>
+            </div>
+
+            <div class="col-12 my-3">
+                <label for="">Dislike Meals</label>
+                <p-multiSelect [options]="meals" appendTo="body" optionLabel="ITEM" optionValue="ITEM"
+                    defaultLabel="Select Meals" styleClass="w-100" formControlName='dislike_meals' display="chip">
+                </p-multiSelect>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('dislike_meals')?.touched &&
+                updateForm.get('dislike_meals')?.hasError('required')">This field is required.</small>
+            </div>
+            <!-- <div class="col-12 my-3">
+                <label for="">Name</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='name' />
+                <small class="text-danger ms-1" *ngIf="updateForm.get('name')?.touched &&
+                updateForm.get('name')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Email</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='email' />
+                <small class="text-danger ms-1" *ngIf="updateForm.get('email')?.touched &&
+                updateForm.get('email')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Mobile</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='mobile' />
+                <small class="text-danger ms-1" *ngIf="updateForm.get('mobile')?.touched &&
+                updateForm.get('mobile')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Related Branch</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='branch' />
+                <small class="text-danger ms-1" *ngIf="updateForm.get('branch')?.touched &&
+                updateForm.get('branch')?.hasError('required')">This field is required.</small>
+            </div> -->
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">Update</button>
+            </div>
+        </div>
+    </form>
+</div>

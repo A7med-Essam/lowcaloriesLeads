@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DislikeService } from 'src/app/services/dislike.service';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-show-dislike',
@@ -8,10 +9,15 @@ import { DislikeService } from 'src/app/services/dislike.service';
   styleUrls: ['./show-dislike.component.scss'],
 })
 export class ShowDislikeComponent implements OnInit {
+
+  userId:number = 0;
   constructor(
     private _Router: Router,
-    private _DislikeService: DislikeService
-  ) {}
+    private _DislikeService: DislikeService,
+    private _LocalService:LocalService
+  ) {
+    this.userId = this._LocalService.getJsonValue("userInfo_oldLowCalories").id
+  }
 
   branches: any[] = [];
   meals: any[] = [];
@@ -46,6 +52,13 @@ export class ShowDislikeComponent implements OnInit {
 
   paginate(e: any) {
     this.getDislikes(e.first / e.rows + 1);
+  }
+  
+  updateRow(dislike: any) {
+    if (dislike) {
+      this._DislikeService.dislikeDetails.next(dislike);
+      this._Router.navigate(['dislike/update']);
+    }
   }
 
   // *******************************

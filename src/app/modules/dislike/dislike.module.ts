@@ -10,7 +10,7 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChipsModule } from 'primeng/chips';
 import { ShowDislikeComponent } from './show-dislike/show-dislike.component';
 import { UpdateDislikeComponent } from './update-dislike/update-dislike.component';
@@ -39,6 +39,7 @@ const APP_PRIMENG_MODULE = [
     DislikeRoutingModule,
     APP_PRIMENG_MODULE,
     FormsModule,
+    ReactiveFormsModule
   ],
 })
 export class DislikeModule {}
