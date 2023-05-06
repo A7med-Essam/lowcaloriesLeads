@@ -29,6 +29,12 @@ const routes: Routes = [
       import('./modules/dislike/dislike.module').then((m) => m.DislikeModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'clinic',
+    loadChildren: () =>
+      import('./modules/clinic/clinic.module').then((m) => m.ClinicModule),
+    canActivate: [AuthGuard],
+  },
   { path: '**', component: Error404Component },
 ];
 

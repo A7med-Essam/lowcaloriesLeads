@@ -88,4 +88,30 @@ export class ApiConfigService {
       )
     );
   }
+
+  postReq2(url: string, body: any, params?: HttpParams): Observable<any> {
+    return this.http
+      .post(environment.BaseUrl3 + url, body, { params: params })
+      .pipe(
+        retry(2),
+        tap(
+          (res: any) => {
+            if (res.status != 1) {
+              this._MessageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: res.message,
+              });
+            }
+          },
+          (err: any) => {
+            this._MessageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+          }
+        )
+      );
+  }
 }
