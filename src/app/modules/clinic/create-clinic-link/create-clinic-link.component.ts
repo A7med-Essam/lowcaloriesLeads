@@ -10,6 +10,7 @@ import {
 } from 'src/app/services/clinic.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import { MessageService } from 'primeng/api';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-create-clinic-link',
@@ -22,7 +23,8 @@ export class CreateClinicLinkComponent implements OnInit {
 
   constructor(
     private _ClinicService: ClinicService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _LocalService:LocalService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +73,10 @@ export class CreateClinicLinkComponent implements OnInit {
       max_people: new FormControl(null, [Validators.required]),
       date: new FormControl(null),
       day: new FormControl(null),
+      agent_id: new FormControl(
+        this._LocalService.getJsonValue('userInfo_oldLowCalories').id,
+        [Validators.required]
+      ),
     });
   }
 
