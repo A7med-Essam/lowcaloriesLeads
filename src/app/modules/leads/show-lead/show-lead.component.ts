@@ -62,7 +62,9 @@ export class ShowLeadComponent implements OnInit {
     filter4?: any,
     filter5?: any,
     filter6?: any,
-    filter7?: any
+    filter7?: any,
+    filter8?: any,
+    filter9?: any
   ) {
     filter3.value == undefined && (filter3.value = []);
     let FILTER: any = {
@@ -82,6 +84,8 @@ export class ShowLeadComponent implements OnInit {
       customer_mobile: filter5.value || null,
       customer_email: filter6.value || null,
       lead_answer_id: filter7.value || null,
+      assigned: filter8.value || null,
+      replied: filter9.value || null,
     };
 
     this.appliedFilters = [
@@ -92,6 +96,8 @@ export class ShowLeadComponent implements OnInit {
       filter5,
       filter6,
       filter7,
+      filter8,
+      filter9
     ];
     Object.keys(FILTER).forEach((k) => FILTER[k] == null && delete FILTER[k]);
     this._SurveyService.filterLeads(FILTER).subscribe((res) => {
@@ -107,7 +113,9 @@ export class ShowLeadComponent implements OnInit {
     filter4: any,
     filter5: any,
     filter6: any,
-    filter7: any
+    filter7: any,
+    filter8: any,
+    filter9: any
   ) {
     this.filterModal = false;
     filter1.value = null;
@@ -117,11 +125,14 @@ export class ShowLeadComponent implements OnInit {
     filter5.value = null;
     filter6.value = null;
     filter7.value = null;
+    filter8.value = null;
+    filter9.value = null;
     this.rangeDates = null;
     this.getLeads();
     this.getAgents();
     this.appliedFilters = null;
     this.answers = [];
+    this.resetStaticFilterOptions();
   }
 
   agents: any[] = [];
@@ -139,5 +150,27 @@ export class ShowLeadComponent implements OnInit {
     this.answers = [];
     let [currentQuestion] = this.questions.filter(f=>f.id == e.value)
     this.answers = currentQuestion?.answers
+  }
+
+  assigned:any = [
+    {name:"Assigned",value:"true"},
+    {name:"Not Assigned",value:"false"}
+  ]
+
+  replied:any = [
+    {name:"Replied",value:"true"},
+    {name:"Not Replied",value:"false"}
+  ]
+
+  resetStaticFilterOptions(){
+    this.assigned = [
+      {name:"Assigned",value:"true"},
+      {name:"Not Assigned",value:"false"}
+    ]
+
+    this.replied = [
+      {name:"Replied",value:"true"},
+      {name:"Not Replied",value:"false"}
+    ]
   }
 }

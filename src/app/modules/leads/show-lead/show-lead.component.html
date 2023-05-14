@@ -66,24 +66,32 @@
                 <label for="">customer_email</label>
                 <input type="text" pInputText ngClass="w-100" #filter6 />
             </div>
-            <!-- <div class="col-md-6 my-3">
-                <label for="">Agent Created Lead</label>
-                <input type="text" pInputText ngClass="w-100" />
-            </div> -->
             <div class="col-md-6 my-3">
                 <label for="range">Date Range</label>
                 <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" inputId="range"
-                    #filter3 ngClass="w-100" appendTo="body">
-                </p-calendar>
-            </div>
+                #filter3 ngClass="w-100" appendTo="body">
+            </p-calendar>
+        </div>
+        <div class="col-md-6 my-3">
+            <label for="">Assigned</label>
+            <p-dropdown #filter8 [options]="assigned" optionLabel="name" optionValue="value" styleClass="w-100"
+            appendTo="body" placeholder="Select Assigned Status">
+            </p-dropdown>
+        </div>
+        <div class="col-md-6 my-3">
+            <label for="">Replied</label>
+            <p-dropdown #filter9 [options]="replied" optionLabel="name" optionValue="value" styleClass="w-100"
+            appendTo="body" placeholder="Select Replied Status">
+            </p-dropdown>
+        </div>
         </div>
     </div>
     <ng-template pTemplate="footer">
         <div class="upload-btn-wrapper">
-            <button class="btn btn-primary" (click)="filter(filter1,filter2,filter3,filter4,filter5,filter6,filter7);filterModal = false;">
+            <button class="btn btn-primary" (click)="filter(filter1,filter2,filter3,filter4,filter5,filter6,filter7,filter8,filter9);filterModal = false;">
                 Apply Filter
             </button>
-            <button class="btn btn-secondary" (click)="resetFilter(filter1,filter2,filter3,filter4,filter5,filter6,filter7)">
+            <button class="btn btn-secondary" (click)="resetFilter(filter1,filter2,filter3,filter4,filter5,filter6,filter7,filter8,filter9)">
                 Reset Filter
             </button>
         </div>
