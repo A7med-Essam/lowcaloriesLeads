@@ -16,6 +16,7 @@
                 <th class="text-center">Name</th>
                 <th class="text-center">Mobile</th>
                 <th class="text-center">Email</th>
+                <th class="text-center">CID</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -25,6 +26,7 @@
                 <td class="text-center">{{dislike?.name}}</td>
                 <td class="text-center">{{dislike?.mobile}}</td>
                 <td class="text-center">{{dislike?.email}}</td>
+                <td class="text-center">{{dislike?.cid}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(dislike)"
                         class="m-1 p-button-sm"></button>

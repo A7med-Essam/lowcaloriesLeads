@@ -14,9 +14,9 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.createChart();
-    this.createChart2();
-    this.createChart3();
+    // this.createChart();
+    // this.createChart2();
+    // this.createChart3();
     this.allReminderLeads();
   }
 

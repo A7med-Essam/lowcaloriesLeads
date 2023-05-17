@@ -3,32 +3,36 @@
         <ng-template pTemplate="title">
             Create Lead
         </ng-template>
-        <!-- <ng-template pTemplate="subtitle">
-            Add New Lead
-        </ng-template> -->
         <ng-template pTemplate="content">
             <div class="mx-4">
                 <div class="form-group mb-3 row">
                     <div class="col-xl-4">
                         <label for="">Customer Name</label>
-                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer name" [(ngModel)]="selectedCustomerName">
+                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer name"
+                            [(ngModel)]="selectedCustomerName">
                     </div>
                     <div class="col-xl-4">
                         <label for="">Customer Email</label>
-                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer email" [(ngModel)]="selectedCustomerEmail">
+                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer email"
+                            [(ngModel)]="selectedCustomerEmail">
                     </div>
                     <div class="col-xl-4">
                         <label for="">Customer Mobile</label>
-                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer mobile" [(ngModel)]="selectedCustomerMobile"
-                        maxlength="11"
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer mobile"
+                            [(ngModel)]="selectedCustomerMobile" maxlength="11"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                    <div class="col-12">
+                        <label for="" class="mb-1">Agents</label>
+                        <p-multiSelect [options]="agents" appendTo="body" optionLabel="name" optionValue="agent_id"
+                            defaultLabel="Select Agents" styleClass="w-100" [(ngModel)]="selectedAgents" display="chip">
+                        </p-multiSelect>
                     </div>
                 </div>
 
                 <div class="text-end">
-                    <button class="btn btn-success px-4"
-                        [disabled]="!selectedCustomerName||!selectedCustomerMobile"
-                     (click)="createLead()"><b>Create</b>
+                    <button class="btn btn-success px-4" [disabled]="!selectedCustomerMobile || selectedAgents.length == 0"
+                        (click)="createLead()"><b>Create</b>
                     </button>
                 </div>
             </div>

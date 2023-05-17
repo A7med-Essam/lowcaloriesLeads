@@ -21,11 +21,11 @@ export class DislikeService {
   }
 
   storeDislikeRequest(data:any): Observable<any> {
-    return this._ApiConfigService.postReq(`storeDislikeRequest`,data);
+    return this._ApiConfigService.postReq3(`storeDislikeRequest`,data);
   }
 
   getAgentBranches(): Observable<any> {
-    return this._ApiConfigService.postReq(`getAgentBranches`,'');
+    return this._ApiConfigService.postReq3(`getAgentBranches`,'');
   }
 
   getDislikes(page:number):Observable<any> {
@@ -33,15 +33,15 @@ export class DislikeService {
   }
 
   updateDislikes(dislike:any):Observable<any> {
-    return this._ApiConfigService.postReq('updateDislikeRequest',dislike)
+    return this._ApiConfigService.postReq3('updateDislikeRequest',dislike)
   }
 
   getDislikesDetails(dislike_request_id:number):Observable<any> {
-    return this._ApiConfigService.postReq('showDislikeRequest',{dislike_request_id})
+    return this._ApiConfigService.postReq3('showDislikeRequest',{dislike_request_id})
   }
 
   filterDislikes(filter: any): Observable<any> {
     filter.withoutPagination = true;
-    return this._ApiConfigService.postReq(`allDislikeRequests`, filter);
+    return this._ApiConfigService.postReq3(`allDislikeRequests`, filter);
   }
 }

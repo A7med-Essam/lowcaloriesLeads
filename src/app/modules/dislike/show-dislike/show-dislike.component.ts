@@ -36,8 +36,12 @@ export class ShowDislikeComponent implements OnInit {
     if (this.filterStatus) {
       this.filter();
     } else {
-      this._DislikeService.getDislikes(page).subscribe({
+      this._DislikeService.getDislikes(page)
+      .subscribe({
         next: (res) => {
+          res.data.data.map((e:any) => {
+            e.mobile = e.mobile.filter((item:any) => item !== null)
+          });
           this.dislikes = res?.data?.data;
           this.PaginationInfo = res.data;
         },

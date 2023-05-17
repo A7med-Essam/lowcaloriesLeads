@@ -74,7 +74,7 @@
                                 </td>
                                 <td>
                                     <p-dropdown [options]="branches" styleClass="w-100" placeholder="Select Branch" optionLabel="name"
-                                     [(ngModel)]="selectedBranch" optionValue="name" appendTo="body">
+                                     [(ngModel)]="selectedBranch" optionValue="name" appendTo="body" [filter]="true">
                                     </p-dropdown>
                                 </td>
                             </tr>

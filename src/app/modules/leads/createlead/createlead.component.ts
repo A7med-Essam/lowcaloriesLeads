@@ -14,7 +14,6 @@ export class CreateleadComponent implements OnInit {
   selectedCustomerEmail: any;
   constructor(
     private _SurveyService: SurveyService,
-    private _Router: Router,
     private _MessageService: MessageService
   ) {}
 
@@ -28,9 +27,7 @@ export class CreateleadComponent implements OnInit {
       customer_name: this.selectedCustomerName,
       customer_email: this.selectedCustomerEmail,
       customer_mobile: this.selectedCustomerMobile,
-      user_ids:[
-        this.getAgentByLeadCount().id
-      ]
+      user_ids:this.selectedAgents
     };
 
     this._SurveyService.createLead(lead).subscribe({
@@ -56,7 +53,10 @@ export class CreateleadComponent implements OnInit {
     });
   }
 
-  getAgentByLeadCount(){
-    return this.agents.reduce((prev,current) => prev.open_lead_counts < current.open_lead_counts ? prev:current)
-  }
+  selectedAgents:any[]=[]
+
+
+  // getAgentByLeadCount(){
+  //   return this.agents.reduce((prev,current) => prev.open_lead_counts < current.open_lead_counts ? prev:current)
+  // }
 }

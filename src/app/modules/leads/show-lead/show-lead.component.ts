@@ -173,4 +173,15 @@ export class ShowLeadComponent implements OnInit {
       {name:"Not Replied",value:"false"}
     ]
   }
+
+  export(){
+    const ids = this.leads.map((obj:any) => obj.id);
+    this._SurveyService.exportLeads(ids).subscribe({
+      next:res=>{
+        const link = document.createElement('a');
+        link.href = res.data;
+        link.click();
+      }
+    })
+  }
 }

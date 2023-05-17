@@ -112,51 +112,53 @@ export class SurveyService {
   }
 
   createLeadDetails(lead: any): Observable<any> {
-    return this._ApiConfigService.postReq(`addLeadDetails`, lead);
+    return this._ApiConfigService.postReq3(`addLeadDetails`, lead);
   }
   // =========================================================================
 
   getLeads(page: number): Observable<any> {
-    return this._ApiConfigService.getReq(`leads?page=${page}`);
+    return this._ApiConfigService.getReq3(`leads?page=${page}`);
   }
 
   filterLeads(filter: any): Observable<any> {
-    // paginate && (filter.paginate = paginate);
-    // filter.withoutPagination = true;
     return this._ApiConfigService.getReq(`leads`, filter);
   }
 
   showLead(id: number): Observable<any> {
-    return this._ApiConfigService.postReq(`leads/show`, { id });
+    return this._ApiConfigService.postReq3(`leads/show`, { id });
   }
 
   addReplay(replay: any): Observable<any> {
-    return this._ApiConfigService.postReq(`leads/replay`, replay);
+    return this._ApiConfigService.postReq3(`leads/replay`, replay);
   }
 
   getAllReplies(id: number): Observable<any> {
-    return this._ApiConfigService.postReq(`leads/replies`, { id });
+    return this._ApiConfigService.postReq3(`leads/replies`, { id });
   }
 
   getAllAgents(): Observable<any> {
-    return this._ApiConfigService.postReq(`getAgents`, {
+    return this._ApiConfigService.postReq3(`getAgents`, {
       withoutPagination: true,
     });
   }
 
   assignLead(lead: any): Observable<any> {
-    return this._ApiConfigService.postReq(`leads/assign`, lead);
+    return this._ApiConfigService.postReq3(`leads/assign`, lead);
+  }
+
+  exportLeads(leadIds: number[]): Observable<any> {
+    return this._ApiConfigService.postReq3(`leads/export`, {leadIds});
   }
   // =========================================================================
 
   allReminderLeads(): Observable<any> {
-    return this._ApiConfigService.postReq(`leads/allReminderLeads`, {
+    return this._ApiConfigService.postReq3(`leads/allReminderLeads`, {
       withoutPagination: true,
     });
   }
 
   addReminderLead(reminder:any): Observable<any> {
-    return this._ApiConfigService.postReq(`leads/addReminderLead`, reminder);
+    return this._ApiConfigService.postReq(`leads3/addReminderLead`, reminder);
   }
 
 }

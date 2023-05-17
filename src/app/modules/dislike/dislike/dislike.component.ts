@@ -23,7 +23,9 @@ export class DislikeComponent implements OnInit {
     this.getAgentBranches();
   }
 
+  currentCID:number = 0;
   getCustomerInfo(CID_Input: HTMLInputElement) {
+    this.currentCID = Number(CID_Input.value);
     this._DislikeService.getCustomerInfo(Number(CID_Input.value)).subscribe({
       next: (res) => (this.customerInfo = res.data),
     });
@@ -50,6 +52,7 @@ export class DislikeComponent implements OnInit {
       dislike_meals:this.selectedMeals,
       sent_by:this.selectedBranch,
       reasons:this.selectedReason,
+      cid:this.currentCID,
       agent_id:this._LocalService.getJsonValue("userInfo_oldLowCalories").id
     }
 

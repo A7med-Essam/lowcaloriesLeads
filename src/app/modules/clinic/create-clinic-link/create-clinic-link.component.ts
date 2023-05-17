@@ -106,6 +106,7 @@ export class CreateClinicLinkComponent implements OnInit {
       this.appointments = this.emirates.filter(
         (e) => e.id == id
       )[0].appointments;
+      this.appointments = this.appointments.filter(item => new Date(item.date) > new Date());
     }
   }
 
