@@ -184,4 +184,32 @@ export class ShowLeadComponent implements OnInit {
       }
     })
   }
+
+  resetFields(
+    filter1: any,
+    filter2: any,
+    filter3: any,
+    filter4: any,
+    filter5: any,
+    filter6: any,
+    filter7: any,
+    filter8: any,
+    filter9: any
+  ) {
+    filter1.value = null;
+    filter2.value = null;
+    filter3.value = undefined;
+    filter4.value = null;
+    filter5.value = null;
+    filter6.value = null;
+    filter7.value = null;
+    filter8.value = null;
+    filter9.value = null;
+    this.rangeDates = null;
+    this.getAgents();
+    this.getAllQuestions();
+    this.appliedFilters = null;
+    this.answers = [];
+    this.resetStaticFilterOptions();
+  }
 }
