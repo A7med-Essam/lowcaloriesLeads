@@ -13,6 +13,7 @@ export class DislikeComponent implements OnInit {
   customerInfo: any[] = [];
   branches: any[] = [];
   meals: any[] = [];
+  reasons: any[] = [];
   selectedMeals:any[]=[]
   selectedBranch:any[]=[]
   selectedReason:any[]=[]
@@ -20,7 +21,18 @@ export class DislikeComponent implements OnInit {
   constructor(private _DislikeService: DislikeService, private _LocalService:LocalService, private _MessageService:MessageService, private _Router:Router) {}
   ngOnInit(): void {
     this.getMeals();
+    this.getReasons();
     this.getAgentBranches();
+    setTimeout(() => {
+    }, 15000);
+  }
+
+  addOption(el:HTMLInputElement){
+    if (el.value != "") {
+      this.reasons.push({reason:el.value})
+      this.selectedReason.push(el.value)
+      el.value = ""
+    }
   }
 
   currentCID:number = 0;
@@ -34,6 +46,12 @@ export class DislikeComponent implements OnInit {
   getMeals() {
     this._DislikeService.getMeals().subscribe({
       next: (res) => (this.meals = res.data),
+    });
+  }
+
+  getReasons() {
+    this._DislikeService.getReasons().subscribe({
+      next: (res) => (this.reasons = res.data),
     });
   }
 

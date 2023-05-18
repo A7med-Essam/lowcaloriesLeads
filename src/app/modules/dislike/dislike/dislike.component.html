@@ -5,7 +5,8 @@
                 <div class="form-group">
                     <label for="">Customer ID</label>
                     <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter CID" maxlength="30"
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" #CID_INPUT>
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                        #CID_INPUT>
                     <div class="text-end">
                         <button class="btn btn-success px-4" (click)="getCustomerInfo(CID_INPUT)">
                             <b>Get Customer Info</b>
@@ -35,8 +36,10 @@
                             <tr>
                                 <td>Customer Mobile</td>
                                 <td>
-                                    <span *ngIf="customerInfo[0]?.CustomerMobile">{{customerInfo[0]?.CustomerMobile}} - </span>
-                                    <span *ngIf="customerInfo[0]?.CustomerPhone">{{customerInfo[0]?.CustomerPhone}}</span>
+                                    <span *ngIf="customerInfo[0]?.CustomerMobile">{{customerInfo[0]?.CustomerMobile}} -
+                                    </span>
+                                    <span
+                                        *ngIf="customerInfo[0]?.CustomerPhone">{{customerInfo[0]?.CustomerPhone}}</span>
                                 </td>
                             </tr>
                             <tr>
@@ -50,9 +53,10 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p-multiSelect [options]="meals"  appendTo="body" optionLabel="ITEM" optionValue="ITEM"
-                                     defaultLabel="Select Meals" styleClass="w-100" [(ngModel)]="selectedMeals"
-                                        display="chip"></p-multiSelect>
+                                    <p-multiSelect [options]="meals" appendTo="body" optionLabel="ITEM"
+                                        optionValue="ITEM" defaultLabel="Select Meals" styleClass="w-100"
+                                        [(ngModel)]="selectedMeals" display="chip">
+                                    </p-multiSelect>
                                 </td>
                             </tr>
                             <tr>
@@ -62,8 +66,22 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p-chips [addOnTab]="true" [addOnBlur]="true"
-                                    [(ngModel)]="selectedReason" styleClass="w-100" placeholder="Enter Your Reasons"></p-chips>
+                                    <p-multiSelect [options]="reasons" appendTo="body" optionLabel="reason"
+                                        optionValue="reason" defaultLabel="Select Your Reasons" styleClass="w-100"
+                                        [(ngModel)]="selectedReason" display="chip">
+                                        <p-header class="w-100 mb-3">
+                                            <div class="row w-100">
+                                                <div class="col-10">
+                                                    <input type="text" placeholder="Add another option"
+                                                        #multieOptionInput pInputText
+                                                        style="min-height:2em;width: 100%;" />
+                                                </div>
+                                                <div class="col-2">
+                                                    <p-button (click)="addOption(multieOptionInput)">Add</p-button>
+                                                </div>
+                                            </div>
+                                        </p-header>
+                                    </p-multiSelect>
                                 </td>
                             </tr>
                             <tr>
@@ -73,16 +91,17 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p-dropdown [options]="branches" styleClass="w-100" placeholder="Select Branch" optionLabel="name"
-                                     [(ngModel)]="selectedBranch" optionValue="name" appendTo="body" [filter]="true">
+                                    <p-dropdown [options]="branches" styleClass="w-100" placeholder="Select Branch"
+                                        optionLabel="name" [(ngModel)]="selectedBranch" optionValue="name"
+                                        appendTo="body" [filter]="true">
                                     </p-dropdown>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     <button class="btn btn-primary py-2 px-4 w-100"
-                                    [disabled]="selectedBranch.length == 0 || selectedReason.length == 0 || selectedMeals.length == 0"
-                                     (click)="storeDislikeRequest()">
+                                        [disabled]="selectedBranch.length == 0 || selectedReason.length == 0 || selectedMeals.length == 0"
+                                        (click)="storeDislikeRequest()">
                                         <b>Add Dislike Info</b>
                                     </button>
                                 </td>

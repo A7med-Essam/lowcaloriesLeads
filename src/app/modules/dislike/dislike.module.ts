@@ -16,6 +16,8 @@ import { ShowDislikeComponent } from './show-dislike/show-dislike.component';
 import { UpdateDislikeComponent } from './update-dislike/update-dislike.component';
 import { DislikeDetailsComponent } from './dislike-details/dislike-details.component';
 import { DislikeComponent } from './dislike/dislike.component';
+import { AddReasonsComponent } from './add-reasons/add-reasons.component';
+import { ReasonsComponent } from './reasons/reasons.component';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   DropdownModule,
@@ -33,6 +35,8 @@ const APP_PRIMENG_MODULE = [
     DislikeComponent,
     UpdateDislikeComponent,
     DislikeDetailsComponent,
+    AddReasonsComponent,
+    ReasonsComponent,
   ],
   imports: [
     CommonModule,

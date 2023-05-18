@@ -1,0 +1,26 @@
+
+<div class="d-flex justify-content-end align-items-center">
+    <div class="mb-3">
+        <p-button class="mb-3 mx-2" icon="pi pi-plus" label="Add Row" routerLink="../add-reason">
+        </p-button>
+    </div>
+</div>
+<div class="card">
+    <p-table [value]="reasons">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Reason</th>
+                <th class="text-center">Delete</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-reason>
+            <tr>
+                <td class="text-center">{{reason?.reason}}</td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-trash" (click)="deleteRow(reason?.id)"
+                        class="m-1 p-button-danger p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

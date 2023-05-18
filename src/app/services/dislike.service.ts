@@ -44,4 +44,18 @@ export class DislikeService {
     filter.withoutPagination = true;
     return this._ApiConfigService.postReq3(`allDislikeRequests`, filter);
   }
+
+  // =========================== reasons ===========================
+
+  getReasons(): Observable<any> {
+    return this._ApiConfigService.postReq3(`reasons`,'');
+  }
+
+  addReasons(reason:string): Observable<any> {
+    return this._ApiConfigService.postReq3(`addReasons`,{reason});
+  }
+
+  deleteReasons(reason_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`deleteReasons`,{reason_id});
+  }
 }
