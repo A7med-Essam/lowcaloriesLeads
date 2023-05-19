@@ -54,6 +54,7 @@ export class UpdateDislikeComponent implements OnInit {
     this.updateForm = new FormGroup({
       dislike_request_id: new FormControl(data?.id, [Validators.required]),
       name: new FormControl(data?.name, [Validators.required]),
+      cid: new FormControl(data?.cid, [Validators.required]),
       email: new FormControl(data?.email, [Validators.required]),
       branch: new FormControl(data?.branch, [Validators.required]),
       sent_by: new FormControl(data?.sent_by, [Validators.required]),

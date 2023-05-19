@@ -108,7 +108,7 @@ export class SurveyService {
   }
 
   createLead(lead: any): Observable<any> {
-    return this._ApiConfigService.postReq(`leads`, lead);
+    return this._ApiConfigService.postReq3(`leads`, lead);
   }
 
   createLeadDetails(lead: any): Observable<any> {
@@ -121,7 +121,7 @@ export class SurveyService {
   }
 
   filterLeads(filter: any): Observable<any> {
-    return this._ApiConfigService.getReq(`leads`, filter);
+    return this._ApiConfigService.getReq3(`leads`, filter);
   }
 
   showLead(id: number): Observable<any> {
@@ -158,7 +158,7 @@ export class SurveyService {
   }
 
   addReminderLead(reminder:any): Observable<any> {
-    return this._ApiConfigService.postReq(`leads3/addReminderLead`, reminder);
+    return this._ApiConfigService.postReq3(`leads/addReminderLead`, reminder);
   }
 
 }

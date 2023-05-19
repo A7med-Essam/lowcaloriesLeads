@@ -34,7 +34,6 @@ export class CreateClinicLinkComponent implements OnInit {
 
   insertRow(insertForm: FormGroup) {
     if (insertForm.valid) {
-      console.log(insertForm.value);
       const day = this.appointments.filter(
         (e) => e.id == insertForm.value.date_id
       )[0].day;

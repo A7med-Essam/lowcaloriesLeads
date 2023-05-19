@@ -42,55 +42,66 @@
     [draggable]="false" [resizable]="false">
     <div class="container">
         <div class="row mx-0">
-            <div class="col-md-6 my-3">
+            <div class="col-md-6 my-1">
                 <label for="">Sent By</label>
                 <p-dropdown [options]="branches" optionLabel="name" optionValue="name" styleClass="w-100"
                     appendTo="body" placeholder="Select Option" [(ngModel)]="filter_selectedSentBy">
                 </p-dropdown>
             </div>
-            <div class="col-md-6 my-3">
+            <div class="col-md-6 my-1">
                 <label for="">Meal</label>
                 <p-dropdown [options]="meals" optionLabel="ITEM" optionValue="ITEM" styleClass="w-100" appendTo="body"
                     placeholder="Select Meal" [(ngModel)]="filter_selectedMeal">
                 </p-dropdown>
             </div>
-            <div class="col-md-6 my-3">
+            <div class="col-md-6 my-1">
                 <label for="">Reason</label>
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedReason" />
             </div>
-            <div class="col-md-6 my-3">
+            <div class="col-md-6 my-1">
                 <label for="">Name</label>
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedName" />
             </div>
-            <div class="col-md-6 my-3">
+            <div class="col-md-6 my-1">
                 <label for="">Branch</label>
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedBranch" />
             </div>
-            <div class="col-md-6 my-3">
+            <div class="col-md-6 my-1">
                 <label for="">Email</label>
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedEmail" />
             </div>
-            <div class="col-md-6 my-3">
+            <div class="col-md-6 my-1">
                 <label for="">Mobile</label>
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedMobile" maxlength="11"
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
             </div>
-            <div class="col-md-6 my-3">
+            <div class="col-md-6 my-1">
                 <label for="range">Date Range</label>
                 <p-calendar [(ngModel)]="filter_selectedDates" selectionMode="range" [readonlyInput]="true"
                     inputId="range" ngClass="w-100" appendTo="body">
                 </p-calendar>
             </div>
+            <div class="col-md-6 my-1">
+                <label for="">CID</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedCid" />
+            </div>
         </div>
     </div>
     <ng-template pTemplate="footer">
-        <div class="upload-btn-wrapper">
-            <button class="btn btn-primary" (click)="filter();filterModal = false;">
-                Apply Filter
-            </button>
-            <button class="btn btn-secondary" (click)="resetFilter()">
-                Reset Filter
-            </button>
+        <div class="upload-btn-wrapper d-flex justify-content-between">
+            <div>
+                <button class="btn btn-secondary" (click)="resetFields()">
+                    Reset Fields
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="filter();filterModal = false;">
+                    Apply Filter
+                </button>
+                <button class="btn btn-secondary" (click)="resetFilter()">
+                    Reset Filter
+                </button>
+            </div>
         </div>
     </ng-template>
 </p-dialog>

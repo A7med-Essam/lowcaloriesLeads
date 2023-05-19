@@ -96,6 +96,7 @@ export class ShowDislikeComponent implements OnInit {
   filter_selectedReason: any = null;
   filter_selectedMeal: any = null;
   filter_selectedMobile: any = null;
+  filter_selectedCid:any = null
 
   filter() {
     let FILTER: any = {
@@ -118,6 +119,7 @@ export class ShowDislikeComponent implements OnInit {
       reason: this.filter_selectedReason || null,
       dislike_meal: this.filter_selectedMeal || null,
       mobile: this.filter_selectedMobile || null,
+      cid: this.filter_selectedCid || null,
     };
     Object.keys(FILTER).forEach((k) => FILTER[k] == null && delete FILTER[k]);
     this.filterStatus = true;
@@ -138,6 +140,19 @@ export class ShowDislikeComponent implements OnInit {
     this.filter_selectedReason = null;
     this.filter_selectedMeal = null;
     this.filter_selectedMobile = null;
+    this.filter_selectedCid = null;
     this.getDislikes();
+  }
+
+  resetFields(){
+    this.filter_selectedEmail = null;
+    this.filter_selectedName = null;
+    this.filter_selectedBranch = null;
+    this.filter_selectedSentBy = null;
+    this.filter_selectedDates = null;
+    this.filter_selectedReason = null;
+    this.filter_selectedMeal = null;
+    this.filter_selectedMobile = null;
+    this.filter_selectedCid = null;
   }
 }

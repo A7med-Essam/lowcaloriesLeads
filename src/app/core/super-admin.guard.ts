@@ -28,8 +28,12 @@ export class SuperAdminGuard implements CanActivate {
     });
     if (role == 'super_admin') {
       return true;
-    } else {
+    } else if (role == 'agent') {
       this._Router.navigate(['/home']);
+      return false;
+    } else {
+      localStorage.clear();
+      this._Router.navigate(['/login']);
       return false;
     }
   }

@@ -6,16 +6,19 @@ import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './core/auth.guard';
 import { SuperAdminGuard } from './core/super-admin.guard';
 
-
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'dashboard',
     loadChildren: () =>
       import('./modules/survey/survey.module').then((m) => m.SurveyModule),
-    canActivate: [AuthGuard,SuperAdminGuard],
+    canActivate: [AuthGuard, SuperAdminGuard],
   },
   {
     path: 'leads',
@@ -39,7 +42,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{useHash:true})],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
