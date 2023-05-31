@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>LowcaloriesLeads</title>
@@ -8,8 +9,81 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
     integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
+
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+
+
+  <!-- <script>
+    // Pusher.logToConsole = true;
+    var pusher = new Pusher('2453154bb7ba5edf59c3', {
+      cluster: 'eu'
+    });
+
+    function agentUpdateStatus(status) {
+      let xhr = new XMLHttpRequest();
+      const url = 'http://lowcalories.ae/api/v3/agentUpdateStatus';
+      const data = {
+        agent_id: '1',
+        status: status
+      };
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            // Request successful
+            const response = JSON.parse(xhr.responseText);
+          } else {
+            // Error handling
+            console.error('Error:', xhr.status);
+          }
+        }
+      };
+
+      xhr.send(JSON.stringify(data));
+    }
+
+    function handlePusherDisconnection() {
+      pusher.connection.bind('disconnected', function () {
+        // Update the user status as offline in the backend when disconnected
+        agentUpdateStatus('Offline');
+      });
+
+      // Capture the browser close, refresh, or tab close events
+      window.addEventListener('beforeunload', function (event) {
+        // Update the user status as offline in the backend before leaving
+        agentUpdateStatus('Offline');
+
+        // Customize the confirmation message displayed to the user
+        event.returnValue = 'Are you sure you want to leave this page?';
+      });
+
+      // Capture the device sleep or shutdown events
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'hidden') {
+          // Update the user status as offline in the backend when the app goes into the background
+          agentUpdateStatus('Offline');
+        }
+      });
+    }
+
+    pusher.connection.bind('state_change', function (states) {
+      var currentConnectionState = states.current;
+      if (currentConnectionState === 'connected') {
+        agentUpdateStatus('Online');
+      }
+      else if (currentConnectionState === "unavailable") {
+        agentUpdateStatus('Offline');
+      }
+    });
+    handlePusherDisconnection();
+  </script> -->
 </head>
+
 <body>
   <app-root></app-root>
 </body>
+
 </html>

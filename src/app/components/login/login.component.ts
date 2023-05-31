@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { PusherService } from 'src/app/services/pusher.service';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,11 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  constructor(private _AuthService: AuthService, private _Router: Router) {}
+  constructor(
+    private _AuthService: AuthService,
+    private _Router: Router,
+    private _PusherService: PusherService
+  ) {}
 
   login(data: any) {
     this._AuthService
@@ -18,6 +23,7 @@ export class LoginComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.status == 1) {
           this._AuthService.saveUser(res.data);
+          this._PusherService.firePusher()
           this._Router.navigate(['./home']);
         }
       });

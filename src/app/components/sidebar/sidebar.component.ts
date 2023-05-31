@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { PusherService } from 'src/app/services/pusher.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,6 +13,7 @@ export class SidebarComponent implements OnInit {
   country: string = '';
   constructor(
     private _AuthService: AuthService,
+    private _PusherService: PusherService
   ) {
     _AuthService.currentUser.subscribe((data) => {
       if (data != null) {
@@ -27,6 +29,7 @@ export class SidebarComponent implements OnInit {
   }
 
   logOut() {
+    this._PusherService.firePusher(true);
     this._AuthService.logOut();
   }
 
