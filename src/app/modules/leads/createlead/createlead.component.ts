@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { SurveyService } from 'src/app/services/survey.service';
 
@@ -22,7 +21,9 @@ export class CreateleadComponent implements OnInit ,OnDestroy{
 
   interval: any;
   ngOnInit() {
-    this.getAgents();
+    setTimeout(() => {
+      this.getAgents();
+    }, 1);
     this.interval = setInterval(() => {
       this.getAgents();
     }, 10000);

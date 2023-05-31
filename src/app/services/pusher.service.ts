@@ -14,7 +14,7 @@ export class PusherService {
     private _LocalService: LocalService
   ) {}
 
-  firePusher(userLogout:boolean = false) {
+  firePusher(userLogout: boolean = false) {
     this.userId =
       this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id || 0;
 
@@ -24,7 +24,7 @@ export class PusherService {
       });
       if (userLogout) {
         this.agentUpdateStatus('Offline').subscribe();
-      }else{
+      } else {
         this.pusher.connection.bind('state_change', (states: any) => {
           const currentConnectionState = states.current;
           if (currentConnectionState === 'connected') {
@@ -43,9 +43,15 @@ export class PusherService {
       this.agentUpdateStatus('Offline').subscribe();
     });
     window.addEventListener('beforeunload', (event) => {
-      this.agentUpdateStatus('Offline').subscribe();
       event.returnValue = 'Are you sure you want to leave this page?';
+      this.agentUpdateStatus('Offline').subscribe();
+      if (event.cancelable) {
+        setTimeout(() => {
+          this.agentUpdateStatus('Online').subscribe();
+        }, 1);
+      }
     });
+
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
         // this.agentUpdateStatus('Offline').subscribe();
