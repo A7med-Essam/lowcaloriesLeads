@@ -38,6 +38,12 @@ const routes: Routes = [
       import('./modules/clinic/clinic.module').then((m) => m.ClinicModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'agent',
+    loadChildren: () =>
+      import('./modules/agent-target/agent-target.module').then((m) => m.AgentTargetModule),
+    canActivate: [AuthGuard],
+  },
   { path: '**', component: Error404Component },
 ];
 

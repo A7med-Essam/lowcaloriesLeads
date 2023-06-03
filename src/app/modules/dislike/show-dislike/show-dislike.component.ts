@@ -155,4 +155,15 @@ export class ShowDislikeComponent implements OnInit {
     this.filter_selectedMobile = null;
     this.filter_selectedCid = null;
   }
+
+  export(){
+    this._DislikeService.exportDislike().subscribe({
+      next:res=>{
+        const link = document.createElement('a');
+        link.href = res.data;
+        link.target = "_blank"
+        link.click();
+      }
+    })
+  }
 }

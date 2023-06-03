@@ -1,0 +1,74 @@
+<div class="row animated">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Target Info</h4>
+                            <div>
+                                <button class="btn btn-dark" (click)="backDetailsBtn()">Back</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive overflow-auto">
+                                <table class="table">
+                                    <thead class="text-muted">
+                                        <th class="py-3">Title</th>
+                                        <th class="py-3">Description</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Date</td>
+                                            <td>{{target?.date | date}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>agent_id</td>
+                                            <td>{{target?.agent_id}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>team</td>
+                                            <td>{{target?.team}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>client_number</td>
+                                            <td>{{target?.client_number}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>client_cid</td>
+                                            <td>{{target?.client_cid}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>emirate</td>
+                                            <td>{{target?.emirate}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>branch</td>
+                                            <td>{{target?.branch}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>case</td>
+                                            <td>{{target?.case}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>action</td>
+                                            <td>{{target?.action}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>status</td>
+                                            <td>{{target?.status}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>notes</td>
+                                            <td>{{target?.notes}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

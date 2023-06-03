@@ -1,49 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AgentTargetService, ITarget } from 'src/app/services/agent-target.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
-  selector: 'app-show-lead',
-  templateUrl: './show-lead.component.html',
-  styleUrls: ['./show-lead.component.scss'],
+  selector: 'app-show-target',
+  templateUrl: './show-target.component.html',
+  styleUrls: ['./show-target.component.scss'],
 })
-export class ShowLeadComponent implements OnInit {
-  constructor(private _SurveyService: SurveyService, private _Router: Router) {}
+export class ShowTargetComponent implements OnInit {
+  constructor(
+    private _SurveyService: SurveyService,
+     private _Router: Router,
+     private _AgentTargetService:AgentTargetService
+     ) {}
 
-  leads: any;
+  targets: any;
   PaginationInfo: any;
 
   ngOnInit(): void {
-    this.getLeads();
+    this.getTargets();
   }
 
-  getLeads(page: number = 1) {
+  getTargets(page: number = 1) {
     if (this.appliedFilters) {
       this.filter(...this.appliedFilters);
     } else {
-      this._SurveyService.getLeads(page).subscribe({
+      this._AgentTargetService.getTargets(page).subscribe({
         next: (res) => {
-          this.leads = res?.data?.data;
+          this.targets = res?.data?.data;
           this.PaginationInfo = res.data;
         },
       });
     }
   }
 
-  showRow(id: number) {
-    if (id) {
-      this._SurveyService.leadId.next(id);
-      this._Router.navigate(['leads/details']);
+  showRow(target: ITarget) {
+    if (target) {
+      this._AgentTargetService.target.next(target);
+      this._Router.navigate(['agent/details']);
     }
   }
 
   currentPage: number = 1;
   paginate(e: any) {
     this.currentPage = e.first / e.rows + 1;
-    this.getLeads(e.first / e.rows + 1);
+    this.getTargets(e.first / e.rows + 1);
   }
 
-  // *******************************
+  // ****************************************************filter************************************************************************
   questions: any[] = [];
   getAllQuestions() {
     this._SurveyService.getQuestions().subscribe({
@@ -97,11 +102,11 @@ export class ShowLeadComponent implements OnInit {
       filter6,
       filter7,
       filter8,
-      filter9
+      filter9,
     ];
     Object.keys(FILTER).forEach((k) => FILTER[k] == null && delete FILTER[k]);
     this._SurveyService.filterLeads(FILTER).subscribe((res) => {
-      this.leads = res.data.data;
+      this.targets = res.data.data;
       this.PaginationInfo = res.data;
     });
   }
@@ -128,7 +133,7 @@ export class ShowLeadComponent implements OnInit {
     filter8.value = null;
     filter9.value = null;
     this.rangeDates = null;
-    this.getLeads();
+    this.getTargets();
     this.getAgents();
     this.appliedFilters = null;
     this.answers = [];
@@ -148,44 +153,31 @@ export class ShowLeadComponent implements OnInit {
 
   onSelectQuestion(e: any) {
     this.answers = [];
-    let [currentQuestion] = this.questions.filter(f=>f.id == e.value)
-    this.answers = currentQuestion?.answers
+    let [currentQuestion] = this.questions.filter((f) => f.id == e.value);
+    this.answers = currentQuestion?.answers;
   }
 
-  assigned:any = [
-    {name:"Assigned",value:"true"},
-    {name:"Not Assigned",value:"false"}
-  ]
+  assigned: any = [
+    { name: 'Assigned', value: 'true' },
+    { name: 'Not Assigned', value: 'false' },
+  ];
 
-  replied:any = [
-    {name:"Replied",value:"true"},
-    {name:"Not Replied",value:"false"}
-  ]
+  replied: any = [
+    { name: 'Replied', value: 'true' },
+    { name: 'Not Replied', value: 'false' },
+  ];
 
-  resetStaticFilterOptions(){
+  resetStaticFilterOptions() {
     this.assigned = [
-      {name:"Assigned",value:"true"},
-      {name:"Not Assigned",value:"false"}
-    ]
+      { name: 'Assigned', value: 'true' },
+      { name: 'Not Assigned', value: 'false' },
+    ];
 
     this.replied = [
-      {name:"Replied",value:"true"},
-      {name:"Not Replied",value:"false"}
-    ]
+      { name: 'Replied', value: 'true' },
+      { name: 'Not Replied', value: 'false' },
+    ];
   }
-
-  export(){
-    const ids = this.leads.map((obj:any) => obj.id);
-    this._SurveyService.exportLeads(ids).subscribe({
-      next:res=>{
-        const link = document.createElement('a');
-        link.target = "_blank"
-        link.href = res.data;
-        link.click();
-      }
-    })
-  }
-
   resetFields(
     filter1: any,
     filter2: any,
@@ -213,4 +205,19 @@ export class ShowLeadComponent implements OnInit {
     this.answers = [];
     this.resetStaticFilterOptions();
   }
+
+
+  // ****************************************************export************************************************************************
+
+  export() {
+    this._AgentTargetService.exportTarget().subscribe({
+      next: (res) => {
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
+      },
+    });
+  }
+
 }

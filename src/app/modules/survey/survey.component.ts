@@ -127,6 +127,7 @@ export class SurveyComponent implements OnInit {
   getSample() {
     this._SurveyService.getSample().subscribe((res) => {
       const link = document.createElement('a');
+      link.target = "_blank"
       link.href = res.data;
       link.click();
     });

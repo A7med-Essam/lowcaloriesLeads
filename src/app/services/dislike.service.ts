@@ -58,4 +58,8 @@ export class DislikeService {
   deleteReasons(reason_id:number): Observable<any> {
     return this._ApiConfigService.postReq3(`deleteReasons`,{reason_id});
   }
+
+  exportDislike(): Observable<any>{
+    return this._ApiConfigService.postReq3(`disLikeExport`,'');
+  }
 }

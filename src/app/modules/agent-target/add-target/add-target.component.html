@@ -1,0 +1,89 @@
+<div class="container">
+    <form [formGroup]="insertForm" (ngSubmit)='insertRow(insertForm)'>
+        <div class="row mx-0">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">client_number</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='client_number' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('client_number')?.touched &&
+                insertForm.get('client_number')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">client_cid</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='client_cid' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('client_cid')?.touched &&
+                insertForm.get('client_cid')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">notes</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='notes' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('notes')?.touched &&
+                insertForm.get('notes')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">date</label>
+                <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='date'></p-calendar>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('date')?.touched &&
+                insertForm.get('date')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Agent</label>
+                <p-dropdown [options]="agents" optionLabel="name" optionValue="id" formControlName='agent_id' appendTo="body"
+                    styleClass="w-100" placeholder="Select Agent" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('agent_id')?.touched &&
+                insertForm.get('agent_id')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Actions</label>
+                <p-dropdown [options]="actions" formControlName='action' styleClass="w-100" placeholder="Select Action" appendTo="body"
+                    [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('action')?.touched &&
+                insertForm.get('action')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Teams</label>
+                <p-dropdown [options]="teams" formControlName='team' styleClass="w-100" placeholder="Select Team" appendTo="body"
+                    [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('team')?.touched &&
+                insertForm.get('team')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Cases</label>
+                <p-dropdown [options]="cases" formControlName='case' styleClass="w-100" placeholder="Select Case" appendTo="body"
+                    [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('case')?.touched &&
+                insertForm.get('case')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Status</label>
+                <p-dropdown [options]="status" formControlName='status' styleClass="w-100" placeholder="Select Status" appendTo="body"
+                    [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('status')?.touched &&
+                insertForm.get('status')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Branches</label>
+                <p-dropdown [options]="branches" optionLabel="name"  formControlName='branch' appendTo="body"
+                    styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('branch')?.touched &&
+                insertForm.get('branch')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Emirates</label>
+                <p-dropdown [options]="emirates" optionLabel="name" optionValue="name"  formControlName='emirate' appendTo="body"
+                    styleClass="w-100" placeholder="Select Emirate" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('emirate')?.touched &&
+                insertForm.get('emirate')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">Add Target</button>
+            </div>
+        </div>
+    </form>
+</div>
