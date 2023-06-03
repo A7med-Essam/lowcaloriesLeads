@@ -16,6 +16,10 @@ export class AgentTargetService {
     return this._ApiConfigService.postReq3(`targetRequests?page=${page}`, '');
   }
 
+  filterTargets(page: number,filter:any){
+    return this._ApiConfigService.postReq3(`targetRequests?page=${page}`, filter);
+  }
+
   addTarget(target:ITarget): Observable<{status:number,data:ITarget,message:string}> {
     return this._ApiConfigService.postReq3(`addTargetRequest`, target);
   }

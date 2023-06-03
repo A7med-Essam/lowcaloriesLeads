@@ -17,7 +17,7 @@ export class AddTargetComponent implements OnInit {
     private _Router: Router,
     private _ActivatedRoute: ActivatedRoute,
     private _DislikeService: DislikeService,
-    private _AgentTargetService:AgentTargetService
+    private _AgentTargetService: AgentTargetService
   ) {}
 
   ngOnInit(): void {
@@ -26,7 +26,7 @@ export class AddTargetComponent implements OnInit {
     this.getAgents();
   }
 
-  insertRow(form:FormGroup) {
+  insertRow(form: FormGroup) {
     if (form.valid) {
       form.patchValue({
         // emirate: form.value.branch.agent_emirate_id,
@@ -64,25 +64,14 @@ export class AddTargetComponent implements OnInit {
     'BANK TRANSFER',
     'Subscribe Via Branch',
     'Paid in Branch',
-    'Subscribe Online'
+    'Subscribe Online',
   ];
 
-  teams: any[] = [
-    'WHATS APP TEAM',
-    'INSTEGRAM APP TEAM',
-    'FACEBOOK APP TEAM'
-  ];
+  teams: any[] = ['WHATS APP TEAM', 'INSTEGRAM APP TEAM', 'FACEBOOK APP TEAM'];
 
-  cases: any[] = [
-    'RENEW',
-    'EXIST',
-  ];
+  cases: any[] = ['RENEW', 'EXIST'];
 
-  status: any[] = [
-    'ACTIVE',
-    'PICKUP',
-    'NOT ACTIVE'
-  ];
+  status: any[] = ['ACTIVE', 'PICKUP', 'NOT ACTIVE'];
 
   agents: any[] = [];
   getAgents() {
@@ -99,44 +88,43 @@ export class AddTargetComponent implements OnInit {
       next: (res) => (this.branches = res.data),
     });
   }
-  // ===============================================================
 
-  emirates: any[] =[
+  emirates: any[] = [
     {
-        "id": 26,
-        "name": "Abu Dhabi",
+      id: 26,
+      name: 'Abu Dhabi',
     },
     {
-        "id": 27,
-        "name": "Al-Gharbia",
+      id: 27,
+      name: 'Al-Gharbia',
     },
     {
-        "id": 28,
-        "name": "Al-Ain",
+      id: 28,
+      name: 'Al-Ain',
     },
     {
-        "id": 29,
-        "name": "Dubai",
+      id: 29,
+      name: 'Dubai',
     },
     {
-        "id": 30,
-        "name": "Sharjah",
+      id: 30,
+      name: 'Sharjah',
     },
     {
-        "id": 31,
-        "name": "Ajman",
+      id: 31,
+      name: 'Ajman',
     },
     {
-        "id": 32,
-        "name": "Ras Al-Khiema",
+      id: 32,
+      name: 'Ras Al-Khiema',
     },
     {
-        "id": 33,
-        "name": "Umm Al-Quwain",
+      id: 33,
+      name: 'Umm Al-Quwain',
     },
     {
-        "id": 34,
-        "name": "Fujirah",
-    }
-]
+      id: 34,
+      name: 'Fujirah',
+    },
+  ];
 }

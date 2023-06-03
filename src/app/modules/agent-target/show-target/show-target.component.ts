@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AgentTargetService, ITarget } from 'src/app/services/agent-target.service';
+import {
+  AgentTargetService,
+  ITarget,
+} from 'src/app/services/agent-target.service';
+import { DislikeService } from 'src/app/services/dislike.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -11,20 +16,24 @@ import { SurveyService } from 'src/app/services/survey.service';
 export class ShowTargetComponent implements OnInit {
   constructor(
     private _SurveyService: SurveyService,
-     private _Router: Router,
-     private _AgentTargetService:AgentTargetService
-     ) {}
+    private _Router: Router,
+    private _AgentTargetService: AgentTargetService,
+    private _DislikeService: DislikeService
+  ) {}
 
   targets: any;
   PaginationInfo: any;
 
   ngOnInit(): void {
     this.getTargets();
+    this.createFilterForm();
+    this.getAgents();
+    this.getAgentBranches();
   }
 
   getTargets(page: number = 1) {
     if (this.appliedFilters) {
-      this.filter(...this.appliedFilters);
+      this.getOldFilters();
     } else {
       this._AgentTargetService.getTargets(page).subscribe({
         next: (res) => {
@@ -49,163 +58,75 @@ export class ShowTargetComponent implements OnInit {
   }
 
   // ****************************************************filter************************************************************************
-  questions: any[] = [];
-  getAllQuestions() {
-    this._SurveyService.getQuestions().subscribe({
-      next: (res) => {
-        this.questions = res.data;
-      },
-    });
-  }
+
   filterModal: boolean = false;
   appliedFilters: any = null;
   rangeDates: any;
-  filter(
-    filter1?: any,
-    filter2?: any,
-    filter3?: any,
-    filter4?: any,
-    filter5?: any,
-    filter6?: any,
-    filter7?: any,
-    filter8?: any,
-    filter9?: any
-  ) {
-    filter3.value == undefined && (filter3.value = []);
-    let FILTER: any = {
-      lead_question_id: filter1.value || null,
-      assigned_id: filter2.value || null,
-      date:
-        filter3?.value[0] && !filter3?.value[1]
-          ? new Date(filter3?.value[0]).toLocaleDateString()
-          : null,
-      from: filter3?.value[1]
-        ? new Date(filter3?.value[0]).toLocaleDateString()
-        : null,
-      to: filter3?.value[1]
-        ? new Date(filter3?.value[1]).toLocaleDateString()
-        : null,
-      customer_name: filter4.value || null,
-      customer_mobile: filter5.value || null,
-      customer_email: filter6.value || null,
-      lead_answer_id: filter7.value || null,
-      assigned: filter8.value || null,
-      replied: filter9.value || null,
-    };
 
-    this.appliedFilters = [
-      filter1,
-      filter2,
-      filter3,
-      filter4,
-      filter5,
-      filter6,
-      filter7,
-      filter8,
-      filter9,
-    ];
-    Object.keys(FILTER).forEach((k) => FILTER[k] == null && delete FILTER[k]);
-    this._SurveyService.filterLeads(FILTER).subscribe((res) => {
+
+  filterForm!: FormGroup;
+  createFilterForm() {
+    this.filterForm = new FormGroup({
+      team: new FormControl(null),
+      client_number: new FormControl(null),
+      client_cid: new FormControl(null),
+      emirate: new FormControl(null),
+      branch: new FormControl(null),
+      action: new FormControl(null),
+      status: new FormControl(null),
+      date: new FormControl(null),
+      case: new FormControl(null),
+      agent_id: new FormControl(null),
+      notes: new FormControl(null),
+    });
+  }
+
+  insertRow(form: FormGroup) {
+    for (const prop in form.value) {
+      if (form.value[prop] === null) {
+        delete form.value[prop];
+      }
+    }
+    if (form.value.date) {
+      form.patchValue({
+        date: new Date(form.value.date).toLocaleDateString('en-CA'),
+      });
+    }
+    if (form.value.branch) {
+      form.patchValue({
+        branch: form.value.branch.name,
+      });
+    }
+
+    this.appliedFilters = form.value;
+
+    this._AgentTargetService.filterTargets(1, form.value).subscribe((res) => {
       this.targets = res.data.data;
       this.PaginationInfo = res.data;
+      this.filterModal = false;
     });
   }
 
-  resetFilter(
-    filter1: any,
-    filter2: any,
-    filter3: any,
-    filter4: any,
-    filter5: any,
-    filter6: any,
-    filter7: any,
-    filter8: any,
-    filter9: any
-  ) {
+  getOldFilters() {
+    this._AgentTargetService
+      .filterTargets(1, this.appliedFilters)
+      .subscribe((res) => {
+        this.targets = res.data.data;
+        this.PaginationInfo = res.data;
+        this.filterModal = false;
+      });
+  }
+
+  resetFilter() {
+    this.appliedFilters = null;
     this.filterModal = false;
-    filter1.value = null;
-    filter2.value = null;
-    filter3.value = undefined;
-    filter4.value = null;
-    filter5.value = null;
-    filter6.value = null;
-    filter7.value = null;
-    filter8.value = null;
-    filter9.value = null;
-    this.rangeDates = null;
-    this.getTargets();
-    this.getAgents();
-    this.appliedFilters = null;
-    this.answers = [];
-    this.resetStaticFilterOptions();
+    this.filterForm.reset();
+    this.targets();
   }
 
-  agents: any[] = [];
-  getAgents() {
-    this._SurveyService.getAllAgents().subscribe({
-      next: (res) => {
-        this.agents = res.data;
-      },
-    });
+  resetFields(){
+    this.filterForm.reset();
   }
-
-  answers: any[] = [];
-
-  onSelectQuestion(e: any) {
-    this.answers = [];
-    let [currentQuestion] = this.questions.filter((f) => f.id == e.value);
-    this.answers = currentQuestion?.answers;
-  }
-
-  assigned: any = [
-    { name: 'Assigned', value: 'true' },
-    { name: 'Not Assigned', value: 'false' },
-  ];
-
-  replied: any = [
-    { name: 'Replied', value: 'true' },
-    { name: 'Not Replied', value: 'false' },
-  ];
-
-  resetStaticFilterOptions() {
-    this.assigned = [
-      { name: 'Assigned', value: 'true' },
-      { name: 'Not Assigned', value: 'false' },
-    ];
-
-    this.replied = [
-      { name: 'Replied', value: 'true' },
-      { name: 'Not Replied', value: 'false' },
-    ];
-  }
-  resetFields(
-    filter1: any,
-    filter2: any,
-    filter3: any,
-    filter4: any,
-    filter5: any,
-    filter6: any,
-    filter7: any,
-    filter8: any,
-    filter9: any
-  ) {
-    filter1.value = null;
-    filter2.value = null;
-    filter3.value = undefined;
-    filter4.value = null;
-    filter5.value = null;
-    filter6.value = null;
-    filter7.value = null;
-    filter8.value = null;
-    filter9.value = null;
-    this.rangeDates = null;
-    this.getAgents();
-    this.getAllQuestions();
-    this.appliedFilters = null;
-    this.answers = [];
-    this.resetStaticFilterOptions();
-  }
-
 
   // ****************************************************export************************************************************************
 
@@ -220,4 +141,74 @@ export class ShowTargetComponent implements OnInit {
     });
   }
 
+  // ****************************************************filter************************************************************************
+
+  actions: any[] = [
+    'Created Payment Link',
+    'BANK TRANSFER',
+    'Subscribe Via Branch',
+    'Paid in Branch',
+    'Subscribe Online',
+  ];
+
+  teams: any[] = ['WHATS APP TEAM', 'INSTEGRAM APP TEAM', 'FACEBOOK APP TEAM'];
+
+  cases: any[] = ['RENEW', 'EXIST'];
+
+  status: any[] = ['ACTIVE', 'PICKUP', 'NOT ACTIVE'];
+
+  agents: any[] = [];
+  getAgents() {
+    this._SurveyService.getAllAgents().subscribe({
+      next: (res) => {
+        this.agents = res.data;
+      },
+    });
+  }
+
+  branches: any[] = [];
+  getAgentBranches() {
+    this._DislikeService.getAgentBranches().subscribe({
+      next: (res) => (this.branches = res.data),
+    });
+  }
+
+  emirates: any[] = [
+    {
+      id: 26,
+      name: 'Abu Dhabi',
+    },
+    {
+      id: 27,
+      name: 'Al-Gharbia',
+    },
+    {
+      id: 28,
+      name: 'Al-Ain',
+    },
+    {
+      id: 29,
+      name: 'Dubai',
+    },
+    {
+      id: 30,
+      name: 'Sharjah',
+    },
+    {
+      id: 31,
+      name: 'Ajman',
+    },
+    {
+      id: 32,
+      name: 'Ras Al-Khiema',
+    },
+    {
+      id: 33,
+      name: 'Umm Al-Quwain',
+    },
+    {
+      id: 34,
+      name: 'Fujirah',
+    },
+  ];
 }
