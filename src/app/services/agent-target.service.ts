@@ -27,6 +27,14 @@ export class AgentTargetService {
   exportTarget(): Observable<any> {
     return this._ApiConfigService.postReq3(`TargetExport`, '');
   }
+
+  getTargetOptions():Observable<any>{
+    return this._ApiConfigService.postReq3(`targetRequestDetails`, '');
+  }
+
+  getCustomerCIDS(phone: string): Observable<any> {
+    return this._ApiConfigService.getReq2(`Subscription/GetCid?phone=${phone}`);
+  }
 }
 
 export interface ITarget{

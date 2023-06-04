@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { DislikeService } from 'src/app/services/dislike.service';
-import { SurveyService } from 'src/app/services/survey.service';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-add-target',
@@ -13,118 +15,136 @@ import { SurveyService } from 'src/app/services/survey.service';
 export class AddTargetComponent implements OnInit {
   insertForm!: FormGroup;
   constructor(
-    private _SurveyService: SurveyService,
     private _Router: Router,
     private _ActivatedRoute: ActivatedRoute,
     private _DislikeService: DislikeService,
-    private _AgentTargetService: AgentTargetService
+    private _LocalService: LocalService,
+    private renderer: Renderer2,
+    private _AgentTargetService: AgentTargetService,
+    private _Location: Location,
+    private _MessageService:MessageService
   ) {}
+
+  goBack(): void {
+    this._Location.back();
+  }
+
+  ngOnDestroy(): void {
+    this.renderer.removeClass(document.body, 'h-side');
+  }
 
   ngOnInit(): void {
     this.getInsertForm();
     this.getAgentBranches();
-    this.getAgents();
+    this.renderer.addClass(document.body, 'h-side');
+    this.getTargetOptions();
   }
 
   insertRow(form: FormGroup) {
     if (form.valid) {
       form.patchValue({
-        // emirate: form.value.branch.agent_emirate_id,
-        branch: form.value.branch.name,
         date: new Date(form.value.date).toLocaleDateString('en-CA'),
+        agent_id: this._LocalService.getJsonValue('userInfo_oldLowCalories').id,
       });
       this._AgentTargetService.addTarget(form.value).subscribe((res) => {
-        this._Router.navigate(['agent'], {
-          relativeTo: this._ActivatedRoute.parent?.parent,
+        // this._Router.navigate(['agent'], {
+        //   relativeTo: this._ActivatedRoute.parent?.parent,
+        // });
+        this._MessageService.add({
+          severity: 'success',
+          summary: 'Target',
+          detail: 'Target Added Successfully',
         });
+        this.insertForm.reset();
       });
     }
   }
 
   getInsertForm() {
     this.insertForm = new FormGroup({
-      team: new FormControl(null, [Validators.required]),
-      client_number: new FormControl(null, [Validators.required]),
+      client_number: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('^[\\d]{10}$'),
+      ]),
       client_cid: new FormControl(null, [Validators.required]),
-      emirate: new FormControl(null, [Validators.required]),
       branch: new FormControl(null, [Validators.required]),
-      action: new FormControl(null, [Validators.required]),
+      customer_type: new FormControl(null, [Validators.required]),
+      paid_by: new FormControl(null, [Validators.required]),
       status: new FormControl(null, [Validators.required]),
+      invoice_number: new FormControl(null, [Validators.required]),
+      type: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),
-      case: new FormControl(null, [Validators.required]),
-      agent_id: new FormControl(null, [Validators.required]),
-      notes: new FormControl(null),
+      team: new FormControl(null, [Validators.required]),
+      agent_id: new FormControl(null),
     });
   }
 
   // ================================== OPTIONS =========================================
 
-  actions: any[] = [
-    'Created Payment Link',
-    'BANK TRANSFER',
-    'Subscribe Via Branch',
-    'Paid in Branch',
-    'Subscribe Online',
-  ];
-
-  teams: any[] = ['WHATS APP TEAM', 'INSTEGRAM APP TEAM', 'FACEBOOK APP TEAM'];
-
-  cases: any[] = ['RENEW', 'EXIST'];
-
-  status: any[] = ['ACTIVE', 'PICKUP', 'NOT ACTIVE'];
-
-  agents: any[] = [];
-  getAgents() {
-    this._SurveyService.getAllAgents().subscribe({
-      next: (res) => {
-        this.agents = res.data;
-      },
-    });
-  }
-
+  paid_by: any[] = [];
+  teams: any[] = [];
+  customer_types: any[] = [];
+  status: any[] = [];
+  types: any[] = [];
   branches: any[] = [];
+
   getAgentBranches() {
     this._DislikeService.getAgentBranches().subscribe({
       next: (res) => (this.branches = res.data),
     });
   }
 
-  emirates: any[] = [
-    {
-      id: 26,
-      name: 'Abu Dhabi',
-    },
-    {
-      id: 27,
-      name: 'Al-Gharbia',
-    },
-    {
-      id: 28,
-      name: 'Al-Ain',
-    },
-    {
-      id: 29,
-      name: 'Dubai',
-    },
-    {
-      id: 30,
-      name: 'Sharjah',
-    },
-    {
-      id: 31,
-      name: 'Ajman',
-    },
-    {
-      id: 32,
-      name: 'Ras Al-Khiema',
-    },
-    {
-      id: 33,
-      name: 'Umm Al-Quwain',
-    },
-    {
-      id: 34,
-      name: 'Fujirah',
-    },
-  ];
+  getTargetOptions() {
+    this._AgentTargetService.getTargetOptions().subscribe({
+      next: (res) => {
+        this.customer_types = res.data.customer_types;
+        this.paid_by = res.data.payment_types;
+        this.teams = res.data.teams;
+        this.status = res.data.status;
+        this.types = res.data.type;
+      },
+    });
+  }
+
+  // ================================== Client number & cid =========================================
+
+  cids: any[] = [];
+  getCustomerCID() {
+    if (this.insertForm.controls.client_number.valid) {
+      this._AgentTargetService
+        .getCustomerCIDS(this.insertForm.value.client_number)
+        .subscribe((res) => {
+          this.cids = res.map((item: any) => item.cid);
+          this.insertForm.patchValue({
+            client_cid: null,
+          });
+        });
+    }
+  }
+
+  customerPhones: any[] = [];
+  getCustomerPhones() {
+    if (this.insertForm.controls.client_cid.valid) {
+      this._DislikeService
+        .getCustomerInfo(this.insertForm.value.client_cid)
+        .subscribe((res) => {
+          if (res.data.length) {
+            this.customerPhones = this.getContactNumbers(res.data[0]);
+          } else {
+            this.customerPhones = [];
+          }
+        });
+    }
+  }
+
+  getContactNumbers(customer: any) {
+    const contactNumbers = [];
+    if (customer.CustomerMobile) {
+      contactNumbers.push(customer.CustomerMobile);
+    }
+    if (customer.CustomerPhone) {
+      contactNumbers.push(customer.CustomerPhone);
+    }
+    return contactNumbers;
+  }
 }

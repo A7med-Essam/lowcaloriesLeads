@@ -29,6 +29,7 @@ export class ShowTargetComponent implements OnInit {
     this.createFilterForm();
     this.getAgents();
     this.getAgentBranches();
+    this.getTargetOptions();
   }
 
   getTargets(page: number = 1) {
@@ -61,8 +62,6 @@ export class ShowTargetComponent implements OnInit {
 
   filterModal: boolean = false;
   appliedFilters: any = null;
-  rangeDates: any;
-
 
   filterForm!: FormGroup;
   createFilterForm() {
@@ -70,14 +69,16 @@ export class ShowTargetComponent implements OnInit {
       team: new FormControl(null),
       client_number: new FormControl(null),
       client_cid: new FormControl(null),
-      emirate: new FormControl(null),
       branch: new FormControl(null),
-      action: new FormControl(null),
+      paid_by: new FormControl(null),
       status: new FormControl(null),
       date: new FormControl(null),
-      case: new FormControl(null),
+      customer_types: new FormControl(null),
       agent_id: new FormControl(null),
-      notes: new FormControl(null),
+      invoice_number: new FormControl(null),
+      type: new FormControl(null),
+      from: new FormControl(null),
+      to: new FormControl(null),
     });
   }
 
@@ -87,23 +88,31 @@ export class ShowTargetComponent implements OnInit {
         delete form.value[prop];
       }
     }
-    if (form.value.date) {
-      form.patchValue({
-        date: new Date(form.value.date).toLocaleDateString('en-CA'),
-      });
-    }
     if (form.value.branch) {
       form.patchValue({
         branch: form.value.branch.name,
       });
     }
 
+    if (form.value.date) {
+      if (form.value.date[1]) {
+        form.patchValue({
+          from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+          to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+          date: null
+        });
+      } else {
+        form.patchValue({
+          date: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+        });
+      }
+    }
     this.appliedFilters = form.value;
-
     this._AgentTargetService.filterTargets(1, form.value).subscribe((res) => {
       this.targets = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
+      this.resetFields();
     });
   }
 
@@ -121,10 +130,10 @@ export class ShowTargetComponent implements OnInit {
     this.appliedFilters = null;
     this.filterModal = false;
     this.filterForm.reset();
-    this.targets();
+    this.getTargets();
   }
 
-  resetFields(){
+  resetFields() {
     this.filterForm.reset();
   }
 
@@ -141,21 +150,7 @@ export class ShowTargetComponent implements OnInit {
     });
   }
 
-  // ****************************************************filter************************************************************************
-
-  actions: any[] = [
-    'Created Payment Link',
-    'BANK TRANSFER',
-    'Subscribe Via Branch',
-    'Paid in Branch',
-    'Subscribe Online',
-  ];
-
-  teams: any[] = ['WHATS APP TEAM', 'INSTEGRAM APP TEAM', 'FACEBOOK APP TEAM'];
-
-  cases: any[] = ['RENEW', 'EXIST'];
-
-  status: any[] = ['ACTIVE', 'PICKUP', 'NOT ACTIVE'];
+  // ****************************************************filter options************************************************************************
 
   agents: any[] = [];
   getAgents() {
@@ -173,42 +168,20 @@ export class ShowTargetComponent implements OnInit {
     });
   }
 
-  emirates: any[] = [
-    {
-      id: 26,
-      name: 'Abu Dhabi',
-    },
-    {
-      id: 27,
-      name: 'Al-Gharbia',
-    },
-    {
-      id: 28,
-      name: 'Al-Ain',
-    },
-    {
-      id: 29,
-      name: 'Dubai',
-    },
-    {
-      id: 30,
-      name: 'Sharjah',
-    },
-    {
-      id: 31,
-      name: 'Ajman',
-    },
-    {
-      id: 32,
-      name: 'Ras Al-Khiema',
-    },
-    {
-      id: 33,
-      name: 'Umm Al-Quwain',
-    },
-    {
-      id: 34,
-      name: 'Fujirah',
-    },
-  ];
+  customer_types: any[] = [];
+  types: any[] = [];
+  paid_by: any[] = [];
+  status: any[] = [];
+  teams: any[] = [];
+  getTargetOptions() {
+    this._AgentTargetService.getTargetOptions().subscribe({
+      next: (res) => {
+        this.customer_types = res.data.customer_types;
+        this.paid_by = res.data.payment_types;
+        this.teams = res.data.teams;
+        this.status = res.data.status;
+        this.types = res.data.type;
+      },
+    });
+  }
 }

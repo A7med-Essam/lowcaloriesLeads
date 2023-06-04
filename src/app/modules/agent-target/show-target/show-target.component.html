@@ -2,8 +2,7 @@
     <div class="mb-3">
         <button pButton pRipple label="Add Target" class="p-button-success" icon="pi pi-plus"
             routerLink="../create"></button>
-        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter"
-            (click)="filterModal = true;">
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
         <p-button icon="pi pi-file" label="Export" (click)="export()">
         </p-button>
@@ -17,7 +16,7 @@
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
-                <!-- <th class="text-center">Date</th> -->
+                <th class="text-center">agent</th>
                 <th class="text-center">team</th>
                 <th class="text-center">branch</th>
                 <th class="text-center">Actions</th>
@@ -25,6 +24,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-agent>
             <tr>
+                <td class="text-center">{{agent?.agent.name}}</td>
                 <td class="text-center">{{agent?.team}}</td>
                 <td class="text-center">{{agent?.branch}}</td>
                 <td class="text-center">
@@ -41,63 +41,60 @@
     <div class="container">
         <form [formGroup]="filterForm" #myForm="ngForm">
             <div class="row mx-0">
-                <div class="col-md-6 col-12 my-3">
+                <div class="col-lg-6 col-12 my-2">
                     <label for="">client_number</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='client_number' />
                 </div>
-                <div class="col-md-6 col-12 my-3">
+                <div class="col-lg-6 col-12 my-2">
                     <label for="">client_cid</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='client_cid' />
                 </div>
-                <div class="col-md-6 col-12 my-3">
-                    <label for="">notes</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='notes' />
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Invoice Number</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='invoice_number' />
                 </div>
-                <div class="col-md-6 col-12 my-3">
-                    <label for="">date</label>
-                    <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='date'></p-calendar>
-                </div>
-                <div class="col-md-6 col-12 my-3">
+                <div class="col-lg-6 col-12 my-2">
                     <label for="">Agent</label>
-                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id" formControlName='agent_id' appendTo="body"
-                        styleClass="w-100" placeholder="Select Agent" [filter]="true">
+                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id" formControlName='agent_id'
+                        appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
                     </p-dropdown>
                 </div>
-                <div class="col-md-6 col-12 my-3">
-                    <label for="">Actions</label>
-                    <p-dropdown [options]="actions" formControlName='action' styleClass="w-100" placeholder="Select Action" appendTo="body"
-                        [filter]="true">
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Paid by</label>
+                    <p-dropdown [options]="paid_by" formControlName='paid_by' optionLabel="name" optionValue="name"
+                        styleClass="w-100" placeholder="Select Method" appendTo="body" [filter]="true">
                     </p-dropdown>
                 </div>
-                <div class="col-md-6 col-12 my-3">
+                <div class="col-lg-6 col-12 my-2">
                     <label for="">Teams</label>
-                    <p-dropdown [options]="teams" formControlName='team' styleClass="w-100" placeholder="Select Team" appendTo="body"
+                    <p-dropdown [options]="teams" formControlName='team' optionLabel="name" optionValue="name"
+                        styleClass="w-100" placeholder="Select Team" appendTo="body" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Customer types</label>
+                    <p-dropdown [options]="customer_types" formControlName='customer_types' optionLabel="name"
+                        optionValue="name" styleClass="w-100" placeholder="Select Customer Type" appendTo="body"
                         [filter]="true">
                     </p-dropdown>
                 </div>
-                <div class="col-md-6 col-12 my-3">
-                    <label for="">Cases</label>
-                    <p-dropdown [options]="cases" formControlName='case' styleClass="w-100" placeholder="Select Case" appendTo="body"
-                        [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-md-6 col-12 my-3">
+                <div class="col-lg-6 col-12 my-2">
                     <label for="">Status</label>
-                    <p-dropdown [options]="status" formControlName='status' styleClass="w-100" placeholder="Select Status" appendTo="body"
-                        [filter]="true">
+                    <p-dropdown [options]="status" formControlName='status' optionLabel="name" optionValue="name"
+                        styleClass="w-100" placeholder="Select Status" appendTo="body" [filter]="true">
                     </p-dropdown>
                 </div>
-                <div class="col-md-6 col-12 my-3">
-                    <label for="">Branches</label>
-                    <p-dropdown [options]="branches" optionLabel="name"  formControlName='branch' appendTo="body"
-                        styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Type</label>
+                    <p-dropdown [options]="types" optionLabel="name" formControlName='type' appendTo="body"
+                        optionValue="name" styleClass="w-100" placeholder="Select Type" [filter]="true">
                     </p-dropdown>
                 </div>
-                <div class="col-md-6 col-12 my-3">
-                    <label for="">Emirates</label>
-                    <p-dropdown [options]="emirates" optionLabel="name" optionValue="name"  formControlName='emirate' appendTo="body"
-                        styleClass="w-100" placeholder="Select Emirate" [filter]="true">
-                    </p-dropdown>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="range">Date Range</label>
+                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+                        ngClass="w-100" appendTo="body">
+                    </p-calendar>
                 </div>
             </div>
         </form>

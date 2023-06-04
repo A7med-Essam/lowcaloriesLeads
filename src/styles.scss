@@ -794,6 +794,6 @@ input::-webkit-inner-spin-button {
     }
 }
 
-.h-side app-sidebar{
-  display: none;
+.h-side app-sidebar,.h-side .navbar-nav{
+  display: none !important;
 }

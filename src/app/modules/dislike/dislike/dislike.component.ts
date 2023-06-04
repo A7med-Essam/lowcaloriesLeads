@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit,Renderer2  } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -23,8 +24,18 @@ export class DislikeComponent implements OnInit, OnDestroy {
     private _LocalService: LocalService,
     private _MessageService: MessageService,
     private _Router: Router,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private _Location:Location
   ) {}
+
+  goBack(): void {
+    // if (this._LocalService.getJsonValue('returnUrl')) {
+      // this._Router.navigate([this._LocalService.getJsonValue('returnUrl')]);
+    // }else{
+      this._Location.back();
+    // }
+  }
+
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, 'h-side');
   }

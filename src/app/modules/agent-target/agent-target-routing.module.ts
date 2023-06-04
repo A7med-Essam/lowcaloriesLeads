@@ -5,7 +5,7 @@ import { ShowTargetComponent } from './show-target/show-target.component';
 import { TargetDetailsComponent } from './target-details/target-details.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'show', pathMatch: 'full' },
+  { path: '', redirectTo: 'create', pathMatch: 'full' },
   {
     path: 'create',
     component: AddTargetComponent,

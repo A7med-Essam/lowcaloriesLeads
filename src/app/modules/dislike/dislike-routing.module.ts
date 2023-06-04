@@ -9,7 +9,7 @@ import { ShowDislikeComponent } from './show-dislike/show-dislike.component';
 import { UpdateDislikeComponent } from './update-dislike/update-dislike.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'show', pathMatch: 'full' },
+  { path: '', redirectTo: 'create', pathMatch: 'full' },
   {
     path: 'update',
     component: UpdateDislikeComponent,
