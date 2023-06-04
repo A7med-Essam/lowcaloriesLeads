@@ -7,6 +7,8 @@ import {
 } from 'src/app/services/agent-target.service';
 import { DislikeService } from 'src/app/services/dislike.service';
 import { SurveyService } from 'src/app/services/survey.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-show-target',
@@ -21,6 +23,88 @@ export class ShowTargetComponent implements OnInit {
     private _DislikeService: DislikeService
   ) {}
 
+  exportAsPDF() {
+    // Default export is a4 paper, portrait, using millimeters for units
+    const doc = new jsPDF();
+    const imageFile = '../../../../assets/images/logo.png';
+    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+
+    doc.setTextColor(50);
+    doc.setFontSize(14);
+    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+    doc.text('Issue Subject:Customer Service Target', 10, 45);
+    doc.text('Prepared By: Low Calories Technical Team', 10, 55);
+    doc.text('Requested By: Mohamed Fawzy', 10, 65);
+    doc.text('Low Calories Restaurant - Egypt', 320, 25);
+    doc.text('3rd Settelment, New Cairo', 320, 35);
+    doc.text('Phone: 201116202225', 320, 45);
+    doc.text('Email: info@thelowcalories.com', 320, 55);
+    doc.text('Website: thelowcalories.com', 320, 65);
+
+    // Get the total number of pages
+    const totalPages = doc.internal.pages;
+
+    // Iterate over each page and add the footer
+    for (let i = 1; i <= totalPages.length; i++) {
+      // Set the current page as active
+      doc.setPage(i);
+      // Set the position and alignment of the footer
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(
+        'Thelowcalories.com',
+        20,
+        doc.internal.pageSize.getHeight() - 10,
+      );
+    }
+
+    const headers = [
+      'Date',
+      'Agent',
+      'Team',
+      'Branch',
+      'Client_CID',
+      'Client_number',
+      'Client_Type',
+      'Invoice_number',
+      'Status',
+      'Paid',
+      'Type',
+    ];
+    const convertedData = this.allTargets.map((obj: any) => [
+      obj.date,
+      obj.agent.name,
+      obj.team,
+      obj.branch,
+      obj.client_cid,
+      obj.client_number,
+      obj.customer_type,
+      obj.invoice_number,
+      obj.status.toUpperCase(),
+      obj.paid_by,
+      obj.type,
+    ]);
+    doc.internal.pageSize.width = 420;
+    autoTable(doc, { startY: 70 });
+    autoTable(doc, {
+      head: [headers],
+      body: convertedData,
+    });
+
+    // Set the line color and width
+    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+    // Draw a line at the bottom of the page
+    doc.line(
+      20,
+      doc.internal.pageSize.height - 20,
+      doc.internal.pageSize.width - 20,
+      doc.internal.pageSize.height - 20
+    );
+    doc.save('example.pdf');
+  }
+
   targets: any;
   PaginationInfo: any;
 
@@ -30,6 +114,14 @@ export class ShowTargetComponent implements OnInit {
     this.getAgents();
     this.getAgentBranches();
     this.getTargetOptions();
+    this.getAllTargets();
+  }
+
+  allTargets: any[] = [];
+  getAllTargets() {
+    this._AgentTargetService.getAllTargets().subscribe((res) => {
+      this.allTargets = res.data;
+    });
   }
 
   getTargets(page: number = 1) {
@@ -99,7 +191,7 @@ export class ShowTargetComponent implements OnInit {
         form.patchValue({
           from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
           to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
-          date: null
+          date: null,
         });
       } else {
         form.patchValue({

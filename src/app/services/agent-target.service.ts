@@ -35,6 +35,10 @@ export class AgentTargetService {
   getCustomerCIDS(phone: string): Observable<any> {
     return this._ApiConfigService.getReq2(`Subscription/GetCid?phone=${phone}`);
   }
+
+  getAllTargets(): Observable<{status:number,data:any,message:string}> {
+    return this._ApiConfigService.postReq3(`targetRequests`, {withoutPagination:true});
+  }
 }
 
 export interface ITarget{
