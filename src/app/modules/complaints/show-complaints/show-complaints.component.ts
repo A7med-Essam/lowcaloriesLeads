@@ -1,39 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  AgentTargetService,
-  ITarget,
-} from 'src/app/services/agent-target.service';
 import { DislikeService } from 'src/app/services/dislike.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { ComplaintsService } from 'src/app/services/complaints.service';
 
 @Component({
-  selector: 'app-show-target',
-  templateUrl: './show-target.component.html',
-  styleUrls: ['./show-target.component.scss'],
+  selector: 'app-show-complaints',
+  templateUrl: './show-complaints.component.html',
+  styleUrls: ['./show-complaints.component.scss'],
 })
-export class ShowTargetComponent implements OnInit {
+export class ShowComplaintsComponent implements OnInit {
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
-    private _AgentTargetService: AgentTargetService,
-    private _DislikeService: DislikeService
+    private _DislikeService: DislikeService,
+    private _ComplaintsService: ComplaintsService
   ) {}
 
   exportAsPDF() {
     // Default export is a4 paper, portrait, using millimeters for units
     const doc = new jsPDF();
     doc.internal.pageSize.width = 420;
+
     const imageFile = '../../../../assets/images/logo.png';
     doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
 
     doc.setTextColor(50);
     doc.setFontSize(14);
     doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Customer Service Target', 10, 45);
+    doc.text('Issue Subject:Customers Complaints Report', 10, 45);
     doc.text('Prepared By: Low Calories Technical Team', 10, 55);
     doc.text('Requested By: Mohamed Fawzy', 10, 65);
     doc.text('Low Calories Restaurant - Egypt', 320, 25);
@@ -42,32 +40,31 @@ export class ShowTargetComponent implements OnInit {
     doc.text('Email: info@thelowcalories.com', 320, 55);
     doc.text('Website: thelowcalories.com', 320, 65);
 
+
+
     const headers = [
       'Date',
-      'Agent',
-      'Team',
-      'Branch',
-      'Client_CID',
-      'Client_number',
-      'Client_Type',
-      'Invoice_number',
+      'client_name',
+      'client_mobile',
+      'CID',
+      'Agent_name',
       'Status',
-      'Paid',
-      'Type',
+      'Branch',
+      'Action',
+      'issue_details',
     ];
-    const convertedData = this.allTargets.map((obj: any) => [
+    const convertedData = this.allComplaints.map((obj: any) => [
       obj.date,
-      obj.agent.name,
-      obj.team,
+      obj.c_name,
+      obj.c_mobile,
+      obj.cid,
+      obj.agent_name,
+      obj.status,
       obj.branch,
-      obj.client_cid,
-      obj.client_number,
-      obj.customer_type,
-      obj.invoice_number,
-      obj.status.toUpperCase(),
-      obj.paid_by,
-      obj.type,
+      obj.action,
+      obj.issue_details,
     ]);
+
     autoTable(doc, { startY: 70 });
     autoTable(doc, {
       head: [headers],
@@ -79,77 +76,76 @@ export class ShowTargetComponent implements OnInit {
     doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
 
     // Draw a line at the bottom of the page
-
+    
     // Get the total number of pages
     const totalPages = doc.internal.pages;
-
+    
     // Iterate over each page and add the footer
     for (let i = 1; i <= totalPages.length; i++) {
-      doc.internal.pageSize.width = 420;
-      doc.line(
-        20,
-        doc.internal.pageSize.height - 20,
-        doc.internal.pageSize.width - 20,
-        doc.internal.pageSize.height - 20
-      );
-      // Set the current page as active
-      doc.setPage(i);
-      // Set the position and alignment of the footer
-      doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(
-        'Thelowcalories.com',
-        20,
-        doc.internal.pageSize.getHeight() - 10
-      );
-    }
+    doc.internal.pageSize.width = 420;
 
+          doc.line(
+            20,
+            doc.internal.pageSize.height - 10,
+            doc.internal.pageSize.width - 20,
+            doc.internal.pageSize.height - 10
+          );
+          // Set the current page as active
+          doc.setPage(i);
+          // Set the position and alignment of the footer
+          doc.setFontSize(10);
+          doc.setTextColor(150);
+          doc.text(
+            'Thelowcalories.com',
+            20,
+            doc.internal.pageSize.getHeight() - 5
+          );
+        }
     doc.save('example.pdf');
   }
 
-  targets: any;
+  complaints: any[] = [];
   PaginationInfo: any;
 
   ngOnInit(): void {
-    this.getTargets();
+    this.getComplaints();
     this.createFilterForm();
     this.getAgents();
     this.getAgentBranches();
-    this.getTargetOptions();
-    this.getAllTargets();
+    this.getAllComplaints();
   }
 
-  allTargets: any[] = [];
-  getAllTargets() {
-    this._AgentTargetService.getAllTargets().subscribe((res) => {
-      this.allTargets = res.data;
+  allComplaints: any[] = [];
+  getAllComplaints() {
+    this._ComplaintsService.getAllComplaints().subscribe((res) => {
+      this.allComplaints = res.data;
     });
   }
 
-  getTargets(page: number = 1) {
+  getComplaints(page: number = 1) {
     if (this.appliedFilters) {
       this.getOldFilters();
     } else {
-      this._AgentTargetService.getTargets(page).subscribe({
+      this._ComplaintsService.getComplaints(page).subscribe({
         next: (res) => {
-          this.targets = res?.data?.data;
+          this.complaints = res?.data?.data;
           this.PaginationInfo = res.data;
         },
       });
     }
   }
 
-  showRow(target: ITarget) {
-    if (target) {
-      this._AgentTargetService.target.next(target);
-      this._Router.navigate(['agent/details']);
+  showRow(complaint: any) {
+    if (complaint) {
+      this._ComplaintsService.complaint.next(complaint);
+      this._Router.navigate(['complaints/details']);
     }
   }
 
   currentPage: number = 1;
   paginate(e: any) {
     this.currentPage = e.first / e.rows + 1;
-    this.getTargets(e.first / e.rows + 1);
+    this.getComplaints(e.first / e.rows + 1);
   }
 
   // ****************************************************filter************************************************************************
@@ -160,39 +156,29 @@ export class ShowTargetComponent implements OnInit {
   filterForm!: FormGroup;
   createFilterForm() {
     this.filterForm = new FormGroup({
-      team: new FormControl(null),
-      client_number: new FormControl(null),
-      client_cid: new FormControl(null),
-      branch: new FormControl(null),
-      paid_by: new FormControl(null),
+      c_name: new FormControl(null),
+      c_mobile: new FormControl(null),
+      cid: new FormControl(null),
+      agent_name: new FormControl(null),
       status: new FormControl(null),
+      branch: new FormControl(null),
       date: new FormControl(null),
-      customer_types: new FormControl(null),
-      agent_id: new FormControl(null),
-      invoice_number: new FormControl(null),
-      type: new FormControl(null),
-      from: new FormControl(null),
-      to: new FormControl(null),
+      fromDate: new FormControl(null),
+      toDate: new FormControl(null),
     });
   }
 
-  insertRow(form: FormGroup) {
+  applyFilter(form: FormGroup) {
     for (const prop in form.value) {
       if (form.value[prop] === null) {
         delete form.value[prop];
       }
     }
-    if (form.value.branch) {
-      form.patchValue({
-        branch: form.value.branch.name,
-      });
-    }
-
     if (form.value.date) {
       if (form.value.date[1]) {
         form.patchValue({
-          from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
-          to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+          fromDate: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+          toDate: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
           date: null,
         });
       } else {
@@ -202,8 +188,8 @@ export class ShowTargetComponent implements OnInit {
       }
     }
     this.appliedFilters = form.value;
-    this._AgentTargetService.filterTargets(1, form.value).subscribe((res) => {
-      this.targets = res.data.data;
+    this._ComplaintsService.filterComplaints(1, form.value).subscribe((res) => {
+      this.complaints = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
       this.resetFields();
@@ -211,10 +197,10 @@ export class ShowTargetComponent implements OnInit {
   }
 
   getOldFilters() {
-    this._AgentTargetService
-      .filterTargets(1, this.appliedFilters)
+    this._ComplaintsService
+      .filterComplaints(1, this.appliedFilters)
       .subscribe((res) => {
-        this.targets = res.data.data;
+        this.complaints = res.data.data;
         this.PaginationInfo = res.data;
         this.filterModal = false;
       });
@@ -224,7 +210,7 @@ export class ShowTargetComponent implements OnInit {
     this.appliedFilters = null;
     this.filterModal = false;
     this.filterForm.reset();
-    this.getTargets();
+    this.getComplaints();
   }
 
   resetFields() {
@@ -234,7 +220,8 @@ export class ShowTargetComponent implements OnInit {
   // ****************************************************export************************************************************************
 
   export() {
-    this._AgentTargetService.exportTarget().subscribe({
+    const ids = this.complaints.map((obj: any) => obj.id);
+    this._ComplaintsService.exportComplaints(ids).subscribe({
       next: (res) => {
         const link = document.createElement('a');
         link.target = '_blank';
@@ -262,20 +249,30 @@ export class ShowTargetComponent implements OnInit {
     });
   }
 
-  customer_types: any[] = [];
-  types: any[] = [];
-  paid_by: any[] = [];
-  status: any[] = [];
-  teams: any[] = [];
-  getTargetOptions() {
-    this._AgentTargetService.getTargetOptions().subscribe({
-      next: (res) => {
-        this.customer_types = res.data.customer_types;
-        this.paid_by = res.data.payment_types;
-        this.teams = res.data.teams;
-        this.status = res.data.status;
-        this.types = res.data.type;
-      },
-    });
+  status: string[] = ['Open', 'Closed'];
+
+  // ****************************************************update************************************************************************
+
+  updateRow(status:string){
+    this._ComplaintsService.updateIssueStatus({id:this.currentEditRow.id,status:status.toLowerCase()}).subscribe(res=>{
+      this.getAllComplaints();
+      this.getComplaints();
+      this.updateModal = false;
+      this.complaints = this.complaints.map(e=> {
+        if (e.id == res.data.id) {
+          e = res.data
+        }
+        return e
+      })
+    })
+  }
+
+  updateModal:boolean = false;
+  currentEditRow:any;
+  currentEditStatus:any;
+  displayUpdateModal(issue:any){
+    this.currentEditRow = issue
+    this.currentEditStatus = issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
+    this.updateModal = true;
   }
 }

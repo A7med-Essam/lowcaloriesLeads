@@ -6,7 +6,7 @@
         </p-button>
         <p-button class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
         </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()">
+        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allTargets.length">
         </p-button>
     </div>
 </div>
@@ -38,7 +38,7 @@
     </p-table>
 </div>
 
-<p-dialog header="Filter Leads Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
+<p-dialog header="Filter Targets Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
     [draggable]="false" [resizable]="false">
     <div class="container">
         <form [formGroup]="filterForm" #myForm="ngForm">

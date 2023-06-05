@@ -44,6 +44,12 @@ const routes: Routes = [
       import('./modules/agent-target/agent-target.module').then((m) => m.AgentTargetModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'complaints',
+    loadChildren: () =>
+      import('./modules/complaints/complaints.module').then((m) => m.ComplaintsModule),
+    canActivate: [AuthGuard],
+  },
   { path: '**', component: Error404Component },
 ];
 
