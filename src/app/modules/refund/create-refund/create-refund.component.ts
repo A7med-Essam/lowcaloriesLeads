@@ -26,6 +26,7 @@ export class CreateRefundComponent implements OnInit {
   CIDs: any[] = [];
   planDetails: any;
   getCustomerInfo(e: HTMLInputElement) {
+    this.displayFormStatus = false;
     if (e.value.length == 10) {
       this._RefundService.getCIDs(e.value).subscribe((res) => {
         this.CIDs = res;
@@ -44,6 +45,7 @@ export class CreateRefundComponent implements OnInit {
   }
 
   getPlanDetails(cid: number) {
+    this.displayFormStatus = false;
     this._RefundService.getPlanDetails(cid).subscribe({
       next: (res) => {
         this.planDetails = res;
@@ -101,36 +103,60 @@ export class CreateRefundComponent implements OnInit {
       bank_account_number: new FormControl(null, [Validators.required]),
       account_hold_name: new FormControl(null, [Validators.required]),
       reason: new FormControl(null, [Validators.required]),
-      name: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      email: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      mobile: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      branch: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      delivery_branch: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      subscription_plan: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      remaining_days: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      payment_method: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      address: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      cid: new FormControl({ value: null, disabled: true }, [Validators.required]),
-      amount_paid: new FormControl({ value: null, disabled: true }, [Validators.required]),
+      name: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      email: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      mobile: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      branch: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      delivery_branch: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      subscription_plan: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      remaining_days: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      payment_method: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      address: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      cid: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
+      amount_paid: new FormControl({ value: null, disabled: true }, [
+        Validators.required,
+      ]),
       agent_id: new FormControl(null),
     });
   }
 
   insertRefund(form: FormGroup) {
     if (form.valid) {
-      this._RefundService.addRefund(this.insertForm.getRawValue()).subscribe((res) => {
-        if (res.status == 1) {
-          this.insertForm.reset();
-          this.displayFormStatus = false;
-          this.planDetails = null;
-          this.CIDs = [];
-          this._MessageService.add({
-            severity: 'success',
-            summary: 'Refund Form',
-            detail: 'Refund Added successfully',
-          });
-        }
-      });
+      this._RefundService
+        .addRefund(this.insertForm.getRawValue())
+        .subscribe((res) => {
+          if (res.status == 1) {
+            this.insertForm.reset();
+            this.displayFormStatus = false;
+            this.planDetails = null;
+            this.CIDs = [];
+            this._MessageService.add({
+              severity: 'success',
+              summary: 'Refund Form',
+              detail: 'Refund Added successfully',
+            });
+          }
+        });
     }
   }
 
