@@ -1,0 +1,19 @@
+.CIDS{
+    user-select: none;
+    transition: all .5s;
+    // &.EXPIRED{
+    //     background-color: rgb(126, 126, 126) !important;
+    //     color: #fff !important;
+        // cursor: not-allowed;
+    // }
+    &:not(.EXPIRED):hover{
+        background-color: rgb(237, 237, 237) !important;
+    }
+}
+
+.invoice{
+    transition: all .5s;
+    &:hover{
+        background-color: rgb(237, 237, 237) !important;
+    }
+}

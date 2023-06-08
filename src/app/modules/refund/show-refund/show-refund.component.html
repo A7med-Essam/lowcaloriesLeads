@@ -28,7 +28,7 @@
             <tr>
                 <td class="text-center">{{refund?.cid}}</td>
                 <td class="text-center">{{refund?.bank_name}}</td>
-                <td class="text-center">{{refund?.total_amount_refund}}</td>
+                <td class="text-center">{{refund?.amount_paid}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(refund)"
                         class="m-1 p-button-sm"></button>
@@ -107,7 +107,7 @@
                     <label for="">account_hold_name</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='account_hold_name' />
                 </div>
-                <div class="col-lg-6 col-12 my-2">
+                <!-- <div class="col-lg-6 col-12 my-2">
                     <label for="">original_amount_paid</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='original_amount_paid' />
                 </div>
@@ -118,7 +118,7 @@
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">total_amount_refund</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='total_amount_refund' />
-                </div>
+                </div> -->
             </div>
         </form>
     </div>

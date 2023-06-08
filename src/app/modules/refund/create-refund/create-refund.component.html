@@ -1,1 +1,135 @@
-<h1>Create Refund under maintenance</h1>
+<section>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Create Refund</h2>
+            <button class="btn btn-outline-primary" (click)="goBack()">Back</button>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="">CID / CUSTOMER NUMBER</label>
+                    <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter CID or customer number" maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                        #REFUND_FIRST_STEP_INPUT>
+                    <div class="text-end">
+                        <button class="btn btn-success px-4" (click)="getCustomerInfo(REFUND_FIRST_STEP_INPUT)">
+                            <b>Get Customer Info</b>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr  *ngIf="CIDs.length">
+        <div class="row mx-0" *ngIf="CIDs.length">
+            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12 my-2" *ngFor="let cid of CIDs">
+                    <div class="rounded shadow bg-white px-4 py-3 flex-center pointer CIDS" (click)="getPlanDetails(cid.cid)">
+                        <h6 class="m-0">CID: {{cid.cid}}</h6>
+                    </div>
+            </div>
+        </div>
+
+
+
+
+        <hr  *ngIf="planDetails?.invoices?.length">
+        <div class="row mx-0" *ngIf="planDetails?.invoices?.length">
+            <div class="col-xl-4 col-lg-6 col-12 my-2" *ngFor="let inv of planDetails.invoices">
+                <div class="rounded shadow bg-white px-4 py-2 pointer invoice" (click)="displayRefundForm(planDetails, inv)">
+                    <div>
+                        <h6 class="my-2 remainingDays">Remaining: <span class="text-success" [class.text-danger]="planDetails.remainingDays == 0">{{planDetails.remainingDays}} Days</span></h6>
+                        <h6 class="my-2">Name: {{planDetails.customerName}}</h6>
+                        <h6 class="my-2">Phone: {{planDetails.customerPhone}}</h6>
+                        <div class="d-flex justify-content-between">
+                            <h6>Amount: {{inv.amount}}</h6>
+                            <small class="text-muted">{{inv.date |date}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr *ngIf="displayFormStatus">
+        <form [formGroup]="insertForm" (ngSubmit)='insertRefund(insertForm)'  *ngIf="displayFormStatus">
+            <div class="row mx-0">
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">name</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='name' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">email</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='email' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">mobile</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='mobile' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">branch</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='branch' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">delivery_branch</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='delivery_branch' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">subscription_plan</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='subscription_plan' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">remaining_days</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='remaining_days' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">payment_method</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='payment_method' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">address</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='address' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">cid</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='cid' readonly />
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 my-3">
+                    <label for="">amount_paid</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='amount_paid' readonly />
+                </div>
+                <div class="col-md-6 my-3">
+                    <label for="">bank_name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='bank_name' />
+                    <small class="text-danger ms-1" *ngIf="insertForm.get('bank_name')?.touched &&
+                    insertForm.get('bank_name')?.hasError('required')">This field is required.</small>
+                </div>
+                <div class="col-md-6 my-3">
+                    <label for="">bank_account_number</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='bank_account_number' />
+                    <small class="text-danger ms-1" *ngIf="insertForm.get('bank_account_number')?.touched &&
+                    insertForm.get('bank_account_number')?.hasError('required')">This field is required.</small>
+                </div>
+                <div class="col-md-6 my-3">
+                    <label for="">iban</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='iban' />
+                    <small class="text-danger ms-1" *ngIf="insertForm.get('iban')?.touched &&
+                    insertForm.get('iban')?.hasError('required')">This field is required.</small>
+                </div>
+                <div class="col-md-6 my-3">
+                    <label for="">account_hold_name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='account_hold_name' />
+                    <small class="text-danger ms-1" *ngIf="insertForm.get('account_hold_name')?.touched &&
+                    insertForm.get('account_hold_name')?.hasError('required')">This field is required.</small>
+                </div>
+                <div class="col-12 my-3">
+                    <label for="">reason</label>
+                    <textarea pInputTextarea ngClass="w-100" formControlName='reason'></textarea>
+                    <small class="text-danger ms-1" *ngIf="insertForm.get('reason')?.touched &&
+                    insertForm.get('reason')?.hasError('required')">This field is required.</small>
+                </div>
+                <div class="col-12 my-3">
+                    <button class="btn btn-primary w-100">Submit Refund</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

@@ -23,6 +23,10 @@
                                             <td>{{refund?.created_at | date}}</td>
                                         </tr>
                                         <tr>
+                                            <td>agent_name</td>
+                                            <td>{{refund?.agent_name}}</td>
+                                        </tr>
+                                        <tr>
                                             <td>name</td>
                                             <td>{{refund?.name}}</td>
                                         </tr>
@@ -79,6 +83,14 @@
                                             <td>{{refund?.account_hold_name}}</td>
                                         </tr>
                                         <tr>
+                                            <td>amount_paid</td>
+                                            <td>{{refund?.amount_paid}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>reason</td>
+                                            <td>{{refund?.reason}}</td>
+                                        </tr>
+                                        <!-- <tr>
                                             <td>original_amount_paid</td>
                                             <td>{{refund?.original_amount_paid}}</td>
                                         </tr>
@@ -89,11 +101,7 @@
                                         <tr>
                                             <td>total_amount_refund</td>
                                             <td>{{refund?.total_amount_refund}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>agent_id</td>
-                                            <td>{{refund?.agent_id}}</td>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>

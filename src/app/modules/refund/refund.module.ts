@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const APP_PRIMENG_MODULE = [
   DropdownModule,
@@ -17,6 +18,7 @@ const APP_PRIMENG_MODULE = [
   TableModule,
   DialogModule,
   CalendarModule,
+  InputTextareaModule
 ];
 
 @NgModule({

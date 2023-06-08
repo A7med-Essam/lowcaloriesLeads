@@ -52,11 +52,11 @@ export class ApiConfigService {
           }
         },
         (err: any) => {
-          this._MessageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: err.message,
-          });
+          // this._MessageService.add({
+          //   severity: 'error',
+          //   summary: 'Error',
+          //   detail: err.message,
+          // });
         }
       )
     );

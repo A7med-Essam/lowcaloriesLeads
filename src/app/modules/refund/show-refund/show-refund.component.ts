@@ -60,10 +60,12 @@ export class ShowRefundComponent implements OnInit {
       'iban',
       'account_hold_name',
       'bank_account_number',
-      'original_amount_paid',
-      'amount_usd',
-      'total_amount_refund',
-      'agent_id',
+      // 'original_amount_paid',
+      // 'amount_usd',
+      // 'total_amount_refund',
+      'agent_name',
+      'amount_paid',
+      'reason',
     ];
     const convertedData = this.allRefunds.map((obj: any) => [
       obj.created_at.substring(0, 10),
@@ -81,10 +83,12 @@ export class ShowRefundComponent implements OnInit {
       obj.iban,
       obj.account_hold_name,
       obj.bank_account_number,
-      obj.original_amount_paid,
-      obj.amount_usd,
-      obj.total_amount_refund,
-      obj.agent_id,
+      // obj.original_amount_paid,
+      // obj.amount_usd,
+      // obj.total_amount_refund,
+      obj.agent_name,
+      obj.amount_paid,
+      obj.reason,
     ]);
     autoTable(doc, { startY: 70 });
     autoTable(doc, {
@@ -192,9 +196,9 @@ export class ShowRefundComponent implements OnInit {
       iban: new FormControl(null),
       bank_account_number: new FormControl(null),
       account_hold_name: new FormControl(null),
-      original_amount_paid: new FormControl(null),
-      amount_usd: new FormControl(null),
-      total_amount_refund: new FormControl(null),
+      // original_amount_paid: new FormControl(null),
+      // amount_usd: new FormControl(null),
+      // total_amount_refund: new FormControl(null),
     });
   }
 
@@ -204,25 +208,7 @@ export class ShowRefundComponent implements OnInit {
         delete form.value[prop];
       }
     }
-    // if (form.value.branch) {
-    //   form.patchValue({
-    //     branch: form.value.branch.name,
-    //   });
-    // }
 
-    // if (form.value.date) {
-    //   if (form.value.date[1]) {
-    //     form.patchValue({
-    //       from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
-    //       to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
-    //       date: null,
-    //     });
-    //   } else {
-    //     form.patchValue({
-    //       date: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
-    //     });
-    //   }
-    // }
     this.appliedFilters = form.value;
     this._RefundService.filterRefund(1, form.value).subscribe((res) => {
       this.refunds = res.data.data;
