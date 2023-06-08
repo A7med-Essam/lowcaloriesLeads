@@ -50,6 +50,12 @@ const routes: Routes = [
       import('./modules/complaints/complaints.module').then((m) => m.ComplaintsModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'refund',
+    loadChildren: () =>
+      import('./modules/refund/refund.module').then((m) => m.RefundModule),
+    canActivate: [AuthGuard],
+  },
   { path: '**', component: Error404Component },
 ];
 

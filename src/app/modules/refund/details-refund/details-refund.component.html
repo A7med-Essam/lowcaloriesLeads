@@ -1,0 +1,106 @@
+<div class="row animated">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Refund Info</h4>
+                            <div>
+                                <button class="btn btn-dark" (click)="backDetailsBtn()">Back</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive overflow-auto">
+                                <table class="table">
+                                    <thead class="text-muted">
+                                        <th class="py-3">Title</th>
+                                        <th class="py-3">Description</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Date</td>
+                                            <td>{{refund?.created_at | date}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>name</td>
+                                            <td>{{refund?.name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>email</td>
+                                            <td>{{refund?.email}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>mobile</td>
+                                            <td>{{refund?.mobile}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>branch</td>
+                                            <td>{{refund?.branch}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>delivery_branch</td>
+                                            <td>{{refund?.delivery_branch}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>subscription_plan</td>
+                                            <td>{{refund?.subscription_plan}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>remaining_days</td>
+                                            <td>{{refund?.remaining_days}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>payment_method</td>
+                                            <td>{{refund?.payment_method}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>cid</td>
+                                            <td>{{refund?.cid}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>address</td>
+                                            <td>{{refund?.address}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>bank_name</td>
+                                            <td>{{refund?.bank_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>iban</td>
+                                            <td>{{refund?.iban}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>bank_account_number</td>
+                                            <td>{{refund?.bank_account_number}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>account_hold_name</td>
+                                            <td>{{refund?.account_hold_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>original_amount_paid</td>
+                                            <td>{{refund?.original_amount_paid}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>amount_usd</td>
+                                            <td>{{refund?.amount_usd}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>total_amount_refund</td>
+                                            <td>{{refund?.total_amount_refund}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>agent_id</td>
+                                            <td>{{refund?.agent_id}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

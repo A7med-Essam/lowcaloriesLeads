@@ -1,0 +1,142 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="mb-3">
+        <button pButton pRipple label="Create Refund" class="p-button-success mx-1" icon="pi pi-plus"
+            routerLink="../create"></button>
+        <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+        </p-button>
+        <p-button class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
+        </p-button>
+        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allRefunds.length">
+        </p-button>
+    </div>
+</div>
+
+<div class="card">
+    <p-table [value]="refunds" [paginator]="true" [rows]="PaginationInfo?.per_page"
+        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">cid</th>
+                <th class="text-center">Bank</th>
+                <th class="text-center">Amount</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-refund>
+            <tr>
+                <td class="text-center">{{refund?.cid}}</td>
+                <td class="text-center">{{refund?.bank_name}}</td>
+                <td class="text-center">{{refund?.total_amount_refund}}</td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(refund)"
+                        class="m-1 p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Filter Targets Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <form [formGroup]="filterForm" #myForm="ngForm">
+            <div class="row mx-0">
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Agent</label>
+                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id" formControlName='agent_id'
+                        appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">delivery_branch</label>
+                    <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='delivery_branch'
+                        appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='name' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">email</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='email' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">mobile</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='mobile' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">branch</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='branch' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">subscription_plan</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='subscription_plan' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">remaining_days</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='remaining_days' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">payment_method</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='payment_method' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">cid</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='cid' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">address</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='address' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">bank_name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='bank_name' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">iban</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='iban' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">bank_account_number</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='bank_account_number' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">account_hold_name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='account_hold_name' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">original_amount_paid</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='original_amount_paid' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">amount_usd</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='amount_usd' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">total_amount_refund</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='total_amount_refund' />
+                </div>
+            </div>
+        </form>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+            <div>
+                <button class="btn btn-secondary" (click)="resetFields()">
+                    Reset Fields
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="insertRow(filterForm)">
+                    Apply Filter
+                </button>
+                <button class="btn btn-secondary" (click)="resetFilter()">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
