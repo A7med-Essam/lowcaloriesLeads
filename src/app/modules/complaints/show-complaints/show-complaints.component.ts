@@ -6,6 +6,7 @@ import { SurveyService } from 'src/app/services/survey.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ComplaintsService } from 'src/app/services/complaints.service';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-show-complaints',
@@ -53,7 +54,10 @@ export class ShowComplaintsComponent implements OnInit {
       'Action',
       'issue_details',
     ];
-    const convertedData = this.allComplaints.map((obj: any) => [
+
+    let filteredArray = this.allComplaints.filter((item:any) => this.specificRows.includes(item.id));
+    filteredArray.length == 0 && (filteredArray = this.allComplaints)
+    const convertedData = filteredArray.map((obj: any) => [
       obj.date,
       obj.c_name,
       obj.c_mobile,
@@ -253,9 +257,10 @@ export class ShowComplaintsComponent implements OnInit {
 
   // ****************************************************update************************************************************************
 
-  updateRow(status:string){
-    this._ComplaintsService.updateIssueStatus({id:this.currentEditRow.id,status:status.toLowerCase()}).subscribe(res=>{
+  updateRow(status:string,reason:string){
+    this._ComplaintsService.updateIssueStatus({id:this.currentEditRow.id,status:status.toLowerCase(), reason}).subscribe(res=>{
       this.getAllComplaints();
+      this.currentEditReason = null;
       this.getComplaints();
       this.updateModal = false;
       this.complaints = this.complaints.map(e=> {
@@ -270,9 +275,70 @@ export class ShowComplaintsComponent implements OnInit {
   updateModal:boolean = false;
   currentEditRow:any;
   currentEditStatus:any;
+  currentEditReason:any;
   displayUpdateModal(issue:any){
     this.currentEditRow = issue
     this.currentEditStatus = issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
     this.updateModal = true;
+  }
+
+  // ****************************************************filter columns************************************************************************
+  filterColumns: boolean = false;
+  selectedColumns: any[] = [];
+  specificRows: number[] = [];
+  columns: any[] = [
+    { name: 'id', status: false },
+    { name: 'action', status: false },
+    { name: 'agent_name', status: true },
+    { name: 'branch', status: false },
+    { name: 'c_mobile', status: true },
+    { name: 'c_name', status: true },
+    { name: 'cid', status: true },
+    { name: 'created_at', status: false },
+    { name: 'date', status: false },
+    { name: 'issue_details', status: false },
+    { name: 'status', status: false },
+  ];
+  
+  getFilterColumns() {
+    this.columns.forEach((element) => {
+      element.status = false;
+    });
+
+    this.selectedColumns.forEach((e) => {
+      for (let i = 0; i < this.columns.length; i++) {
+        if (this.columns[i].name == e) {
+          this.columns[i].status = true;
+        }
+      }
+    });
+  }
+
+  selectAllColumns(checkboxContainer: HTMLElement, currentCheckbox: Checkbox) {
+    setTimeout(() => {
+      if (!currentCheckbox.checked()) {
+        this.selectedColumns = [];
+      } else {
+        let checkboxes: HTMLLabelElement[] = [];
+        this.selectedColumns = [];
+        for (let i = 0; i < checkboxContainer.children.length; i++) {
+          checkboxes.push(checkboxContainer.children[i].children[1] as any);
+        }
+        this.columns.forEach((e) => {
+          this.selectedColumns.push(e.name);
+        });
+      }
+    }, 1);
+  }
+
+  getSpecificRows(input: HTMLInputElement) {
+    if (input.checked) {
+      this.specificRows.push(Number(input.value));
+    } else {
+      const index = this.specificRows.indexOf(Number(input.value));
+      if (index > -1) {
+        this.specificRows.splice(index, 1);
+      }
+    }
   }
 }

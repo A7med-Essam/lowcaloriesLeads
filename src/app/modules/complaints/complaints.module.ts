@@ -11,13 +11,17 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 const APP_PRIMENG_MODULE = [
   DropdownModule,
+  InputTextareaModule,
   InputTextModule,
   TableModule,
   DialogModule,
   CalendarModule,
+  CheckboxModule,
 ];
 
 @NgModule({
@@ -31,7 +35,7 @@ const APP_PRIMENG_MODULE = [
     ComplaintsRoutingModule,
     APP_PRIMENG_MODULE,
     ReactiveFormsModule,
-    FormsModule
-  ]
+    FormsModule,
+  ],
 })
-export class ComplaintsModule { }
+export class ComplaintsModule {}

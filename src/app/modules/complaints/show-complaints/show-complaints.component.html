@@ -9,6 +9,8 @@
         <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" *ngIf="allComplaints.length"
             (click)="exportAsPDF()">
         </p-button>
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
+        </p-button>
     </div>
 </div>
 
@@ -19,19 +21,39 @@
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center">c_name</th>
-                <th class="text-center">c_mobile</th>
-                <th class="text-center">cid</th>
-                <th class="text-center">agent_name</th>
+                <th class="text-center">
+                    Select Columns
+                </th>
+                <th class="text-center"*ngIf="columns[0].status">id</th>
+                <th class="text-center"*ngIf="columns[1].status">action</th>
+                <th class="text-center"*ngIf="columns[2].status">agent_name</th>
+                <th class="text-center"*ngIf="columns[3].status">branch</th>
+                <th class="text-center"*ngIf="columns[4].status">c_mobile</th>
+                <th class="text-center"*ngIf="columns[5].status">c_name</th>
+                <th class="text-center"*ngIf="columns[6].status">cid</th>
+                <th class="text-center"*ngIf="columns[7].status">created_at</th>
+                <th class="text-center"*ngIf="columns[8].status">date</th>
+                <th class="text-center"*ngIf="columns[9].status">issue_details</th>
+                <th class="text-center"*ngIf="columns[10].status">status</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-complaint>
             <tr>
-                <td class="text-center">{{complaint?.c_name}}</td>
-                <td class="text-center">{{complaint?.c_mobile}}</td>
-                <td class="text-center">{{complaint?.cid}}</td>
-                <td class="text-center">{{complaint?.agent_name}}</td>
+                <td class="text-center">
+                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="complaint.id">
+                </td>
+                <td class="text-center" *ngIf="columns[0].status">{{complaint.id}}</td>
+                <td class="text-center" *ngIf="columns[1].status">{{complaint.action}}</td>
+                <td class="text-center" *ngIf="columns[2].status">{{complaint.agent_name}}</td>
+                <td class="text-center" *ngIf="columns[3].status">{{complaint.branch}}</td>
+                <td class="text-center" *ngIf="columns[4].status">{{complaint.c_mobile}}</td>
+                <td class="text-center" *ngIf="columns[5].status">{{complaint.c_name}}</td>
+                <td class="text-center" *ngIf="columns[6].status">{{complaint.cid}}</td>
+                <td class="text-center" *ngIf="columns[7].status">{{complaint.created_at | date}}</td>
+                <td class="text-center" *ngIf="columns[8].status">{{complaint.date}}</td>
+                <td class="text-center" *ngIf="columns[9].status">{{complaint.issue_details}}</td>
+                <td class="text-center" *ngIf="columns[10].status">{{complaint.status}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(complaint)"
                         class="m-1 p-button-sm"></button>
@@ -110,15 +132,44 @@
 <p-dialog header="Update Complaint Status Modal" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
     [draggable]="false" [resizable]="false">
     <div class="container">
-        <label for="">Status</label>
-        <p-dropdown [options]="status" appendTo="body" styleClass="w-100" [(ngModel)]="currentEditStatus">
-        </p-dropdown>
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="">Status</label>
+                <p-dropdown [options]="status" appendTo="body" styleClass="w-100" [(ngModel)]="currentEditStatus">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-2">
+                <label for="">reason</label>
+                <textarea pInputTextarea ngClass="w-100" [(ngModel)]="currentEditReason"></textarea>
+            </div>
+        </div>
     </div>
     <ng-template pTemplate="footer">
         <div>
-            <button class="btn btn-primary" (click)="updateRow(currentEditStatus)">
+            <button class="btn btn-primary" (click)="updateRow(currentEditStatus,currentEditReason)" [disabled]="!currentEditReason">
                 Update Status
             </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+
+<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container" #checkboxContainer>
+        <div class="field-checkbox my-3" *ngFor="let obj of columns">
+            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name"></p-checkbox>
+            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+                value="selectAll" inputId="c100"></p-checkbox>
+            <label class="mx-3" for="c100">Select All</label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
         </div>
     </ng-template>
 </p-dialog>

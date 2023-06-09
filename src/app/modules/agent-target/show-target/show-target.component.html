@@ -8,6 +8,8 @@
         </p-button>
         <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allTargets.length">
         </p-button>
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
+        </p-button>
     </div>
 </div>
 
@@ -18,17 +20,47 @@
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center">agent</th>
-                <th class="text-center">team</th>
-                <th class="text-center">branch</th>
+                <th class="text-center">
+                    Select Columns
+                </th>
+                <th class="text-center"*ngIf="columns[0].status">id</th>
+                <th class="text-center"*ngIf="columns[1].status">team</th>
+                <th class="text-center"*ngIf="columns[2].status">type</th>
+                <th class="text-center"*ngIf="columns[3].status">agent_id</th>
+                <th class="text-center"*ngIf="columns[4].status">agent_name</th>
+                <th class="text-center"*ngIf="columns[5].status">date</th>
+                <th class="text-center"*ngIf="columns[6].status">client_number</th>
+                <th class="text-center"*ngIf="columns[7].status">client_cid</th>
+                <th class="text-center"*ngIf="columns[8].status">branch</th>
+                <th class="text-center"*ngIf="columns[9].status">customer_type</th>
+                <th class="text-center"*ngIf="columns[10].status">paid_by</th>
+                <th class="text-center"*ngIf="columns[11].status">status</th>
+                <th class="text-center"*ngIf="columns[12].status">invoice_number</th>
+                <th class="text-center"*ngIf="columns[13].status">created_at</th>
+                <th class="text-center">Percent</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-agent>
             <tr>
-                <td class="text-center">{{agent?.agent.name}}</td>
-                <td class="text-center">{{agent?.team}}</td>
-                <td class="text-center">{{agent?.branch}}</td>
+                <td class="text-center">
+                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="agent.id">
+                </td>
+                <td class="text-center" *ngIf="columns[0].status">{{agent.id}}</td>
+                <td class="text-center" *ngIf="columns[1].status">{{agent.team}}</td>
+                <td class="text-center" *ngIf="columns[2].status">{{agent.type}}</td>
+                <td class="text-center" *ngIf="columns[3].status">{{agent.agent_id}}</td>
+                <td class="text-center" *ngIf="columns[4].status">{{agent.agent.name}}</td>
+                <td class="text-center" *ngIf="columns[5].status">{{agent.date}}</td>
+                <td class="text-center" *ngIf="columns[6].status">{{agent.client_number}}</td>
+                <td class="text-center" *ngIf="columns[7].status">{{agent.client_cid}}</td>
+                <td class="text-center" *ngIf="columns[8].status">{{agent.branch}}</td>
+                <td class="text-center" *ngIf="columns[9].status">{{agent.customer_type}}</td>
+                <td class="text-center" *ngIf="columns[10].status">{{agent.paid_by}}</td>
+                <td class="text-center" *ngIf="columns[11].status">{{agent.status}}</td>
+                <td class="text-center" *ngIf="columns[12].status">{{agent.invoice_number}}</td>
+                <td class="text-center" *ngIf="columns[13].status">{{agent.created_at}}</td>
+                <td class="text-center">100%</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
                         class="m-1 p-button-sm"></button>
@@ -116,6 +148,27 @@
                     Reset Filter
                 </button>
             </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+
+<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container" #checkboxContainer>
+        <div class="field-checkbox my-3" *ngFor="let obj of columns">
+            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name"></p-checkbox>
+            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+                value="selectAll" inputId="c100"></p-checkbox>
+            <label class="mx-3" for="c100">Select All</label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
         </div>
     </ng-template>
 </p-dialog>

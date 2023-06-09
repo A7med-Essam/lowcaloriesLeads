@@ -10,6 +10,7 @@ import { SurveyService } from 'src/app/services/survey.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { RefundService } from 'src/app/services/refund.service';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-show-refund',
@@ -67,7 +68,9 @@ export class ShowRefundComponent implements OnInit {
       'amount_paid',
       'reason',
     ];
-    const convertedData = this.allRefunds.map((obj: any) => [
+    let filteredArray = this.allRefunds.filter((item:any) => this.specificRows.includes(item.id));
+    filteredArray.length == 0 && (filteredArray = this.allRefunds)
+    const convertedData = filteredArray.map((obj: any) => [
       obj.created_at.substring(0, 10),
       obj.name,
       obj.email,
@@ -83,9 +86,6 @@ export class ShowRefundComponent implements OnInit {
       obj.iban,
       obj.account_hold_name,
       obj.bank_account_number,
-      // obj.original_amount_paid,
-      // obj.amount_usd,
-      // obj.total_amount_refund,
       obj.agent_name,
       obj.amount_paid,
       obj.reason,
@@ -196,9 +196,6 @@ export class ShowRefundComponent implements OnInit {
       iban: new FormControl(null),
       bank_account_number: new FormControl(null),
       account_hold_name: new FormControl(null),
-      // original_amount_paid: new FormControl(null),
-      // amount_usd: new FormControl(null),
-      // total_amount_refund: new FormControl(null),
     });
   }
 
@@ -268,6 +265,75 @@ export class ShowRefundComponent implements OnInit {
     this._DislikeService.getAgentBranches().subscribe({
       next: (res) => (this.branches = res.data),
     });
+  }
+
+  // ****************************************************filter columns************************************************************************
+  filterColumns: boolean = false;
+  selectedColumns: any[] = [];
+  specificRows: number[] = [];
+  columns: any[] = [
+    { name: 'id', status: false },
+    { name: 'account_hold_name', status: false },
+    { name: 'address', status: false },
+    { name: 'agent_id', status: false },
+    { name: 'agent_name', status: true },
+    { name: 'amount_paid', status: true },
+    { name: 'bank_account_number', status: false },
+    { name: 'bank_name', status: true },
+    { name: 'branch', status: false },
+    { name: 'cid', status: true },
+    { name: 'created_at', status: false },
+    { name: 'delivery_branch', status: false },
+    { name: 'email', status: false },
+    { name: 'iban', status: false },
+    { name: 'mobile', status: true },
+    { name: 'name', status: true },
+    { name: 'payment_method', status: false },
+    { name: 'reason', status: false },
+    { name: 'remaining_days', status: false },
+    { name: 'subscription_plan', status: false },
+  ];
+  
+  getFilterColumns() {
+    this.columns.forEach((element) => {
+      element.status = false;
+    });
+
+    this.selectedColumns.forEach((e) => {
+      for (let i = 0; i < this.columns.length; i++) {
+        if (this.columns[i].name == e) {
+          this.columns[i].status = true;
+        }
+      }
+    });
+  }
+
+  selectAllColumns(checkboxContainer: HTMLElement, currentCheckbox: Checkbox) {
+    setTimeout(() => {
+      if (!currentCheckbox.checked()) {
+        this.selectedColumns = [];
+      } else {
+        let checkboxes: HTMLLabelElement[] = [];
+        this.selectedColumns = [];
+        for (let i = 0; i < checkboxContainer.children.length; i++) {
+          checkboxes.push(checkboxContainer.children[i].children[1] as any);
+        }
+        this.columns.forEach((e) => {
+          this.selectedColumns.push(e.name);
+        });
+      }
+    }, 1);
+  }
+
+  getSpecificRows(input: HTMLInputElement) {
+    if (input.checked) {
+      this.specificRows.push(Number(input.value));
+    } else {
+      const index = this.specificRows.indexOf(Number(input.value));
+      if (index > -1) {
+        this.specificRows.splice(index, 1);
+      }
+    }
   }
 
 }

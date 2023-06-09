@@ -9,6 +9,7 @@ import { DislikeService } from 'src/app/services/dislike.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-show-target',
@@ -55,7 +56,9 @@ export class ShowTargetComponent implements OnInit {
       'Paid',
       'Type',
     ];
-    const convertedData = this.allTargets.map((obj: any) => [
+    let filteredArray = this.allTargets.filter((item:any) => this.specificRows.includes(item.id));
+    filteredArray.length == 0 && (filteredArray = this.allTargets)
+    const convertedData = filteredArray.map((obj: any) => [
       obj.date,
       obj.agent.name,
       obj.team,
@@ -277,5 +280,68 @@ export class ShowTargetComponent implements OnInit {
         this.types = res.data.type;
       },
     });
+  }
+
+  // ****************************************************filter columns************************************************************************
+  filterColumns: boolean = false;
+  selectedColumns: any[] = [];
+  specificRows: number[] = [];
+  columns: any[] = [
+    { name: 'id', status: false },
+    { name: 'team', status: false },
+    { name: 'type', status: false },
+    { name: 'agent_id', status: false },
+    { name: 'agent_name', status: false },
+    { name: 'date', status: true },
+    { name: 'client_number', status: true },
+    { name: 'client_cid', status: false },
+    { name: 'branch', status: true },
+    { name: 'customer_type', status: false },
+    { name: 'paid_by', status: true },
+    { name: 'status', status: false },
+    { name: 'invoice_number', status: false },
+    { name: 'created_at', status: false },
+  ];
+  
+  getFilterColumns() {
+    this.columns.forEach((element) => {
+      element.status = false;
+    });
+
+    this.selectedColumns.forEach((e) => {
+      for (let i = 0; i < this.columns.length; i++) {
+        if (this.columns[i].name == e) {
+          this.columns[i].status = true;
+        }
+      }
+    });
+  }
+
+  selectAllColumns(checkboxContainer: HTMLElement, currentCheckbox: Checkbox) {
+    setTimeout(() => {
+      if (!currentCheckbox.checked()) {
+        this.selectedColumns = [];
+      } else {
+        let checkboxes: HTMLLabelElement[] = [];
+        this.selectedColumns = [];
+        for (let i = 0; i < checkboxContainer.children.length; i++) {
+          checkboxes.push(checkboxContainer.children[i].children[1] as any);
+        }
+        this.columns.forEach((e) => {
+          this.selectedColumns.push(e.name);
+        });
+      }
+    }, 1);
+  }
+
+  getSpecificRows(input: HTMLInputElement) {
+    if (input.checked) {
+      this.specificRows.push(Number(input.value));
+    } else {
+      const index = this.specificRows.indexOf(Number(input.value));
+      if (index > -1) {
+        this.specificRows.splice(index, 1);
+      }
+    }
   }
 }

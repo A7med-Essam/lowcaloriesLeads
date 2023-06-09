@@ -11,10 +11,11 @@ import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
 
 const APP_PRIMENG_MODULE = [
   // ButtonModule,
-  // CheckboxModule,
+  CheckboxModule,
   // CardModule,
   DropdownModule,
   InputTextModule,

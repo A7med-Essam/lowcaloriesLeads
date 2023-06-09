@@ -6,7 +6,10 @@
         </p-button>
         <p-button class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
         </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allRefunds.length">
+        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()"
+            *ngIf="allRefunds.length">
+        </p-button>
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
     </div>
 </div>
@@ -18,17 +21,57 @@
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center">cid</th>
-                <th class="text-center">Bank</th>
-                <th class="text-center">Amount</th>
+                <th class="text-center">
+                    Select Columns
+                </th>
+                <th class="text-center"*ngIf="columns[0].status">id</th>
+                <th class="text-center"*ngIf="columns[1].status">account_hold_name</th>
+                <th class="text-center"*ngIf="columns[2].status">address</th>
+                <th class="text-center"*ngIf="columns[3].status">agent_id</th>
+                <th class="text-center"*ngIf="columns[4].status">agent_name</th>
+                <th class="text-center"*ngIf="columns[5].status">amount_paid</th>
+                <th class="text-center"*ngIf="columns[6].status">bank_account_number</th>
+                <th class="text-center"*ngIf="columns[7].status">bank_name</th>
+                <th class="text-center"*ngIf="columns[8].status">branch</th>
+                <th class="text-center"*ngIf="columns[9].status">cid</th>
+                <th class="text-center"*ngIf="columns[10].status">created_at</th>
+                <th class="text-center"*ngIf="columns[11].status">delivery_branch</th>
+                <th class="text-center"*ngIf="columns[12].status">email</th>
+                <th class="text-center"*ngIf="columns[13].status">iban</th>
+                <th class="text-center"*ngIf="columns[14].status">mobile</th>
+                <th class="text-center"*ngIf="columns[15].status">name</th>
+                <th class="text-center"*ngIf="columns[16].status">payment_method</th>
+                <th class="text-center"*ngIf="columns[17].status">reason</th>
+                <th class="text-center"*ngIf="columns[18].status">remaining_days</th>
+                <th class="text-center"*ngIf="columns[19].status">subscription_plan</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-refund>
             <tr>
-                <td class="text-center">{{refund?.cid}}</td>
-                <td class="text-center">{{refund?.bank_name}}</td>
-                <td class="text-center">{{refund?.amount_paid}}</td>
+                <td class="text-center">
+                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="refund.id">
+                </td>
+                <td class="text-center" *ngIf="columns[0].status">{{refund.id}}</td>
+                <td class="text-center" *ngIf="columns[1].status">{{refund.account_hold_name}}</td>
+                <td class="text-center" *ngIf="columns[2].status">{{refund.address}}</td>
+                <td class="text-center" *ngIf="columns[3].status">{{refund.agent_id}}</td>
+                <td class="text-center" *ngIf="columns[4].status">{{refund.agent_name}}</td>
+                <td class="text-center" *ngIf="columns[5].status">{{refund.amount_paid}}</td>
+                <td class="text-center" *ngIf="columns[6].status">{{refund.bank_account_number}}</td>
+                <td class="text-center" *ngIf="columns[7].status">{{refund.bank_name}}</td>
+                <td class="text-center" *ngIf="columns[8].status">{{refund.branch}}</td>
+                <td class="text-center" *ngIf="columns[9].status">{{refund.cid}}</td>
+                <td class="text-center" *ngIf="columns[10].status">{{refund.created_at}}</td>
+                <td class="text-center" *ngIf="columns[11].status">{{refund.delivery_branch}}</td>
+                <td class="text-center" *ngIf="columns[12].status">{{refund.email}}</td>
+                <td class="text-center" *ngIf="columns[13].status">{{refund.iban}}</td>
+                <td class="text-center" *ngIf="columns[14].status">{{refund.mobile}}</td>
+                <td class="text-center" *ngIf="columns[15].status">{{refund.name}}</td>
+                <td class="text-center" *ngIf="columns[16].status">{{refund.payment_method}}</td>
+                <td class="text-center" *ngIf="columns[17].status">{{refund.reason}}</td>
+                <td class="text-center" *ngIf="columns[18].status">{{refund.remaining_days}}</td>
+                <td class="text-center" *ngIf="columns[19].status">{{refund.subscription_plan}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(refund)"
                         class="m-1 p-button-sm"></button>
@@ -51,8 +94,9 @@
                 </div>
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">delivery_branch</label>
-                    <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='delivery_branch'
-                        appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                    <p-dropdown [options]="branches" optionLabel="name" optionValue="name"
+                        formControlName='delivery_branch' appendTo="body" styleClass="w-100" placeholder="Select Branch"
+                        [filter]="true">
                     </p-dropdown>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
@@ -137,6 +181,26 @@
                     Reset Filter
                 </button>
             </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container" #checkboxContainer>
+        <div class="field-checkbox my-3" *ngFor="let obj of columns">
+            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name"></p-checkbox>
+            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+                value="selectAll" inputId="c100"></p-checkbox>
+            <label class="mx-3" for="c100">Select All</label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
         </div>
     </ng-template>
 </p-dialog>
