@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+// import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { DislikeService } from 'src/app/services/dislike.service';
@@ -15,8 +15,8 @@ import { LocalService } from 'src/app/services/local.service';
 export class AddTargetComponent implements OnInit {
   insertForm!: FormGroup;
   constructor(
-    private _Router: Router,
-    private _ActivatedRoute: ActivatedRoute,
+    // private _Router: Router,
+    // private _ActivatedRoute: ActivatedRoute,
     private _DislikeService: DislikeService,
     private _LocalService: LocalService,
     private renderer: Renderer2,
@@ -25,9 +25,9 @@ export class AddTargetComponent implements OnInit {
     private _MessageService:MessageService
   ) {}
 
-  goBack(): void {
-    this._Location.back();
-  }
+  // goBack(): void {
+  //   this._Location.back();
+  // }
 
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, 'h-side');
@@ -111,6 +111,16 @@ export class AddTargetComponent implements OnInit {
   cids: any[] = [];
   getCustomerCID() {
     if (this.insertForm.controls.client_number.valid) {
+      this._AgentTargetService.getSubDetails(this.insertForm.value.client_number).subscribe(res=>{
+        if (res.status) {
+          this.insertForm.patchValue({
+            invoice_number: res.data.invoice_no,
+            date: new Date(res.data.delivery_starting_day),
+            // type: res.data.type,
+            // paid_by: res.data.paid_by,
+          });
+        }
+      })
       this._AgentTargetService
         .getCustomerCIDS(this.insertForm.value.client_number)
         .subscribe((res) => {
@@ -120,6 +130,19 @@ export class AddTargetComponent implements OnInit {
           });
         });
     }
+  }
+
+  onNumberChange(e:any){
+    this._AgentTargetService.getSubDetails(e.value).subscribe(res=>{
+      if (res.status) {
+        this.insertForm.patchValue({
+          invoice_number: res.data.invoice_no,
+          date: new Date(res.data.delivery_starting_day),
+          // type: res.data.type,
+          // paid_by: res.data.paid_by,
+        });
+      }
+    })
   }
 
   customerPhones: any[] = [];

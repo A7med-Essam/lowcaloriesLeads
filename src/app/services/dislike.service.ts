@@ -32,6 +32,10 @@ export class DislikeService {
     return this._ApiConfigService.postReq(`allDislikeRequests?page=${page}`,'')
   }
 
+  getAllDislikes():Observable<any> {
+    return this._ApiConfigService.postReq(`allDislikeRequests`, {withoutPagination:true});
+  }
+
   updateDislikes(dislike:any):Observable<any> {
     return this._ApiConfigService.postReq3('updateDislikeRequest',dislike)
   }

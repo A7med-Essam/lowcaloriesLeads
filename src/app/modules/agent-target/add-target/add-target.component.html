@@ -18,7 +18,7 @@
             <div class="col-md-6 col-12 my-3" *ngIf="customerPhones.length">
                 <label for="">Client Number</label>
                 <p-dropdown [options]="customerPhones" formControlName='client_number' appendTo="body" 
-                    styleClass="w-100" placeholder="Select Number" [filter]="true">
+                (onChange)="onNumberChange($event)" styleClass="w-100" placeholder="Select Number" [filter]="true">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_number')?.touched &&
                 insertForm.get('client_number')?.hasError('required')">This field is required.</small>

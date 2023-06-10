@@ -3,7 +3,11 @@
         <button pButton pRipple label="Add Dislike" class="p-button-success" icon="pi pi-plus" routerLink="../create"></button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-        <p-button icon="pi pi-file" label="Export" (click)="export()">
+        <p-button icon="pi pi-file" label="Export as Excel" (click)="export()">
+        </p-button>
+        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allDislikes.length">
+        </p-button>
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
     </div>
 </div>
@@ -14,21 +18,39 @@
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center">Date</th>
-                <th class="text-center">Name</th>
-                <th class="text-center">Mobile</th>
-                <th class="text-center">Email</th>
-                <th class="text-center">CID</th>
+                <th class="text-center">
+                    Select Columns
+                </th>
+                <th class="text-center"*ngIf="columns[0].status">id</th>
+                <th class="text-center"*ngIf="columns[1].status">name</th>
+                <th class="text-center"*ngIf="columns[2].status">cid</th>
+                <th class="text-center"*ngIf="columns[3].status">email</th>
+                <th class="text-center"*ngIf="columns[4].status">mobile</th>
+                <th class="text-center"*ngIf="columns[5].status">branch</th>
+                <th class="text-center"*ngIf="columns[6].status">agent_id</th>
+                <th class="text-center"*ngIf="columns[7].status">sent_by</th>
+                <th class="text-center"*ngIf="columns[8].status">dislike_meals</th>
+                <th class="text-center"*ngIf="columns[9].status">reasons</th>
+                <th class="text-center"*ngIf="columns[9].status">created_at</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-dislike>
             <tr>
-                <td class="text-center">{{dislike?.created_at | date}}</td>
-                <td class="text-center">{{dislike?.name}}</td>
-                <td class="text-center">{{dislike?.mobile}}</td>
-                <td class="text-center">{{dislike?.email}}</td>
-                <td class="text-center">{{dislike?.cid}}</td>
+                <td class="text-center">
+                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="dislike.id">
+                </td>
+                <td class="text-center" *ngIf="columns[0].status">{{dislike.id}}</td>
+                <td class="text-center" *ngIf="columns[1].status">{{dislike.name}}</td>
+                <td class="text-center" *ngIf="columns[2].status">{{dislike.cid}}</td>
+                <td class="text-center" *ngIf="columns[3].status">{{dislike.email}}</td>
+                <td class="text-center" *ngIf="columns[4].status">{{dislike.mobile}}</td>
+                <td class="text-center" *ngIf="columns[5].status">{{dislike.branch}}</td>
+                <td class="text-center" *ngIf="columns[6].status">{{dislike.agent_id}}</td>
+                <td class="text-center" *ngIf="columns[7].status">{{dislike.sent_by}}</td>
+                <td class="text-center" *ngIf="columns[8].status">{{dislike.dislike_meals}}</td>
+                <td class="text-center" *ngIf="columns[9].status">{{dislike.reasons}}</td>
+                <td class="text-center" *ngIf="columns[10].status">{{dislike.created_at | date}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(dislike)"
                         class="m-1 p-button-sm"></button>
@@ -104,6 +126,26 @@
                     Reset Filter
                 </button>
             </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container" #checkboxContainer>
+        <div class="field-checkbox my-3" *ngFor="let obj of columns">
+            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name"></p-checkbox>
+            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+                value="selectAll" inputId="c100"></p-checkbox>
+            <label class="mx-3" for="c100">Select All</label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
         </div>
     </ng-template>
 </p-dialog>

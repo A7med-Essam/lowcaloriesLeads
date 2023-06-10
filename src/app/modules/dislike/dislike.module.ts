@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
@@ -19,6 +18,7 @@ import { DislikeDetailsComponent } from './dislike-details/dislike-details.compo
 import { DislikeComponent } from './dislike/dislike.component';
 import { AddReasonsComponent } from './add-reasons/add-reasons.component';
 import { ReasonsComponent } from './reasons/reasons.component';
+
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   DropdownModule,
@@ -27,7 +27,9 @@ const APP_PRIMENG_MODULE = [
   DialogModule,
   CalendarModule,
   MultiSelectModule,
-  ChipsModule,ConfirmDialogModule
+  ChipsModule,
+  ConfirmDialogModule,
+  CheckboxModule,
 ];
 
 @NgModule({
@@ -44,7 +46,7 @@ const APP_PRIMENG_MODULE = [
     DislikeRoutingModule,
     APP_PRIMENG_MODULE,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
 })
 export class DislikeModule {}

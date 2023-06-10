@@ -54,6 +54,10 @@
                                             <td>issue_details</td>
                                             <td>{{complaint?.issue_details}}</td>
                                         </tr>
+                                        <tr *ngIf="complaint?.reason">
+                                            <td>reason</td>
+                                            <td>{{complaint?.reason}}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
