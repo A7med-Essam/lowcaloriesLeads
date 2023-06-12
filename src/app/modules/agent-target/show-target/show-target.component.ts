@@ -48,12 +48,12 @@ export class ShowTargetComponent implements OnInit {
       'Agent',
       'Team',
       'Branch',
-      'Client_CID',
-      'Client_number',
-      'Client_Type',
+      'customer_CID',
+      'customer_number',
+      'customer_Type',
       'Invoice_number',
       'Status',
-      'Paid',
+      'Paid_by',
       'Type',
     ];
     let filteredArray = this.allTargets.filter((item:any) => this.specificRows.includes(item.id));
@@ -344,4 +344,74 @@ export class ShowTargetComponent implements OnInit {
       }
     }
   }
+
+   // ****************************************************print row************************************************************************
+   print(target:any){
+    // Default export is a4 paper, portrait, using millimeters for units
+    const doc = new jsPDF();
+    const imageFile = '../../../../assets/images/logo.png';
+    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+    doc.setTextColor(50);
+    doc.setFontSize(10);
+    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+    doc.text('Issue Subject:Customer Service Target', 10, 40);
+    doc.text('Prepared By: Low Calories Technical Team', 10, 45);
+    doc.text('Requested By: Mohamed Fawzy', 10, 50);
+    doc.text('Low Calories Restaurant - Egypt', 150, 30);
+    doc.text('3rd Settelment, New Cairo', 150, 35);
+    doc.text('Phone: 201116202225', 150, 40);
+    doc.text('Email: info@thelowcalories.com', 150, 45);
+    doc.text('Website: thelowcalories.com', 150, 50);
+
+
+    autoTable(doc, { startY: 55 });
+
+    var columns = [
+      {title: "Date", dataKey:target.date},
+      {title: "agent_name", dataKey:target.agent.name},          
+      {title: "Team", dataKey:target.team}, 
+      {title: "Branch", dataKey:target.branch},
+      {title: "customer_cid", dataKey:target.client_cid},
+      {title: "customer_number", dataKey:target.client_number},
+      {title: "customer_type", dataKey:target.customer_type},
+      {title: "invoice_number", dataKey:target.invoice_number},
+      {title: "paid_by", dataKey:target.paid_by},
+      {title: "type", dataKey:target.type},
+      {title: "status", dataKey:target.status.toUpperCase()},          
+  ];
+
+  // doc.text(140, 40, "Report");
+  autoTable(doc,{body:columns,});
+
+    // Set the line color and width
+    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+    // Draw a line at the bottom of the page
+
+    // Get the total number of pages
+    const totalPages = doc.internal.pages;
+
+    // Iterate over each page and add the footer
+    for (let i = 1; i <= totalPages.length; i++) {
+      doc.line(
+        20,
+        doc.internal.pageSize.height - 20,
+        doc.internal.pageSize.width - 20,
+        doc.internal.pageSize.height - 20
+      );
+      // Set the current page as active
+      doc.setPage(i);
+      // Set the position and alignment of the footer
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(
+        'Thelowcalories.com',
+        20,
+        doc.internal.pageSize.getHeight() - 10
+      );
+    }
+
+    doc.save('target.pdf');
+}
 }

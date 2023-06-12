@@ -24,26 +24,26 @@
                 <th class="text-center">
                     Select Columns
                 </th>
-                <th class="text-center"*ngIf="columns[0].status">id</th>
-                <th class="text-center"*ngIf="columns[1].status">account_hold_name</th>
-                <th class="text-center"*ngIf="columns[2].status">address</th>
-                <th class="text-center"*ngIf="columns[3].status">agent_id</th>
-                <th class="text-center"*ngIf="columns[4].status">agent_name</th>
-                <th class="text-center"*ngIf="columns[5].status">amount_paid</th>
-                <th class="text-center"*ngIf="columns[6].status">bank_account_number</th>
-                <th class="text-center"*ngIf="columns[7].status">bank_name</th>
-                <th class="text-center"*ngIf="columns[8].status">branch</th>
-                <th class="text-center"*ngIf="columns[9].status">cid</th>
-                <th class="text-center"*ngIf="columns[10].status">created_at</th>
-                <th class="text-center"*ngIf="columns[11].status">delivery_branch</th>
-                <th class="text-center"*ngIf="columns[12].status">email</th>
-                <th class="text-center"*ngIf="columns[13].status">iban</th>
-                <th class="text-center"*ngIf="columns[14].status">mobile</th>
-                <th class="text-center"*ngIf="columns[15].status">name</th>
-                <th class="text-center"*ngIf="columns[16].status">payment_method</th>
-                <th class="text-center"*ngIf="columns[17].status">reason</th>
-                <th class="text-center"*ngIf="columns[18].status">remaining_days</th>
-                <th class="text-center"*ngIf="columns[19].status">subscription_plan</th>
+                <th class="text-center" *ngIf="columns[0].status">id</th>
+                <th class="text-center" *ngIf="columns[1].status">account_hold_name</th>
+                <th class="text-center" *ngIf="columns[2].status">address</th>
+                <th class="text-center" *ngIf="columns[3].status">agent_id</th>
+                <th class="text-center" *ngIf="columns[4].status">agent_name</th>
+                <th class="text-center" *ngIf="columns[5].status">amount_paid</th>
+                <th class="text-center" *ngIf="columns[6].status">bank_account_number</th>
+                <th class="text-center" *ngIf="columns[7].status">bank_name</th>
+                <th class="text-center" *ngIf="columns[8].status">branch</th>
+                <th class="text-center" *ngIf="columns[9].status">cid</th>
+                <th class="text-center" *ngIf="columns[10].status">created_at</th>
+                <th class="text-center" *ngIf="columns[11].status">delivery_branch</th>
+                <th class="text-center" *ngIf="columns[12].status">email</th>
+                <th class="text-center" *ngIf="columns[13].status">iban</th>
+                <th class="text-center" *ngIf="columns[14].status">mobile</th>
+                <th class="text-center" *ngIf="columns[15].status">name</th>
+                <th class="text-center" *ngIf="columns[16].status">payment_method</th>
+                <th class="text-center" *ngIf="columns[17].status">reason</th>
+                <th class="text-center" *ngIf="columns[18].status">remaining_days</th>
+                <th class="text-center" *ngIf="columns[19].status">subscription_plan</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -75,6 +75,7 @@
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(refund)"
                         class="m-1 p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(refund)"></button>
                 </td>
             </tr>
         </ng-template>
@@ -189,7 +190,8 @@
     [draggable]="false" [resizable]="false">
     <div class="container" #checkboxContainer>
         <div class="field-checkbox my-3" *ngFor="let obj of columns">
-            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name"></p-checkbox>
+            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name">
+            </p-checkbox>
             <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
         </div>
         <div class="field-checkbox my-3">

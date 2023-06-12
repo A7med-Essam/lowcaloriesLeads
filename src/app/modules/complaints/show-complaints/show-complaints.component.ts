@@ -45,8 +45,8 @@ export class ShowComplaintsComponent implements OnInit {
 
     const headers = [
       'Date',
-      'client_name',
-      'client_mobile',
+      'customer_name',
+      'customer_mobile',
       'CID',
       'Agent_name',
       'Status',
@@ -341,4 +341,72 @@ export class ShowComplaintsComponent implements OnInit {
       }
     }
   }
+
+   // ****************************************************print row************************************************************************
+   print(complaint:any){
+    // Default export is a4 paper, portrait, using millimeters for units
+    const doc = new jsPDF();
+    const imageFile = '../../../../assets/images/logo.png';
+    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+    doc.setTextColor(50);
+    doc.setFontSize(10);
+    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+    doc.text('Issue Subject:Customers Complaints Report', 10, 40);
+    doc.text('Prepared By: Low Calories Technical Team', 10, 45);
+    doc.text('Requested By: Mohamed Fawzy', 10, 50);
+    doc.text('Low Calories Restaurant - Egypt', 150, 30);
+    doc.text('3rd Settelment, New Cairo', 150, 35);
+    doc.text('Phone: 201116202225', 150, 40);
+    doc.text('Email: info@thelowcalories.com', 150, 45);
+    doc.text('Website: thelowcalories.com', 150, 50);
+
+    autoTable(doc, { startY: 55 });
+ 
+
+    var columns = [
+      {title: "Date", dataKey:complaint.date},
+      {title: "customer_name", dataKey:complaint.c_name}, 
+      {title: "customer_mobile", dataKey:complaint.c_mobile},
+      {title: "cid", dataKey:complaint.cid},
+      {title: "agent_name", dataKey:complaint.agent_name},
+      {title: "status", dataKey:complaint.status},
+      {title: "branch", dataKey:complaint.branch},
+      {title: "action", dataKey:complaint.action},
+      {title: "issue_details", dataKey:complaint.issue_details},
+  ];
+
+  // doc.text(140, 40, "Report");
+  autoTable(doc,{body:columns,});
+
+    // Set the line color and width
+    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+    // Draw a line at the bottom of the page
+
+    // Get the total number of pages
+    const totalPages = doc.internal.pages;
+
+    // Iterate over each page and add the footer
+    for (let i = 1; i <= totalPages.length; i++) {
+      doc.line(
+        20,
+        doc.internal.pageSize.height - 20,
+        doc.internal.pageSize.width - 20,
+        doc.internal.pageSize.height - 20
+      );
+      // Set the current page as active
+      doc.setPage(i);
+      // Set the position and alignment of the footer
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(
+        'Thelowcalories.com',
+        20,
+        doc.internal.pageSize.getHeight() - 10
+      );
+    }
+
+    doc.save('complaint.pdf');
+}
 }

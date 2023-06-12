@@ -250,7 +250,7 @@ export class ShowDislikeComponent implements OnInit {
       doc.setTextColor(50);
       doc.setFontSize(14);
       doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-      doc.text('Issue Subject:Customer Service Target', 10, 45);
+      doc.text('Issue Subject:Customers Dislike Report', 10, 45);
       doc.text('Prepared By: Low Calories Technical Team', 10, 55);
       doc.text('Requested By: Mohamed Fawzy', 10, 65);
       doc.text('Low Calories Restaurant - Egypt', 320, 25);
@@ -261,6 +261,7 @@ export class ShowDislikeComponent implements OnInit {
   
       const headers = [
         'date',
+        'cid',
         'name',
         'email',
         'mobile',
@@ -273,6 +274,7 @@ export class ShowDislikeComponent implements OnInit {
       filteredArray.length == 0 && (filteredArray = this.allDislikes)
       const convertedData = filteredArray.map((obj: any) => [
         new Date(obj.created_at).toLocaleDateString("en-CA"),
+        obj.cid,
         obj.name,
         obj.email,
         obj.mobile,
@@ -319,4 +321,75 @@ export class ShowDislikeComponent implements OnInit {
   
       doc.save('example.pdf');
     }
+
+     // ****************************************************print row************************************************************************
+  print(dislike:any){
+    // Default export is a4 paper, portrait, using millimeters for units
+    const doc = new jsPDF();
+    const imageFile = '../../../../assets/images/logo.png';
+    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+    doc.setTextColor(50);
+    doc.setFontSize(10);
+    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+    doc.text('Issue Subject:Customers Dislike Report', 10, 40);
+    doc.text('Prepared By: Low Calories Technical Team', 10, 45);
+    doc.text('Requested By: Mohamed Fawzy', 10, 50);
+    doc.text('Low Calories Restaurant - Egypt', 150, 30);
+    doc.text('3rd Settelment, New Cairo', 150, 35);
+    doc.text('Phone: 201116202225', 150, 40);
+    doc.text('Email: info@thelowcalories.com', 150, 45);
+    doc.text('Website: thelowcalories.com', 150, 50);
+
+  
+
+    autoTable(doc, { startY: 55 });
+
+    var columns = [
+      {title: "Date", dataKey:dislike.created_at.substring(0, 10)}, 
+      {title: "Name", dataKey:dislike.name}, 
+      {title: "Email", dataKey:dislike.email},
+      {title: "Mobile", dataKey:dislike.mobile},
+      {title: "Branch", dataKey:dislike.branch},
+      {title: "sent_by", dataKey:dislike.sent_by},
+      {title: "reasons", dataKey:dislike.reasons},
+      {title: "cid", dataKey:dislike.cid},
+      {title: "dislike_meals", dataKey:dislike.dislike_meals},
+  ];
+
+
+
+  // doc.text(140, 40, "Report");
+  autoTable(doc,{body:columns,});
+
+    // Set the line color and width
+    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+    // Draw a line at the bottom of the page
+
+    // Get the total number of pages
+    const totalPages = doc.internal.pages;
+
+    // Iterate over each page and add the footer
+    for (let i = 1; i <= totalPages.length; i++) {
+      doc.line(
+        20,
+        doc.internal.pageSize.height - 20,
+        doc.internal.pageSize.width - 20,
+        doc.internal.pageSize.height - 20
+      );
+      // Set the current page as active
+      doc.setPage(i);
+      // Set the position and alignment of the footer
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(
+        'Thelowcalories.com',
+        20,
+        doc.internal.pageSize.getHeight() - 10
+      );
+    }
+
+    doc.save('dislike.pdf');
+}
 }

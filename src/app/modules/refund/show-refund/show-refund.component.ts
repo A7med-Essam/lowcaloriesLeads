@@ -336,4 +336,80 @@ export class ShowRefundComponent implements OnInit {
     }
   }
 
+  // ****************************************************print row************************************************************************
+  print(refund:any){
+      // Default export is a4 paper, portrait, using millimeters for units
+      const doc = new jsPDF();
+      const imageFile = '../../../../assets/images/logo.png';
+      doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+      doc.setTextColor(50);
+      doc.setFontSize(10);
+      doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+      doc.text('Issue Subject:Refund Requests Report', 10, 40);
+      doc.text('Prepared By: Low Calories Technical Team', 10, 45);
+      doc.text('Requested By: Mohamed Fawzy', 10, 50);
+      doc.text('Low Calories Restaurant - Egypt', 150, 30);
+      doc.text('3rd Settelment, New Cairo', 150, 35);
+      doc.text('Phone: 201116202225', 150, 40);
+      doc.text('Email: info@thelowcalories.com', 150, 45);
+      doc.text('Website: thelowcalories.com', 150, 50);
+  
+      autoTable(doc, { startY: 55 });
+
+      var columns = [
+        {title: "Date", dataKey:refund.created_at.substring(0, 10)},
+        {title: "Name", dataKey:refund.name}, 
+        {title: "Email", dataKey:refund.email},
+        {title: "Mobile", dataKey:refund.mobile},
+        {title: "Branch", dataKey:refund.branch},
+        {title: "delivery_branch", dataKey:refund.delivery_branch},
+        {title: "subscription_plan", dataKey:refund.subscription_plan},
+        {title: "remaining_days", dataKey:refund.remaining_days},
+        {title: "payment_method", dataKey:refund.payment_method},
+        {title: "cid", dataKey:refund.cid},
+        {title: "address", dataKey:refund.address},
+        {title: "bank_name", dataKey:refund.bank_name},          
+        {title: "iban", dataKey:refund.iban},          
+        {title: "account_hold_name", dataKey:refund.account_hold_name},  
+        {title: "bank_account_number", dataKey:refund.bank_account_number},  
+        {title: "amount_paid", dataKey:refund.amount_paid},          
+        {title: "agent_name", dataKey:refund.agent_name},          
+        {title: "reason", dataKey:refund.reason},          
+    ];
+
+    // doc.text(140, 40, "Report");
+    autoTable(doc,{body:columns,});
+  
+      // Set the line color and width
+      doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+      doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+  
+      // Draw a line at the bottom of the page
+  
+      // Get the total number of pages
+      const totalPages = doc.internal.pages;
+  
+      // Iterate over each page and add the footer
+      for (let i = 1; i <= totalPages.length; i++) {
+        doc.line(
+          20,
+          doc.internal.pageSize.height - 20,
+          doc.internal.pageSize.width - 20,
+          doc.internal.pageSize.height - 20
+        );
+        // Set the current page as active
+        doc.setPage(i);
+        // Set the position and alignment of the footer
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(
+          'Thelowcalories.com',
+          20,
+          doc.internal.pageSize.getHeight() - 10
+        );
+      }
+  
+      doc.save('refund.pdf');
+  }
+
 }
