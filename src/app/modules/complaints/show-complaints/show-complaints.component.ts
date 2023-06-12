@@ -196,7 +196,7 @@ export class ShowComplaintsComponent implements OnInit {
       this.complaints = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
-      this.resetFields();
+      // this.resetFields();
     });
   }
 

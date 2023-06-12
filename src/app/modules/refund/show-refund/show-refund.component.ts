@@ -211,7 +211,7 @@ export class ShowRefundComponent implements OnInit {
       this.refunds = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
-      this.resetFields();
+      // this.resetFields();
     });
   }
 

@@ -209,7 +209,7 @@ export class ShowTargetComponent implements OnInit {
       this.targets = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
-      this.resetFields();
+      // this.resetFields();
     });
   }
 
