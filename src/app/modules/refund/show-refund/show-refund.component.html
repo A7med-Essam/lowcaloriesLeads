@@ -82,7 +82,7 @@
     </p-table>
 </div>
 
-<p-dialog header="Filter Targets Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
+<p-dialog header="Filter Refund Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
     [draggable]="false" [resizable]="false">
     <div class="container">
         <form [formGroup]="filterForm" #myForm="ngForm">
@@ -114,7 +114,9 @@
                 </div>
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">branch</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='branch' />
+                    <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='branch'
+                        appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                    </p-dropdown>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">subscription_plan</label>

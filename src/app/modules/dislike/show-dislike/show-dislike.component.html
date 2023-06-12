@@ -88,8 +88,10 @@
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedName" />
             </div>
             <div class="col-md-6 my-1">
-                <label for="">Branch</label>
-                <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedBranch" />
+                <label for="">branch</label>
+                <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='branch'
+                    appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                </p-dropdown>
             </div>
             <div class="col-md-6 my-1">
                 <label for="">Email</label>
