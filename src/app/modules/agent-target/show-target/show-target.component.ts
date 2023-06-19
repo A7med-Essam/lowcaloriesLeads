@@ -131,7 +131,7 @@ export class ShowTargetComponent implements OnInit {
 
   getTargets(page: number = 1) {
     if (this.appliedFilters) {
-      this.getOldFilters();
+      this.getOldFilters(page);
     } else {
       this._AgentTargetService.getTargets(page).subscribe({
         next: (res) => {
@@ -209,13 +209,18 @@ export class ShowTargetComponent implements OnInit {
       this.targets = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
+      this.filterForm.patchValue({
+        date:null,
+        from:null,
+        to:null
+      })
       // this.resetFields();
     });
   }
 
-  getOldFilters() {
+  getOldFilters(page:number) {
     this._AgentTargetService
-      .filterTargets(1, this.appliedFilters)
+      .filterTargets(page, this.appliedFilters)
       .subscribe((res) => {
         this.targets = res.data.data;
         this.PaginationInfo = res.data;

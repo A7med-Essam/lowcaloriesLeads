@@ -26,8 +26,8 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
     _AuthService.currentUser.subscribe((data) => {
       if (data != null) {
         data.role == 'super_admin'
-          ? (this.isSuperAdmin = true)
-          : (this.isSuperAdmin = false);
+        ? (this.isSuperAdmin = true)
+        : (this.isSuperAdmin = false);
       } else {
         this.isSuperAdmin = false;
       }

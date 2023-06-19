@@ -1,0 +1,216 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="mb-3">
+        <button pButton pRipple label="Assign" class="p-button-success mx-1" icon="pi pi-plus"
+            (click)="assignModal2 = true"></button>
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+        </p-button>
+        <p-button class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
+        </p-button>
+        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allCalls.length">
+        </p-button>
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
+        </p-button>
+    </div>
+</div>
+<div class="card">
+    <p-table [value]="calls" [paginator]="true" [rows]="PaginationInfo?.per_page" [totalRecords]="PaginationInfo?.total"
+        [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">
+                    Select Columns
+                </th>
+                <th class="text-center" *ngIf="columns[0].status">id</th>
+                <th class="text-center" *ngIf="columns[1].status">cid</th>
+                <th class="text-center" *ngIf="columns[2].status">subscription_id</th>
+                <th class="text-center" *ngIf="columns[3].status">branch</th>
+                <th class="text-center" *ngIf="columns[4].status">customer_name</th>
+                <th class="text-center" *ngIf="columns[5].status">customer_mobile</th>
+                <th class="text-center" *ngIf="columns[6].status">customer_phone</th>
+                <th class="text-center" *ngIf="columns[7].status">plan</th>
+                <th class="text-center" *ngIf="columns[8].status">date</th>
+                <th class="text-center" *ngIf="columns[9].status">note</th>
+                <th class="text-center" *ngIf="columns[10].status">voice</th>
+                <th class="text-center" *ngIf="columns[11].status">agent_uploaded</th>
+                <th class="text-center" *ngIf="columns[12].status">created_at</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-call>
+            <tr>
+                <td class="text-center">
+                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="call.id">
+                </td>
+                <td class="text-center" *ngIf="columns[0].status">{{call.id}}</td>
+                <td class="text-center" *ngIf="columns[1].status">{{call.cid}}</td>
+                <td class="text-center" *ngIf="columns[2].status">{{call.subscription_id}}</td>
+                <td class="text-center" *ngIf="columns[3].status">{{call.branch}}</td>
+                <td class="text-center" *ngIf="columns[4].status">{{call.customer_name}}</td>
+                <td class="text-center" *ngIf="columns[5].status">{{call.customer_mobile}}</td>
+                <td class="text-center" *ngIf="columns[6].status">{{call.customer_phone}}</td>
+                <td class="text-center" *ngIf="columns[7].status">{{call.plan}}</td>
+                <td class="text-center" *ngIf="columns[8].status">{{call.date}}</td>
+                <td class="text-center" *ngIf="columns[9].status">{{call.note}}</td>
+                <td class="text-center" *ngIf="columns[10].status">{{call.voice}}</td>
+                <td class="text-center" *ngIf="columns[11].status">{{call.agent_uploaded_name}}</td>
+                <td class="text-center" *ngIf="columns[12].status">{{call.created_at | date}}</td>
+                <td class="text-center">
+                    <!-- <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
+                        class="m-1 p-button-sm"></button> -->
+                    <button pButton pRipple class="p-button-success mx-1" icon="pi pi-link"
+                        (click)="displayAssignedUsersModal(call.id);getAssignedUsers(call)"></button>
+                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
+                        (click)="print(call)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container" #checkboxContainer>
+        <div class="field-checkbox my-3" *ngFor="let obj of columns">
+            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name">
+            </p-checkbox>
+            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+                value="selectAll" inputId="c100"></p-checkbox>
+            <label class="mx-3" for="c100">Select All</label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Assign Users" [(visible)]="assignModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="row">
+        <div class="col-12">
+            <form [formGroup]='AssignForm' #AssignUsersForm (ngSubmit)='assignUsers(AssignForm)' id="AssignUsersForm">
+                <div *ngFor="let user of agents; let i = index;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="d-flex align-items-center">
+                                <img src="../../../../assets/images/default-avatar.png" class="rounded-circle"
+                                    style="width: 40px;height: 40px;" alt="user image">
+                                <div class="px-2 py-1 my-3 mx-2 rounded-lg"
+                                    style="background-color: rgb(238, 238, 238);">
+                                    <small>{{user.name}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <input [id]="'ckb_'+i" class="ckb ckb-primary" type="checkbox" [value]="user.id"
+                                (change)="onCheckChange($event)" />
+                            <label class="hidden" [for]="'ckb_'+i"></label>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button class="btn btn-primary m-1" form="AssignUsersForm">Confirm</button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Assign User" [(visible)]="assignModal2" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <label for="">Call Assign</label>
+        <p-dropdown #selectAgent [options]="agents" optionLabel="name" optionValue="id" styleClass="w-100"
+            appendTo="body" placeholder="Select Agent">
+        </p-dropdown>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="assignAgent(selectAgent)">
+                Assign
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Filter Calls Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <form [formGroup]="filterForm" #myForm="ngForm">
+            <div class="row mx-0">
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">agent_uploaded</label>
+                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id"
+                        formControlName='agent_uploaded_id' appendTo="body" styleClass="w-100"
+                        placeholder="Select Agent" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">agent_assigned</label>
+                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id" formControlName='assigned_id'
+                        appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="range">Date Range</label>
+                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+                        ngClass="w-100" appendTo="body">
+                    </p-calendar>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">customer_name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='customer_name' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">customer_phone</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='customer_phone' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">customer_mobile</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='mobile' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">branch</label>
+                    <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='branch'
+                        appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">subscription_plan_id</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='subscription_id' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">plan</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='plan' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">cid</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='cid' />
+                </div>
+            </div>
+        </form>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+            <div>
+                <button class="btn btn-secondary" (click)="resetFields()">
+                    Reset Fields
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="insertRow(filterForm)">
+                    Apply Filter
+                </button>
+                <button class="btn btn-secondary" (click)="resetFilter()">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

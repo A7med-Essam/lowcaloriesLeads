@@ -56,6 +56,12 @@ const routes: Routes = [
       import('./modules/refund/refund.module').then((m) => m.RefundModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'calls',
+    loadChildren: () =>
+      import('./modules/calls/calls.module').then((m) => m.CallsModule),
+    canActivate: [AuthGuard],
+  },
   { path: '**', component: Error404Component },
 ];
 

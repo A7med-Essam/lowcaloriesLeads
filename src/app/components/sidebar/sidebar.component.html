@@ -31,13 +31,21 @@
           <span>Create Lead</span>
         </a>
       </li>
-
+      <li *ngIf="isLogin">
+        <a routerLink="calls/assign" routerLinkActive="active">
+          <i class="fas fa-link"></i>
+          <span>Assign Calls</span>
+        </a>
+      </li>
       <li *ngIf="isLogin">
         <a routerLink="dislike/reasons" routerLinkActive="active">
-          <i class="fas fa-link"></i>
+          <!-- <i class="fas fa-link"></i> -->
+          <i class="fas fa-list"></i>
           <span>Reasons</span>
         </a>
       </li>
+
+  
     </ul>
     <div class="menu-header mt-3 mb-2">
       Components
@@ -55,6 +63,12 @@
           <i class="fas fa-home"></i>
           <span>Home</span>
           <!-- <span>Dashboard</span> -->
+        </a>
+      </li>
+      <li *ngIf="isLogin">
+        <a routerLink="/calls/show" routerLinkActive="active">
+          <i class="fas fa-headset"></i>
+          <span>Calls</span>
         </a>
       </li>
       <li *ngIf="isLogin">

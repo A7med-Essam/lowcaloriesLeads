@@ -128,7 +128,7 @@ export class ShowComplaintsComponent implements OnInit {
 
   getComplaints(page: number = 1) {
     if (this.appliedFilters) {
-      this.getOldFilters();
+      this.getOldFilters(page);
     } else {
       this._ComplaintsService.getComplaints(page).subscribe({
         next: (res) => {
@@ -200,9 +200,9 @@ export class ShowComplaintsComponent implements OnInit {
     });
   }
 
-  getOldFilters() {
+  getOldFilters(page:number) {
     this._ComplaintsService
-      .filterComplaints(1, this.appliedFilters)
+      .filterComplaints(page, this.appliedFilters)
       .subscribe((res) => {
         this.complaints = res.data.data;
         this.PaginationInfo = res.data;

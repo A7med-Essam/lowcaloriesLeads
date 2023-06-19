@@ -149,7 +149,7 @@ export class ShowRefundComponent implements OnInit {
 
   getRefunds(page: number = 1) {
     if (this.appliedFilters) {
-      this.getOldFilters();
+      this.getOldFilters(page);
     } else {
       this._RefundService.getRefunds(page).subscribe({
         next: (res) => {
@@ -215,9 +215,9 @@ export class ShowRefundComponent implements OnInit {
     });
   }
 
-  getOldFilters() {
+  getOldFilters(page:number) {
     this._RefundService
-      .filterRefund(1, this.appliedFilters)
+      .filterRefund(page, this.appliedFilters)
       .subscribe((res) => {
         this.refunds = res.data.data;
         this.PaginationInfo = res.data;
