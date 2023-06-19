@@ -1,1 +1,56 @@
-<p>add-call works!</p>
+<section>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Upload Call</h2>
+            <button class="btn btn-outline-primary" (click)="backBtn()">Back</button>
+        </div>
+        <hr>
+        <form [formGroup]="insertForm" (ngSubmit)='insert(insertForm)'>
+            <div class="row mx-0">
+                <div class="col-lg-4 col-md-6 my-3">
+                    <label for="">subscription_id</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='subscription_id' readonly />
+                </div>
+                <div class="col-lg-4 col-md-6 my-3">
+                    <label for="">branch</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='branch' readonly />
+                </div>
+                <div class="col-lg-4 col-md-6 my-3">
+                    <label for="">customer_name</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='customer_name' readonly />
+                </div>
+                <div class="col-lg-4 col-md-6 my-3">
+                    <label for="">customer_mobile</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='customer_mobile' readonly />
+                </div>
+                <div class="col-lg-4 col-md-6 my-3">
+                    <label for="">customer_phone</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='customer_phone' readonly />
+                </div>
+                <div class="col-lg-4 col-md-6 my-3">
+                    <label for="">plan</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='plan' readonly />
+                </div>
+                <div class="col-lg-4 col-md-6 my-3">
+                    <label for="">date</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='date' readonly />
+                </div>
+                <div class="col-lg-4 col-md-6 my-3">
+                    <label for="">cid</label>
+                    <input type="text" pInputText ngClass="w-100 disabled" formControlName='cid' readonly />
+                </div>
+                <div class="col-lg-4 col-md-12 my-3">
+                    <label for="">Upload Call</label>
+                    <button class="btn btn-primary w-100" style="padding: 12px 0px;" (click)="uploadFile()">Upload</button>
+                </div>
+                <div class="col-12 my-3">
+                    <label for="">note</label>
+                    <textarea pInputTextarea ngClass="w-100" formControlName='note'></textarea>
+                </div>
+                <div class="col-12 my-3">
+                    <button class="btn btn-primary w-100">Add Call</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

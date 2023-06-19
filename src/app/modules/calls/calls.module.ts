@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { InputTextModule } from 'primeng/inputtext';
     ReactiveFormsModule,
     DropdownModule,
     CalendarModule,
-    InputTextModule
+    InputTextModule,
+    InputTextareaModule
   ]
 })
 export class CallsModule { }

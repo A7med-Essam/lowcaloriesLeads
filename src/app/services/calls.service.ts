@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiConfigService } from '../core/api-config.service';
 
 @Injectable({
@@ -7,6 +7,7 @@ import { ApiConfigService } from '../core/api-config.service';
 })
 export class CallsService {
   constructor(private _ApiConfigService: ApiConfigService) {}
+  call: BehaviorSubject<any> = new BehaviorSubject(null);
 
   getCalls(page: number): Observable<{
     status: number;
@@ -48,6 +49,34 @@ export class CallsService {
 
   filterCalls(page: number,filter:any){
     return this._ApiConfigService.postReq3(`calls?page=${page}`, filter);
+  }
+
+  getAgentCalls(page: number,agent_id:number): Observable<{
+    status: number;
+    data: {
+      data: ICalls[];
+      first_page_url: string;
+      from: number;
+      last_page: number;
+      last_page_url: string;
+      next_page_url: string;
+      path: string;
+      per_page: number;
+      prev_page_url: string;
+      to: number;
+      total: number;
+    };
+    message: string;
+  }> {
+    return this._ApiConfigService.postReq3(`getAgentCalls?page=${page}`, {agent_id});
+  }
+
+  filterAgentCalls(page: number,filter:any,agent_id:number){
+    return this._ApiConfigService.postReq3(`getAgentCalls?page=${page}`, {...filter,agent_id});
+  }
+
+  addCall(data: any){
+    return this._ApiConfigService.postReq3(`uploadNoteVoice`, data);
   }
 }
 
