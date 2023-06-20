@@ -40,11 +40,16 @@
                 <td class="text-center" *ngIf="columns[7].status">{{call.plan}}</td>
                 <td class="text-center" *ngIf="columns[8].status">{{call.date}}</td>
                 <td class="text-center" *ngIf="columns[9].status">{{call.note}}</td>
-                <td class="text-center" *ngIf="columns[10].status">{{call.voice}}</td>
+                <td class="text-center" *ngIf="columns[10].status">
+                    <audio controls>
+                        <source [src]="call.voice" type="audio/mpeg">
+                    </audio>
+                </td>
                 <td class="text-center" *ngIf="columns[11].status">{{call.agent_uploaded_name}}</td>
                 <td class="text-center" *ngIf="columns[12].status">{{call.created_at | date}}</td>
                 <td class="text-center">
-                    <button pButton pRipple class="p-button-success mx-1" icon="pi pi-plus" (click)="routeToCreateCall(call)"></button>
+                    <button pButton pRipple class="p-button-success mx-1" icon="pi pi-plus"
+                        (click)="routeToCreateCall(call)"></button>
                 </td>
             </tr>
         </ng-template>

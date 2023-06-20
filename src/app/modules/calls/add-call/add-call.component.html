@@ -48,7 +48,10 @@
                     <textarea pInputTextarea ngClass="w-100" formControlName='note'></textarea>
                 </div>
                 <div class="col-12 my-3">
-                    <button class="btn btn-primary w-100">Add Call</button>
+                    <button class="btn btn-primary w-100" [disabled]="uploadingStatus">
+                        <span *ngIf="!uploadingStatus">Add Call</span>
+                        <span *ngIf="uploadingStatus">Uploading...<i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
                 </div>
             </div>
         </form>
