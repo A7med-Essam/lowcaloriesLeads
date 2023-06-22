@@ -69,7 +69,8 @@ export class ShowRefundComponent implements OnInit {
       'reason',
     ];
     let filteredArray = this.allRefunds.filter((item:any) => this.specificRows.includes(item.id));
-    filteredArray.length == 0 && (filteredArray = this.allRefunds)
+    (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allRefunds);
+    (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.refunds);
     const convertedData = filteredArray.map((obj: any) => [
       obj.created_at.substring(0, 10),
       obj.name,

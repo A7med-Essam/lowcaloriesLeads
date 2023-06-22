@@ -57,7 +57,8 @@ export class ShowTargetComponent implements OnInit {
       'Type',
     ];
     let filteredArray = this.allTargets.filter((item:any) => this.specificRows.includes(item.id));
-    filteredArray.length == 0 && (filteredArray = this.allTargets)
+    (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allTargets);
+    (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.targets);
     const convertedData = filteredArray.map((obj: any) => [
       obj.date,
       obj.agent.name,

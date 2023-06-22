@@ -271,7 +271,8 @@ export class ShowDislikeComponent implements OnInit {
         'dislike_meals',
       ];
       let filteredArray = this.allDislikes.filter((item:any) => this.specificRows.includes(item.id));
-      filteredArray.length == 0 && (filteredArray = this.allDislikes)
+      (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allDislikes);
+      (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.dislikes);
       const convertedData = filteredArray.map((obj: any) => [
         new Date(obj.created_at).toLocaleDateString("en-CA"),
         obj.cid,

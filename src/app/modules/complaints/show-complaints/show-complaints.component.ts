@@ -56,7 +56,8 @@ export class ShowComplaintsComponent implements OnInit {
     ];
 
     let filteredArray = this.allComplaints.filter((item:any) => this.specificRows.includes(item.id));
-    filteredArray.length == 0 && (filteredArray = this.allComplaints)
+    (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allComplaints);
+    (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.complaints);
     const convertedData = filteredArray.map((obj: any) => [
       obj.date,
       obj.c_name,

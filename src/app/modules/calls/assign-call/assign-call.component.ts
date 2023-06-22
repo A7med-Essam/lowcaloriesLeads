@@ -364,8 +364,6 @@ export class AssignCallComponent implements OnInit {
     let filteredArray = this.allCalls.filter((item: any) =>
       this.specificRows.includes(item.id)
     );
-    // filteredArray.length == 0 &&
-
     (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allCalls);
     (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.calls);
     const convertedData = filteredArray.map((obj: any) => [
