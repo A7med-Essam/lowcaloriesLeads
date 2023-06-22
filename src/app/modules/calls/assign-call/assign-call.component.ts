@@ -276,7 +276,7 @@ export class AssignCallComponent implements OnInit {
 
     var columns = [
       { title: 'cid', dataKey: call.cid },
-      { title: 'subscription_id', dataKey: call.subscription_id },
+      { title: 'Remaining Days', dataKey: call.subscription_id },
       { title: 'branch', dataKey: call.branch },
       { title: 'customer_name', dataKey: call.customer_name },
       { title: 'customer_mobile', dataKey: call.customer_mobile },
@@ -348,7 +348,7 @@ export class AssignCallComponent implements OnInit {
 
     const headers = [
       'cid',
-      'subscription_id',
+      'Remaining Days',
       'branch',
       'customer_name',
       'customer_mobile',

@@ -23,7 +23,7 @@
                 </th>
                 <th class="text-center" *ngIf="columns[0].status">id</th>
                 <th class="text-center" *ngIf="columns[1].status">cid</th>
-                <th class="text-center" *ngIf="columns[2].status">subscription_id</th>
+                <th class="text-center" *ngIf="columns[2].status">Remaining Days</th>
                 <th class="text-center" *ngIf="columns[3].status">branch</th>
                 <th class="text-center" *ngIf="columns[4].status">customer_name</th>
                 <th class="text-center" *ngIf="columns[5].status">customer_mobile</th>
@@ -186,7 +186,7 @@
                     </p-dropdown>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
-                    <label for="">subscription_plan_id</label>
+                    <label for="">Remaining Days</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='subscription_id' />
                 </div>
                 <div class="col-lg-6 col-12 my-2">
