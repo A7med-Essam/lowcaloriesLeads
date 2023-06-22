@@ -182,7 +182,8 @@ export class AssignCallComponent implements OnInit {
   // ****************************************************export************************************************************************
 
   export() {
-    this._CallsService.export().subscribe({
+    const ids = this.calls.map((obj: any) => obj.id);
+    this._CallsService.export(ids).subscribe({
       next: (res) => {
         const link = document.createElement('a');
         link.target = '_blank';
@@ -363,7 +364,10 @@ export class AssignCallComponent implements OnInit {
     let filteredArray = this.allCalls.filter((item: any) =>
       this.specificRows.includes(item.id)
     );
-    filteredArray.length == 0 && (filteredArray = this.allCalls);
+    // filteredArray.length == 0 &&
+
+    (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allCalls);
+    (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.calls);
     const convertedData = filteredArray.map((obj: any) => [
       obj.cid,
       obj.subscription_id,
