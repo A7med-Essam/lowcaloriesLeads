@@ -72,7 +72,7 @@ export class ShowCallsComponent implements OnInit {
   columns: any[] = [
     { name: 'id', status: false },
     { name: 'cid', status: true },
-    { name: 'subscription_id', status: true },
+    { name: 'Remaining_days', status: true },
     { name: 'branch', status: true },
     { name: 'customer_name', status: true },
     { name: 'customer_mobile', status: false },

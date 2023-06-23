@@ -200,7 +200,7 @@ export class AssignCallComponent implements OnInit {
   columns: any[] = [
     { name: 'id', status: false },
     { name: 'cid', status: true },
-    { name: 'subscription_id', status: false },
+    { name: 'Remaining_days', status: false },
     { name: 'branch', status: false },
     { name: 'customer_name', status: true },
     { name: 'customer_mobile', status: false },
