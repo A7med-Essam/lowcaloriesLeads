@@ -66,7 +66,7 @@ export class AddTargetComponent implements OnInit {
         Validators.required,
         Validators.pattern('^[\\d]{10}$'),
       ]),
-      client_cid: new FormControl(null, [Validators.required]),
+      client_cid: new FormControl(null),
       branch: new FormControl(null, [Validators.required]),
       customer_type: new FormControl(null, [Validators.required]),
       paid_by: new FormControl(null, [Validators.required]),
