@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Checkbox } from 'primeng/checkbox';
 import { CallsService, ICalls } from 'src/app/services/calls.service';
@@ -14,7 +14,7 @@ import { DislikeService } from 'src/app/services/dislike.service';
   templateUrl: './assign-call.component.html',
   styleUrls: ['./assign-call.component.scss'],
 })
-export class AssignCallComponent implements OnInit {
+export class AssignCallComponent implements OnInit, OnDestroy {
   constructor(
     private _CallsService: CallsService,
     private _SurveyService: SurveyService,
@@ -25,14 +25,24 @@ export class AssignCallComponent implements OnInit {
 
   calls: ICalls[] = [];
   PaginationInfo: any;
+  interval: any;
+
+  ngOnDestroy(): void {
+    clearInterval(this.interval);
+  }
 
   ngOnInit(): void {
     this.getAllCalls();
     this.getCalls();
-    this.getAgents();
     this.setAdminForm();
     this.createFilterForm();
     this.getAgentBranches();
+    setTimeout(() => {
+      this.getAgents();
+    }, 500);
+    this.interval = setInterval(() => {
+      this.getAgents();
+    }, 10000);
   }
 
   allCalls: any[] = [];
@@ -65,6 +75,13 @@ export class AssignCallComponent implements OnInit {
   getAgents() {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
+        res.data.forEach((e: any) => {
+          if (e.status == 'Online') {
+            e.name = `${e.name} - Online 🟢`;
+          } else {
+            e.name = `${e.name} - Offline 🔴`;
+          }
+        });
         this.agents = res.data;
       },
     });
@@ -203,8 +220,8 @@ export class AssignCallComponent implements OnInit {
     { name: 'Remaining_days', status: false },
     { name: 'branch', status: false },
     { name: 'customer_name', status: true },
-    { name: 'customer_mobile', status: false },
     { name: 'customer_phone', status: false },
+    { name: 'customer_mobile', status: false },
     { name: 'plan', status: true },
     { name: 'date', status: false },
     { name: 'note', status: false },
@@ -281,8 +298,8 @@ export class AssignCallComponent implements OnInit {
       { title: 'Remaining Days', dataKey: call.subscription_id },
       { title: 'branch', dataKey: call.branch },
       { title: 'customer_name', dataKey: call.customer_name },
-      { title: 'customer_mobile', dataKey: call.customer_mobile },
-      { title: 'customer_phone', dataKey: call.customer_phone },
+      { title: 'customer_phone', dataKey: call.customer_mobile },
+      { title: 'customer_mobile', dataKey: call.customer_phone },
       { title: 'plan', dataKey: call.plan },
       { title: 'date', dataKey: call.date },
       { title: 'note', dataKey: call.note },
@@ -292,7 +309,14 @@ export class AssignCallComponent implements OnInit {
       },
       { title: 'agent_uploaded', dataKey: call.agent_uploaded_name },
       { title: 'created_at', dataKey: call.created_at.substring(0, 10) },
-    ];
+    ].filter((obj:any) => {
+      for (const prop in obj) {
+        if (obj[prop] === null || obj[prop] === "" || (Array.isArray(obj[prop]) && obj[prop].length === 0)) {
+          return false;
+        }
+      }
+      return true;
+    });
 
     // doc.text(140, 40, "Report");
     autoTable(doc, { body: columns });
@@ -353,8 +377,8 @@ export class AssignCallComponent implements OnInit {
       'Remaining Days',
       'branch',
       'customer_name',
-      'customer_mobile',
       'customer_phone',
+      'customer_mobile',
       'plan',
       'date',
       'note',

@@ -23,10 +23,16 @@ export class CreateleadComponent implements OnInit ,OnDestroy{
   ngOnInit() {
     setTimeout(() => {
       this.getAgents();
-    }, 1);
+    }, 500);
     this.interval = setInterval(() => {
       this.getAgents();
     }, 10000);
+  }
+
+  fixMultieSelectFilter(e:any){
+    if (e.filterValue == "Online") {
+      e.filterValue = "Online"
+    }
   }
 
   createLead() {

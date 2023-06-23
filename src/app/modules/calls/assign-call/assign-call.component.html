@@ -14,7 +14,7 @@
 </div>
 <div class="card">
     <p-table [value]="calls" [paginator]="true" [rows]="PaginationInfo?.per_page" [totalRecords]="PaginationInfo?.total"
-        [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
+        [lazy]="false" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
@@ -23,11 +23,13 @@
                 </th>
                 <th class="text-center" *ngIf="columns[0].status">id</th>
                 <th class="text-center" *ngIf="columns[1].status">cid</th>
-                <th class="text-center" *ngIf="columns[2].status">Remaining Days</th>
+                <th class="text-center" pSortableColumn="subscription_id" *ngIf="columns[2].status">
+                    Remaining Days <p-sortIcon field="subscription_id"></p-sortIcon>
+                </th>
                 <th class="text-center" *ngIf="columns[3].status">branch</th>
                 <th class="text-center" *ngIf="columns[4].status">customer_name</th>
-                <th class="text-center" *ngIf="columns[5].status">customer_mobile</th>
-                <th class="text-center" *ngIf="columns[6].status">customer_phone</th>
+                <th class="text-center" *ngIf="columns[5].status">customer_phone</th>
+                <th class="text-center" *ngIf="columns[6].status">customer_mobile</th>
                 <th class="text-center" *ngIf="columns[7].status">plan</th>
                 <th class="text-center" *ngIf="columns[8].status">date</th>
                 <th class="text-center" *ngIf="columns[9].status">note</th>
@@ -139,7 +141,7 @@
     <div class="container">
         <label for="">Call Assign</label>
         <p-dropdown #selectAgent [options]="agents" optionLabel="name" optionValue="id" styleClass="w-100"
-            appendTo="body" placeholder="Select Agent">
+            [filter]="true" filterValue="Online" appendTo="body" placeholder="Select Agent">
         </p-dropdown>
     </div>
     <ng-template pTemplate="footer">
@@ -180,11 +182,11 @@
                     <input type="text" pInputText ngClass="w-100" formControlName='customer_name' />
                 </div>
                 <div class="col-lg-6 col-12 my-2">
-                    <label for="">customer_phone</label>
+                    <label for="">customer_mobile</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='customer_phone' />
                 </div>
                 <div class="col-lg-6 col-12 my-2">
-                    <label for="">customer_mobile</label>
+                    <label for="">customer_phone</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='mobile' />
                 </div>
                 <div class="col-lg-6 col-12 my-2">

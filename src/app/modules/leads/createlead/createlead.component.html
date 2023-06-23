@@ -24,7 +24,8 @@
                     </div>
                     <div class="col-12">
                         <label for="" class="mb-1">Agents</label>
-                        <p-multiSelect [options]="agents" appendTo="body" optionLabel="name" optionValue="agent_id"
+                        <p-multiSelect [options]="agents" appendTo="body" optionLabel="name" optionValue="agent_id" [autofocusFilter]="true"
+                        [filter]="true"  filterBy="name" filterValue="Online" #multieSelectAgent (onFocus)="fixMultieSelectFilter(multieSelectAgent)"
                             defaultLabel="Select Agents" styleClass="w-100" [(ngModel)]="selectedAgents" display="chip">
                         </p-multiSelect>
                     </div>
