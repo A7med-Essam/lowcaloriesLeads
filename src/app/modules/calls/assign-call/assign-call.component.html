@@ -34,6 +34,7 @@
                 <th class="text-center" *ngIf="columns[10].status">voice</th>
                 <th class="text-center" *ngIf="columns[11].status">agent_uploaded</th>
                 <th class="text-center" *ngIf="columns[12].status">created_at</th>
+                <th class="text-center" *ngIf="columns[13].status">assigned_agent</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -59,6 +60,13 @@
                 </td>
                 <td class="text-center" *ngIf="columns[11].status">{{call.agent_uploaded_name}}</td>
                 <td class="text-center" *ngIf="columns[12].status">{{call.created_at | date}}</td>
+                <td class="text-center" *ngIf="columns[13].status">
+                    <span *ngIf="call.call_users.length">
+                        <small *ngFor="let user of call.call_users" style="display: block;">
+                            {{user.user.name}}
+                        </small>
+                    </span>
+                </td>
                 <td class="text-center">
                     <!-- <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
                         class="m-1 p-button-sm"></button> -->

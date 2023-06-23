@@ -211,6 +211,7 @@ export class AssignCallComponent implements OnInit {
     { name: 'voice', status: false },
     { name: 'agent_uploaded', status: false },
     { name: 'created_at', status: false },
+    { name: 'assigned_agent', status: true },
   ];
 
   getFilterColumns() {
