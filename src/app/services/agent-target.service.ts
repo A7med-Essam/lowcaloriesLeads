@@ -43,6 +43,14 @@ export class AgentTargetService {
   getAllTargets(): Observable<{status:number,data:any,message:string}> {
     return this._ApiConfigService.postReq3(`targetRequests`, {withoutPagination:true});
   }
+
+  getSample(): Observable<any>{
+    return this._ApiConfigService.postReq3(`target/sample` , '');
+  }
+
+  uploadFile(file:File): Observable<any> {
+    return this._ApiConfigService.postReq3(`target/import` , file);
+  }
 }
 
 export interface ITarget{

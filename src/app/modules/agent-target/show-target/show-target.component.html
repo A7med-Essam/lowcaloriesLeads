@@ -8,8 +8,10 @@
         </p-button>
         <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allTargets.length">
         </p-button>
-        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
+        <p-button (click)="filterColumns = true" class="mb-3 mx-1" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
+        <p-button (click)="uploadModal = true" class="mb-3 mx-1" icon="pi pi-external-link"
+        label="Upload"></p-button>
     </div>
 </div>
 
@@ -170,6 +172,20 @@
     <ng-template pTemplate="footer">
         <div class="upload-btn-wrapper">
             <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
+    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="getSample()">Download Sample</button>
+        </div>
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary">Upload a file</button>
+            <input type="file" name="myfile" (change)="onFileSelected($event)" />
         </div>
     </ng-template>
 </p-dialog>

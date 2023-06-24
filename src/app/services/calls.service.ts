@@ -78,6 +78,7 @@ export class CallsService {
   addCall(data: any){
     return this._ApiConfigService.postReq3(`uploadNoteVoice`, data);
   }
+
 }
 
 export interface ICalls {

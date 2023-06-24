@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-show-calls',
   templateUrl: './show-calls.component.html',
-  styleUrls: ['./show-calls.component.scss']
+  styleUrls: ['./show-calls.component.scss'],
 })
 export class ShowCallsComponent implements OnInit {
   constructor(
@@ -22,7 +22,7 @@ export class ShowCallsComponent implements OnInit {
     private _SurveyService: SurveyService,
     private _DislikeService: DislikeService,
     private _LocalService: LocalService,
-    private _Router:Router
+    private _Router: Router
   ) {}
 
   calls: ICalls[] = [];
@@ -39,12 +39,17 @@ export class ShowCallsComponent implements OnInit {
     if (this.appliedFilters) {
       this.getOldFilters(page);
     } else {
-      this._CallsService.getAgentCalls(page,this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id).subscribe({
-        next: (res) => {
-          this.calls = res?.data?.data;
-          this.PaginationInfo = res.data;
-        },
-      });
+      this._CallsService
+        .getAgentCalls(
+          page,
+          this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id
+        )
+        .subscribe({
+          next: (res) => {
+            this.calls = res?.data?.data;
+            this.PaginationInfo = res.data;
+          },
+        });
     }
   }
 
@@ -62,8 +67,6 @@ export class ShowCallsComponent implements OnInit {
       },
     });
   }
-
-
 
   // ****************************************************filter columns************************************************************************
   filterColumns: boolean = false;
@@ -150,8 +153,6 @@ export class ShowCallsComponent implements OnInit {
   }
 
   insertRow(form: FormGroup) {
-
-
     if (form.value.date) {
       if (form.value.date[1]) {
         form.patchValue({
@@ -173,21 +174,31 @@ export class ShowCallsComponent implements OnInit {
     }
 
     this.appliedFilters = form.value;
-    this._CallsService.filterAgentCalls(1, form.value, this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id).subscribe((res) => {
-      this.calls = res.data.data;
-      this.PaginationInfo = res.data;
-      this.filterModal = false;
-      this.filterForm.patchValue({
-        date:null,
-        from:null,
-        to:null
-      })
-    });
+    this._CallsService
+      .filterAgentCalls(
+        1,
+        form.value,
+        this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id
+      )
+      .subscribe((res) => {
+        this.calls = res.data.data;
+        this.PaginationInfo = res.data;
+        this.filterModal = false;
+        this.filterForm.patchValue({
+          date: null,
+          from: null,
+          to: null,
+        });
+      });
   }
 
   getOldFilters(page: number) {
     this._CallsService
-      .filterAgentCalls(page, this.appliedFilters, this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id)
+      .filterAgentCalls(
+        page,
+        this.appliedFilters,
+        this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id
+      )
       .subscribe((res) => {
         this.calls = res.data.data;
         this.PaginationInfo = res.data;
@@ -221,4 +232,5 @@ export class ShowCallsComponent implements OnInit {
       this._Router.navigate(['calls/create']);
     }
   }
+
 }

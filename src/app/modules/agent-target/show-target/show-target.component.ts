@@ -56,9 +56,15 @@ export class ShowTargetComponent implements OnInit {
       'Paid_by',
       'Type',
     ];
-    let filteredArray = this.allTargets.filter((item:any) => this.specificRows.includes(item.id));
-    (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allTargets);
-    (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.targets);
+    let filteredArray = this.allTargets.filter((item: any) =>
+      this.specificRows.includes(item.id)
+    );
+    filteredArray.length == 0 &&
+      this.appliedFilters == null &&
+      (filteredArray = this.allTargets);
+    filteredArray.length == 0 &&
+      this.appliedFilters != null &&
+      (filteredArray = this.targets);
     const convertedData = filteredArray.map((obj: any) => [
       obj.date,
       obj.agent.name,
@@ -211,15 +217,15 @@ export class ShowTargetComponent implements OnInit {
       this.PaginationInfo = res.data;
       this.filterModal = false;
       this.filterForm.patchValue({
-        date:null,
-        from:null,
-        to:null
-      })
+        date: null,
+        from: null,
+        to: null,
+      });
       // this.resetFields();
     });
   }
 
-  getOldFilters(page:number) {
+  getOldFilters(page: number) {
     this._AgentTargetService
       .filterTargets(page, this.appliedFilters)
       .subscribe((res) => {
@@ -308,7 +314,7 @@ export class ShowTargetComponent implements OnInit {
     { name: 'invoice_number', status: false },
     { name: 'created_at', status: false },
   ];
-  
+
   getFilterColumns() {
     this.columns.forEach((element) => {
       element.status = false;
@@ -351,8 +357,8 @@ export class ShowTargetComponent implements OnInit {
     }
   }
 
-   // ****************************************************print row************************************************************************
-   print(target:any){
+  // ****************************************************print row************************************************************************
+  print(target: any) {
     // Default export is a4 paper, portrait, using millimeters for units
     const doc = new jsPDF();
     const imageFile = '../../../../assets/images/logo.png';
@@ -369,25 +375,24 @@ export class ShowTargetComponent implements OnInit {
     doc.text('Email: info@thelowcalories.com', 150, 45);
     doc.text('Website: thelowcalories.com', 150, 50);
 
-
     autoTable(doc, { startY: 55 });
 
     var columns = [
-      {title: "Date", dataKey:target.date},
-      {title: "agent_name", dataKey:target.agent.name},          
-      {title: "Team", dataKey:target.team}, 
-      {title: "Branch", dataKey:target.branch},
-      {title: "customer_cid", dataKey:target.client_cid},
-      {title: "customer_number", dataKey:target.client_number},
-      {title: "customer_type", dataKey:target.customer_type},
-      {title: "invoice_number", dataKey:target.invoice_number},
-      {title: "paid_by", dataKey:target.paid_by},
-      {title: "type", dataKey:target.type},
-      {title: "status", dataKey:target.status.toUpperCase()},          
-  ];
+      { title: 'Date', dataKey: target.date },
+      { title: 'agent_name', dataKey: target.agent.name },
+      { title: 'Team', dataKey: target.team },
+      { title: 'Branch', dataKey: target.branch },
+      { title: 'customer_cid', dataKey: target.client_cid },
+      { title: 'customer_number', dataKey: target.client_number },
+      { title: 'customer_type', dataKey: target.customer_type },
+      { title: 'invoice_number', dataKey: target.invoice_number },
+      { title: 'paid_by', dataKey: target.paid_by },
+      { title: 'type', dataKey: target.type },
+      { title: 'status', dataKey: target.status.toUpperCase() },
+    ];
 
-  // doc.text(140, 40, "Report");
-  autoTable(doc,{body:columns,});
+    // doc.text(140, 40, "Report");
+    autoTable(doc, { body: columns });
 
     // Set the line color and width
     doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
@@ -419,5 +424,38 @@ export class ShowTargetComponent implements OnInit {
     }
 
     doc.save('target.pdf');
-}
+  }
+
+    // ****************************************************upload Modal************************************************************************
+    uploadModal: boolean = false;
+
+    getSample() {
+      this._AgentTargetService.getSample().subscribe((res) => {
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
+      });
+    }
+  
+    getFormData(object: any) {
+      const formData = new FormData();
+      Object.keys(object).forEach((key) => formData.append(key, object[key]));
+      return formData;
+    }
+  
+    onFileSelected(event: any) {
+      const file: File = event.target.files[0];
+      if (file) {
+        let f: File = this.getFormData({ file: file }) as any;
+        this._AgentTargetService.uploadFile(f).subscribe({
+          next: (res) => {
+            this.uploadModal = false;
+            this.getTargets();
+            this.getAllTargets();
+          },
+        });
+        this.uploadModal = false;
+      }
+    }
 }
