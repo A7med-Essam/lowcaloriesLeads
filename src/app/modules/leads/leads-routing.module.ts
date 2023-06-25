@@ -7,6 +7,7 @@ import { DislikeComponent } from '../dislike/dislike/dislike.component';
 import { LeadDetailsComponent } from './lead-details/lead-details.component';
 import { LeadReminderComponent } from './lead-reminder/lead-reminder.component';
 import { ShowLeadComponent } from './show-lead/show-lead.component';
+import { AnswerLeadComponent } from './answer-lead/answer-lead.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'create', pathMatch: 'full' },
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'reminder',
     component: LeadReminderComponent,
+  },
+  {
+    path: 'answer',
+    component: AnswerLeadComponent,
   },
 ];
 

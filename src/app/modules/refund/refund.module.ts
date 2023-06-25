@@ -13,6 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MultiSelectModule } from 'primeng/multiselect';
 const APP_PRIMENG_MODULE = [
   DropdownModule,
   InputTextModule,
@@ -20,7 +21,8 @@ const APP_PRIMENG_MODULE = [
   DialogModule,
   CalendarModule,
   InputTextareaModule,
-  CheckboxModule
+  CheckboxModule,
+  MultiSelectModule
 ];
 
 @NgModule({
@@ -34,7 +36,7 @@ const APP_PRIMENG_MODULE = [
     RefundRoutingModule,
     APP_PRIMENG_MODULE,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class RefundModule { }

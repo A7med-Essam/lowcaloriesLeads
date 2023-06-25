@@ -22,17 +22,27 @@
                             [(ngModel)]="selectedCustomerMobile" maxlength="11"
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                     </div>
-                    <div class="col-12">
+                    <div class="col-xl-6 my-1">
                         <label for="" class="mb-1">Agents</label>
-                        <p-multiSelect [options]="agents" appendTo="body" optionLabel="name" optionValue="agent_id" [autofocusFilter]="true"
+                        <p-multiSelect [options]="agents" appendTo="body" optionLabel="name" optionValue="id" [autofocusFilter]="true"
                         [filter]="true"  filterBy="name" filterValue="Online" #multieSelectAgent (onFocus)="fixMultieSelectFilter(multieSelectAgent)"
                             defaultLabel="Select Agents" styleClass="w-100" [(ngModel)]="selectedAgents" display="chip">
                         </p-multiSelect>
                     </div>
+                    <div class="col-xl-6 my-1">
+                        <label for="" class="mb-1">Platforms</label>
+                        <p-dropdown [options]="platforms" appendTo="body" optionLabel="name" optionValue="name"
+                         styleClass="w-100" placeholder="Select Platform" [filter]="true" [(ngModel)]="selectedPlatform">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-12 my-1">
+                        <label for="" class="mb-1">Details</label>
+                        <textarea pInputTextarea ngClass="w-100" [(ngModel)]="note"></textarea>
+                    </div>
                 </div>
 
                 <div class="text-end">
-                    <button class="btn btn-success px-4" [disabled]="!selectedCustomerMobile || selectedAgents.length == 0"
+                    <button class="btn btn-success px-4" [disabled]="!selectedCustomerMobile || selectedAgents.length == 0 || !selectedPlatform" 
                         (click)="createLead()"><b>Create</b>
                     </button>
                 </div>

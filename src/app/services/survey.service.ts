@@ -17,6 +17,7 @@ export class SurveyService {
   surveyAnswers: BehaviorSubject<number> = new BehaviorSubject(0);
   filterId: BehaviorSubject<number> = new BehaviorSubject(0);
   leadId: BehaviorSubject<number> = new BehaviorSubject(0);
+  lead: BehaviorSubject<any> = new BehaviorSubject(null);
 
   deleteRow(id: number): Observable<any> {
     return this._ApiConfigService.postReq(`lead_questions/delete`, {
@@ -159,6 +160,12 @@ export class SurveyService {
 
   addReminderLead(reminder:any): Observable<any> {
     return this._ApiConfigService.postReq3(`leads/addReminderLead`, reminder);
+  }
+
+  // =========================================================================
+
+  getPlatforms(): Observable<any> {
+    return this._ApiConfigService.postReq3(`platforms`, '');
   }
 
 }

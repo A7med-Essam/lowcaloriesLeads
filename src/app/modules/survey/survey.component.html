@@ -54,7 +54,7 @@
                         class="m-1 p-button-warning p-button-sm"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(survey?.id)"
                         class="m-1 p-button-sm"></button>
-                    <button pButton type="button" icon="pi pi-check-square" (click)="insertAnswer(survey)"
+                    <button pButton type="button" icon="pi pi-check-square" *ngIf="survey?.type != 'text' && survey?.type != 'date'" (click)="insertAnswer(survey)"
                         class="m-1 p-button-success p-button-sm"></button>
                 </td>
             </tr>

@@ -18,6 +18,8 @@ import { LeadDetailsComponent } from './lead-details/lead-details.component';
 import { LeadReminderComponent } from './lead-reminder/lead-reminder.component';
 import { CreateLeadQuestionsComponent } from './create-lead-questions/create-lead-questions.component';
 import { ChipsModule } from 'primeng/chips';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { AnswerLeadComponent } from './answer-lead/answer-lead.component';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   CheckboxModule,
@@ -29,6 +31,7 @@ const APP_PRIMENG_MODULE = [
   CalendarModule,
   MultiSelectModule,
   ChipsModule,
+  InputTextareaModule
 ];
 
 @NgModule({
@@ -38,6 +41,7 @@ const APP_PRIMENG_MODULE = [
     LeadDetailsComponent,
     LeadReminderComponent,
     CreateLeadQuestionsComponent,
+    AnswerLeadComponent,
   ],
   imports: [
     CommonModule,

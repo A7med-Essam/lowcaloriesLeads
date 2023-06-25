@@ -26,8 +26,10 @@
                 <td class="text-center">{{lead?.customer_mobile}}</td>
                 <td class="text-center">{{lead?.customer_email}}</td>
                 <td class="text-center">
-                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(lead?.id)"
-                        class="m-1 p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(lead)"
+                    class="m-1 p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-check-square" (click)="answerLead(lead?.id)"
+                        class="m-1 p-button-sm p-button-success"></button>
                 </td>
             </tr>
         </ng-template>

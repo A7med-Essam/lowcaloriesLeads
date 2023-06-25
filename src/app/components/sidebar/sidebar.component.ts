@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { LocalService } from 'src/app/services/local.service';
 import { PusherService } from 'src/app/services/pusher.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,7 +15,9 @@ export class SidebarComponent implements OnInit {
   country: string = '';
   constructor(
     private _AuthService: AuthService,
-    private _PusherService: PusherService
+    private _PusherService: PusherService,
+    private _SurveyService:SurveyService,
+    private _LocalService:LocalService
   ) {
     _AuthService.currentUser.subscribe((data) => {
       if (data != null) {
@@ -34,7 +38,18 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getAgents();
+  }
 
+  currentUserName: any;
+  getAgents() {
+    this._SurveyService.getAllAgents().subscribe({
+      next: (res) => {
+        const userId = this._LocalService.getJsonValue('userInfo_oldLowCalories').id
+        const [user] = res.data.filter((e:any)=> e.id == userId);
+        this.currentUserName = user
+      },
+    });
   }
 
 }

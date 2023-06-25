@@ -113,7 +113,7 @@ export class AddCallComponent implements OnInit {
   uploadFile() {
     let input: HTMLInputElement = document.createElement('input');
     input.type = 'file';
-    input.accept = 'audio/mpeg';
+    input.accept = '*/*';
     input.multiple = true;
     input.click();
     input.onchange = (e) => {

@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { DislikeService } from 'src/app/services/dislike.service';
 import { LocalService } from 'src/app/services/local.service';
 import { RefundService } from 'src/app/services/refund.service';
 
@@ -15,11 +16,24 @@ export class CreateRefundComponent implements OnInit {
     private _RefundService: RefundService,
     private _LocalService: LocalService,
     private _MessageService: MessageService,
-    private _Location: Location
+    private _Location: Location,
+    private _DislikeService:DislikeService
   ) {}
+  selectedReason: any[] = [];
 
   ngOnInit(): void {
     this.createRefundForm();
+    this.getReasons();
+  }
+
+  
+  addOption(el: HTMLInputElement) {
+    if (el.value != '') {
+      this.reasons.push({ reason: el.value });
+      this.selectedReason.push(el.value);
+      el.value = '';
+    }
+    console.log(this.insertForm.value);
   }
 
   insertForm!: FormGroup;
@@ -137,6 +151,13 @@ export class CreateRefundComponent implements OnInit {
         Validators.required,
       ]),
       agent_id: new FormControl(null),
+    });
+  }
+
+  reasons:any[]=[]
+  getReasons() {
+    this._DislikeService.getReasons().subscribe({
+      next: (res) => (this.reasons = res.data),
     });
   }
 

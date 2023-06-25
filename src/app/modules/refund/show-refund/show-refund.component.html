@@ -88,37 +88,48 @@
         <form [formGroup]="filterForm" #myForm="ngForm">
             <div class="row mx-0">
                 <div class="col-lg-6 col-12 my-2">
-                    <label for="">Agent</label>
-                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id" formControlName='agent_id'
-                        appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">delivery_branch</label>
-                    <p-dropdown [options]="branches" optionLabel="name" optionValue="name"
-                        formControlName='delivery_branch' appendTo="body" styleClass="w-100" placeholder="Select Branch"
-                        [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">name</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='name' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">email</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='email' />
+                    <label for="">cid</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='cid' />
                 </div>
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">mobile</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='mobile' />
                 </div>
                 <div class="col-lg-6 col-12 my-2">
-                    <label for="">branch</label>
+                    <label for="">Delivery Branch</label>
+                    <p-dropdown [options]="branches" optionLabel="name" optionValue="name"
+                        formControlName='delivery_branch' appendTo="body" styleClass="w-100" placeholder="Select Branch"
+                        [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Paid Branch</label>
                     <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='branch'
                         appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
                     </p-dropdown>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
+                    <label for="">Agent</label>
+                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id" formControlName='agent_id'
+                        appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Reasons</label>
+                    <p-dropdown [options]="reasons" optionLabel="name" optionValue="id" formControlName='reason'
+                        appendTo="body" styleClass="w-100" placeholder="Select Reason" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <!-- <div class="col-lg-6 col-12 my-2">
+                    <label for="">name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='name' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">email</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='email' />
+                </div> -->
+          
+                <!-- <div class="col-lg-6 col-12 my-2">
                     <label for="">subscription_plan</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='subscription_plan' />
                 </div>
@@ -129,12 +140,9 @@
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">payment_method</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='payment_method' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">cid</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='cid' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
+                </div> -->
+            
+                <!-- <div class="col-lg-6 col-12 my-2">
                     <label for="">address</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='address' />
                 </div>
@@ -153,19 +161,8 @@
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">account_hold_name</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='account_hold_name' />
-                </div>
-                <!-- <div class="col-lg-6 col-12 my-2">
-                    <label for="">original_amount_paid</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='original_amount_paid' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">amount_usd</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='amount_usd' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">total_amount_refund</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='total_amount_refund' />
                 </div> -->
+         
             </div>
         </form>
     </div>

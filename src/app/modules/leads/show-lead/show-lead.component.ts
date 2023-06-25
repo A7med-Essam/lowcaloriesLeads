@@ -30,10 +30,17 @@ export class ShowLeadComponent implements OnInit {
     }
   }
 
-  showRow(id: number) {
+  showRow(lead: any) {
+    if (lead) {
+      this._SurveyService.lead.next(lead);
+      this._Router.navigate(['leads/details']);
+    }
+  }
+
+  answerLead(id: number) {
     if (id) {
       this._SurveyService.leadId.next(id);
-      this._Router.navigate(['leads/details']);
+      this._Router.navigate(['leads/answer']);
     }
   }
 

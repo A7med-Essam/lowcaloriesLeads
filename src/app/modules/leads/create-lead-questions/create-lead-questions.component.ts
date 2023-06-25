@@ -6,20 +6,18 @@ import { SurveyService } from 'src/app/services/survey.service';
 @Component({
   selector: 'app-create-lead-questions',
   templateUrl: './create-lead-questions.component.html',
-  styleUrls: ['./create-lead-questions.component.scss']
+  styleUrls: ['./create-lead-questions.component.scss'],
 })
 export class CreateLeadQuestionsComponent implements OnInit {
-
   questions: any[] = [];
   questionsClone: any[] = [];
   selectedValues: any;
-  selectedDropDownValues: any;
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _MessageService: MessageService
   ) {}
-  @Input() lead_id:number = 0
+  @Input() lead_id: number = 0;
 
   ngOnInit() {
     this.getSurvey();
@@ -40,7 +38,16 @@ export class CreateLeadQuestionsComponent implements OnInit {
       survey_answer_id: answerId,
       suggest_answer: suggest_answer,
     };
-    this.checkValidation()
+    this.checkValidation();
+  }
+
+  setDateAnswer(date: Date, questionId: number) {
+    this.questions.filter((a: any) => a.id == questionId)[0].userAnswer = {
+      survey_question_id: questionId,
+      survey_answer_id: '',
+      suggest_answer: date.toLocaleDateString('en-CA'),
+    };
+    this.checkValidation();
   }
 
   setCheckAnswer() {
@@ -83,7 +90,7 @@ export class CreateLeadQuestionsComponent implements OnInit {
         }
       }
     });
-    this.checkValidation()
+    this.checkValidation();
   }
 
   setTextAnswer(surveyTextInput: HTMLInputElement, survey: any) {
@@ -95,7 +102,7 @@ export class CreateLeadQuestionsComponent implements OnInit {
     if (surveyTextInput.value == '') {
       delete this.questions.filter((a: any) => a.id == survey.id)[0].userAnswer;
     }
-    this.checkValidation()
+    this.checkValidation();
   }
 
   setDropdownAnswer(
@@ -108,16 +115,16 @@ export class CreateLeadQuestionsComponent implements OnInit {
       survey_answer_id: answerId,
       suggest_answer: suggest_answer,
     };
-    this.checkValidation()
+    this.checkValidation();
   }
 
   createLead() {
     this.createButtonState = false;
-    this.questions = this.questions.filter(e=> e.userAnswer != null)
+    this.questions = this.questions.filter((e) => e.userAnswer != null);
 
     let lead: any = {
       inputs: [],
-      lead_id:this.lead_id
+      lead_id: this.lead_id,
     };
 
     this.questions.forEach((q) => {
@@ -129,9 +136,9 @@ export class CreateLeadQuestionsComponent implements OnInit {
     });
 
     lead.inputs.forEach((e: any) => {
-      if ( typeof(e.lead_answer_id) == "object") {
+      if (typeof e.lead_answer_id == 'object') {
         if (e.lead_answer_id.length == 1) {
-          e.lead_answer_id = e.lead_answer_id[0]
+          e.lead_answer_id = e.lead_answer_id[0];
         }
       }
     });
@@ -140,29 +147,28 @@ export class CreateLeadQuestionsComponent implements OnInit {
       next: (res) => {
         this.questions = [];
         setTimeout(() => {
-          this.questions = this.questionsClone
+          this.questions = this.questionsClone;
         }, 1);
         this._MessageService.add({
           severity: 'success',
           summary: 'Notification',
           detail: res.message,
         });
-        this._Router.navigate(['./leads/show'])
+        this._Router.navigate(['./leads/show']);
       },
-      error: err=>{
-        this.questions = this.questionsClone
+      error: (err) => {
+        this.questions = this.questionsClone;
         this._MessageService.add({
           severity: 'error',
           summary: 'Notification',
           detail: err.message,
         });
-      }
+      },
     });
   }
 
-  createButtonState:boolean = false;
-  checkValidation(){
-    this.createButtonState = this.questions.some(a => a.userAnswer)
+  createButtonState: boolean = false;
+  checkValidation() {
+    this.createButtonState = this.questions.some((a) => a.userAnswer);
   }
-
 }

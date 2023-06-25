@@ -139,6 +139,7 @@ export class ShowRefundComponent implements OnInit {
     this.getAgents();
     this.getAgentBranches();
     this.getAllRefunds();
+    this.getReasons();
   }
 
   allRefunds: any[] = [];
@@ -183,20 +184,28 @@ export class ShowRefundComponent implements OnInit {
   createFilterForm() {
     this.filterForm = new FormGroup({
       agent_id: new FormControl(null),
-      name: new FormControl(null),
-      email: new FormControl(null),
+      // name: new FormControl(null),
+      // email: new FormControl(null),
       mobile: new FormControl(null),
       branch: new FormControl(null),
       delivery_branch: new FormControl(null),
-      subscription_plan: new FormControl(null),
-      remaining_days: new FormControl(null),
-      payment_method: new FormControl(null),
+      // subscription_plan: new FormControl(null),
+      // remaining_days: new FormControl(null),
+      // payment_method: new FormControl(null),
       cid: new FormControl(null),
-      address: new FormControl(null),
-      bank_name: new FormControl(null),
-      iban: new FormControl(null),
-      bank_account_number: new FormControl(null),
-      account_hold_name: new FormControl(null),
+      reason: new FormControl(null),
+      // address: new FormControl(null),
+      // bank_name: new FormControl(null),
+      // iban: new FormControl(null),
+      // bank_account_number: new FormControl(null),
+      // account_hold_name: new FormControl(null),
+    });
+  }
+
+  reasons:any[]=[]
+  getReasons() {
+    this._DislikeService.getReasons().subscribe({
+      next: (res) => (this.reasons = res.data),
     });
   }
 

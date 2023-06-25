@@ -25,18 +25,19 @@
                                 </p-checkbox>
                             </div>
                         </div>
-
-                        <div *ngFor="let answer of survey.answers;let j = index" class="drop">
-                            <div *ngIf="survey?.type == 'drop'" class="mx-3">
-                                <p-dropdown [options]="survey.answers" [(ngModel)]="selectedDropDownValues"
-                                    optionLabel="type_value" optionValue="type_value"
-                                    (click)="setDropdownAnswer(answer.id,survey.id,'')" placeholder="Select an answer"
-                                    [editable]="true"></p-dropdown>
-                            </div>
+                        <div *ngIf="survey?.type == 'drop'" class="mx-3 w-100">
+                            <p-dropdown [options]="survey.answers" #dropdownQuestion optionLabel="type_value"
+                                optionValue="id" [filter]="true" styleClass="w-100"
+                                (click)="setDropdownAnswer(dropdownQuestion.value,survey.id,'')"
+                                placeholder="Select an answer"></p-dropdown>
                         </div>
                         <div *ngIf="survey?.type == 'text'" class="mx-3 w-100">
                             <input type="text" class="w-100 py-2" pInputText #surveyText
-                                (keypress)="setTextAnswer(surveyText, survey)">
+                                (keyup)="setTextAnswer(surveyText, survey)">
+                        </div>
+                        <div *ngIf="survey?.type == 'date'" class="mx-3 w-100">
+                            <p-calendar [readonlyInput]="true" ngClass="w-100" #calendar appendTo="body"
+                                (onSelect)="setDateAnswer(calendar.value,survey.id)"></p-calendar>
                         </div>
                     </div>
                     <hr style="height: 0.5px;" class="my-4">
@@ -44,7 +45,7 @@
 
                 <div class="text-end">
                     <button class="btn btn-success px-4" [disabled]="!createButtonState"
-                     (click)="createLead()"><b>Create</b>
+                        (click)="createLead()"><b>Create</b>
                     </button>
                 </div>
             </div>

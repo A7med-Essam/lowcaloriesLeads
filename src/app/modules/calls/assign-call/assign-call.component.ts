@@ -42,7 +42,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     }, 500);
     this.interval = setInterval(() => {
       this.getAgents();
-    }, 10000);
+    }, 20000);
   }
 
   allCalls: any[] = [];

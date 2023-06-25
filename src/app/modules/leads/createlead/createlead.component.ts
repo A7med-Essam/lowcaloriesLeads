@@ -7,10 +7,14 @@ import { SurveyService } from 'src/app/services/survey.service';
   templateUrl: './createlead.component.html',
   styleUrls: ['./createlead.component.scss'],
 })
-export class CreateleadComponent implements OnInit ,OnDestroy{
+export class CreateleadComponent implements OnInit, OnDestroy {
   selectedCustomerName: any;
   selectedCustomerMobile: any;
   selectedCustomerEmail: any;
+  selectedPlatform: any;
+  note: any;
+  selectedAgents: any[] = [];
+
   constructor(
     private _SurveyService: SurveyService,
     private _MessageService: MessageService
@@ -27,11 +31,12 @@ export class CreateleadComponent implements OnInit ,OnDestroy{
     this.interval = setInterval(() => {
       this.getAgents();
     }, 10000);
+    this.getPlatforms();
   }
 
-  fixMultieSelectFilter(e:any){
-    if (e.filterValue == "Online") {
-      e.filterValue = "Online"
+  fixMultieSelectFilter(e: any) {
+    if (e.filterValue == 'Online') {
+      e.filterValue = 'Online';
     }
   }
 
@@ -41,6 +46,8 @@ export class CreateleadComponent implements OnInit ,OnDestroy{
       customer_email: this.selectedCustomerEmail,
       customer_mobile: this.selectedCustomerMobile,
       user_ids: this.selectedAgents,
+      platforms:this.selectedPlatform,
+      notes:this.note
     };
 
     this._SurveyService.createLead(lead).subscribe({
@@ -48,6 +55,9 @@ export class CreateleadComponent implements OnInit ,OnDestroy{
         this.selectedCustomerEmail = null;
         this.selectedCustomerMobile = null;
         this.selectedCustomerName = null;
+        this.selectedPlatform = null;
+        this.note = null;
+        this.selectedAgents = []
         this._MessageService.add({
           severity: 'success',
           summary: 'Notification',
@@ -73,7 +83,14 @@ export class CreateleadComponent implements OnInit ,OnDestroy{
     });
   }
 
-  selectedAgents: any[] = [];
+  platforms: any[] = [];
+  getPlatforms() {
+    this._SurveyService.getPlatforms().subscribe({
+      next: (res) => {
+        this.platforms = res.data;
+      },
+    });
+  }
 
   // getAgentByLeadCount(){
   //   return this.agents.reduce((prev,current) => prev.open_lead_counts < current.open_lead_counts ? prev:current)

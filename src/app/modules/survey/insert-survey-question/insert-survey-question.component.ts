@@ -15,6 +15,7 @@ export class InsertSurveyQuestionComponent implements OnInit {
     {name:'Checkbox',value:'check'},
     {name:'Text',value:'text'},
     {name:'Dropdown List',value:'drop'},
+    {name:'Date',value:'date'},
   ];
   constructor(
     private _SurveyService: SurveyService,

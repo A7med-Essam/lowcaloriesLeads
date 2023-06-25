@@ -122,10 +122,31 @@
                 </div>
                 <div class="col-12 my-3">
                     <label for="">reason</label>
-                    <textarea pInputTextarea ngClass="w-100" formControlName='reason'></textarea>
+                    <p-multiSelect [options]="reasons" appendTo="body" optionLabel="reason" formControlName='reason'
+                    optionValue="reason" defaultLabel="Select Your Reasons" styleClass="w-100"
+                    [(ngModel)]="selectedReason" display="chip">
+                    <p-header class="w-100 mb-3">
+                        <div class="row w-100">
+                            <div class="col-10">
+                                <input type="text" placeholder="Add another option"
+                                    #multieOptionInput pInputText
+                                    style="min-height:2em;width: 100%;" />
+                            </div>
+                            <div class="col-2">
+                                <p-button (click)="addOption(multieOptionInput)">Add</p-button>
+                            </div>
+                        </div>
+                    </p-header>
+                    </p-multiSelect>
                     <small class="text-danger ms-1" *ngIf="insertForm.get('reason')?.touched &&
                     insertForm.get('reason')?.hasError('required')">This field is required.</small>
                 </div>
+                <!-- <div class="col-12 my-3">
+                    <label for="">reason</label>
+                    <textarea pInputTextarea ngClass="w-100" formControlName='reason'></textarea>
+                    <small class="text-danger ms-1" *ngIf="insertForm.get('reason')?.touched &&
+                    insertForm.get('reason')?.hasError('required')">This field is required.</small>
+                </div> -->
                 <div class="col-12 my-3">
                     <button class="btn btn-primary w-100">Submit Refund</button>
                 </div>
