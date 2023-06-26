@@ -49,7 +49,7 @@ export class AddCallComponent implements OnInit {
   createRefundForm(data?: any) {
     this.insertForm = new FormGroup({
       note: new FormControl(null),
-      voice: new FormControl(null),
+      files: new FormControl(null, [Validators.required]),
       call_id: new FormControl(data?.id),
       agent_uploaded: new FormControl(
         this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id
@@ -87,17 +87,18 @@ export class AddCallComponent implements OnInit {
 
   uploadingStatus: boolean = false;
   insert(form: FormGroup) {
-    if (this.voiceFile) {
-      if (form.valid) {
+    if (form.valid) {
         this.uploadingStatus = true;
-        const formData = new FormData();
-        for (const key in this.insertForm.getRawValue()) {
-          if (this.insertForm.getRawValue().hasOwnProperty(key)) {
-            formData.append(key, this.insertForm.getRawValue()[key]);
-          }
-        }
-        formData.append('voice', this.voiceFile ? this.voiceFile : '');
-        this._CallsService.addCall(formData).subscribe((res) => {
+        // const formData = new FormData();
+        // for (const key in this.insertForm.getRawValue()) {
+        //   if (this.insertForm.getRawValue().hasOwnProperty(key)) {
+        //     formData.append(key, this.insertForm.getRawValue()[key]);
+        //   }
+        // }
+        // formData.append('voice', this.voiceFile ? this.voiceFile : '');
+
+
+        this._CallsService.addCall(this.insertForm.getRawValue()).subscribe((res) => {
           if (res.status == 1) {
             this.uploadingStatus = false;
             this.insertForm.reset();
@@ -105,7 +106,6 @@ export class AddCallComponent implements OnInit {
           }
         });
       }
-    }
   }
 
   // ====================================================================UPLOAD==========================================================================
@@ -120,12 +120,39 @@ export class AddCallComponent implements OnInit {
       this.onFileChange(e);
     };
   }
-  voiceFile!: File | null;
 
   onFileChange(event: any) {
     if (event.target.files && event.target.files.length) {
-      this.voiceFile = event.target.files[0];
+      const files = event.target.files;
+      const readFile = (file: any) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = (event: any) => resolve(event.target.result);
+          fileReader.onerror = (error) => reject(error);
+          fileReader.readAsDataURL(file);
+        });
+      };
+
+      const readFiles = async () => {
+        try {
+          const base64Strings = await Promise.all(
+            Array.from(files).map(readFile)
+          );
+
+          const fileTypes = base64Strings.map((base64String: any) => {
+            const type = base64String.split(',')[0].split(':')[1].split(';')[0];
+            return { [type]: base64String };
+          });
+
+          this.insertForm.patchValue({
+            files: fileTypes,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      readFiles();
     }
   }
-
 }

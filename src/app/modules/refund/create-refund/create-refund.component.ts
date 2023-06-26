@@ -17,23 +17,23 @@ export class CreateRefundComponent implements OnInit {
     private _LocalService: LocalService,
     private _MessageService: MessageService,
     private _Location: Location,
-    private _DislikeService:DislikeService
+    private _DislikeService: DislikeService
   ) {}
   selectedReason: any[] = [];
 
   ngOnInit(): void {
     this.createRefundForm();
     this.getReasons();
+    this.getDeliveryTimes();
+    this.getFoodQuality();
   }
 
-  
   addOption(el: HTMLInputElement) {
     if (el.value != '') {
       this.reasons.push({ reason: el.value });
       this.selectedReason.push(el.value);
       el.value = '';
     }
-    console.log(this.insertForm.value);
   }
 
   insertForm!: FormGroup;
@@ -151,13 +151,29 @@ export class CreateRefundComponent implements OnInit {
         Validators.required,
       ]),
       agent_id: new FormControl(null),
+      food_qualities: new FormControl(null, [Validators.required]),
+      delivery_times: new FormControl(null, [Validators.required]),
     });
   }
 
-  reasons:any[]=[]
+  reasons: any[] = [];
   getReasons() {
     this._DislikeService.getReasons().subscribe({
       next: (res) => (this.reasons = res.data),
+    });
+  }
+
+  deliveryTimes: any[] = [];
+  getDeliveryTimes() {
+    this._RefundService.getDeliveryTimes().subscribe({
+      next: (res) => (this.deliveryTimes = res.data),
+    });
+  }
+
+  foodQualities: any[] = [];
+  getFoodQuality() {
+    this._RefundService.getFoodQuality().subscribe({
+      next: (res) => (this.foodQualities = res.data),
     });
   }
 

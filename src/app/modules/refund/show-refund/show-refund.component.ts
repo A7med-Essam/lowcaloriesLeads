@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   AgentTargetService,
@@ -11,6 +11,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { RefundService } from 'src/app/services/refund.service';
 import { Checkbox } from 'primeng/checkbox';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-show-refund',
@@ -18,13 +19,16 @@ import { Checkbox } from 'primeng/checkbox';
   styleUrls: ['./show-refund.component.scss']
 })
 export class ShowRefundComponent implements OnInit {
-
+  role:string = ''
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _RefundService: RefundService,
-    private _DislikeService: DislikeService
-  ) {}
+    private _DislikeService: DislikeService,
+    private _LocalService:LocalService
+  ) {
+    this.role = this._LocalService.getJsonValue("userInfo_oldLowCalories").role
+  }
 
   exportAsPDF() {
     // Default export is a4 paper, portrait, using millimeters for units
@@ -140,6 +144,7 @@ export class ShowRefundComponent implements OnInit {
     this.getAgentBranches();
     this.getAllRefunds();
     this.getReasons();
+    this.createReportForm();
   }
 
   allRefunds: any[] = [];
@@ -420,6 +425,77 @@ export class ShowRefundComponent implements OnInit {
       }
   
       doc.save('refund.pdf');
+  }
+
+
+  // ****************************************************Report************************************************************************
+
+  reportModal:boolean = false;
+  reportForm!: FormGroup;
+
+  createReportForm() {
+    this.reportForm = new FormGroup({
+      refund_request_id: new FormControl(null, [Validators.required]),
+      type: new FormControl('image', [Validators.required]),
+      file: new FormControl(null, [Validators.required]),
+      notes: new FormControl(null),
+    });
+  }
+
+  uploadingStatus:boolean = false
+  insertReport(form:FormGroup){
+    if (form.valid) {
+      this.uploadingStatus = true
+      this._RefundService.uploadAccountingRefundDetails(form.value).subscribe(res=>{
+        this.refunds = this.refunds.map((e:any)=> {
+          if (e.id == res.data.id) {
+            e = res.data
+          }
+          return e
+        })
+        this.uploadingStatus = false
+        this.getAllRefunds();
+        this.getRefunds();
+        this.reportModal = false
+      })
+    }
+  }
+
+  displayReportModal(id:number){
+    this.reportForm.patchValue({
+      refund_request_id: id,
+    });
+    this.reportModal = true;
+  }
+
+  getUploadedFile(event: any) {
+    if (event.target.files && event.target.files.length) {
+      const files = event.target.files;
+      const readFile = (file: any) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = (event: any) => resolve(event.target.result);
+          fileReader.onerror = (error) => reject(error);
+          fileReader.readAsDataURL(file);
+        });
+      };
+
+      const readFiles = async () => {
+        try {
+          const base64Strings = await Promise.all(
+            Array.from(files).map(readFile)
+          );
+          this.reportForm.patchValue({
+            file: base64Strings[0],
+          });
+
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      readFiles();
+    }
   }
 
 }

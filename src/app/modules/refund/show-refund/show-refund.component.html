@@ -73,9 +73,12 @@
                 <td class="text-center" *ngIf="columns[18].status">{{refund.remaining_days}}</td>
                 <td class="text-center" *ngIf="columns[19].status">{{refund.subscription_plan}}</td>
                 <td class="text-center">
+                    <button pButton type="button" icon="pi pi-upload" class="m-1 p-button-sm p-button-success"
+                        (click)="displayReportModal(refund.id)" *ngIf="role == 'super_admin' || role == 'accounting'"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(refund)"
                         class="m-1 p-button-sm"></button>
-                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(refund)"></button>
+                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
+                        (click)="print(refund)"></button>
                 </td>
             </tr>
         </ng-template>
@@ -116,7 +119,7 @@
                 </div>
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Reasons</label>
-                    <p-dropdown [options]="reasons" optionLabel="name" optionValue="id" formControlName='reason'
+                    <p-dropdown [options]="reasons" optionLabel="reason" optionValue="reason" formControlName='reason'
                         appendTo="body" styleClass="w-100" placeholder="Select Reason" [filter]="true">
                     </p-dropdown>
                 </div>
@@ -128,7 +131,7 @@
                     <label for="">email</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='email' />
                 </div> -->
-          
+
                 <!-- <div class="col-lg-6 col-12 my-2">
                     <label for="">subscription_plan</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='subscription_plan' />
@@ -141,7 +144,7 @@
                     <label for="">payment_method</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='payment_method' />
                 </div> -->
-            
+
                 <!-- <div class="col-lg-6 col-12 my-2">
                     <label for="">address</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='address' />
@@ -162,7 +165,7 @@
                     <label for="">account_hold_name</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='account_hold_name' />
                 </div> -->
-         
+
             </div>
         </form>
     </div>
@@ -204,4 +207,30 @@
             <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
         </div>
     </ng-template>
+</p-dialog>
+
+<p-dialog header="Upload Report" [(visible)]="reportModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <form [formGroup]="reportForm" (ngSubmit)='insertReport(reportForm)'>
+        <div class="row mx-0">
+            <div class="col-12 my-2">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload
+                    Image</label>
+                <input (change)="getUploadedFile($event)"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="file_input" type="file" accept="image/*">
+            </div>
+            <div class="col-12 my-2">
+                <label for="">Note</label>
+                <textarea pInputTextarea ngClass="w-100" formControlName='notes'></textarea>
+            </div>
+
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">
+                    <span *ngIf="!uploadingStatus">Add Report</span>
+                    <span *ngIf="uploadingStatus">Uploading...<i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+            </div>
+        </div>
+    </form>
 </p-dialog>

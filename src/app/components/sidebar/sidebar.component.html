@@ -65,7 +65,7 @@
           <!-- <span>Dashboard</span> -->
         </a>
       </li>
-      <li *ngIf="isLogin">
+      <li *ngIf="isLogin && role != 'accounting'">
         <a routerLink="/calls/show" routerLinkActive="active">
           <i class="fas fa-headset"></i>
           <span>Calls</span>
@@ -77,31 +77,31 @@
           <span>Refund</span>
         </a>
       </li>
-      <li *ngIf="isLogin">
+      <li *ngIf="isLogin && role != 'accounting'">
         <a routerLink="/leads/show" routerLinkActive="active">
           <i class="fa fa-star"></i>
           <span>My Leads</span>
         </a>
       </li>
-      <li *ngIf="isLogin">
+      <li *ngIf="isLogin && role != 'accounting'">
         <a routerLink="/agent/show" routerLinkActive="active">
           <i class="fas fa-user-tag"></i>
           <span>Agent Target</span>
         </a>
       </li>
-      <li *ngIf="isLogin">
+      <li *ngIf="isLogin && role != 'accounting'">
         <a routerLink="/dislike/show" routerLinkActive="active">
           <i class="fas fa-thumbs-down"></i>
           <span>Dislike</span>
         </a>
       </li>
-      <li *ngIf="isLogin">
+      <li *ngIf="isLogin && role != 'accounting'">
         <a routerLink="/clinic" routerLinkActive="active">
           <i class="fas fa-hospital-symbol"></i>
           <span>Clinic</span>
         </a>
       </li>
-      <li *ngIf="isLogin">
+      <li *ngIf="isLogin && role != 'accounting'">
         <a routerLink="/complaints/show" routerLinkActive="active">
           <i class="fas fa-clipboard-list"></i>
           <span>Complaints</span>

@@ -28,13 +28,14 @@ export class SuperAdminGuard implements CanActivate {
     });
     if (role == 'super_admin') {
       return true;
-    } else if (role == 'agent') {
+    } else {
       this._Router.navigate(['/home']);
       return false;
-    } else {
-      localStorage.clear();
-      this._Router.navigate(['/login']);
-      return false;
-    }
+    } 
+    // else {
+    //   localStorage.clear();
+    //   this._Router.navigate(['/login']);
+    //   return false;
+    // }
   }
 }

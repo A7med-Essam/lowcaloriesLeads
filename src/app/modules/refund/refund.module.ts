@@ -14,6 +14,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ImageModule } from 'primeng/image';
 const APP_PRIMENG_MODULE = [
   DropdownModule,
   InputTextModule,
@@ -22,7 +23,7 @@ const APP_PRIMENG_MODULE = [
   CalendarModule,
   InputTextareaModule,
   CheckboxModule,
-  MultiSelectModule
+  MultiSelectModule,ImageModule
 ];
 
 @NgModule({

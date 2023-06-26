@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { Error404Component } from './components/error404/error404.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
+import { AccountingGuard } from './core/accounting.guard';
 import { AuthGuard } from './core/auth.guard';
 import { SuperAdminGuard } from './core/super-admin.guard';
 
@@ -24,31 +25,31 @@ const routes: Routes = [
     path: 'leads',
     loadChildren: () =>
       import('./modules/leads/leads.module').then((m) => m.LeadsModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,AccountingGuard],
   },
   {
     path: 'dislike',
     loadChildren: () =>
       import('./modules/dislike/dislike.module').then((m) => m.DislikeModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,AccountingGuard],
   },
   {
     path: 'clinic',
     loadChildren: () =>
       import('./modules/clinic/clinic.module').then((m) => m.ClinicModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,AccountingGuard],
   },
   {
     path: 'agent',
     loadChildren: () =>
       import('./modules/agent-target/agent-target.module').then((m) => m.AgentTargetModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,AccountingGuard],
   },
   {
     path: 'complaints',
     loadChildren: () =>
       import('./modules/complaints/complaints.module').then((m) => m.ComplaintsModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,AccountingGuard],
   },
   {
     path: 'refund',
@@ -60,7 +61,7 @@ const routes: Routes = [
     path: 'calls',
     loadChildren: () =>
       import('./modules/calls/calls.module').then((m) => m.CallsModule),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,AccountingGuard],
   },
   { path: '**', component: Error404Component },
 ];

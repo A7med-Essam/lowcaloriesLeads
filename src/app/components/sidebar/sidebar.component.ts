@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { LocalService } from 'src/app/services/local.service';
 import { PusherService } from 'src/app/services/pusher.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
@@ -13,11 +12,12 @@ export class SidebarComponent implements OnInit {
   isLogin: boolean = false;
   isSuperAdmin: boolean = true;
   country: string = '';
+  userId:number = 0;
+  role:string = ''
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
     private _SurveyService:SurveyService,
-    private _LocalService:LocalService
   ) {
     _AuthService.currentUser.subscribe((data) => {
       if (data != null) {
@@ -26,6 +26,8 @@ export class SidebarComponent implements OnInit {
         data.role == 'super_admin' || data.role == '2'
           ? (this.isSuperAdmin = true)
           : (this.isSuperAdmin = false);
+        this.userId = data.id
+        this.role = data.role
       } else {
         this.isLogin = false;
       }
@@ -42,11 +44,11 @@ export class SidebarComponent implements OnInit {
   }
 
   currentUserName: any;
+
   getAgents() {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
-        const userId = this._LocalService.getJsonValue('userInfo_oldLowCalories').id
-        const [user] = res.data.filter((e:any)=> e.id == userId);
+        const [user] = res.data.filter((e:any)=> e?.id == this.userId);
         this.currentUserName = user
       },
     });

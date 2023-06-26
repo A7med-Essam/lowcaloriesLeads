@@ -43,5 +43,17 @@ export class RefundService  {
     return this._ApiConfigService.postReq3(`refundRequests`, {withoutPagination:true});
   }
 
- 
+//  ===========================================
+getDeliveryTimes(): Observable<any> {
+  return this._ApiConfigService.postReq3(`deliveryTimes`,'');
+}
+
+getFoodQuality(): Observable<any> {
+  return this._ApiConfigService.postReq3(`foodQualities`,'');
+}
+
+//  ===========================================
+uploadAccountingRefundDetails(data:any): Observable<any> {
+  return this._ApiConfigService.postReq3(`uploadAccountingRefundDetails`,data);
+}
 }

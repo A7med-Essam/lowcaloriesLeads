@@ -90,18 +90,17 @@
                                             <td>reason</td>
                                             <td>{{refund?.reason}}</td>
                                         </tr>
-                                        <!-- <tr>
-                                            <td>original_amount_paid</td>
-                                            <td>{{refund?.original_amount_paid}}</td>
+                                        <tr>
+                                            <td>notes</td>
+                                            <td>{{refund?.notes}}</td>
                                         </tr>
                                         <tr>
-                                            <td>amount_usd</td>
-                                            <td>{{refund?.amount_usd}}</td>
+                                            <td>Uploaded Image</td>
+                                            <td>
+                                                <p-image [src]="'http://lowcalories.ae/'+refund?.file" 
+                                                alt="Report Image" width="250" [preview]="true"></p-image>
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td>total_amount_refund</td>
-                                            <td>{{refund?.total_amount_refund}}</td>
-                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>
