@@ -66,4 +66,20 @@ export class DislikeService {
   exportDislike(): Observable<any>{
     return this._ApiConfigService.postReq3(`disLikeExport`,'');
   }
+
+  getSample(): Observable<any>{
+    return this._ApiConfigService.postReq3(`dislikeRequestsSample` , '');
+  }
+
+  uploadFile(file:File): Observable<any> {
+    return this._ApiConfigService.postReq3(`dislikeRequestsImport` , file);
+  }
+
+  getFiles(dislike_request_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`getDislikeRequestFiles` , {dislike_request_id});
+  }
+  
+  uploadDislikeRequestFiles(file:File): Observable<any> {
+    return this._ApiConfigService.postReq3(`uploadDislikeRequestFiles` , file);
+  }
 }

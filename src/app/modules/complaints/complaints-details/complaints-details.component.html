@@ -58,6 +58,33 @@
                                             <td>reason</td>
                                             <td>{{complaint?.reason}}</td>
                                         </tr>
+                                        <tr>
+                                            <td>Files</td>
+                                            <td>
+                                                <span *ngIf="files?.length">
+                                                    <small *ngFor="let f of files" style="display: block;" class="my-2">
+                                                        <span *ngIf="f.type.includes('image')">
+                                                            <p-image [src]="'http://lowcalories.ae/'+f?.file" 
+                                                            alt="Uploaded Image" width="250" [preview]="true"></p-image>
+                                                        </span>
+                                                        <span *ngIf="f.type.includes('audio')">
+                                                            <audio controls>
+                                                                <source [src]="'http://lowcalories.ae/'+f.file" type="audio/mpeg">
+                                                            </audio>
+                                                        </span>
+                                                        <span *ngIf="!f.type.includes('audio')&&!f.type.includes('image')&&!f.type.includes('video')">
+                                                            <a target="_blank" [href]="'http://lowcalories.ae/'+f.file" download>{{f.type}}</a>
+                                                        </span>
+                                                        <span *ngIf="f.type.includes('video')">
+                                                            <video width="250" class="m-1" controls>
+                                                                <source
+                                                                    src="http://lowcalories.ae/{{f?.file}}">
+                                                            </video>
+                                                        </span>
+                                                    </small>
+                                                </span>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

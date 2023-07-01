@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SuperAdminGuard } from 'src/app/core/super-admin.guard';
 import { AddCallComponent } from './add-call/add-call.component';
 import { AssignCallComponent } from './assign-call/assign-call.component';
+import { CallDetailsComponent } from './call-details/call-details.component';
 import { ShowCallsComponent } from './show-calls/show-calls.component';
 
 const routes: Routes = [
@@ -14,6 +15,10 @@ const routes: Routes = [
   {
     path: 'show',
     component: ShowCallsComponent,
+  },
+  {
+    path: 'details',
+    component: CallDetailsComponent,
   },
   {
     path: 'assign',

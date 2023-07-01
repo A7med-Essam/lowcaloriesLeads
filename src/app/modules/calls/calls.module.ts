@@ -14,13 +14,16 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CallDetailsComponent } from './call-details/call-details.component';
+import { ImageModule } from 'primeng/image';
 
 
 @NgModule({
   declarations: [
     AssignCallComponent,
     ShowCallsComponent,
-    AddCallComponent
+    AddCallComponent,
+    CallDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +37,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     DropdownModule,
     CalendarModule,
     InputTextModule,
-    InputTextareaModule
+    InputTextareaModule,
+    ImageModule
   ]
 })
 export class CallsModule { }

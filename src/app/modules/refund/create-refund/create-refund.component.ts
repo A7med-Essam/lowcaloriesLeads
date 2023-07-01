@@ -24,13 +24,13 @@ export class CreateRefundComponent implements OnInit {
   ngOnInit(): void {
     this.createRefundForm();
     this.getReasons();
-    this.getDeliveryTimes();
-    this.getFoodQuality();
+    // this.getDeliveryTimes();
+    // this.getFoodQuality();
   }
 
   addOption(el: HTMLInputElement) {
     if (el.value != '') {
-      this.reasons.push({ reason: el.value });
+      this.reasons.push({ name: el.value });
       this.selectedReason.push(el.value);
       el.value = '';
     }
@@ -151,31 +151,31 @@ export class CreateRefundComponent implements OnInit {
         Validators.required,
       ]),
       agent_id: new FormControl(null),
-      food_qualities: new FormControl(null, [Validators.required]),
-      delivery_times: new FormControl(null, [Validators.required]),
+      // food_qualities: new FormControl(null, [Validators.required]),
+      // delivery_times: new FormControl(null, [Validators.required]),
     });
   }
 
   reasons: any[] = [];
   getReasons() {
-    this._DislikeService.getReasons().subscribe({
+    this._RefundService.getRefundReasons().subscribe({
       next: (res) => (this.reasons = res.data),
     });
   }
 
-  deliveryTimes: any[] = [];
-  getDeliveryTimes() {
-    this._RefundService.getDeliveryTimes().subscribe({
-      next: (res) => (this.deliveryTimes = res.data),
-    });
-  }
+  // deliveryTimes: any[] = [];
+  // getDeliveryTimes() {
+  //   this._RefundService.getDeliveryTimes().subscribe({
+  //     next: (res) => (this.deliveryTimes = res.data),
+  //   });
+  // }
 
-  foodQualities: any[] = [];
-  getFoodQuality() {
-    this._RefundService.getFoodQuality().subscribe({
-      next: (res) => (this.foodQualities = res.data),
-    });
-  }
+  // foodQualities: any[] = [];
+  // getFoodQuality() {
+  //   this._RefundService.getFoodQuality().subscribe({
+  //     next: (res) => (this.foodQualities = res.data),
+  //   });
+  // }
 
   insertRefund(form: FormGroup) {
     if (form.valid) {

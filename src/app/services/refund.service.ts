@@ -56,4 +56,34 @@ getFoodQuality(): Observable<any> {
 uploadAccountingRefundDetails(data:any): Observable<any> {
   return this._ApiConfigService.postReq3(`uploadAccountingRefundDetails`,data);
 }
+
+//=======================================================
+
+getRefundReasons(): Observable<any> {
+  return this._ApiConfigService.postReq3(`refundReasons`,'');
+}
+
+addRefundReason(reason:string): Observable<any> {
+  return this._ApiConfigService.postReq3(`addRefundReason`,{reason});
+}
+
+deleteRefundReason(refund_id:number): Observable<any> {
+  return this._ApiConfigService.postReq3(`deleteRefundReason`,{refund_id});
+}
+
+getSample(): Observable<any>{
+  return this._ApiConfigService.postReq3(`refundRequestSample` , '');
+}
+
+uploadFile(file:File): Observable<any> {
+  return this._ApiConfigService.postReq3(`refundRequestImport` , file);
+}
+
+getFiles(refund_id:number): Observable<any> {
+  return this._ApiConfigService.postReq3(`getRefundFiles` , {refund_id});
+}
+
+uploadRefundFiles(file:File): Observable<any> {
+  return this._ApiConfigService.postReq3(`uploadRefundFiles` , file);
+}
 }

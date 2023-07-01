@@ -27,20 +27,12 @@ export class DislikeDetailsComponent implements OnInit {
           if (res == null) {
             this._Router.navigate(['dislike/show']);
           } else {
-            // this.getLeadDetails(res);
             this.dislike = res
+            this.getFiles(res.id)
           }
         },
       });
   }
-
-  // getLeadDetails(id: number) {
-  //   this._DislikeService.getDislikesDetails(id).subscribe({
-  //     next: (res) => {
-  //       this.dislike = res.data;
-  //     },
-  //   });
-  // }
 
   backDetailsBtn() {
     this._Router.navigate(['dislike/show']);
@@ -49,5 +41,12 @@ export class DislikeDetailsComponent implements OnInit {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  files:any[]=[]
+  getFiles(id:number){
+    this._DislikeService.getFiles(id).subscribe(res=>{
+      this.files = res.data.dislike_files
+    })
   }
 }

@@ -29,6 +29,7 @@ export class ComplaintsDetailsComponent implements OnInit {
             this._Router.navigate(['complaints/show']);
           } else {
             this.complaint = res
+            this.getFiles(res.id)
           }
         },
       });
@@ -43,4 +44,10 @@ export class ComplaintsDetailsComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
+  files:any[]=[]
+  getFiles(id:number){
+    this._ComplaintsService.getFiles(id).subscribe(res=>{
+      this.files = res.data.issue_files
+    })
+  }
 }

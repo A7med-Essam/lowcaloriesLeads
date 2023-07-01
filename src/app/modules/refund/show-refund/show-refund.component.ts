@@ -138,6 +138,7 @@ export class ShowRefundComponent implements OnInit {
   PaginationInfo: any;
 
   ngOnInit(): void {
+    this.createUploadingForm()
     this.getRefunds();
     this.createFilterForm();
     this.getAgents();
@@ -497,5 +498,98 @@ export class ShowRefundComponent implements OnInit {
       readFiles();
     }
   }
+    // ****************************************************upload Modal************************************************************************
+    uploadModal: boolean = false;
 
+    getSample() {
+      this._RefundService.getSample().subscribe((res) => {
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
+      });
+    }
+  
+    getFormData(object: any) {
+      const formData = new FormData();
+      Object.keys(object).forEach((key) => formData.append(key, object[key]));
+      return formData;
+    }
+  
+    onFileSelected(event: any) {
+      const file: File = event.target.files[0];
+      if (file) {
+        let f: File = this.getFormData({ file: file }) as any;
+        this._RefundService.uploadFile(f).subscribe({
+          next: (res) => {
+            this.uploadModal = false;
+            this.getRefunds();
+            this.getAllRefunds();
+          },
+        });
+        this.uploadModal = false;
+      }
+    }
+
+       // ****************************************************upload File Modal************************************************************************
+       uploadFilesModal:boolean = false;
+       uploadForm!: FormGroup;
+       
+       displayUploadFilesModal(id:number){
+         this.uploadForm.patchValue({
+           refund_id: id,
+         });
+         this.uploadFilesModal = true;
+       }
+       
+       getUploadedFile2(event: any) {
+         if (event.target.files && event.target.files.length) {
+           const files = event.target.files;
+           const readFile = (file: any) => {
+             return new Promise((resolve, reject) => {
+               const fileReader = new FileReader();
+               fileReader.onload = (event: any) => resolve(event.target.result);
+               fileReader.onerror = (error) => reject(error);
+               fileReader.readAsDataURL(file);
+             });
+           };
+     
+           const readFiles = async () => {
+             try {
+               const base64Strings = await Promise.all(
+                 Array.from(files).map(readFile)
+               );
+               const fileTypes = base64Strings.map((base64String: any) => {
+                const type = base64String.split(',')[0].split(':')[1].split(';')[0];
+                return { [type]: base64String };
+              });
+               this.uploadForm.patchValue({
+                 files: fileTypes,
+               });
+     
+             } catch (error) {
+               console.error(error);
+             }
+           };
+     
+           readFiles();
+         }
+       }
+   
+       createUploadingForm() {
+         this.uploadForm = new FormGroup({
+           refund_id: new FormControl(null, [Validators.required]),
+           files: new FormControl(null, [Validators.required]),
+         });
+       }
+   
+       insertRefundFiles(form:FormGroup){
+         if (form.valid) {
+           this.uploadingStatus = true
+           this._RefundService.uploadRefundFiles(form.value).subscribe(res=>{
+             this.uploadingStatus = false
+             this.uploadFilesModal = false
+           })
+         }
+       }
 }

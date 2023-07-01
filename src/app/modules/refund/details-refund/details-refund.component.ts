@@ -29,6 +29,7 @@ export class DetailsRefundComponent implements OnInit {
             this._Router.navigate(['refund/show']);
           } else {
             this.refund = res
+            this.getFiles(res.id)
           }
         },
       });
@@ -41,5 +42,12 @@ export class DetailsRefundComponent implements OnInit {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  files:any[]=[]
+  getFiles(id:number){
+    this._RefundService.getFiles(id).subscribe(res=>{
+      this.files = res.data.refund_files
+    })
   }
 }

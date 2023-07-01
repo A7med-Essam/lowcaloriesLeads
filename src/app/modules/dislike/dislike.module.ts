@@ -18,6 +18,7 @@ import { DislikeDetailsComponent } from './dislike-details/dislike-details.compo
 import { DislikeComponent } from './dislike/dislike.component';
 import { AddReasonsComponent } from './add-reasons/add-reasons.component';
 import { ReasonsComponent } from './reasons/reasons.component';
+import { ImageModule } from 'primeng/image';
 
 const APP_PRIMENG_MODULE = [
   ButtonModule,
@@ -29,7 +30,7 @@ const APP_PRIMENG_MODULE = [
   MultiSelectModule,
   ChipsModule,
   ConfirmDialogModule,
-  CheckboxModule,
+  CheckboxModule,ImageModule
 ];
 
 @NgModule({

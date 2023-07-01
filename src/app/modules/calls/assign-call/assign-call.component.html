@@ -33,10 +33,10 @@
                 <th class="text-center" *ngIf="columns[7].status">plan</th>
                 <th class="text-center" *ngIf="columns[8].status">date</th>
                 <th class="text-center" *ngIf="columns[9].status">note</th>
-                <th class="text-center" *ngIf="columns[10].status">voice</th>
-                <th class="text-center" *ngIf="columns[11].status">agent_uploaded</th>
-                <th class="text-center" *ngIf="columns[12].status">created_at</th>
-                <th class="text-center" *ngIf="columns[13].status">assigned_agent</th>
+                <!-- <th class="text-center" *ngIf="columns[10].status">voice</th> -->
+                <th class="text-center" *ngIf="columns[10].status">agent_uploaded</th>
+                <th class="text-center" *ngIf="columns[11].status">created_at</th>
+                <th class="text-center" *ngIf="columns[12].status">assigned_agent</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -55,14 +55,14 @@
                 <td class="text-center" *ngIf="columns[7].status">{{call.plan}}</td>
                 <td class="text-center" *ngIf="columns[8].status">{{call.date}}</td>
                 <td class="text-center" *ngIf="columns[9].status">{{call.note}}</td>
-                <td class="text-center" *ngIf="columns[10].status">
+                <!-- <td class="text-center" *ngIf="columns[10].status">
                     <audio controls>
                         <source [src]="call.voice" type="audio/mpeg">
                     </audio>
-                </td>
-                <td class="text-center" *ngIf="columns[11].status">{{call.agent_uploaded_name}}</td>
-                <td class="text-center" *ngIf="columns[12].status">{{call.created_at | date}}</td>
-                <td class="text-center" *ngIf="columns[13].status">
+                </td> -->
+                <td class="text-center" *ngIf="columns[10].status">{{call.agent_uploaded_name}}</td>
+                <td class="text-center" *ngIf="columns[11].status">{{call.created_at | date}}</td>
+                <td class="text-center" *ngIf="columns[12].status">
                     <span *ngIf="call.call_users.length">
                         <small *ngFor="let user of call.call_users" style="display: block;">
                             {{user.user.name}}
@@ -70,8 +70,8 @@
                     </span>
                 </td>
                 <td class="text-center">
-                    <!-- <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
-                        class="m-1 p-button-sm"></button> -->
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
+                        class="m-1 p-button-sm"></button>
                     <button pButton pRipple class="p-button-success mx-1" icon="pi pi-link"
                         (click)="displayAssignedUsersModal(call.id);getAssignedUsers(call)"></button>
                     <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"

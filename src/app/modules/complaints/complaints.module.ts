@@ -13,6 +13,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ImageModule } from 'primeng/image';
 
 const APP_PRIMENG_MODULE = [
   DropdownModule,
@@ -21,7 +22,7 @@ const APP_PRIMENG_MODULE = [
   TableModule,
   DialogModule,
   CalendarModule,
-  CheckboxModule,
+  CheckboxModule,ImageModule
 ];
 
 @NgModule({

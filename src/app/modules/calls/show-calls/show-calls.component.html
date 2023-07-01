@@ -4,6 +4,8 @@
         </p-button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
+        <!-- <p-button (click)="uploadModal = true" class="mb-3 mx-1" icon="pi pi-external-link"
+        label="Upload"></p-button> -->
     </div>
 </div>
 <div class="card">
@@ -22,9 +24,9 @@
                 <th class="text-center" *ngIf="columns[7].status">plan</th>
                 <th class="text-center" *ngIf="columns[8].status">date</th>
                 <th class="text-center" *ngIf="columns[9].status">note</th>
-                <th class="text-center" *ngIf="columns[10].status">voice</th>
-                <th class="text-center" *ngIf="columns[11].status">agent_uploaded</th>
-                <th class="text-center" *ngIf="columns[12].status">created_at</th>
+                <!-- <th class="text-center" *ngIf="columns[10].status">voice</th> -->
+                <th class="text-center" *ngIf="columns[10].status">agent_uploaded</th>
+                <th class="text-center" *ngIf="columns[11].status">created_at</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -40,15 +42,17 @@
                 <td class="text-center" *ngIf="columns[7].status">{{call.plan}}</td>
                 <td class="text-center" *ngIf="columns[8].status">{{call.date}}</td>
                 <td class="text-center" *ngIf="columns[9].status">{{call.note}}</td>
-                <td class="text-center" *ngIf="columns[10].status">
+                <!-- <td class="text-center" *ngIf="columns[10].status">
                     <audio controls>
                         <source [src]="call.voice" type="audio/mpeg">
                     </audio>
-                </td>
-                <td class="text-center" *ngIf="columns[11].status">{{call.agent_uploaded_name}}</td>
-                <td class="text-center" *ngIf="columns[12].status">{{call.created_at | date}}</td>
+                </td> -->
+                <td class="text-center" *ngIf="columns[10].status">{{call.agent_uploaded_name}}</td>
+                <td class="text-center" *ngIf="columns[11].status">{{call.created_at | date}}</td>
                 <td class="text-center">
-                    <button pButton pRipple class="p-button-success mx-1" icon="pi pi-plus"
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
+                    class="mx-1 p-button-sm"></button>
+                    <button pButton pRipple class="p-button-success mx-1 p-button-sm" icon="pi pi-plus"
                         (click)="routeToCreateCall(call)"></button>
                 </td>
             </tr>
@@ -153,3 +157,16 @@
     </ng-template>
 </p-dialog>
 
+<p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
+    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="getSample()">Download Sample</button>
+        </div>
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary">Upload a file</button>
+            <input type="file" name="myfile" (change)="onFileSelected($event)" />
+        </div>
+    </ng-template>
+</p-dialog>

@@ -54,6 +54,7 @@ export class CreateComplaintsComponent implements OnInit  {
       branch: new FormControl(null, [Validators.required]),
       issue_details: new FormControl(null, [Validators.required]),
       action: new FormControl(null, [Validators.required]),
+      status: new FormControl(null, [Validators.required]),
       agent_id: new FormControl(null),
     });
   }
@@ -67,5 +68,8 @@ export class CreateComplaintsComponent implements OnInit  {
       next: (res) => (this.branches = res.data),
     });
   }
+
+  // ================================== STATUS =========================================
+  status :string[] = ["open","closed"]
 
 }

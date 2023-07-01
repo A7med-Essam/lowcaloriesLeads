@@ -79,6 +79,17 @@ export class CallsService {
     return this._ApiConfigService.postReq3(`uploadNoteVoice`, data);
   }
 
+  getSample(): Observable<any>{
+    return this._ApiConfigService.postReq3(`calls/sample` , '');
+  }
+
+  uploadFile(file:File): Observable<any> {
+    return this._ApiConfigService.postReq3(`calls/import` , file);
+  }
+
+  getFiles(call_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`getCallFiles` , {call_id});
+  }
 }
 
 export interface ICalls {

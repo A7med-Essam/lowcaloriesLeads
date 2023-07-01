@@ -46,6 +46,14 @@
                 <small class="text-danger ms-1" *ngIf="insertForm.get('branch')?.touched &&
                 insertForm.get('branch')?.hasError('required')">This field is required.</small>
             </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Status</label>
+                <p-dropdown [options]="status" formControlName='status' appendTo="body"
+                    styleClass="w-100" placeholder="Select Status" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('status')?.touched &&
+                insertForm.get('status')?.hasError('required')">This field is required.</small>
+            </div>
             
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100">Add Complaint</button>

@@ -5,7 +5,7 @@
                 <div class="col-md-12">
                     <div class="card card-plain">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Refund Info</h4>
+                            <h4 class="card-title">Call Info</h4>
                             <div>
                                 <button class="btn btn-dark" (click)="backDetailsBtn()">Back</button>
                             </div>
@@ -19,86 +19,57 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Date</td>
-                                            <td>{{refund?.created_at | date}}</td>
+                                            <td>Cid</td>
+                                            <td>{{call?.cid}}</td>
                                         </tr>
                                         <tr>
-                                            <td>agent_name</td>
-                                            <td>{{refund?.agent_name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>name</td>
-                                            <td>{{refund?.name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>email</td>
-                                            <td>{{refund?.email}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>mobile</td>
-                                            <td>{{refund?.mobile}}</td>
+                                            <td>remaining days</td>
+                                            <td>{{call?.subscription_id}}</td>
                                         </tr>
                                         <tr>
                                             <td>branch</td>
-                                            <td>{{refund?.branch}}</td>
+                                            <td>{{call?.branch}}</td>
                                         </tr>
                                         <tr>
-                                            <td>delivery_branch</td>
-                                            <td>{{refund?.delivery_branch}}</td>
+                                            <td>customer_name</td>
+                                            <td>{{call?.customer_name}}</td>
                                         </tr>
                                         <tr>
-                                            <td>subscription_plan</td>
-                                            <td>{{refund?.subscription_plan}}</td>
+                                            <td>customer_phone</td>
+                                            <td>{{call?.customer_mobile}}</td>
                                         </tr>
                                         <tr>
-                                            <td>remaining_days</td>
-                                            <td>{{refund?.remaining_days}}</td>
+                                            <td>customer_mobile</td>
+                                            <td>{{call?.customer_phone}}</td>
                                         </tr>
                                         <tr>
-                                            <td>payment_method</td>
-                                            <td>{{refund?.payment_method}}</td>
+                                            <td>plan</td>
+                                            <td>{{call?.plan}}</td>
                                         </tr>
                                         <tr>
-                                            <td>cid</td>
-                                            <td>{{refund?.cid}}</td>
+                                            <td>date</td>
+                                            <td>{{call?.date}}</td>
                                         </tr>
                                         <tr>
-                                            <td>address</td>
-                                            <td>{{refund?.address}}</td>
+                                            <td>note</td>
+                                            <td>{{call?.note}}</td>
                                         </tr>
                                         <tr>
-                                            <td>bank_name</td>
-                                            <td>{{refund?.bank_name}}</td>
+                                            <td>agent_uploaded</td>
+                                            <td>{{call?.agent_uploaded_name}}</td>
                                         </tr>
                                         <tr>
-                                            <td>iban</td>
-                                            <td>{{refund?.iban}}</td>
+                                            <td>created_at</td>
+                                            <td>{{call?.created_at|date}}</td>
                                         </tr>
                                         <tr>
-                                            <td>bank_account_number</td>
-                                            <td>{{refund?.bank_account_number}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>account_hold_name</td>
-                                            <td>{{refund?.account_hold_name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>amount_paid</td>
-                                            <td>{{refund?.amount_paid}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>reason</td>
-                                            <td>{{refund?.reason}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>notes</td>
-                                            <td>{{refund?.notes}}</td>
-                                        </tr>
-                                        <tr *ngIf="refund?.file">
-                                            <td>Uploaded Image</td>
+                                            <td>assigned_agent</td>
                                             <td>
-                                                <p-image [src]="'http://lowcalories.ae/'+refund?.file" 
-                                                alt="Report Image" width="250" [preview]="true"></p-image>
+                                                <span *ngIf="call?.call_users?.length">
+                                                    <small *ngFor="let user of call?.call_users" style="display: block;">
+                                                        {{user?.user?.name}}
+                                                    </small>
+                                                </span>
                                             </td>
                                         </tr>
                                         <tr>

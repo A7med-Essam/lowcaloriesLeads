@@ -126,7 +126,7 @@
                     <small class="text-danger ms-1" *ngIf="insertForm.get('account_hold_name')?.touched &&
                     insertForm.get('account_hold_name')?.hasError('required')">This field is required.</small>
                 </div>
-                <div class="col-md-6 my-3">
+                <!-- <div class="col-md-6 my-3">
                     <label for="">Delivery Times</label>
                     <p-dropdown [options]="deliveryTimes" formControlName='delivery_times' appendTo="body"
                         styleClass="w-100" placeholder="Select Delivery Time" [filter]="true" optionLabel="name"
@@ -143,12 +143,12 @@
                     </p-dropdown>
                     <small class="text-danger ms-1" *ngIf="insertForm.get('food_qualities')?.touched &&
                     insertForm.get('food_qualities')?.hasError('required')">This field is required.</small>
-                </div>
+                </div> -->
 
                 <div class="col-12 my-3">
                     <label for="">reason</label>
-                    <p-multiSelect [options]="reasons" appendTo="body" optionLabel="reason" formControlName='reason'
-                        optionValue="reason" defaultLabel="Select Your Reasons" styleClass="w-100"
+                    <p-multiSelect [options]="reasons" appendTo="body" optionLabel="name" formControlName='reason'
+                        optionValue="name" defaultLabel="Select Your Reasons" styleClass="w-100"
                         [(ngModel)]="selectedReason" display="chip">
                         <p-header class="w-100 mb-3">
                             <div class="row w-100">

@@ -83,7 +83,7 @@ export class ShowCallsComponent implements OnInit {
     { name: 'plan', status: true },
     { name: 'date', status: true },
     { name: 'note', status: false },
-    { name: 'voice', status: false },
+    // { name: 'voice', status: false },
     { name: 'agent_uploaded', status: false },
     { name: 'created_at', status: false },
   ];
@@ -232,5 +232,42 @@ export class ShowCallsComponent implements OnInit {
       this._Router.navigate(['calls/create']);
     }
   }
+    // ****************************************************upload Modal************************************************************************
+    uploadModal: boolean = false;
 
+    getSample() {
+      this._CallsService.getSample().subscribe((res) => {
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
+      });
+    }
+  
+    getFormData(object: any) {
+      const formData = new FormData();
+      Object.keys(object).forEach((key) => formData.append(key, object[key]));
+      return formData;
+    }
+  
+    onFileSelected(event: any) {
+      const file: File = event.target.files[0];
+      if (file) {
+        let f: File = this.getFormData({ file: file }) as any;
+        this._CallsService.uploadFile(f).subscribe({
+          next: (res) => {
+            this.uploadModal = false;
+            this.getCalls();
+          },
+        });
+        this.uploadModal = false;
+      }
+    }
+
+    showRow(call: any) {
+      if (call) {
+        this._CallsService.call.next(call);
+        this._Router.navigate(['calls/details']);
+      }
+    }
 }

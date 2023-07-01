@@ -8,6 +8,7 @@ import autoTable from 'jspdf-autotable';
 import { Dropdown } from 'primeng/dropdown';
 import { MessageService } from 'primeng/api';
 import { DislikeService } from 'src/app/services/dislike.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-assign-call',
@@ -20,7 +21,8 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     private _SurveyService: SurveyService,
     private _MessageService: MessageService,
     private _FormBuilder: FormBuilder,
-    private _DislikeService: DislikeService
+    private _DislikeService: DislikeService,
+    private _Router:Router
   ) {}
 
   calls: ICalls[] = [];
@@ -225,7 +227,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     { name: 'plan', status: true },
     { name: 'date', status: false },
     { name: 'note', status: false },
-    { name: 'voice', status: false },
+    // { name: 'voice', status: false },
     { name: 'agent_uploaded', status: false },
     { name: 'created_at', status: false },
     { name: 'assigned_agent', status: true },
@@ -528,5 +530,12 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     this._DislikeService.getAgentBranches().subscribe({
       next: (res) => (this.branches = res.data),
     });
+  }
+
+  showRow(call: any) {
+    if (call) {
+      this._CallsService.call.next(call);
+      this._Router.navigate(['calls/details']);
+    }
   }
 }

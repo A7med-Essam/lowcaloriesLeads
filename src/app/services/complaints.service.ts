@@ -36,4 +36,20 @@ export class ComplaintsService {
     return this._ApiConfigService.postReq3(`updateIssueStatus`, data);
   }
 
+  getSample(): Observable<any>{
+    return this._ApiConfigService.postReq3(`issueSample` , '');
+  }
+
+  uploadFile(file:File): Observable<any> {
+    return this._ApiConfigService.postReq3(`issueImport` , file);
+  }
+
+  getFiles(issue_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`getIssueFiles` , {issue_id});
+  }
+
+  uploadIssueFiles(files:any): Observable<any> {
+    return this._ApiConfigService.postReq3(`uploadIssueFiles` , files);
+  }
+
 }
