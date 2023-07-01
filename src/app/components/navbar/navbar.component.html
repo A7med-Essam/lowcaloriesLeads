@@ -34,20 +34,26 @@
     <!-- right menu -->
     <div class="collapse navbar-collapse right-nav" id="collapseBasic" *ngIf="isLogin" [attr.collapse]="isCollapsed">
       <ul class="navbar-nav ">
+        <li class="nav-item" style="outline: 0px !important;">
+          <a class="btn nav-link notifications-container" (click)="closeNotify()">
+            <i class="far fa-bell"></i>
+            <span class="link-text">Notifications</span>
+            <span class="nav-alert notifications" *ngIf="hasNotification"></span>
+            <div class="notification-list">
+              <div class="item shadow-lg" *ngIf="hasNotification" routerLink="leads/show">
+                <div>Lead Status: {{LeadNotification.lead.status}}</div>
+                <small class="text-muted">{{LeadNotification.lead.created_at | date}}</small>
+              </div>
+          
+            </div>
+          </a>
+        </li>
         <li class="nav-item">
           <a class="btn nav-link" routerLink="leads/reminder">
             <i class="far fa-envelope"></i>
             <span class="link-text">Messages</span>
             <!-- <span class="badge badge-pill badge-success">5</span> -->
-            <span class="nav-alert messages"></span>
-          </a>
-        </li>
-        <li class="nav-item" style="outline: 0px !important;">
-          <a class="btn nav-link">
-            <i class="far fa-bell"></i>
-            <span class="link-text">Notifications</span>
-            <!-- <span class="badge badge-pill ba dge-danger">3</span> -->
-            <!-- <span class="nav-alert notifications"></span> -->
+            <!-- <span class="nav-alert messages"></span> -->
           </a>
         </li>
         <li class="nav-item">

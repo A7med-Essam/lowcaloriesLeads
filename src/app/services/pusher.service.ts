@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Pusher from 'pusher-js';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiConfigService } from '../core/api-config.service';
 import { LocalService } from './local.service';
 @Injectable({
@@ -9,10 +9,13 @@ import { LocalService } from './local.service';
 export class PusherService {
   pusher: any;
   userId: number = 0;
+  pusherEventLeadData:BehaviorSubject<any> = new BehaviorSubject(null);
   constructor(
     private _ApiConfigService: ApiConfigService,
     private _LocalService: LocalService
-  ) {}
+  ) { 
+    this.newLead();
+  }
 
   firePusher(userLogout: boolean = false) {
     this.userId =
@@ -66,4 +69,15 @@ export class PusherService {
     };
     return this._ApiConfigService.postReq3(`agentUpdateStatus`, data);
   }
+
+  newLead(){
+    let pusher = new Pusher('2453154bb7ba5edf59c3', {
+      cluster: 'eu',
+    });
+    let channel = pusher.subscribe('lowcalories');
+    channel.bind('newLead', (data:any)=> {
+      this.pusherEventLeadData.next(data);
+    });
+  }
+
 }
