@@ -333,8 +333,6 @@ export class CreateLeadQuestionsComponent implements OnInit {
       suggest_answer: keys[0] == this.questions.find(e=>e.tpye == 'text').id ? keys[0].value:'',
     };
 
-    console.log(this.questions);
-
     return [
       {
         lead_question_id:1,
