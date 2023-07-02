@@ -252,6 +252,7 @@ export class CreateLeadQuestionsComponent implements OnInit {
         steps.push({ label: stepLabel , target:this.stepSize.toString()});
       }
       this.items = steps
+      this.setRepeatedCountAsDefaultAnswer();
     });
   }
 
@@ -367,5 +368,33 @@ export class CreateLeadQuestionsComponent implements OnInit {
     } else {
       this.activeIndex--
     }
+  }
+
+  setRepeatedCountAsDefaultAnswer() {
+    this.questions.forEach(q => {
+      const formControl = this.form.get(q.id.toString());
+  
+      if (q.type === 'text') {
+        formControl?.setValue(q.repeated_count);
+      } else if (q.type === 'date') {
+        formControl?.setValue(new Date(q.repeated_count));
+      } else {
+        let highestCount = 0;
+        let repeatedCountObj: any;
+  
+        q.answers.forEach((e: any) => {
+          if (e.repeated_count > highestCount) {
+            highestCount = e.repeated_count;
+            repeatedCountObj = e;
+          }
+        });
+  
+        if (q.type === 'check') {
+          formControl?.setValue([repeatedCountObj.id]);
+        } else {
+          formControl?.setValue(repeatedCountObj.id);
+        }
+      }
+    });
   }
 }
