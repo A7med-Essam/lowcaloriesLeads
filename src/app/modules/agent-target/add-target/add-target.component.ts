@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { DislikeService } from 'src/app/services/dislike.service';
 import { LocalService } from 'src/app/services/local.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-add-target',
@@ -22,7 +23,8 @@ export class AddTargetComponent implements OnInit {
     private renderer: Renderer2,
     private _AgentTargetService: AgentTargetService,
     private _Location: Location,
-    private _MessageService:MessageService
+    private _MessageService: MessageService,
+    private _SurveyService:SurveyService
   ) {}
 
   // goBack(): void {
@@ -34,6 +36,7 @@ export class AddTargetComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAgents()
     this.getInsertForm();
     this.getAgentBranches();
     this.renderer.addClass(document.body, 'h-side');
@@ -111,45 +114,46 @@ export class AddTargetComponent implements OnInit {
   cids: any[] = [];
   getCustomerCID() {
     if (this.insertForm.controls.client_number.valid) {
-      this._AgentTargetService.getSubDetails(this.insertForm.value.client_number).subscribe(res=>{
-        if (res.status) {
-        this.insertPaid_by(res)
-          this.insertForm.patchValue({
-            invoice_number: res.data.invoice_no,
-            date: new Date(res.data.delivery_starting_day),
-          });
-          this.insertStatus();
-          // 0501102001
-          // 0501157459
-        }
-        else{
-          this.insertForm.reset();
-        }
-      })
       this._AgentTargetService
-      .getCustomerCIDS(this.insertForm.value.client_number)
-      .subscribe((res) => {
-        this.cids = res.map((item: any) => item.cid);
-        this.insertForm.patchValue({
-          client_cid: null,
+        .getSubDetails(this.insertForm.value.client_number)
+        .subscribe((res) => {
+          if (res.status) {
+            this.insertPaid_by(res);
+            this.insertForm.patchValue({
+              invoice_number: res.data.invoice_no,
+              date: new Date(res.data.delivery_starting_day),
+            });
+            this.insertTeam();
+            this.insertStatus();
+          } else {
+            this.insertForm.reset();
+          }
         });
-        this.insertCustomerType(this.cids)
+      this._AgentTargetService
+        .getCustomerCIDS(this.insertForm.value.client_number)
+        .subscribe((res) => {
+          this.cids = res.map((item: any) => item.cid);
+          this.insertForm.patchValue({
+            client_cid: null,
+          });
+          this.insertCustomerType(this.cids);
         });
     }
   }
 
-  onNumberChange(e:any){
-    this._AgentTargetService.getSubDetails(e.value).subscribe(res=>{
-      this.insertCustomerType(this.cids)
+  onNumberChange(e: any) {
+    this._AgentTargetService.getSubDetails(e.value).subscribe((res) => {
+      this.insertCustomerType(this.cids);
       if (res.status) {
-        this.insertPaid_by(res)
+        this.insertPaid_by(res);
         this.insertStatus();
+        this.insertTeam();
         this.insertForm.patchValue({
           invoice_number: res.data.invoice_no,
           date: new Date(res.data.delivery_starting_day),
         });
       }
-    })
+    });
   }
 
   customerPhones: any[] = [];
@@ -178,24 +182,32 @@ export class AddTargetComponent implements OnInit {
     return contactNumbers;
   }
 
-  insertPaid_by(res:any){
+  insertPaid_by(res: any) {
     const subFrom = res.data.sub_from.toLowerCase();
     const programId = Number(res.data.program_id);
     let paidValue;
     if (programId < 50) {
-      if (subFrom.includes("web")) {
-        paidValue = this.paid_by.find(e => e.name.toLowerCase().includes("web"));
-      } else if (subFrom.includes("mobile")) {
-        paidValue = this.paid_by.find(e => e.name.toLowerCase().includes("mobile"));
+      if (subFrom.includes('web')) {
+        paidValue = this.paid_by.find((e) =>
+          e.name.toLowerCase().includes('web')
+        );
+      } else if (subFrom.includes('mobile')) {
+        paidValue = this.paid_by.find((e) =>
+          e.name.toLowerCase().includes('mobile')
+        );
       }
     } else if (programId === 50) {
-      if (subFrom.includes("link")) {
-        paidValue = this.paid_by.find(e => e.name.toLowerCase() == "payment link");
-      } else if (subFrom.includes("exchange")) {
-        paidValue = this.paid_by.find(e => e.name.toLowerCase().includes("payment link exchange"));
+      if (subFrom.includes('link')) {
+        paidValue = this.paid_by.find(
+          (e) => e.name.toLowerCase() == 'payment link'
+        );
+      } else if (subFrom.includes('exchange')) {
+        paidValue = this.paid_by.find((e) =>
+          e.name.toLowerCase().includes('payment link exchange')
+        );
       }
     } else {
-      paidValue = this.paid_by.find(e => Number(e.flag_id) === programId);
+      paidValue = this.paid_by.find((e) => Number(e.flag_id) === programId);
     }
     if (paidValue) {
       this.insertForm.patchValue({
@@ -205,32 +217,46 @@ export class AddTargetComponent implements OnInit {
 
     if (programId == 60 || programId == 61) {
       this.insertForm.patchValue({
-        type: "Clinic Reservation",
+        type: 'Clinic Reservation',
       });
     } else {
       this.insertForm.patchValue({
-        type: "Subscription",
+        type: 'Subscription',
       });
     }
-
   }
 
-  insertCustomerType(cids:number[]){
+  insertCustomerType(cids: number[]) {
     if (cids?.length > 1) {
       this.insertForm.patchValue({
-        customer_type: "Re-New",
+        customer_type: 'Re-New',
       });
-    }
-    else{
+    } else {
       this.insertForm.patchValue({
-        customer_type: "New",
+        customer_type: 'New',
       });
     }
   }
 
-  insertStatus(){
+  insertStatus() {
     this.insertForm.patchValue({
-      status: "Active",
+      status: 'Active',
+    });
+  }
+
+  insertTeam(){
+    this.insertForm.patchValue({
+      team: this.currentUser.team,
+    });
+  }
+
+  currentUser: any;
+  getAgents() {
+    this._SurveyService.getAllAgents().subscribe({
+      next: (res) => {
+        const [user] = res.data.filter((e:any)=> e?.id == this._LocalService.getJsonValue('userInfo_oldLowCalories').id);
+        this.currentUser = user
+      },
     });
   }
 }
