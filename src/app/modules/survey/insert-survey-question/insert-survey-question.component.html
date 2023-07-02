@@ -1,5 +1,5 @@
 <div class="container">
-    <form [formGroup]="insertForm" (ngSubmit)='insertRow()'>
+    <form [formGroup]="insertForm" (ngSubmit)='insertRow(insertForm)'>
         <div class="row mx-0">
             <div class="col-12 my-3">
                 <label for="">Input Type</label>
@@ -17,6 +17,13 @@
                 <input type="text" pInputText ngClass="w-100" formControlName='question_ar' />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('question_ar')?.touched &&
                 insertForm.get('question_ar')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Is Required?</label>
+                <p-dropdown [options]="validations"  formControlName='required' styleClass="w-100" placeholder="Select Validation">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('required')?.touched &&
+                insertForm.get('required')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100">Insert</button>

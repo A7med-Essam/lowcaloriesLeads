@@ -20,6 +20,9 @@ export class UpdateSurveyQuestionComponent implements OnInit {
     {name:'Dropdown List',value:'drop'},
     {name:'Date',value:'date'},
   ];
+  validations:string[] = [
+    'yes','no'
+  ]
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
@@ -35,12 +38,14 @@ export class UpdateSurveyQuestionComponent implements OnInit {
     Object.keys(object).forEach((key) => formData.append(key, object[key]));
     return formData;
   }
-  update() {
-    this._SurveyService.updateRow(this.updateForm.value).subscribe((res) => {
-      this._Router.navigate(['leads'], {
-        relativeTo: this._ActivatedRoute.parent?.parent,
+  update(form:FormGroup) {
+    if (form.valid) {
+      this._SurveyService.updateRow(form.value).subscribe((res) => {
+        this._Router.navigate(['leads'], {
+          relativeTo: this._ActivatedRoute.parent?.parent,
+        });
       });
-    });
+    }
   }
 
   showDetails() {
@@ -68,6 +73,7 @@ export class UpdateSurveyQuestionComponent implements OnInit {
         Validators.required,
       ]),
       type: new FormControl(data?.data.type, [Validators.required]),
+      required: new FormControl(data?.data.required, [Validators.required]),
     });
   }
   

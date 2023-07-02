@@ -1,5 +1,5 @@
 <div class="container">
-    <form [formGroup]="updateForm" (ngSubmit)='update()'>
+    <form [formGroup]="updateForm" (ngSubmit)='update(updateForm)'>
         <div class="row mx-0">
             <div class="col-12 my-3">
                 <label for="">Input Type</label>
@@ -17,6 +17,13 @@
                 <input type="text" pInputText ngClass="w-100" formControlName='question_ar' />
                 <small class="text-danger ms-1" *ngIf="updateForm.get('question_ar')?.touched &&
                 updateForm.get('question_ar')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Is Required?</label>
+                <p-dropdown [options]="validations"  formControlName='required' styleClass="w-100" placeholder="Select Validation">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('required')?.touched &&
+                updateForm.get('required')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100">Update</button>

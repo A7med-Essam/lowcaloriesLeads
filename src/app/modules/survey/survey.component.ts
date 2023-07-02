@@ -172,6 +172,7 @@ export class SurveyComponent implements OnInit {
     { name: 'question_ar', status: true },
     { name: 'type', status: true },
     { name: 'answers_count', status: true },
+    { name: 'Is Required?', status: true },
   ];
 
   getFilterColumns() {

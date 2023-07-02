@@ -113,33 +113,40 @@ export class AddTargetComponent implements OnInit {
     if (this.insertForm.controls.client_number.valid) {
       this._AgentTargetService.getSubDetails(this.insertForm.value.client_number).subscribe(res=>{
         if (res.status) {
+        this.insertPaid_by(res)
           this.insertForm.patchValue({
             invoice_number: res.data.invoice_no,
             date: new Date(res.data.delivery_starting_day),
-            // type: res.data.type,
-            // paid_by: res.data.paid_by,
           });
+          this.insertStatus();
+          // 0501102001
+          // 0501157459
+        }
+        else{
+          this.insertForm.reset();
         }
       })
       this._AgentTargetService
-        .getCustomerCIDS(this.insertForm.value.client_number)
-        .subscribe((res) => {
-          this.cids = res.map((item: any) => item.cid);
-          this.insertForm.patchValue({
-            client_cid: null,
-          });
+      .getCustomerCIDS(this.insertForm.value.client_number)
+      .subscribe((res) => {
+        this.cids = res.map((item: any) => item.cid);
+        this.insertForm.patchValue({
+          client_cid: null,
+        });
+        this.insertCustomerType(this.cids)
         });
     }
   }
 
   onNumberChange(e:any){
     this._AgentTargetService.getSubDetails(e.value).subscribe(res=>{
+      this.insertCustomerType(this.cids)
       if (res.status) {
+        this.insertPaid_by(res)
+        this.insertStatus();
         this.insertForm.patchValue({
           invoice_number: res.data.invoice_no,
           date: new Date(res.data.delivery_starting_day),
-          // type: res.data.type,
-          // paid_by: res.data.paid_by,
         });
       }
     })
@@ -169,5 +176,61 @@ export class AddTargetComponent implements OnInit {
       contactNumbers.push(customer.CustomerPhone);
     }
     return contactNumbers;
+  }
+
+  insertPaid_by(res:any){
+    const subFrom = res.data.sub_from.toLowerCase();
+    const programId = Number(res.data.program_id);
+    let paidValue;
+    if (programId < 50) {
+      if (subFrom.includes("web")) {
+        paidValue = this.paid_by.find(e => e.name.toLowerCase().includes("web"));
+      } else if (subFrom.includes("mobile")) {
+        paidValue = this.paid_by.find(e => e.name.toLowerCase().includes("mobile"));
+      }
+    } else if (programId === 50) {
+      if (subFrom.includes("link")) {
+        paidValue = this.paid_by.find(e => e.name.toLowerCase() == "payment link");
+      } else if (subFrom.includes("exchange")) {
+        paidValue = this.paid_by.find(e => e.name.toLowerCase().includes("payment link exchange"));
+      }
+    } else {
+      paidValue = this.paid_by.find(e => Number(e.flag_id) === programId);
+    }
+    if (paidValue) {
+      this.insertForm.patchValue({
+        paid_by: paidValue.name,
+      });
+    }
+
+    if (programId == 60 || programId == 61) {
+      this.insertForm.patchValue({
+        type: "Clinic Reservation",
+      });
+    } else {
+      this.insertForm.patchValue({
+        type: "Subscription",
+      });
+    }
+
+  }
+
+  insertCustomerType(cids:number[]){
+    if (cids?.length > 1) {
+      this.insertForm.patchValue({
+        customer_type: "Re-New",
+      });
+    }
+    else{
+      this.insertForm.patchValue({
+        customer_type: "New",
+      });
+    }
+  }
+
+  insertStatus(){
+    this.insertForm.patchValue({
+      status: "Active",
+    });
   }
 }

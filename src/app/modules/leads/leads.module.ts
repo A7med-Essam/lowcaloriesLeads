@@ -20,6 +20,8 @@ import { CreateLeadQuestionsComponent } from './create-lead-questions/create-lea
 import { ChipsModule } from 'primeng/chips';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { AnswerLeadComponent } from './answer-lead/answer-lead.component';
+import { StepsModule } from 'primeng/steps';
+import { RadioButtonModule } from 'primeng/radiobutton';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   CheckboxModule,
@@ -31,7 +33,9 @@ const APP_PRIMENG_MODULE = [
   CalendarModule,
   MultiSelectModule,
   ChipsModule,
-  InputTextareaModule
+  InputTextareaModule,
+  StepsModule,
+  RadioButtonModule,
 ];
 
 @NgModule({

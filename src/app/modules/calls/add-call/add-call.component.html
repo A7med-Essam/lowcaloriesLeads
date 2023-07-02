@@ -7,35 +7,35 @@
         <hr>
         <form [formGroup]="insertForm" (ngSubmit)='insert(insertForm)'>
             <div class="row mx-0">
-                <div class="col-lg-4 col-md-6 my-3">
+                <div class="col-lg-4 col-md-6 my-3" *ngIf="insertForm.getRawValue().subscription_id || insertForm.getRawValue().subscription_id == 0">
                     <label for="">Remaining Days</label>
                     <input type="text" pInputText ngClass="w-100 disabled" formControlName='subscription_id' readonly />
                 </div>
-                <div class="col-lg-4 col-md-6 my-3">
+                <div class="col-lg-4 col-md-6 my-3" *ngIf="insertForm.getRawValue().branch">
                     <label for="">branch</label>
                     <input type="text" pInputText ngClass="w-100 disabled" formControlName='branch' readonly />
                 </div>
-                <div class="col-lg-4 col-md-6 my-3">
+                <div class="col-lg-4 col-md-6 my-3" *ngIf="insertForm.getRawValue().customer_name">
                     <label for="">customer_name</label>
                     <input type="text" pInputText ngClass="w-100 disabled" formControlName='customer_name' readonly />
                 </div>
-                <div class="col-lg-4 col-md-6 my-3">
+                <div class="col-lg-4 col-md-6 my-3" *ngIf="insertForm.getRawValue().customer_mobile">
                     <label for="">customer_phone</label>
                     <input type="text" pInputText ngClass="w-100 disabled" formControlName='customer_mobile' readonly />
                 </div>
-                <div class="col-lg-4 col-md-6 my-3">
+                <div class="col-lg-4 col-md-6 my-3" *ngIf="insertForm.getRawValue().customer_phone">
                     <label for="">customer_mobile</label>
                     <input type="text" pInputText ngClass="w-100 disabled" formControlName='customer_phone' readonly />
                 </div>
-                <div class="col-lg-4 col-md-6 my-3">
+                <div class="col-lg-4 col-md-6 my-3" *ngIf="insertForm.getRawValue().plan">
                     <label for="">plan</label>
                     <input type="text" pInputText ngClass="w-100 disabled" formControlName='plan' readonly />
                 </div>
-                <div class="col-lg-4 col-md-6 my-3">
+                <div class="col-lg-4 col-md-6 my-3" *ngIf="insertForm.getRawValue().date">
                     <label for="">date</label>
                     <input type="text" pInputText ngClass="w-100 disabled" formControlName='date' readonly />
                 </div>
-                <div class="col-lg-4 col-md-6 my-3">
+                <div class="col-lg-4 col-md-6 my-3" *ngIf="insertForm.getRawValue().cid">
                     <label for="">cid</label>
                     <input type="text" pInputText ngClass="w-100 disabled" formControlName='cid' readonly />
                 </div>

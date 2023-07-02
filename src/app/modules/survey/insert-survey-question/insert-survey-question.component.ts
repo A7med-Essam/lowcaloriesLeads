@@ -17,6 +17,9 @@ export class InsertSurveyQuestionComponent implements OnInit {
     {name:'Dropdown List',value:'drop'},
     {name:'Date',value:'date'},
   ];
+  validations:string[] = [
+    'yes','no'
+  ]
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
@@ -27,12 +30,14 @@ export class InsertSurveyQuestionComponent implements OnInit {
     this.getInsertForm();
   }
 
-  insertRow() {
-    this._SurveyService.insertRow(this.insertForm.value).subscribe((res) => {
-      this._Router.navigate(['leads'], {
-        relativeTo: this._ActivatedRoute.parent?.parent,
+  insertRow(form:FormGroup) {
+    if (form.valid) {
+      this._SurveyService.insertRow(form.value).subscribe((res) => {
+        this._Router.navigate(['leads'], {
+          relativeTo: this._ActivatedRoute.parent?.parent,
+        });
       });
-    });
+    }
   }
 
   getInsertForm() {
@@ -40,6 +45,7 @@ export class InsertSurveyQuestionComponent implements OnInit {
       question: new FormControl(null, [Validators.required]),
       question_ar: new FormControl(null, [Validators.required]),
       type: new FormControl(null, [Validators.required]),
+      required: new FormControl(null, [Validators.required]),
     });
   }
 

@@ -60,7 +60,14 @@
                         <source [src]="call.voice" type="audio/mpeg">
                     </audio>
                 </td> -->
-                <td class="text-center" *ngIf="columns[10].status">{{call.agent_uploaded_name}}</td>
+                <td class="text-center" *ngIf="columns[10].status">
+                    <span *ngIf="call.agent_uploaded_name">
+                        {{call.agent_uploaded_name}}
+                    </span>
+                    <span *ngIf="!call.agent_uploaded_name">
+                        None
+                    </span>
+                </td>
                 <td class="text-center" *ngIf="columns[11].status">{{call.created_at | date}}</td>
                 <td class="text-center" *ngIf="columns[12].status">
                     <span *ngIf="call.call_users.length">
@@ -68,6 +75,7 @@
                             {{user.user.name}}
                         </small>
                     </span>
+                    <span *ngIf="call.call_users.length == 0">NOT ASSIGNED</span>
                 </td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"

@@ -39,7 +39,7 @@
                 <th class="text-center"*ngIf="columns[11].status">status</th>
                 <th class="text-center"*ngIf="columns[12].status">invoice_number</th>
                 <th class="text-center"*ngIf="columns[13].status">created_at</th>
-                <th class="text-center">Percent</th>
+                <!-- <th class="text-center">Percent</th> -->
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -62,7 +62,7 @@
                 <td class="text-center" *ngIf="columns[11].status">{{agent.status}}</td>
                 <td class="text-center" *ngIf="columns[12].status">{{agent.invoice_number}}</td>
                 <td class="text-center" *ngIf="columns[13].status">{{agent.created_at}}</td>
-                <td class="text-center">100%</td>
+                <!-- <td class="text-center">100%</td> -->
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
                         class="m-1 p-button-sm"></button>

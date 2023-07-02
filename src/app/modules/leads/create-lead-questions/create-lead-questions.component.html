@@ -1,4 +1,4 @@
-<div class="stepsdemo-content">
+<!-- <div class="stepsdemo-content">
     <p-card>
         <ng-template pTemplate="title">
             Replay Lead Questions
@@ -51,4 +51,137 @@
             </div>
         </ng-template>
     </p-card>
+</div> -->
+
+
+<!-- <div class="stepsdemo-content">
+    <p-card>
+        <ng-template pTemplate="title">
+            Replay Lead Questions
+        </ng-template>
+        <ng-template pTemplate="subtitle">
+            Answer Questions
+        </ng-template>
+        <ng-template pTemplate="content">
+            <div class="mx-4">
+                <p-steps [model]="items" [readonly]="true" [activeIndex]="activeIndex"></p-steps>
+                <div *ngFor="let survey of questions|slice:activeIndex*stepSize:stepSize*(activeIndex+1); let i = index" class="mt-4">
+                    <h6>{{i+1}} - {{survey?.question}}</h6>
+                    <div class="d-flex flex-wrap questions">
+                        <div *ngFor="let answer of survey.answers;let j = index">
+                            <div *ngIf="survey?.type == 'radio'" class="mx-3">
+                                <input type="radio" [name]="'surveyRadio'+i" [value]="answer?.id" [id]="'radio'+i+j"
+                                    (click)="setRadioAnswer(answer.id,survey.id,'')">
+                                <label [for]="'radio'+i+j" class="mx-1">{{answer?.type_value | titlecase}}</label>
+                            </div>
+                            <div *ngIf="survey?.type == 'check'" class="mx-3">
+                                <p-checkbox [value]="{questionId:survey.id,answerId:answer.id}"
+                                    [label]="answer.type_value | titlecase" [(ngModel)]="selectedValues"
+                                    (onChange)="setCheckAnswer()">
+                                </p-checkbox>
+                            </div>
+                        </div>
+                        <div *ngIf="survey?.type == 'drop'" class="mx-3 w-100">
+                            <p-dropdown [options]="survey.answers" #dropdownQuestion optionLabel="type_value"
+                                optionValue="id" [filter]="true" styleClass="w-100"
+                                (click)="setDropdownAnswer(dropdownQuestion.value,survey.id,'')"
+                                placeholder="Select an answer"></p-dropdown>
+                        </div>
+                        <div *ngIf="survey?.type == 'text'" class="mx-3 w-100">
+                            <input type="text" class="w-100 py-2" pInputText #surveyText
+                                (keyup)="setTextAnswer(surveyText, survey)">
+                        </div>
+                        <div *ngIf="survey?.type == 'date'" class="mx-3 w-100">
+                            <p-calendar [readonlyInput]="true" ngClass="w-100" #calendar appendTo="body"
+                                (onSelect)="setDateAnswer(calendar.value,survey.id)"></p-calendar>
+                        </div>
+                    </div>
+                    <hr style="height: 0.5px;" class="my-4">
+                </div>
+
+                <div class="d-flex" [ngClass]="{'justify-content-end': activeIndex==0,'justify-content-between': activeIndex>0}">
+                    <button class="btn btn-success px-4" *ngIf="activeIndex != 0" (click)="changeIndex(false)">
+                        <b>Back</b>
+                    </button>
+
+                    <button class="btn btn-success px-4" *ngIf="activeIndex == maxIndex" [disabled]="!createButtonState"
+                        (click)="createLead()"><b>Create</b>
+                    </button>
+
+                    <button class="btn btn-success px-4" *ngIf="activeIndex < maxIndex" (click)="changeIndex(true)">
+                        <b>Next</b>
+                    </button>
+
+                </div>
+            </div>
+        </ng-template>
+    </p-card>
+</div> -->
+
+<div *ngIf="loadingQuestions" class="text-center">
+    <i class="fas fa-spinner fa-spin fa-4x text-success"></i>
+</div>
+<div class="bg-white p-5 rounded">
+    <p-steps [model]="items" [readonly]="true" [activeIndex]="activeIndex"></p-steps>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div *ngFor="let question of questions |slice:activeIndex*stepSize:stepSize*(activeIndex+1)" class="my-4">
+            <label for="{{question.id}}">{{question.question}}</label>
+            <div [ngSwitch]="question.type">
+                <div *ngSwitchCase="'text'">
+                    <input type="text" class="w-100 py-2" pInputText [formControlName]="question.id">
+                </div>
+
+                <div *ngSwitchCase="'drop'">
+                    <p-dropdown [options]="question.answers" optionLabel="type_value" [formControlName]="question.id"
+                        optionValue="id" [filter]="true" styleClass="w-100" placeholder="Select an answer">
+                    </p-dropdown>
+                </div>
+
+                <ng-container *ngSwitchCase="'radio'">
+                    <div class="d-flex flex-wrap gap-3">
+                        <div *ngFor="let option of question.answers">
+                            <div class="flex align-items-center">
+                                <p-radioButton [formControlName]="question.id" [value]="option.id"
+                                    [inputId]="option.id">
+                                </p-radioButton>
+                                <label class="mx-1" [for]="option.id">{{option.type_value | titlecase}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngSwitchCase="'check'">
+                    <div class="d-flex flex-wrap gap-3">
+                        <p-checkbox *ngFor="let option of question.answers" #elm  [formControlName]="question.id"
+                            (onChange)="updateCheckboxValue(question.id,elm)" [value]="option.id"
+                            [label]="option.type_value | titlecase">
+                        </p-checkbox>
+                    </div>
+                </ng-container>
+
+                <div *ngSwitchCase="'date'">
+                    <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" [formControlName]="question.id">
+                    </p-calendar>
+                </div>
+            </div>
+            <small class="text-danger ms-1" *ngIf="form.get(question.id.toString())?.touched &&
+        form.get(question.id.toString())?.hasError('required')">Please provide a valid answer.</small>
+        </div>
+        <div class="d-flex"
+            [ngClass]="{'justify-content-end': activeIndex==0,'justify-content-between': activeIndex>0}">
+            <button type="button" class="btn btn-success px-4" *ngIf="activeIndex != 0" (click)="changeIndex(false)">
+                <b>Back</b>
+            </button>
+
+            <button type="submit" class="btn btn-success px-4" *ngIf="activeIndex == maxIndex && !loadingQuestions"
+                [disabled]="form.invalid">
+                <b>Create</b>
+            </button>
+
+            <button type="button" class="btn btn-success px-4" *ngIf="activeIndex < maxIndex"
+                (click)="changeIndex(true)">
+                <b>Next</b>
+            </button>
+        </div>
+    </form>
 </div>

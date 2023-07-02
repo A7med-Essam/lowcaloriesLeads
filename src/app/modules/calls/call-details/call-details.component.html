@@ -56,7 +56,14 @@
                                         </tr>
                                         <tr>
                                             <td>agent_uploaded</td>
-                                            <td>{{call?.agent_uploaded_name}}</td>
+                                            <td>
+                                                <span *ngIf="call.agent_uploaded_name">
+                                                    {{call?.agent_uploaded_name}}
+                                                </span>
+                                                <span *ngIf="!call?.agent_uploaded_name">
+                                                    None
+                                                </span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>created_at</td>
@@ -70,6 +77,7 @@
                                                         {{user?.user?.name}}
                                                     </small>
                                                 </span>
+                                                <span *ngIf="call.call_users.length == 0">NOT ASSIGNED</span>
                                             </td>
                                         </tr>
                                         <tr>

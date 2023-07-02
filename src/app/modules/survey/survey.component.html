@@ -26,6 +26,7 @@
                 <th class="text-center" *ngIf="columns[2].status">Label ar</th>
                 <th class="text-center" *ngIf="columns[3].status">Input Type</th>
                 <th class="text-center" *ngIf="columns[4].status">Value Count</th>
+                <th class="text-center" *ngIf="columns[5].status">Is Required?</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -47,6 +48,7 @@
                 </td>
                 <td class="text-center" *ngIf="columns[3].status">{{survey?.type}}</td>
                 <td class="text-center" *ngIf="columns[4].status">{{survey?.answers.length}}</td>
+                <td class="text-center" *ngIf="columns[5].status">{{survey?.required}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-trash" (click)="confirm(survey?.id)"
                         class="m-1 p-button-danger p-button-sm"></button>
@@ -114,6 +116,10 @@
         <div class="field-checkbox my-3">
             <p-checkbox name="group1" value="answers_count" [(ngModel)]="selectedColumns" inputId="c5"></p-checkbox>
             <label class="mx-3" for="c5">Input Value Count</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" value="required" [(ngModel)]="selectedColumns" inputId="c6"></p-checkbox>
+            <label class="mx-3" for="c6">Is Required?</label>
         </div>
         <div class="field-checkbox my-3">
             <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
