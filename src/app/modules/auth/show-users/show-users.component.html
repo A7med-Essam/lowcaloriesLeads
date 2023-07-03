@@ -25,9 +25,11 @@
         <td>{{user.team}}</td>
         <td>{{user.role_name}}</td>
         <td>{{user.status}}</td>
-        <td>
-          <div *ngFor="let permission of user.permissions">
-            {{permission?.permission}}
+        <td [width]="750">
+          <div class="row">
+              <div class="col-4" *ngFor="let permission of user.permissions">
+                {{permission?.permission}}
+              </div>
           </div>
         </td>
         <td>

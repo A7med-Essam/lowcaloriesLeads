@@ -12,6 +12,7 @@ import autoTable from 'jspdf-autotable';
 import { RefundService } from 'src/app/services/refund.service';
 import { Checkbox } from 'primeng/checkbox';
 import { LocalService } from 'src/app/services/local.service';
+import { GuardService } from 'src/app/services/guard.service';
 
 @Component({
   selector: 'app-show-refund',
@@ -25,9 +26,10 @@ export class ShowRefundComponent implements OnInit {
     private _Router: Router,
     private _RefundService: RefundService,
     private _DislikeService: DislikeService,
-    private _LocalService:LocalService
+    private _LocalService:LocalService,
+    private _GuardService:GuardService
   ) {
-    this.role = this._LocalService.getJsonValue("userInfo_oldLowCalories").role
+    this.role = this._GuardService.getUser().role_name
   }
 
   exportAsPDF() {
