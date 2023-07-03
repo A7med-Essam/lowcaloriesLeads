@@ -16,7 +16,7 @@ interface IUser {
   providedIn: 'root',
 })
 export class AuthService {
-  currentUser: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  currentUser: BehaviorSubject<User|null> = new BehaviorSubject<User|null>(null);
   returnUrl!:string;
   constructor(
     private _Router: Router,
@@ -30,36 +30,48 @@ export class AuthService {
     }
   }
 
-  signIn(signInData: any): Observable<any> {
-    return this._ApiConfigService.postReq('loginAgents', signInData);
+  signIn(signInData: {email:string,password:string}): Observable<{
+    status:  number;
+    message: string;
+    data:    User;
+  }> {
+    return this._ApiConfigService.postReq3('loginAgents', signInData);
   }
 
-  saveUser(data: any) {
-    let userData: any = {
-      id: data?.agent_id,
-      role: data?.role,
-    };
+  saveUser(data: User) {
+    let userData: User = data
     this._LocalService.setJsonValue('userInfo_oldLowCalories', userData);
     this.currentUser.next(userData);
   }
-
-  // saveUser2(data: any) {
-  //   let userData: any = {
-  //     name: data?.name,
-  //     country: 'all',
-  //     email: data?.email,
-  //     id: data?.id,
-  //     role: data?.my_role,
-  //     permissions: data?.permissions ? data?.permissions : [],
-  //     token: data?.access_token,
-  //   };
-  //   this._LocalService.setJsonValue('userInfo_oldLowCalories', userData);
-  //   this.currentUser.next(userData);
-  // }
 
   logOut() {
     this._Router.navigate(['/login']);
     this.currentUser.next(null);
     this._LocalService.removeItem('userInfo_oldLowCalories');
   }
+}
+
+export interface User {
+  id:           number;
+  status:       string;
+  team:         string;
+  branch_id:    number;
+  role:         number;
+  role_name:    string;
+  agent_id:     number;
+  name:         string;
+  email:        string;
+  agent_email:  string;
+  created_at:   Date;
+  updated_at:   Date;
+  access_token: string;
+  permissions:  Permission[];
+}
+
+export interface Permission {
+  id:         number;
+  agent_id:   number;
+  permission: string;
+  created_at: Date;
+  updated_at: Date;
 }

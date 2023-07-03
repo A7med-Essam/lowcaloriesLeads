@@ -83,14 +83,14 @@ export class SurveyComponent implements OnInit {
 
   updateRow(id: number) {
     this._SurveyService.surveyQuestionsId.next(id);
-    this._Router.navigate(['update-question'], {
+    this._Router.navigate(['../update-question'], {
       relativeTo: this._ActivatedRoute,
     });
   }
 
   insertAnswer(id: number) {
     this._SurveyService.surveyAnswers.next(id);
-    this._Router.navigate(['insert-answer'], {
+    this._Router.navigate(['../insert-answer'], {
       relativeTo: this._ActivatedRoute,
     });
   }
@@ -103,7 +103,7 @@ export class SurveyComponent implements OnInit {
 
   showRow(e: number) {
     this._SurveyService.surveyQuestionsId.next(e);
-    this._Router.navigate(['details'], { relativeTo: this._ActivatedRoute });
+    this._Router.navigate(['../details'], { relativeTo: this._ActivatedRoute });
   }
 
   confirm(id: any) {
@@ -172,7 +172,7 @@ export class SurveyComponent implements OnInit {
     { name: 'question_ar', status: true },
     { name: 'type', status: true },
     { name: 'answers_count', status: true },
-    { name: 'Is Required?', status: true },
+    { name: 'is_Required', status: true },
   ];
 
   getFilterColumns() {
@@ -308,8 +308,8 @@ export class SurveyComponent implements OnInit {
 
   showRowFiltered(e: number) {
     this._SurveyService.filterId.next(e);
-    this._Router.navigate(['filter-details'], {
-      relativeTo: this._ActivatedRoute,
+    this._Router.navigate(['./filter-details'], {
+      relativeTo: this._ActivatedRoute.parent,
     });
   }
 

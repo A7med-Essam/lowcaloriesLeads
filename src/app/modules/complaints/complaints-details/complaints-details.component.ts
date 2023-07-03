@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { ComplaintsService } from 'src/app/services/complaints.service';
   templateUrl: './complaints-details.component.html',
   styleUrls: ['./complaints-details.component.scss']
 })
-export class ComplaintsDetailsComponent implements OnInit {
+export class ComplaintsDetailsComponent implements OnInit, OnDestroy {
   complaint: any;
 
   constructor(

@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyService } from 'src/app/services/survey.service';
-// import { LayersService } from 'src/app/shared/services/eg/dashboard/layers.service';
-// import { AppService } from 'src/app/shared/services/app.service';
-// import { SurveyService } from 'src/app/shared/services/eg/dashboard/survey.service';
 
 @Component({
   selector: 'app-update-survey-question',
@@ -41,8 +38,8 @@ export class UpdateSurveyQuestionComponent implements OnInit {
   update(form:FormGroup) {
     if (form.valid) {
       this._SurveyService.updateRow(form.value).subscribe((res) => {
-        this._Router.navigate(['leads'], {
-          relativeTo: this._ActivatedRoute.parent?.parent,
+        this._Router.navigate(['show'], {
+          relativeTo: this._ActivatedRoute.parent,
         });
       });
     }
@@ -58,8 +55,8 @@ export class UpdateSurveyQuestionComponent implements OnInit {
           this.getUpdateForm(res);
         });
       } else {
-        this._Router.navigate(['leads'], {
-          relativeTo: this._ActivatedRoute.parent?.parent,
+        this._Router.navigate(['show'], {
+          relativeTo: this._ActivatedRoute.parent,
         });
       }
     });

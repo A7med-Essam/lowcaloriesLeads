@@ -3,9 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { Error404Component } from './components/error404/error404.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { AccountingGuard } from './core/accounting.guard';
-import { AuthGuard } from './core/auth.guard';
-import { SuperAdminGuard } from './core/super-admin.guard';
+import { PermissionGuard } from './core/permission.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -13,55 +11,95 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard],
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ["show_home"],
+    },
   },
   {
-    path: 'dashboard',
+    path: 'users',
+    loadChildren: () =>
+      import('./modules/auth/auth.module').then((m) => m.AuthModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: [""],
+    },
+  },
+  {
+    path: 'leadControls',
     loadChildren: () =>
       import('./modules/survey/survey.module').then((m) => m.SurveyModule),
-    canActivate: [AuthGuard, SuperAdminGuard],
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["show_inputLeads"],
+    },
   },
   {
     path: 'leads',
     loadChildren: () =>
       import('./modules/leads/leads.module').then((m) => m.LeadsModule),
-    canActivate: [AuthGuard,AccountingGuard],
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["show_leads"],
+    },
   },
   {
     path: 'dislike',
     loadChildren: () =>
       import('./modules/dislike/dislike.module').then((m) => m.DislikeModule),
-    canActivate: [AuthGuard,AccountingGuard],
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["show_dislike"],
+    },
   },
   {
     path: 'clinic',
     loadChildren: () =>
       import('./modules/clinic/clinic.module').then((m) => m.ClinicModule),
-    canActivate: [AuthGuard,AccountingGuard],
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["create_clinic"],
+    },
   },
   {
-    path: 'agent',
+    path: 'target',
     loadChildren: () =>
-      import('./modules/agent-target/agent-target.module').then((m) => m.AgentTargetModule),
-    canActivate: [AuthGuard,AccountingGuard],
+      import('./modules/agent-target/agent-target.module').then(
+        (m) => m.AgentTargetModule
+      ),
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["show_target"],
+    },
   },
   {
     path: 'complaints',
     loadChildren: () =>
-      import('./modules/complaints/complaints.module').then((m) => m.ComplaintsModule),
-    canActivate: [AuthGuard,AccountingGuard],
+      import('./modules/complaints/complaints.module').then(
+        (m) => m.ComplaintsModule
+      ),
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["show_complaints"],
+    },
   },
   {
     path: 'refund',
     loadChildren: () =>
       import('./modules/refund/refund.module').then((m) => m.RefundModule),
-    canActivate: [AuthGuard],
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["show_refund"],
+    },
   },
   {
     path: 'calls',
     loadChildren: () =>
       import('./modules/calls/calls.module').then((m) => m.CallsModule),
-    canActivate: [AuthGuard,AccountingGuard],
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["show_calls"],
+    },
   },
   { path: '**', component: Error404Component },
 ];

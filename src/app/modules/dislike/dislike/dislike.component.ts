@@ -10,7 +10,7 @@ import { LocalService } from 'src/app/services/local.service';
   templateUrl: './dislike.component.html',
   styleUrls: ['./dislike.component.scss'],
 })
-export class DislikeComponent implements OnInit, OnDestroy {
+export class DislikeComponent implements OnInit {
   customerInfo: any[] = [];
   branches: any[] = [];
   meals: any[] = [];
@@ -36,15 +36,15 @@ export class DislikeComponent implements OnInit, OnDestroy {
     // }
   }
 
-  ngOnDestroy(): void {
-    this.renderer.removeClass(document.body, 'h-side');
-  }
+  // ngOnDestroy(): void {
+    // this.renderer.removeClass(document.body, 'h-side');
+  // }
   ngOnInit(): void {
     this.getMeals();
     this.getReasons();
     this.getAgentBranches();
     setTimeout(() => {}, 15000);
-    this.renderer.addClass(document.body, 'h-side');
+    // this.renderer.addClass(document.body, 'h-side');
   }
 
   addOption(el: HTMLInputElement) {

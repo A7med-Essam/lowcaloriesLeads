@@ -1,52 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { LocalService } from 'src/app/services/local.service';
+import { GuardService } from 'src/app/services/guard.service';
 import { PusherService } from 'src/app/services/pusher.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  isLogin:boolean = false;
-  hasNotification:boolean = false;
-  audioPlayer!: HTMLAudioElement;
-  LeadNotification:any = null;
+  constructor(
+    private _AppService: AppService,
+    private _GuardService: GuardService,
+    private _AuthService: AuthService,
+    private _PusherService: PusherService
+  ) {}
 
-  constructor(private _AppService: AppService, private _AuthService:AuthService,
-    private _PusherService:PusherService,
-    private _LocalService:LocalService
-    ) { 
-    _AuthService.currentUser.subscribe((data)=>{
-      if(data != null)
-      {
-        this.isLogin = true;
-        this._PusherService.pusherEventLeadData.subscribe(res=>{
-          this.LeadNotification = res
-          if (res) {
-            res.agent_assigned_ids = res.agent_assigned_ids.map((e:string[])=>{
-              return Number(e)
-            })
-            this.hasNotification = res.agent_assigned_ids.includes(Number(this._LocalService.getJsonValue('userInfo_oldLowCalories')?.id))
-            this.audioPlayer = new Audio();
-            this.audioPlayer.src = '../../../assets/notification.mp3';
-            this.audioPlayer.play();
-          }
-        })
+  ngOnInit() {
+    this._AuthService.currentUser.subscribe((data) => {
+      if (data != null) {
+        this.getNotifications();
       }
-      else
-      {
-        this.isLogin = false;
-      }
-    })
+    });
   }
 
   isCollapsed = true;
-  leadData:any;
-  assignedUsersLeads:number[]=[]
-  ngOnInit() {}
 
   toggleSidebarPin() {
     this._AppService.toggleSidebarPin();
@@ -54,8 +33,44 @@ export class NavbarComponent implements OnInit {
   toggleSidebar() {
     this._AppService.toggleSidebar();
   }
-  closeNotify(){
-    this.hasNotification = false;
+
+  // ================================================================ NOTIFICATIONS ================================================================
+  isLogin: boolean = false;
+  hasNotification: boolean = false;
+  audioPlayer!: HTMLAudioElement;
+  LeadNotification: any = null;
+
+  getNotifications() {
+    if (this._GuardService.getUser()) {
+      this.isLogin = true;
+      this._PusherService.pusherEventLeadData.subscribe((res) => {
+        this.processNotification(res);
+      });
+    } else {
+      this.isLogin = false;
+    }
   }
 
+  private processNotification(res: any) {
+    this.LeadNotification = res;
+    if (res) {
+      res.agent_assigned_ids = res.agent_assigned_ids.map((e: string) =>
+        Number(e)
+      );
+      this.hasNotification = res.agent_assigned_ids.includes(
+        Number(this._GuardService.getUser().id)
+      );
+      this.playNotificationSound();
+    }
+  }
+
+  private playNotificationSound() {
+    this.audioPlayer = new Audio();
+    this.audioPlayer.src = '../../../assets/notification.mp3';
+    this.audioPlayer.play();
+  }
+
+  closeNotify() {
+    this.hasNotification = false;
+  }
 }

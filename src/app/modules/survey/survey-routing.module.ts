@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PermissionGuard } from 'src/app/core/permission.guard';
 import { FilterDetailsComponent } from './filter-details/filter-details.component';
 import { InsertSurveyAnswerComponent } from './insert-survey-answer/insert-survey-answer.component';
 import { InsertSurveyQuestionComponent } from './insert-survey-question/insert-survey-question.component';
@@ -10,45 +11,75 @@ import { UpdateSurveyAnswerComponent } from './update-survey-answer/update-surve
 import { UpdateSurveyQuestionComponent } from './update-survey-question/update-survey-question.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'leads', pathMatch: 'full' },
+  { path: '', redirectTo: 'show', pathMatch: 'full' },
   {
-    path: 'leads',
-    children: [
-      { path: '', component: SurveyComponent },
-      {
-        path: 'details',
-        component: SurveyDetailsComponent,
-      },
-      {
-        path: 'filter-details',
-        component: FilterDetailsComponent,
-      },
-      {
-        path: 'update-question',
-        component: UpdateSurveyQuestionComponent,
-      },
-      {
-        path: 'update-answer',
-        component: UpdateSurveyAnswerComponent,
-      },
-      {
-        path: 'insert-question',
-        component: InsertSurveyQuestionComponent,
-      },
-      {
-        path: 'insert-answer',
-        component: InsertSurveyAnswerComponent,
-      },
-      {
-        path: 'recycle-bin',
-        component: SurveyRecyclebinComponent,
-      },
-    ],
+    path: 'show',
+    component: SurveyComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_inputLeads'],
+    },
+  },
+  {
+    path: 'details',
+    component: SurveyDetailsComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_inputLeads'],
+    },
+  },
+  // {
+  //   path: 'filter-details',
+  //   component: FilterDetailsComponent,
+  //   canActivate: [PermissionGuard],
+  //   data: {
+  //     permission: ['show_inputLeads'],
+  //   },
+  // },
+  {
+    path: 'update-question',
+    component: UpdateSurveyQuestionComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['updateQuestion_inputLeads'],
+    },
+  },
+  {
+    path: 'update-answer',
+    component: UpdateSurveyAnswerComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['updateAnswer_inputLeads'],
+    },
+  },
+  {
+    path: 'insert-question',
+    component: InsertSurveyQuestionComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['createQuestion_inputLeads'],
+    },
+  },
+  {
+    path: 'insert-answer',
+    component: InsertSurveyAnswerComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['createAnswer_inputLeads'],
+    },
+  },
+  {
+    path: 'recycle-bin',
+    component: SurveyRecyclebinComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['deleteQuestion_inputLeads'],
+    },
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SurveyRoutingModule { }
+export class SurveyRoutingModule {}

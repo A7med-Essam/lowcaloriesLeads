@@ -23,8 +23,8 @@ export class InsertSurveyAnswerComponent implements OnInit {
 
   insertRow() {
     this._SurveyService.insertAnswer(this.insertForm.value).subscribe((res) => {
-      this._Router.navigate(['leads'], {
-        relativeTo: this._ActivatedRoute.parent?.parent,
+      this._Router.navigate(['show'], {
+        relativeTo: this._ActivatedRoute.parent,
       });
     });
   }
@@ -34,8 +34,8 @@ export class InsertSurveyAnswerComponent implements OnInit {
       if (Answers) {
         this.getInsertForm(Answers);
       } else {
-        this._Router.navigate(['leads'], {
-          relativeTo: this._ActivatedRoute.parent?.parent,
+        this._Router.navigate(['show'], {
+          relativeTo: this._ActivatedRoute.parent,
         });
       }
     });

@@ -1,0 +1,67 @@
+<div class="row" #editForm>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Agent Info</h4>
+                            <div>
+                                <button class="btn btn-dark" (click)="backDetailsBtn()">Back</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card card-user">
+                                <div class="card-body">
+                                  <form [formGroup]='updateForm' (ngSubmit)='updateAgent(updateForm)'>
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label>Name</label>
+                                          <input type="text" class="form-control" formControlName='name'>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label>Email address</label>
+                                          <input type="email" class="form-control" formControlName='email'>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                      <div class="col-12 pr-1">
+                                        <label class="mb-2">Permissions</label>
+                                        <p-tabView [scrollable]="true">
+                                          <p-tabPanel *ngFor="let model of getObjectKeys(permissions); let i=index" [selected]="i === 0">
+                                            <ng-template pTemplate="header">
+                                                <span>{{model | titlecase}}</span>
+                                            </ng-template>
+                                            <div class="form-group">
+                                              <div class="d-flex flex-wrap">
+                                                  <div *ngFor="let permission of permissions[model]; let j=index"
+                                                    class="m-3 d-flex justify-content-center align-items-center">
+                                                    <input [id]="'check'+i+'_'+j" class="ckb ckb-primary" type="checkbox" [value]="permission+'_'+model"
+                                                      (change)="onCheckChange($event)" />
+                                                    <label [for]="'check'+i+'_'+j">{{permission}}</label>
+                                                  </div>
+                                              </div>
+                                            </div>
+                                          </p-tabPanel>
+                                        </p-tabView>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="update text-end">
+                                        <button type="submit" class="btn btn-primary btn-round" [disabled]="updateForm.invalid">Update Agent</button>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

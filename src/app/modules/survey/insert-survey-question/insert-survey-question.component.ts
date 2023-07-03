@@ -33,8 +33,8 @@ export class InsertSurveyQuestionComponent implements OnInit {
   insertRow(form:FormGroup) {
     if (form.valid) {
       this._SurveyService.insertRow(form.value).subscribe((res) => {
-        this._Router.navigate(['leads'], {
-          relativeTo: this._ActivatedRoute.parent?.parent,
+        this._Router.navigate(['show'], {
+          relativeTo: this._ActivatedRoute.parent,
         });
       });
     }

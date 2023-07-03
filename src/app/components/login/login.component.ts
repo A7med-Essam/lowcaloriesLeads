@@ -1,8 +1,8 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { GuardService } from 'src/app/services/guard.service';
 import { PusherService } from 'src/app/services/pusher.service';
 
 @Component({
@@ -11,44 +11,44 @@ import { PusherService } from 'src/app/services/pusher.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  signInStatus: boolean = false;
   loginForm!: FormGroup;
   constructor(
+    private _GuardService: GuardService,
     private _AuthService: AuthService,
     private _Router: Router,
-    private _ActivatedRoute: ActivatedRoute,
-    private _PusherService: PusherService,
-    private _Location:Location
+    private _PusherService: PusherService
   ) {}
 
-  returnUrl!: string;
-
-  login(data: any) {
-    this._AuthService
-      .signIn({ email: data.value.email, password: data.value.password })
-      .subscribe((res: any) => {
-        if (res.status == 1) {
-          this._AuthService.saveUser(res.data);
-          this._PusherService.firePusher();
-          if (this._AuthService.returnUrl) {
-            this._Router.navigateByUrl(this._AuthService.returnUrl);
-          }else{
-            this._Router.navigate(['./home']);
-          }
-        }
-      });
+  ngOnInit() {
+    this.createLoginForm();
+    if (this._GuardService.getUser()) {
+      this._Router.navigate(['./home']);
+    }
   }
 
-  ngOnInit() {
+  login(data: FormGroup) {
+    this.signInStatus = true;
+    if (data.valid) {
+      this._AuthService
+        .signIn({ email: data.value.email, password: data.value.password })
+        .subscribe((res) => {
+          this.signInStatus = false;
+          if (res.status === 1) {
+            this._AuthService.saveUser(res.data);
+            this._PusherService.firePusher();
+            const returnUrl = this._AuthService.returnUrl;
+            const navigationUrl = returnUrl ? returnUrl : '/home';
+            this._Router.navigateByUrl(navigationUrl);
+          }
+        });
+    }
+  }
 
-
+  createLoginForm() {
     this.loginForm = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required]),
     });
-
-    if (this._AuthService.currentUser.getValue() != null) {
-            this._Router.navigate(['./home']);
-            // this._Router.navigateByUrl('/' + history.back());
-    }
   }
 }

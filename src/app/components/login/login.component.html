@@ -29,7 +29,10 @@
                                 Password is required
                             </small>
                         </div>
-                        <button type="submit" class="btn btn-lightning rounded-0 px-4"> Sign In</button>
+                        <button type="submit" class="btn btn-lightning rounded-0 px-4">
+                            <span *ngIf="!signInStatus">Sign In</span>
+                            <span *ngIf="signInStatus">Signing In...<i class="fas fa-spinner fa-spin"></i></span>
+                        </button>
                     </form>
                 </div>
             </div>

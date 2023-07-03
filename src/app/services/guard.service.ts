@@ -1,66 +1,29 @@
 import { Injectable } from '@angular/core';
+import { User } from './auth.service';
 import { LocalService } from './local.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GuardService {
-  user: any;
-  constructor(private _LocalService: LocalService) {
-    this.getUser();
+  constructor(private _LocalService: LocalService) {}
+
+  getUser(): User {
+    return this._LocalService.getJsonValue('userInfo_oldLowCalories');
   }
 
-  getUser() {
-    if (this._LocalService.getJsonValue('userInfoManager') != null) {
-      this.user = this._LocalService.getJsonValue('userInfoManager');
+  getPermissionStatus(permission: string): boolean {
+    if (this.getUser() == null) {
+      return false;
     }
-  }
-
-  getPermissionStatus(permission: string) {
-    this.getUser();
-    let status: boolean = false;
-    if (!this.isSuperAdmin()) {
-      if (this.user?.permissions.length > 0) {
-        this.user.permissions.includes(permission)
-          ? (status = true)
-          : (status = false);
-      }
-    } else {
-      status = true;
+    if (this.isSuperAdmin()) {
+      return true;
     }
-    return status;
+    const userPermissions = this.getUser().permissions;
+    return userPermissions.some((p) => p.permission === permission);
   }
 
-  isSuperAdmin() {
-    return this.user?.role == 'super_admin' || this.user?.role == '2'
-      ? true
-      : false;
-  }
-
-  // Dashboard Permissions
-  hasDashboardPermission_Read() {
-    return this.getPermissionStatus('read_dashboard');
-  }
-
-  hasDashboardPermission_Create() {
-    return this.getPermissionStatus('create_dashboard');
-  }
-
-  hasDashboardPermission_Update() {
-    return this.getPermissionStatus('update_dashboard');
-  }
-
-  hasDashboardPermission_Delete() {
-    return this.getPermissionStatus('delete_dashboard');
-  }
-
-  // Reports Permissions
-  hasReportsPermission_Read() {
-    return this.getPermissionStatus('read_reports');
-  }
-
-  // PaymentLink Permissions
-  hasPaymentLinkPermission_Read() {
-    return this.getPermissionStatus('read_paymentLink');
+  isSuperAdmin(): boolean {
+    return this.getUser().role_name === 'super_admin';
   }
 }

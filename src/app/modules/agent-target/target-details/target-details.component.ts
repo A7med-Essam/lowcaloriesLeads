@@ -25,7 +25,7 @@ export class TargetDetailsComponent implements OnInit {
       .subscribe({
         next: (res) => {
           if (res == null) {
-            this._Router.navigate(['agent/show']);
+            this._Router.navigate(['target/show']);
           } else {
             this.target = res
           }
@@ -34,7 +34,7 @@ export class TargetDetailsComponent implements OnInit {
   }
 
   backDetailsBtn() {
-    this._Router.navigate(['agent/show']);
+    this._Router.navigate(['target/show']);
   }
 
   ngOnDestroy(): void {

@@ -31,15 +31,15 @@ export class AddTargetComponent implements OnInit {
   //   this._Location.back();
   // }
 
-  ngOnDestroy(): void {
-    this.renderer.removeClass(document.body, 'h-side');
-  }
+  // ngOnDestroy(): void {
+    // this.renderer.removeClass(document.body, 'h-side');
+  // }
 
   ngOnInit(): void {
     this.getAgents()
     this.getInsertForm();
     this.getAgentBranches();
-    this.renderer.addClass(document.body, 'h-side');
+    // this.renderer.addClass(document.body, 'h-side');
     this.getTargetOptions();
   }
 
@@ -50,7 +50,7 @@ export class AddTargetComponent implements OnInit {
         agent_id: this._LocalService.getJsonValue('userInfo_oldLowCalories').id,
       });
       this._AgentTargetService.addTarget(form.value).subscribe((res) => {
-        // this._Router.navigate(['agent'], {
+        // this._Router.navigate(['target'], {
         //   relativeTo: this._ActivatedRoute.parent?.parent,
         // });
         this._MessageService.add({

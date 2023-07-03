@@ -16,23 +16,7 @@ import { MessageService } from 'primeng/api';
 export class LeadDetailsComponent implements OnInit, OnDestroy {
   // isSuperAdmin: boolean = false;
   lead: any;
-  constructor(
-    private _SurveyService: SurveyService,
-    private _Router: Router,
-    // private _FormBuilder: FormBuilder,
-    // private _MessageService: MessageService,
-    // private _AuthService: AuthService
-  ) {
-    // _AuthService.currentUser.subscribe((data) => {
-    //   if (data != null) {
-    //     data.role == 'super_admin'
-    //     ? (this.isSuperAdmin = true)
-    //     : (this.isSuperAdmin = false);
-    //   } else {
-    //     this.isSuperAdmin = false;
-    //   }
-    // });
-  }
+  constructor(private _SurveyService: SurveyService, private _Router: Router) {}
   private unsubscribe$ = new Subject<void>();
 
   ngOnInit(): void {
@@ -55,5 +39,4 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
 }

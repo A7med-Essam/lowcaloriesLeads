@@ -152,7 +152,7 @@ export class ShowTargetComponent implements OnInit {
   showRow(target: ITarget) {
     if (target) {
       this._AgentTargetService.target.next(target);
-      this._Router.navigate(['agent/details']);
+      this._Router.navigate(['target/details']);
     }
   }
 

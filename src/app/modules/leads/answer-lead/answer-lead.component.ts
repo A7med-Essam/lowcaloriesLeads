@@ -25,7 +25,7 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
   ) {
     _AuthService.currentUser.subscribe((data) => {
       if (data != null) {
-        data.role == 'super_admin'
+        data.role_name == 'super_admin'
         ? (this.isSuperAdmin = true)
         : (this.isSuperAdmin = false);
       } else {
@@ -92,7 +92,7 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
     let replay = {
       replay: txt,
       lead_id: this.currentLeadId,
-      user_id: this._AuthService.currentUser.value.id,
+      user_id: this._AuthService?.currentUser?.value?.id,
     };
     this._SurveyService.addReplay(replay).subscribe({
       next: (res) => {
