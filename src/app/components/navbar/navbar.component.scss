@@ -1,16 +1,20 @@
-.notifications-container{
+.notifications-container {
     position: relative;
-    .notification-list{
+
+    .notification-list {
         background-color: #fff;
         border-radius: 5px;
         width: 200px;
         position: absolute;
         top: 110%;
         z-index: 99999999;
-        .item{
+
+        .item {
+            border-radius: 5px;
             padding: 10px 5px;
             transition: all .5s;
-            &:hover{
+
+            &:hover {
                 color: rgb(87, 0, 0);
             }
         }

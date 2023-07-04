@@ -39,12 +39,11 @@
             <i class="far fa-bell"></i>
             <span class="link-text">Notifications</span>
             <span class="nav-alert notifications" *ngIf="hasNotification"></span>
-            <div class="notification-list">
-              <div class="item shadow-lg" *ngIf="hasNotification" routerLink="leads/show">
-                <div>Lead Status: {{LeadNotification.lead.status}}</div>
+            <div class="notification-list" (click)="answerLead(LeadNotification.lead.id)">
+              <div class="item shadow-lg" *ngIf="hasNotification">
+                <div>Lead Assigned: {{LeadNotification.lead.customer_mobile}}</div>
                 <small class="text-muted">{{LeadNotification.lead.created_at | date}}</small>
               </div>
-          
             </div>
           </a>
         </li>

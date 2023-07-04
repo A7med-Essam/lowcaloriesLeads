@@ -1,5 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { GuardService } from 'src/app/services/guard.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -8,30 +15,42 @@ import { SurveyService } from 'src/app/services/survey.service';
   styleUrls: ['./createlead.component.scss'],
 })
 export class CreateleadComponent implements OnInit, OnDestroy {
-  selectedCustomerName: any;
-  selectedCustomerMobile: any;
-  selectedCustomerEmail: any;
-  selectedPlatform: any;
-  note: any;
-  selectedAgents: any[] = [];
+  agents: any[] = [];
+  platforms: any[] = [];
+  interval: any;
+  createForm!: FormGroup;
 
   constructor(
     private _SurveyService: SurveyService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _FormBuilder: FormBuilder,
+    private _GuardService:GuardService
   ) {}
+
   ngOnDestroy(): void {
     clearInterval(this.interval);
   }
 
-  interval: any;
   ngOnInit() {
+    this.createLeadForm();
+    this.getPlatforms();
+    this.checkAgent();
     setTimeout(() => {
       this.getAgents();
     }, 500);
     this.interval = setInterval(() => {
       this.getAgents();
     }, 10000);
-    this.getPlatforms();
+  }
+
+  checkAgent(){
+    if (this._GuardService.getUser().role_name.toLowerCase() == 'agent') {
+      this.createForm.get('user_ids')?.clearValidators();
+      this.createForm.get('user_ids')?.disable();
+      this.createForm.patchValue({
+        user_ids: [this._GuardService.getUser().id]
+      });
+    }
   }
 
   fixMultieSelectFilter(e: any) {
@@ -40,34 +59,27 @@ export class CreateleadComponent implements OnInit, OnDestroy {
     }
   }
 
-  createLead() {
-    let lead: any = {
-      customer_name: this.selectedCustomerName,
-      customer_email: this.selectedCustomerEmail,
-      customer_mobile: this.selectedCustomerMobile,
-      user_ids: this.selectedAgents,
-      platforms:this.selectedPlatform,
-      notes:this.note
-    };
-
-    this._SurveyService.createLead(lead).subscribe({
-      next: (res) => {
-        this.selectedCustomerEmail = null;
-        this.selectedCustomerMobile = null;
-        this.selectedCustomerName = null;
-        this.selectedPlatform = null;
-        this.note = null;
-        this.selectedAgents = []
-        this._MessageService.add({
-          severity: 'success',
-          summary: 'Notification',
-          detail: res.message,
-        });
-      },
-    });
+  creatingStatus:boolean = false;
+  createLead(form: FormGroup) {
+    if (form.valid) {
+      this.creatingStatus = true;
+      this._SurveyService.createLead(form.getRawValue()).subscribe({
+        next: (res) => {
+          if (res.status == 1) {
+            this.creatingStatus = false;
+            form.reset();
+            this.checkAgent();
+            this._MessageService.add({
+              severity: 'success',
+              summary: 'Notification',
+              detail: res.message,
+            });
+          }
+        },
+      });
+    }
   }
 
-  agents: any[] = [];
   getAgents() {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
@@ -83,7 +95,6 @@ export class CreateleadComponent implements OnInit, OnDestroy {
     });
   }
 
-  platforms: any[] = [];
   getPlatforms() {
     this._SurveyService.getPlatforms().subscribe({
       next: (res) => {
@@ -92,7 +103,14 @@ export class CreateleadComponent implements OnInit, OnDestroy {
     });
   }
 
-  // getAgentByLeadCount(){
-  //   return this.agents.reduce((prev,current) => prev.open_lead_counts < current.open_lead_counts ? prev:current)
-  // }
+  createLeadForm() {
+    this.createForm = this._FormBuilder.group({
+      notes: new FormControl(null),
+      customer_name: new FormControl(null),
+      customer_email: new FormControl(null),
+      customer_mobile: new FormControl(null, [Validators.required]),
+      user_ids: new FormControl(null, [Validators.required]),
+      platforms: new FormControl(null, [Validators.required]),
+    });
+  }
 }

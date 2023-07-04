@@ -55,12 +55,38 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
     this._SurveyService.showLead(id).subscribe({
       next: (res) => {
         this.lead = res.data;
+        this.lead.inputs = this.removeDuplicates()
       },
     });
   }
 
+  removeDuplicates(){
+    const combinedArr:any[] = [];
+    const groupedObj:any = {};
+    this.lead.inputs.forEach((obj:any) => {
+      const leadQuestionId = obj.lead_question_id;
+      if (!groupedObj[leadQuestionId]) {
+        groupedObj[leadQuestionId] = obj;
+        combinedArr.push(obj);
+      } else {
+        const existingObj = groupedObj[leadQuestionId];
+        if (!Array.isArray(existingObj)) {
+          groupedObj[leadQuestionId] = [existingObj];
+        }
+        groupedObj[leadQuestionId].push(obj);
+        existingObj.answer = groupedObj[leadQuestionId].map((item:any) => item.answer);
+      }
+    });
+    return combinedArr
+  }
+
   backDetailsBtn() {
     this._Router.navigate(['leads/show']);
+  }
+
+  displayUpdate(lead:any) {
+    this._SurveyService.updateLead.next(lead);
+    this._Router.navigate(['leads/update']);
   }
 
   ngOnDestroy(): void {

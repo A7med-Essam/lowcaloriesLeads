@@ -6,6 +6,7 @@ import { LeadReminderComponent } from './lead-reminder/lead-reminder.component';
 import { ShowLeadComponent } from './show-lead/show-lead.component';
 import { AnswerLeadComponent } from './answer-lead/answer-lead.component';
 import { PermissionGuard } from 'src/app/core/permission.guard';
+import { CreateLeadQuestionsComponent } from './create-lead-questions/create-lead-questions.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'show', pathMatch: 'full' },
@@ -44,6 +45,14 @@ const routes: Routes = [
   {
     path: 'answer',
     component: AnswerLeadComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['answer_leads'],
+    },
+  },
+  {
+    path: 'update',
+    component: CreateLeadQuestionsComponent,
     canActivate: [PermissionGuard],
     data: {
       permission: ['answer_leads'],

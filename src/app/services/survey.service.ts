@@ -18,6 +18,7 @@ export class SurveyService {
   filterId: BehaviorSubject<number> = new BehaviorSubject(0);
   leadId: BehaviorSubject<number> = new BehaviorSubject(0);
   lead: BehaviorSubject<any> = new BehaviorSubject(null);
+  updateLead: BehaviorSubject<any> = new BehaviorSubject(null);
 
   deleteRow(id: number): Observable<any> {
     return this._ApiConfigService.postReq(`lead_questions/delete`, {

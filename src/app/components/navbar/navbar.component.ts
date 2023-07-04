@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { GuardService } from 'src/app/services/guard.service';
 import { PusherService } from 'src/app/services/pusher.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +16,9 @@ export class NavbarComponent implements OnInit {
     private _AppService: AppService,
     private _GuardService: GuardService,
     private _AuthService: AuthService,
-    private _PusherService: PusherService
+    private _PusherService: PusherService,
+    private _SurveyService:SurveyService,
+    private _Router:Router
   ) {}
 
   ngOnInit() {
@@ -72,5 +76,10 @@ export class NavbarComponent implements OnInit {
 
   closeNotify() {
     this.hasNotification = false;
+  }
+
+  answerLead(id:number){
+    this._SurveyService.leadId.next(id);
+    this._Router.navigate(['leads/answer']);
   }
 }

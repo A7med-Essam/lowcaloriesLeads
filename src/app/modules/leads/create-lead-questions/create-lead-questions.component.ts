@@ -42,25 +42,25 @@ export class CreateLeadQuestionsComponent implements OnInit {
   //     next: (res) => {
   //       this.questions = res.data;
   //       this.questionsClone = res.data;
-        // this.stepSize = 5;
-        // let stepCount = Math.ceil(this.questions.length / this.stepSize);
-        // let steps:MenuItem[] = []
-        // for (let i = 0; i < stepCount; i++) {
-        //   let stepLabel = "Step " + (i + 1);
-        //   this.maxIndex = i;
-        //   steps.push({ label: stepLabel , target:this.stepSize.toString()});
-        // }
-        // this.items = steps
+  // this.stepSize = 5;
+  // let stepCount = Math.ceil(this.questions.length / this.stepSize);
+  // let steps:MenuItem[] = []
+  // for (let i = 0; i < stepCount; i++) {
+  //   let stepLabel = "Step " + (i + 1);
+  //   this.maxIndex = i;
+  //   steps.push({ label: stepLabel , target:this.stepSize.toString()});
+  // }
+  // this.items = steps
   //     },
   //   });
   // }
 
   // setRadioAnswer(answerId: number, questionId: number, suggest_answer: string) {
-    // this.questions.filter((a: any) => a.id == questionId)[0].userAnswer = {
-    //   survey_question_id: questionId,
-    //   survey_answer_id: answerId,
-    //   suggest_answer: suggest_answer,
-    // };
+  // this.questions.filter((a: any) => a.id == questionId)[0].userAnswer = {
+  //   survey_question_id: questionId,
+  //   survey_answer_id: answerId,
+  //   suggest_answer: suggest_answer,
+  // };
   //   this.checkValidation();
   // }
 
@@ -218,9 +218,8 @@ export class CreateLeadQuestionsComponent implements OnInit {
   loadingQuestions: boolean = true;
   items: MenuItem[] = [];
   activeIndex: number = 0;
-  maxIndex:number = 0;
-  stepSize:number = 0
-
+  maxIndex: number = 0;
+  stepSize: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -233,9 +232,17 @@ export class CreateLeadQuestionsComponent implements OnInit {
     });
   }
 
+  updatedLead = this._SurveyService.updateLead.value;
   ngOnInit() {
-    this.getSurvey();
-    this.form = new FormGroup({});
+    if (this.updatedLead) {
+      this.lead_id = this.updatedLead.id;
+    }
+    if (this.lead_id == 0) {
+      this._Router.navigate(['./leads/show']);
+    } else {
+      this.getSurvey();
+      this.form = new FormGroup({});
+    }
   }
 
   getSurvey() {
@@ -245,14 +252,18 @@ export class CreateLeadQuestionsComponent implements OnInit {
       this.loadingQuestions = false;
       this.stepSize = 5;
       let stepCount = Math.ceil(this.questions.length / this.stepSize);
-      let steps:MenuItem[] = []
+      let steps: MenuItem[] = [];
       for (let i = 0; i < stepCount; i++) {
-        let stepLabel = "Step " + (i + 1);
+        let stepLabel = 'Step ' + (i + 1);
         this.maxIndex = i;
-        steps.push({ label: stepLabel , target:this.stepSize.toString()});
+        steps.push({ label: stepLabel, target: this.stepSize.toString() });
       }
-      this.items = steps
-      this.setRepeatedCountAsDefaultAnswer();
+      this.items = steps;
+      if (this.updatedLead) {
+        this.setUpdateValues(this.updatedLead);
+      } else {
+        this.setRepeatedCountAsDefaultAnswer();
+      }
     });
   }
 
@@ -266,7 +277,7 @@ export class CreateLeadQuestionsComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.addUserAnswer()
+      this.addUserAnswer();
       this.questions = this.questions.filter((e) => e.userAnswer != null);
       let lead: any = { inputs: [], lead_id: this.lead_id };
       this.questions.forEach((q) => {
@@ -325,53 +336,65 @@ export class CreateLeadQuestionsComponent implements OnInit {
     });
   }
 
-  getInputsValues():{lead_question_id:number,lead_answer_id:number,suggest_answer:string}[]{
-    const keys:any = Object.keys(this.form.controls);
+  getInputsValues(): {
+    lead_question_id: number;
+    lead_answer_id: number;
+    suggest_answer: string;
+  }[] {
+    const keys: any = Object.keys(this.form.controls);
     this.questions.filter((a: any) => a.id == keys[0])[0].userAnswer = {
       survey_question_id: keys[0],
       survey_answer_id: keys[0].value,
-      suggest_answer: keys[0] == this.questions.find(e=>e.tpye == 'text').id ? keys[0].value:'',
+      suggest_answer:
+        keys[0] == this.questions.find((e) => e.tpye == 'text').id
+          ? keys[0].value
+          : '',
     };
 
     return [
       {
-        lead_question_id:1,
-        lead_answer_id:1,
-        suggest_answer:''
-      }
-    ]
+        lead_question_id: 1,
+        lead_answer_id: 1,
+        suggest_answer: '',
+      },
+    ];
   }
 
   addUserAnswer() {
     const keys: any[] = Object.keys(this.form.controls);
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const questionId = parseInt(key);
-      const question = this.questions.find(q => q.id === questionId);
+      const question = this.questions.find((q) => q.id === questionId);
       if (question) {
         const answerId = this.form.controls[key].value;
-        const isText = question.type === 'text' ;
+        const isText = question.type === 'text';
         const isDate = question.type === 'date';
         question.userAnswer = {
           lead_question_id: questionId,
-          lead_answer_id: (isText||isDate) ? '' : answerId,
-          suggest_answer: (isText||isDate) ? (isDate? new Date(answerId).toLocaleDateString('en-CA'):answerId) : ''
+          lead_answer_id: isText || isDate ? '' : answerId,
+          suggest_answer:
+            isText || isDate
+              ? isDate
+                ? new Date(answerId).toLocaleDateString('en-CA')
+                : answerId
+              : '',
         };
       }
     });
   }
-  
-  changeIndex(status:boolean){
+
+  changeIndex(status: boolean) {
     if (status) {
-      this.activeIndex++
+      this.activeIndex++;
     } else {
-      this.activeIndex--
+      this.activeIndex--;
     }
   }
 
   setRepeatedCountAsDefaultAnswer() {
-    this.questions.forEach(q => {
+    this.questions.forEach((q) => {
       const formControl = this.form.get(q.id.toString());
-  
+
       if (q.type === 'text') {
         formControl?.setValue(q.repeated_count);
       } else if (q.type === 'date') {
@@ -379,19 +402,45 @@ export class CreateLeadQuestionsComponent implements OnInit {
       } else {
         let highestCount = 0;
         let repeatedCountObj: any;
-  
+
         q.answers.forEach((e: any) => {
           if (e.repeated_count > highestCount) {
             highestCount = e.repeated_count;
             repeatedCountObj = e;
           }
         });
-  
+
         if (q.type === 'check') {
-          formControl?.setValue([repeatedCountObj.id]);
+          formControl?.setValue([repeatedCountObj?.id]);
         } else {
-          formControl?.setValue(repeatedCountObj.id);
+          formControl?.setValue(repeatedCountObj?.id);
         }
+      }
+    });
+  }
+
+  setUpdateValues(lead: any) {
+    lead.inputs.forEach((q: any) => {
+      const formControl = this.form.get(q.lead_question_id.toString());
+      switch (q.question.type) {
+        case 'text':
+          formControl?.setValue(q.suggest_answer);
+          break;
+        case 'date':
+          formControl?.setValue(new Date(q.suggest_answer));
+          break;
+        case 'check':
+          const values = Array.isArray(q.answer)
+            ? q.answer.map((obj: any) => obj.id)
+            : [q.answer.id];
+          formControl?.setValue(values);
+          break;
+        case 'drop':
+        case 'radio':
+          formControl?.setValue(q.answer.id);
+          break;
+        default:
+          break;
       }
     });
   }

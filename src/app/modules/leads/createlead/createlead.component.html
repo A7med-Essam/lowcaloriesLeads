@@ -5,47 +5,49 @@
         </ng-template>
         <ng-template pTemplate="content">
             <div class="mx-4">
-                <div class="form-group mb-3 row">
-                    <div class="col-xl-4">
-                        <label for="">Customer Name</label>
-                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer name"
-                            [(ngModel)]="selectedCustomerName">
+                <form [formGroup]='createForm' (ngSubmit)='createLead(createForm)'>
+                    <div class="form-group mb-3 row">
+                        <div class="col-xl-4">
+                            <label for="">Customer Name</label>
+                            <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer name"
+                                formControlName="customer_name">
+                        </div>
+                        <div class="col-xl-4">
+                            <label for="">Customer Email</label>
+                            <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer email"
+                                formControlName="customer_email">
+                        </div>
+                        <div class="col-xl-4">
+                            <label for="">Customer Mobile</label>
+                            <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer mobile"
+                                formControlName="customer_mobile" maxlength="11"
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                        <div class="col-xl-6 my-1">
+                            <label for="" class="mb-1">Agents</label>
+                            <p-multiSelect [options]="agents" appendTo="body" optionLabel="name" optionValue="id"
+                                [autofocusFilter]="true" [filter]="true" filterBy="name" filterValue="Online"
+                                #multieSelectAgent (onFocus)="fixMultieSelectFilter(multieSelectAgent)"
+                                defaultLabel="Select Agents" styleClass="w-100" display="chip"
+                                formControlName="user_ids">
+                            </p-multiSelect>
+                        </div>
+                        <div class="col-xl-6 my-1">
+                            <label for="" class="mb-1">Platforms</label>
+                            <p-dropdown [options]="platforms" appendTo="body" optionLabel="name" optionValue="name"
+                                styleClass="w-100" placeholder="Select Platform" [filter]="true"
+                                formControlName="platforms">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-12 my-1">
+                            <label for="" class="mb-1">Details</label>
+                            <textarea pInputTextarea ngClass="w-100" formControlName="notes"></textarea>
+                        </div>
                     </div>
-                    <div class="col-xl-4">
-                        <label for="">Customer Email</label>
-                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer email"
-                            [(ngModel)]="selectedCustomerEmail">
+                    <div class="text-end">
+                        <button class="btn btn-success px-4" [disabled]="createForm.invalid || creatingStatus"><b>Create</b></button>
                     </div>
-                    <div class="col-xl-4">
-                        <label for="">Customer Mobile</label>
-                        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter customer mobile"
-                            [(ngModel)]="selectedCustomerMobile" maxlength="11"
-                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
-                    </div>
-                    <div class="col-xl-6 my-1">
-                        <label for="" class="mb-1">Agents</label>
-                        <p-multiSelect [options]="agents" appendTo="body" optionLabel="name" optionValue="id" [autofocusFilter]="true"
-                        [filter]="true"  filterBy="name" filterValue="Online" #multieSelectAgent (onFocus)="fixMultieSelectFilter(multieSelectAgent)"
-                            defaultLabel="Select Agents" styleClass="w-100" [(ngModel)]="selectedAgents" display="chip">
-                        </p-multiSelect>
-                    </div>
-                    <div class="col-xl-6 my-1">
-                        <label for="" class="mb-1">Platforms</label>
-                        <p-dropdown [options]="platforms" appendTo="body" optionLabel="name" optionValue="name"
-                         styleClass="w-100" placeholder="Select Platform" [filter]="true" [(ngModel)]="selectedPlatform">
-                        </p-dropdown>
-                    </div>
-                    <div class="col-12 my-1">
-                        <label for="" class="mb-1">Details</label>
-                        <textarea pInputTextarea ngClass="w-100" [(ngModel)]="note"></textarea>
-                    </div>
-                </div>
-
-                <div class="text-end">
-                    <button class="btn btn-success px-4" [disabled]="!selectedCustomerMobile || selectedAgents.length == 0 || !selectedPlatform" 
-                        (click)="createLead()"><b>Create</b>
-                    </button>
-                </div>
+                </form>
             </div>
         </ng-template>
     </p-card>
