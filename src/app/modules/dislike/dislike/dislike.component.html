@@ -103,6 +103,16 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>
+                                    <div class="d-flex align-items-center" style="height: 50px;">
+                                        Upload File
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary w-100" style="padding: 12px 0px;" (click)="uploadFile()">Upload</button>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td colspan="2">
                                     <button class="btn btn-primary py-2 px-4 w-100"
                                         [disabled]="selectedBranch.length == 0 || selectedReason.length == 0 || selectedMeals.length == 0"

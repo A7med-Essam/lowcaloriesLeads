@@ -151,6 +151,7 @@ export class CreateRefundComponent implements OnInit {
         Validators.required,
       ]),
       agent_id: new FormControl(null),
+      files: new FormControl(null),
       // food_qualities: new FormControl(null, [Validators.required]),
       // delivery_times: new FormControl(null, [Validators.required]),
     });
@@ -200,4 +201,52 @@ export class CreateRefundComponent implements OnInit {
   goBack(): void {
     this._Location.back();
   }
+
+    // ====================================================================UPLOAD==========================================================================
+
+    uploadFile() {
+      let input: HTMLInputElement = document.createElement('input');
+      input.type = 'file';
+      input.accept = '*/*';
+      input.multiple = true;
+      input.click();
+      input.onchange = (e) => {
+        this.onFileChange(e);
+      };
+    }
+  
+    onFileChange(event: any) {
+      if (event.target.files && event.target.files.length) {
+        const files = event.target.files;
+        const readFile = (file: any) => {
+          return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.onload = (event: any) => resolve(event.target.result);
+            fileReader.onerror = (error) => reject(error);
+            fileReader.readAsDataURL(file);
+          });
+        };
+  
+        const readFiles = async () => {
+          try {
+            const base64Strings = await Promise.all(
+              Array.from(files).map(readFile)
+            );
+  
+            const fileTypes = base64Strings.map((base64String: any) => {
+              const type = base64String.split(',')[0].split(':')[1].split(';')[0];
+              return { [type]: base64String };
+            });
+  
+            this.insertForm.patchValue({
+              files: fileTypes,
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        };
+  
+        readFiles();
+      }
+    }
 }

@@ -95,6 +95,7 @@ export class DislikeComponent implements OnInit {
       reasons: this.selectedReason,
       cid: this.currentCID,
       agent_id: this._LocalService.getJsonValue('userInfo_oldLowCalories').id,
+      files:this.files
     };
 
     this._DislikeService.storeDislikeRequest(data).subscribe({
@@ -108,4 +109,52 @@ export class DislikeComponent implements OnInit {
       },
     });
   }
+    // ====================================================================UPLOAD==========================================================================
+
+    uploadFile() {
+      let input: HTMLInputElement = document.createElement('input');
+      input.type = 'file';
+      input.accept = '*/*';
+      input.multiple = true;
+      input.click();
+      input.onchange = (e) => {
+        this.onFileChange(e);
+      };
+    }
+  
+    files:any[]=[]
+    onFileChange(event: any) {
+      if (event.target.files && event.target.files.length) {
+        const files = event.target.files;
+        const readFile = (file: any) => {
+          return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.onload = (event: any) => resolve(event.target.result);
+            fileReader.onerror = (error) => reject(error);
+            fileReader.readAsDataURL(file);
+          });
+        };
+  
+        const readFiles = async () => {
+          try {
+            const base64Strings = await Promise.all(
+              Array.from(files).map(readFile)
+            );
+  
+            const fileTypes = base64Strings.map((base64String: any) => {
+              const type = base64String.split(',')[0].split(':')[1].split(';')[0];
+              return { [type]: base64String };
+            });
+            this.files = fileTypes
+            // this.insertForm.patchValue({
+            //   files: fileTypes,
+            // });
+          } catch (error) {
+            console.error(error);
+          }
+        };
+  
+        readFiles();
+      }
+    }
 }

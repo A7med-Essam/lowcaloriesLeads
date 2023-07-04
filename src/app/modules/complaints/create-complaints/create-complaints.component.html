@@ -54,7 +54,10 @@
                 <small class="text-danger ms-1" *ngIf="insertForm.get('status')?.touched &&
                 insertForm.get('status')?.hasError('required')">This field is required.</small>
             </div>
-            
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Upload Record/File/Video</label>
+                <button class="btn btn-primary w-100" style="padding: 12px 0px;" (click)="uploadFile()">Upload</button>
+            </div>
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100">Add Complaint</button>
             </div>
