@@ -64,7 +64,9 @@ export class NavbarComponent implements OnInit {
       this.hasNotification = res.agent_assigned_ids.includes(
         Number(this._GuardService.getUser().id)
       );
-      this.playNotificationSound();
+      if (this.hasNotification) {
+        this.playNotificationSound();
+      }
     }
   }
 

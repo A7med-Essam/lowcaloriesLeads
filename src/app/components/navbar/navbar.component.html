@@ -41,7 +41,7 @@
             <span class="nav-alert notifications" *ngIf="hasNotification"></span>
             <div class="notification-list" (click)="answerLead(LeadNotification.lead.id)">
               <div class="item shadow-lg" *ngIf="hasNotification">
-                <div>Lead Assigned: {{LeadNotification.lead.customer_mobile}}</div>
+                <div>Lead Assigned</div>
                 <small class="text-muted">{{LeadNotification.lead.created_at | date}}</small>
               </div>
             </div>
