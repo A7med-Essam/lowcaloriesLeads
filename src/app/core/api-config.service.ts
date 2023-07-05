@@ -154,11 +154,15 @@ export class ApiConfigService {
             }
           },
           (err: any) => {
-            this._MessageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: err.error.message,
-            });
+            if (err.status == 401) {
+              localStorage.clear();
+              window.location.reload();
+              this._MessageService.add({
+                severity: 'error',
+                summary: 'Session Expired',
+                detail: err.error.message,
+              });
+            }
           }
         )
       );

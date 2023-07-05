@@ -19,25 +19,32 @@
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Phone Number</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='phone_number' />
+                <input type="text" pInputText ngClass="w-100" formControlName='phone_number' maxlength="10"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('phone_number')?.touched &&
                 paymentForm.get('phone_number')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="paymentForm.get('phone_number')?.touched &&
+                paymentForm.get('phone_number')?.hasError('pattern')">Length must be 10</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Email</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='email' />
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('email')?.touched &&
                 paymentForm.get('email')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="paymentForm.get('email')?.touched &&
+                paymentForm.get('email')?.hasError('email')">Email is not valid.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Height</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='height' />
+                <input type="text" pInputText ngClass="w-100" formControlName='height'  maxlength="3"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('height')?.touched &&
                 paymentForm.get('height')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Weight</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='Weight' />
+                <input type="text" pInputText ngClass="w-100" formControlName='Weight'  maxlength="3"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('Weight')?.touched &&
                 paymentForm.get('Weight')?.hasError('required')">This field is required.</small>
             </div>
@@ -72,16 +79,16 @@
             <div class="col-md-6 col-12 my-3">
                 <div *ngIf="isCustom">
                     <label for="">SELECT YOUR PROGRAM</label>
-                    <p-dropdown [options]="plans" formControlName='program_id' appendTo="body" optionValue="program_id"
-                        optionLabel="name" styleClass="w-100" placeholder="Select Program">
+                    <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name"
+                        styleClass="w-100" placeholder="Select Program">
                     </p-dropdown>
                     <small class="text-danger ms-1" *ngIf="paymentForm.get('program_id')?.touched &&
                     paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
                 </div>
                 <div *ngIf="!isCustom">
                     <label for="">SELECT YOUR PROGRAM</label>
-                    <p-dropdown [options]="plans" formControlName='program_id' appendTo="body" optionValue="id"
-                        optionLabel="name" styleClass="w-100" placeholder="Select Program">
+                    <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name"
+                        styleClass="w-100" placeholder="Select Program">
                     </p-dropdown>
                     <small class="text-danger ms-1" *ngIf="paymentForm.get('program_id')?.touched &&
                     paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
@@ -92,15 +99,16 @@
                 <p-dropdown [options]="numberOfDays" formControlName='subscription_days' appendTo="body"
                     styleClass="w-100" placeholder="Select Number Of Days">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('program_id')?.touched &&
-            paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="paymentForm.get('subscription_days')?.touched &&
+            paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
-            <div class="col-12 my-3" *ngIf="paymentForm.get('program_id')?.value">
+            <div class="col-12 my-3" *ngIf="mealTypes.length">
                 <label for="">Type Meals</label>
                 <div class="d-flex flex-wrap">
                     <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
-                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" (change)="onCheckboxChange($event,'meal_types')">
+                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
+                            (onChange)="onCheckboxChange($event,'meal_types',meal)">
                         </p-checkbox>
                         <label class="mx-1" [for]="meal">{{meal}}</label>
                     </div>
@@ -108,11 +116,12 @@
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('meal_types')?.touched &&
                 paymentForm.get('meal_types')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-12 my-3" *ngIf="paymentForm.get('program_id')?.value && snackTypes.length">
+            <div class="col-12 my-3" *ngIf="snackTypes.length">
                 <label for="">Type Snack</label>
                 <div class="d-flex flex-wrap">
                     <div class="field-checkbox m-3" *ngFor="let meal of snackTypes">
-                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" (change)="onCheckboxChange($event,'snack_types')">
+                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
+                            (onChange)="onCheckboxChange($event,'snack_types',meal)">
                         </p-checkbox>
                         <label class="mx-1" [for]="meal">{{meal}}</label>
                     </div>
@@ -120,7 +129,7 @@
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('snack_types')?.touched &&
             paymentForm.get('snack_types')?.hasError('required')">This field is required.</small>
             </div>
-            <hr *ngIf="paymentForm.get('program_id')?.value">
+            <hr *ngIf="mealTypes.length">
             <div class="col-12 my-3" *ngIf="!isCustom">
                 <label for="">DAYS OF PLAN</label>
                 <div class="d-flex flex-wrap">
@@ -151,8 +160,8 @@
                 <label for="">Days Of Delivery</label>
                 <div class="d-flex flex-wrap">
                     <div class="field-checkbox m-3" *ngFor="let day of days">
-                        <p-checkbox [value]="day.value" [inputId]="day.name"
-                            (change)="onCheckboxChange($event,'delivery_days')">
+                        <p-checkbox [value]="day.value" [inputId]="day.name" #checkbox
+                            (onChange)="onCheckboxChange($event,'delivery_days',day.value)">
                         </p-checkbox>
                         <label class="mx-1" [for]="day.name">{{day.name}}</label>
                     </div>
@@ -165,7 +174,8 @@
                 <label for="">DISLIKES</label>
                 <div class="d-flex flex-wrap">
                     <div class="field-checkbox m-3" *ngFor="let meal of paymentDetails?.disLikes">
-                        <p-checkbox name="group1" [value]="meal.name" [inputId]="meal.name" (change)="onCheckboxChange($event,'dislike')">
+                        <p-checkbox [name]="meal.name" [value]="meal.name" [inputId]="meal.name" #checkbox
+                            (onChange)="onCheckboxChange($event,'dislike',meal.name)">
                         </p-checkbox>
                         <label class="mx-1" [for]="meal.name">{{meal.name}}</label>
                     </div>
@@ -258,11 +268,11 @@
             <div class="col-md-6 col-12 my-3" *ngIf="exchangeStatus">
                 <label for="">Branches</label>
                 <p-dropdown [options]="paymentDetails?.branches == undefined ?[]:paymentDetails.branches"
-                    formControlName='branch_paid_on_id' appendTo="body" styleClass="w-100" placeholder="Select Branch"
-                    optionLabel="name" optionValue="id" [filter]="true">
+                    formControlName='branch_paid' appendTo="body" styleClass="w-100" placeholder="Select Branch"
+                    optionLabel="name" optionValue="name" [filter]="true">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('branch_paid_on_id')?.touched &&
-                paymentForm.get('branch_paid_on_id')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="paymentForm.get('branch_paid')?.touched &&
+                paymentForm.get('branch_paid')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-2" *ngIf="exchangeStatus">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">INVOICE
@@ -280,7 +290,10 @@
                     #PaymentUrl />
             </div>
             <div class="col-12 my-3">
-                <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid">Create</button>
+                <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
+                    <span *ngIf="!creatingStatus">Create</span>
+                    <span *ngIf="creatingStatus">Creating...<i class="fas fa-spinner fa-spin"></i></span>
+                </button>
             </div>
         </div>
     </form>

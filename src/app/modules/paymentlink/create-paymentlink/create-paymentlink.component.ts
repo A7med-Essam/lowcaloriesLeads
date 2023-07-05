@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -7,6 +13,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { Checkbox } from 'primeng/checkbox';
 import { Subscription } from 'rxjs';
 import {
   PaymentDetails,
@@ -38,20 +45,25 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     { name: 'Thursday', value: 'Thu' },
     { name: 'Friday', value: 'Fri' },
   ];
-  valueChangesSubscription!: Subscription | undefined;
+  valueChangesSubscription1!: Subscription | undefined;
   valueChangesSubscription2!: Subscription | undefined;
+  valueChangesSubscription3!: Subscription | undefined;
 
   ngOnDestroy() {
-    if (this.valueChangesSubscription && this.valueChangesSubscription2) {
-      this.valueChangesSubscription.unsubscribe();
+    if (
+      this.valueChangesSubscription1 &&
+      this.valueChangesSubscription2 &&
+      this.valueChangesSubscription3
+    ) {
+      this.valueChangesSubscription1.unsubscribe();
       this.valueChangesSubscription2.unsubscribe();
+      this.valueChangesSubscription3.unsubscribe();
     }
   }
 
   constructor(
     private _PaymentlinkService: PaymentlinkService,
-    private _MessageService: MessageService,
-    private _FormBuilder: FormBuilder
+    private _MessageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -71,15 +83,19 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     this.paymentForm = new FormGroup({
       first_name: new FormControl(null, [Validators.required]),
       last_name: new FormControl(null, [Validators.required]),
-      phone_number: new FormControl(null, [Validators.required]),
-      email: new FormControl(null, [Validators.required]),
+      phone_number: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('^[\\d]{10}$'),
+      ]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
       gender: new FormControl(null, [Validators.required]),
       height: new FormControl(null, [Validators.required]),
       Weight: new FormControl(null, [Validators.required]),
       birthday: new FormControl(null, [Validators.required]),
       program_type: new FormControl(null, [Validators.required]),
+      program: new FormControl(null, [Validators.required]),
       program_id: new FormControl(null, [Validators.required]),
-      plan_id: new FormControl(null, [Validators.required]),
+      plan_id: new FormControl(null),
       meal_types: new FormArray([], [Validators.required]),
       snack_types: new FormArray([]),
       subscription_days: new FormControl(null, [Validators.required]),
@@ -92,117 +108,10 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       cutlery: new FormControl(null, [Validators.required]),
       exchange_paymentLink: new FormControl('no', [Validators.required]),
       dislike: new FormArray([], [Validators.required]),
-      branch_paid_on_id: new FormControl(null),
+      branch_paid: new FormControl(null),
       branch_invoice_image: new FormControl(null),
     });
     this.valueChanges();
-  }
-
-  isCustom: Boolean = true;
-  valueChanges() {
-    this.valueChangesSubscription = this.paymentForm.valueChanges.subscribe(
-      (value) => {
-        if (value.program_type) {
-          this.isCustom =
-            this.paymentDetails.Programs[value.program_type][0].plans !=
-            undefined;
-          if (!this.isCustom) {
-            this.plans = this.paymentDetails.Programs[value.program_type];
-            this.mealTypes = [];
-          } else {
-            this.plans =
-              this.paymentDetails.Programs[value.program_type][0].plans;
-            this.mealTypes = this.getSelectedMealTypes(
-              this.paymentDetails.Programs[value.program_type][0].plans[0]
-                .details.max_meal,
-              'Meal'
-            );
-          }
-        }
-        if (value.program_id) {
-          if (!this.isCustom) {
-            const [plan] = this.paymentDetails.Programs[
-              value.program_type
-            ].filter((e) => e.id === value.program_id);
-            this.paymentForm.patchValue(
-              { plan_id: null },
-              { emitEvent: false }
-            );
-            this.paymentForm.get('plan_id')?.clearValidators();
-            this.paymentForm
-              .get('plan_id')
-              ?.updateValueAndValidity({ emitEvent: false });
-
-            this.mealTypes = this.getSelectedMealTypes(plan?.max_meals, 'Meal');
-            this.snackTypes = this.getSelectedMealTypes(
-              plan?.no_snacks,
-              'Snack'
-            );
-          } else {
-            const [plan] = this.paymentDetails.Programs[
-              value.program_type
-            ][0].plans.filter((e) => e.program_id === value.program_id);
-            this.mealTypes = this.getSelectedMealTypes(
-              plan?.details.max_meal,
-              'Meal'
-            );
-            this.snackTypes = this.getSelectedMealTypes(
-              plan?.details.max_snack,
-              'Snack'
-            );
-            this.numberOfDays = this.getNumberOfDays(
-              plan?.details.min_days,
-              plan?.details.max_days
-            );
-            this.paymentForm.patchValue(
-              {
-                program_id: plan?.program_id,
-                plan_id: plan?.id,
-              },
-              { emitEvent: false }
-            );
-          }
-        }
-        if (value.exchange_paymentLink) {
-          if (value.exchange_paymentLink == 'yes') {
-            this.exchangeStatus = true;
-            this.paymentForm
-              .get('branch_invoice_image')
-              ?.setValidators([Validators.required]);
-            this.paymentForm
-              .get('branch_paid_on_id')
-              ?.setValidators([Validators.required]);
-          } else {
-            this.paymentForm.patchValue(
-              {
-                branch_invoice_image: null,
-                branch_paid_on_id: null,
-              },
-              { emitEvent: false }
-            );
-            this.exchangeStatus = false;
-            this.paymentForm.get('branch_invoice_image')?.clearValidators();
-            this.paymentForm.get('branch_paid_on_id')?.clearValidators();
-          }
-          this.paymentForm
-            .get('branch_invoice_image')
-            ?.updateValueAndValidity({ emitEvent: false });
-          this.paymentForm
-            .get('branch_paid_on_id')
-            ?.updateValueAndValidity({ emitEvent: false });
-        }
-      }
-    );
-
-    this.valueChangesSubscription2 = this.paymentForm
-      .get('program_type')
-      ?.valueChanges.subscribe((res) => {
-        this.paymentForm.patchValue({
-          subscription_days: null,
-          meal_types: null,
-          snack_types: null,
-        });
-      });
   }
 
   getNumberOfDays(min: number, max: number): string[] {
@@ -212,9 +121,10 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     }
     return result;
   }
-
+  creatingStatus: boolean = false;
   createPaymentLink(form: FormGroup) {
     if (form.valid) {
+      this.creatingStatus = true;
       form.patchValue({
         birthday: new Date(form.value.birthday).toLocaleDateString('en-CA'),
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
@@ -230,13 +140,15 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
           return obj;
         }, {});
       filteredData.dislike = filteredData.dislike.join(',');
-
       this._PaymentlinkService
         .create_payment_link(filteredData)
         .subscribe((res) => {
           if (res.status == 1) {
+          this.creatingStatus = false;
             this.PaymentLink = res.data;
             this.paymentForm.reset();
+            this.createPaymentForm();
+            this.uncheckAllCheckboxes();
             this._MessageService.add({
               severity: 'success',
               summary: 'Payment Created Successfully',
@@ -310,15 +222,14 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     });
   }
   // ====================================================================Checkbox==========================================================================
-  onCheckboxChange(event: any, type: string) {
+  onCheckboxChange(event: any, type: string, value: string) {
     let formArray: FormArray = this.paymentForm.get(type) as FormArray;
-
-    if (event.target.checked) {
-      formArray.push(new FormControl(event.target.value));
+    if (event.checked.length) {
+      formArray.push(new FormControl(event.checked[0]));
     } else {
       let i: number = 0;
       formArray.controls.forEach((ctrl: any) => {
-        if (ctrl.value === event.target.value) {
+        if (ctrl.value === value) {
           formArray.removeAt(i);
           return;
         }
@@ -326,10 +237,145 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       });
     }
 
-    if (formArray.length > 0) {
-      this.paymentForm.get(type)?.setErrors(null);
-    } else {
-      this.paymentForm.get(type)?.setErrors({ required: true });
+    if (type != 'snack_types') {
+      if (formArray.length > 0) {
+        this.paymentForm.get(type)?.setErrors(null);
+      } else {
+        this.paymentForm.get(type)?.setErrors({ required: true });
+      }
     }
+  }
+
+  @ViewChildren('checkbox') checkboxElements!: QueryList<Checkbox>;
+  uncheckAllCheckboxes() {
+    this.checkboxElements.forEach((checkbox: Checkbox) => {
+      checkbox.writeValue(false);
+    });
+  }
+
+  // ====================================================================Value Changes==========================================================================
+  isCustom: Boolean = true;
+  valueChanges() {
+    this.valueChangesSubscription1 = this.paymentForm
+      .get('program_type')
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          this.handleProgramTypeChange(value);
+        }
+      });
+    this.valueChangesSubscription2 = this.paymentForm
+      .get('program')
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          this.handleProgramIdChange(value);
+        }
+      });
+
+    this.valueChangesSubscription3 = this.paymentForm
+      .get('exchange_paymentLink')
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          this.handleExchangePaymentLinkChange(value);
+        }
+      });
+  }
+
+  handleProgramTypeChange(value: any) {
+    this.handelMealTypes();
+    this.resetFormFields()
+    value.toLowerCase().includes('custom')
+      ? (this.isCustom = true)
+      : (this.isCustom = false);
+    if (this.isCustom) {
+      this.plans = this.paymentDetails.Programs[value][0].plans;
+    } else {
+      this.plans = this.paymentDetails.Programs[value];
+    }
+  }
+
+  handleProgramIdChange(value: any) {
+    this.handelMealTypes();
+    this.handelPlanId();
+    if (this.isCustom) {
+      this.mealTypes = this.getSelectedMealTypes(
+        value.details.max_meal,
+        'Meal'
+      );
+      this.snackTypes = this.getSelectedMealTypes(
+        value.details.max_snack,
+        'Snack'
+      );
+      this.numberOfDays = this.getNumberOfDays(
+        value.details.min_days,
+        value.details.max_days
+      );
+      this.paymentForm.patchValue({
+        program_id: value.program_id,
+        plan_id: value.id,
+      });
+    } else {
+      this.paymentForm.patchValue({program_id: value.id});
+      this.mealTypes = this.getSelectedMealTypes(value.max_meals, 'Meal');
+      this.snackTypes = this.getSelectedMealTypes(value.no_snacks, 'Snack');
+    }
+  }
+
+  handleExchangePaymentLinkChange(value: string) {
+    if (value == 'yes') {
+      this.exchangeStatus = true;
+      this.paymentForm
+        .get('branch_invoice_image')
+        ?.setValidators([Validators.required]);
+      this.paymentForm
+        .get('branch_paid_on_id')
+        ?.setValidators([Validators.required]);
+    } else {
+      this.paymentForm.patchValue(
+        {
+          branch_invoice_image: null,
+          branch_paid_on_id: null,
+        },
+        { emitEvent: false }
+      );
+      this.exchangeStatus = false;
+      this.paymentForm.get('branch_invoice_image')?.clearValidators();
+      this.paymentForm.get('branch_paid_on_id')?.clearValidators();
+    }
+    this.paymentForm
+      .get('branch_invoice_image')
+      ?.updateValueAndValidity({ emitEvent: false });
+    this.paymentForm
+      .get('branch_paid_on_id')
+      ?.updateValueAndValidity({ emitEvent: false });
+  }
+
+  resetFormFields() {
+    this.paymentForm.patchValue({
+      program: null,
+      program_id: null,
+      plan_id: null,
+      subscription_days: null,
+    });
+  }
+
+  handelPlanId() {
+    if (this.isCustom) {
+      this.paymentForm.get('plan_id')?.setValidators([Validators.required]);
+    } else {
+      this.paymentForm.patchValue({ plan_id: null });
+      this.paymentForm.get('plan_id')?.clearValidators();
+      this.paymentForm
+        .get('plan_id')
+        ?.updateValueAndValidity({ emitEvent: false });
+    }
+  }
+
+  handelMealTypes() {
+    this.mealTypes = [];
+    this.snackTypes = [];
+    this.paymentForm.removeControl('meal_types');
+    this.paymentForm.addControl('meal_types', new FormArray([], [Validators.required]));
+    this.paymentForm.removeControl('snack_types');
+    this.paymentForm.addControl('snack_types', new FormArray([]));
   }
 }
