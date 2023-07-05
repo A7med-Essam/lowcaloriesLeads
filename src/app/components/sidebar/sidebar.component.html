@@ -96,7 +96,19 @@
       <li *ngIf="showDislikeReasonsPermission">
         <a routerLink="dislike/reasons" routerLinkActive="active">
           <i class="fas fa-list"></i>
-          <span>Reasons</span>
+          <span>Dislike Reasons</span>
+        </a>
+      </li>
+      <li *ngIf="showRefundReasonsPermission">
+        <a routerLink="refund/reasons" routerLinkActive="active">
+          <i class="fas fa-list"></i>
+          <span>Refund Reasons</span>
+        </a>
+      </li>
+      <li *ngIf="createPaymentLinkPermission">
+        <a routerLink="paymentlink/create" routerLinkActive="active">
+          <i class="fas fa-money-check-alt"></i>
+          <span>PaymentLink</span>
         </a>
       </li>
 

@@ -101,6 +101,15 @@ const routes: Routes = [
       permission: ["show_calls"],
     },
   },
+  {
+    path: 'paymentlink',
+    loadChildren: () =>
+      import('./modules/paymentlink/paymentlink.module').then((m) => m.PaymentlinkModule),
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["create_paymentlink"],
+    },
+  },
   { path: '**', component: Error404Component },
 ];
 

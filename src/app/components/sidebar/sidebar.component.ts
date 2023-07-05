@@ -24,7 +24,8 @@ export class SidebarComponent implements OnInit {
   createLeadsPermission: boolean = false;
   assignCallsPermission: boolean = false;
   showDislikeReasonsPermission: boolean = false;
-
+  showRefundReasonsPermission: boolean = false;
+  createPaymentLinkPermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -42,43 +43,42 @@ export class SidebarComponent implements OnInit {
       this.user = data;
       this.isLogin = true;
       this.isSuperAdmin = data.role_name === 'super_admin';
-      this.getPermission()
+      this.getPermission();
     } else {
       this.isLogin = false;
     }
   }
-  
-  getPermission(){
-    this.showLeadsPermission = this._GuardService.getPermissionStatus('show_leads');
-    this.showCallsPermission = this._GuardService.getPermissionStatus('show_calls');
-    this.showRefundPermission = this._GuardService.getPermissionStatus('show_refund');
-    this.showTargetPermission = this._GuardService.getPermissionStatus('show_target');
-    this.showDislikePermission = this._GuardService.getPermissionStatus('show_dislike');
-    this.createClinicPermission = this._GuardService.getPermissionStatus('create_clinic');
-    this.showComplaintsPermission = this._GuardService.getPermissionStatus('show_complaints');
-    this.showInputLeadsPermission = this._GuardService.getPermissionStatus('show_inputLeads');
-    this.createLeadsPermission = this._GuardService.getPermissionStatus('create_leads');
-    this.assignCallsPermission = this._GuardService.getPermissionStatus('assign_calls');
+
+  getPermission() {
+    this.showLeadsPermission =
+      this._GuardService.getPermissionStatus('show_leads');
+    this.showCallsPermission =
+      this._GuardService.getPermissionStatus('show_calls');
+    this.showRefundPermission =
+      this._GuardService.getPermissionStatus('show_refund');
+    this.showTargetPermission =
+      this._GuardService.getPermissionStatus('show_target');
+    this.showDislikePermission =
+      this._GuardService.getPermissionStatus('show_dislike');
+    this.createClinicPermission =
+      this._GuardService.getPermissionStatus('create_clinic');
+    this.showComplaintsPermission =
+      this._GuardService.getPermissionStatus('show_complaints');
+    this.showInputLeadsPermission =
+      this._GuardService.getPermissionStatus('show_inputLeads');
+    this.createLeadsPermission =
+      this._GuardService.getPermissionStatus('create_leads');
+    this.assignCallsPermission =
+      this._GuardService.getPermissionStatus('assign_calls');
     this.showDislikeReasonsPermission = this._GuardService.getPermissionStatus(
-      'showDislike_reasons'
+      'reasons_dislike'
     );
-      // showRefundReasonsPermission = this.hasPermission("showRefund_reasons");
+    this.showRefundReasonsPermission = this._GuardService.getPermissionStatus('reasons_refund');
+    this.createPaymentLinkPermission = this._GuardService.getPermissionStatus('create_paymentlink');
   }
 
   logOut() {
     this._PusherService.firePusher(true);
     this._AuthService.logOut();
   }
-
-  // private _cachedPermissionStatus: { [key: string]: boolean } = {};
-  // hasPermission(permission: string): boolean {
-  //   console.log(this._cachedPermissionStatus.hasOwnProperty(permission),"this._cachedPermissionStatus.hasOwnProperty(permission)");
-  //   if (this._cachedPermissionStatus.hasOwnProperty(permission)) {
-  //     return this._cachedPermissionStatus[permission];
-  //   } else {
-  //     const hasPermission = this._GuardService.getPermissionStatus(permission);
-  //     this._cachedPermissionStatus[permission] = hasPermission;
-  //     return hasPermission;
-  //   }
-  // }
 }
