@@ -36,6 +36,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
   paymentDetails!: PaymentDetails;
   paymentForm!: FormGroup;
   gender: string[] = ['male', 'female'];
+  creatingStatus: boolean = false;
   days: { name: string; value: string }[] = [
     { name: 'Saturday', value: 'Sat' },
     { name: 'Sunday', value: 'Sun' },
@@ -121,7 +122,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     }
     return result;
   }
-  creatingStatus: boolean = false;
+
   createPaymentLink(form: FormGroup) {
     if (form.valid) {
       this.creatingStatus = true;
@@ -144,7 +145,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         .create_payment_link(filteredData)
         .subscribe((res) => {
           if (res.status == 1) {
-          this.creatingStatus = false;
+            this.creatingStatus = false;
             this.PaymentLink = res.data;
             this.paymentForm.reset();
             this.createPaymentForm();
@@ -282,7 +283,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
 
   handleProgramTypeChange(value: any) {
     this.handelMealTypes();
-    this.resetFormFields()
+    this.resetFormFields();
     value.toLowerCase().includes('custom')
       ? (this.isCustom = true)
       : (this.isCustom = false);
@@ -314,7 +315,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         plan_id: value.id,
       });
     } else {
-      this.paymentForm.patchValue({program_id: value.id});
+      this.paymentForm.patchValue({ program_id: value.id });
       this.mealTypes = this.getSelectedMealTypes(value.max_meals, 'Meal');
       this.snackTypes = this.getSelectedMealTypes(value.no_snacks, 'Snack');
     }
@@ -374,7 +375,10 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     this.mealTypes = [];
     this.snackTypes = [];
     this.paymentForm.removeControl('meal_types');
-    this.paymentForm.addControl('meal_types', new FormArray([], [Validators.required]));
+    this.paymentForm.addControl(
+      'meal_types',
+      new FormArray([], [Validators.required])
+    );
     this.paymentForm.removeControl('snack_types');
     this.paymentForm.addControl('snack_types', new FormArray([]));
   }
