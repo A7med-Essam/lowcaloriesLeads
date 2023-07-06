@@ -86,4 +86,18 @@ getFiles(refund_id:number): Observable<any> {
 uploadRefundFiles(file:File): Observable<any> {
   return this._ApiConfigService.postReq3(`uploadRefundFiles` , file);
 }
+
+// =============================================
+
+getReasons(): Observable<any> {
+  return this._ApiConfigService.postReq3(`refundReasons`,'');
+}
+
+addReasons(name:string): Observable<any> {
+  return this._ApiConfigService.postReq3(`addRefundReason`,{name});
+}
+
+deleteReasons(refund_reason_id:number): Observable<any> {
+  return this._ApiConfigService.postReq3(`deleteRefundReason`,{refund_reason_id});
+}
 }

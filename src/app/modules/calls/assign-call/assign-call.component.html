@@ -4,9 +4,9 @@
             (click)="assignModal2 = true"></button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
+        <p-button class="mx-1" [disabled]="!exportCallsPermission" icon="pi pi-file" label="Export as Excel" (click)="export()">
         </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allCalls.length">
+        <p-button class="mx-1" [disabled]="!printCallsPermission" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allCalls.length">
         </p-button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
@@ -82,7 +82,7 @@
                         class="m-1 p-button-sm"></button>
                     <button pButton pRipple class="p-button-success mx-1" icon="pi pi-link"
                         (click)="displayAssignedUsersModal(call.id);getAssignedUsers(call)"></button>
-                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
+                    <button pButton type="button" [disabled]="!printCallsPermission" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
                         (click)="print(call)"></button>
                 </td>
             </tr>

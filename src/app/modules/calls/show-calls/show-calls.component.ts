@@ -3,13 +3,10 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Checkbox } from 'primeng/checkbox';
 import { CallsService, ICalls } from 'src/app/services/calls.service';
 import { SurveyService } from 'src/app/services/survey.service';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import { Dropdown } from 'primeng/dropdown';
-import { MessageService } from 'primeng/api';
 import { DislikeService } from 'src/app/services/dislike.service';
 import { LocalService } from 'src/app/services/local.service';
 import { Router } from '@angular/router';
+import { GuardService } from 'src/app/services/guard.service';
 
 @Component({
   selector: 'app-show-calls',
@@ -22,8 +19,13 @@ export class ShowCallsComponent implements OnInit {
     private _SurveyService: SurveyService,
     private _DislikeService: DislikeService,
     private _LocalService: LocalService,
-    private _Router: Router
+    private _Router: Router,
+    private _GuardService:GuardService
   ) {}
+  createCallsPermission: boolean = false;
+  getPermission() {
+    this.createCallsPermission = this._GuardService.getPermissionStatus('create_calls');
+  }
 
   calls: ICalls[] = [];
   PaginationInfo: any;
@@ -33,6 +35,7 @@ export class ShowCallsComponent implements OnInit {
     this.getAgents();
     this.createFilterForm();
     this.getAgentBranches();
+    this.getPermission();
   }
 
   getCalls(page: number = 1) {

@@ -15,6 +15,10 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ImageModule } from 'primeng/image';
+import { ShowReasonsComponent } from './show-reasons/show-reasons.component';
+import { AddReasonsComponent } from './add-reasons/add-reasons.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 const APP_PRIMENG_MODULE = [
   DropdownModule,
   InputTextModule,
@@ -23,14 +27,17 @@ const APP_PRIMENG_MODULE = [
   CalendarModule,
   InputTextareaModule,
   CheckboxModule,
-  MultiSelectModule,ImageModule
+  MultiSelectModule,ImageModule,
+  ConfirmDialogModule
 ];
 
 @NgModule({
   declarations: [
     ShowRefundComponent,
     CreateRefundComponent,
-    DetailsRefundComponent
+    DetailsRefundComponent,
+    ShowReasonsComponent,
+    AddReasonsComponent
   ],
   imports: [
     CommonModule,

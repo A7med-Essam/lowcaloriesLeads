@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  AgentTargetService,
-  ITarget,
-} from 'src/app/services/agent-target.service';
 import { DislikeService } from 'src/app/services/dislike.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { RefundService } from 'src/app/services/refund.service';
 import { Checkbox } from 'primeng/checkbox';
-import { LocalService } from 'src/app/services/local.service';
 import { GuardService } from 'src/app/services/guard.service';
 
 @Component({
@@ -26,13 +21,36 @@ export class ShowRefundComponent implements OnInit {
     private _Router: Router,
     private _RefundService: RefundService,
     private _DislikeService: DislikeService,
-    private _LocalService:LocalService,
     private _GuardService:GuardService
   ) {
     this.role = this._GuardService.getUser().role_name
   }
 
+  printPermission: boolean = false;
+  exportPermission: boolean = false;
+  createPermission: boolean = false;
+  downloadSamplePermission: boolean = false;
+  uploadFilesPermission: boolean = false;
+  uploadReportPermission: boolean = false;
+
+  getPermission() {
+    this.printPermission = this._GuardService.getPermissionStatus('print_refund');
+    this.exportPermission = this._GuardService.getPermissionStatus('export_refund');
+    this.createPermission = this._GuardService.getPermissionStatus('create_refund');
+    this.downloadSamplePermission = this._GuardService.getPermissionStatus('downloadSample_refund');
+    this.uploadFilesPermission = this._GuardService.getPermissionStatus('uploadFiles_refund');
+    this.uploadReportPermission = this._GuardService.getPermissionStatus('uploadReport_refund');
+  }
+
+  displayUploadModal(){
+    if (this.downloadSamplePermission) {
+      this.uploadModal = true
+    }
+  }
+
   exportAsPDF() {
+    if (this.printPermission) {
+
     // Default export is a4 paper, portrait, using millimeters for units
     const doc = new jsPDF();
     doc.internal.pageSize.width = 600;
@@ -134,12 +152,14 @@ export class ShowRefundComponent implements OnInit {
     }
 
     doc.save('example.pdf');
+    }
   }
 
   refunds: any;
   PaginationInfo: any;
 
   ngOnInit(): void {
+    this.getPermission();
     this.createUploadingForm()
     this.getRefunds();
     this.createFilterForm();
@@ -257,14 +277,16 @@ export class ShowRefundComponent implements OnInit {
   // ****************************************************export************************************************************************
 
   export() {
-    this._RefundService.RefundExport().subscribe({
-      next: (res) => {
-        const link = document.createElement('a');
-        link.target = '_blank';
-        link.href = res.data;
-        link.click();
-      },
-    });
+    if (this.exportPermission) {
+      this._RefundService.RefundExport().subscribe({
+        next: (res) => {
+          const link = document.createElement('a');
+          link.target = '_blank';
+          link.href = res.data;
+          link.click();
+        },
+      });
+    }
   }
 
   // ****************************************************filter options************************************************************************
@@ -356,6 +378,7 @@ export class ShowRefundComponent implements OnInit {
 
   // ****************************************************print row************************************************************************
   print(refund:any){
+    if (this.printPermission) {
       // Default export is a4 paper, portrait, using millimeters for units
       const doc = new jsPDF();
       const imageFile = '../../../../assets/images/logo.png';
@@ -428,8 +451,8 @@ export class ShowRefundComponent implements OnInit {
       }
   
       doc.save('refund.pdf');
+    }
   }
-
 
   // ****************************************************Report************************************************************************
 
@@ -447,7 +470,7 @@ export class ShowRefundComponent implements OnInit {
 
   uploadingStatus:boolean = false
   insertReport(form:FormGroup){
-    if (form.valid) {
+    if (form.valid && this.uploadReportPermission) {
       this.uploadingStatus = true
       this._RefundService.uploadAccountingRefundDetails(form.value).subscribe(res=>{
         this.refunds = this.refunds.map((e:any)=> {
@@ -504,12 +527,14 @@ export class ShowRefundComponent implements OnInit {
     uploadModal: boolean = false;
 
     getSample() {
-      this._RefundService.getSample().subscribe((res) => {
-        const link = document.createElement('a');
-        link.target = '_blank';
-        link.href = res.data;
-        link.click();
-      });
+      if (this.downloadSamplePermission) {
+        this._RefundService.getSample().subscribe((res) => {
+          const link = document.createElement('a');
+          link.target = '_blank';
+          link.href = res.data;
+          link.click();
+        });
+      }
     }
   
     getFormData(object: any) {
@@ -520,7 +545,7 @@ export class ShowRefundComponent implements OnInit {
   
     onFileSelected(event: any) {
       const file: File = event.target.files[0];
-      if (file) {
+      if (file && this.downloadSamplePermission) {
         let f: File = this.getFormData({ file: file }) as any;
         this._RefundService.uploadFile(f).subscribe({
           next: (res) => {
@@ -586,7 +611,7 @@ export class ShowRefundComponent implements OnInit {
        }
    
        insertRefundFiles(form:FormGroup){
-         if (form.valid) {
+         if (form.valid && this.uploadFilesPermission) {
            this.uploadingStatus = true
            this._RefundService.uploadRefundFiles(form.value).subscribe(res=>{
              this.uploadingStatus = false

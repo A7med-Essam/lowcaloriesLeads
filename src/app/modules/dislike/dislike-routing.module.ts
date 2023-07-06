@@ -47,7 +47,7 @@ const routes: Routes = [
     component: ReasonsComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['showDislike_reasons'],
+      permission: ['reasons_dislike'],
     },
   },
   {
@@ -55,7 +55,7 @@ const routes: Routes = [
     component: AddReasonsComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['createDislike_reasons'],
+      permission: ['reasons_dislike'],
     },
   },
 ];

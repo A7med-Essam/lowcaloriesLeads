@@ -1,18 +1,11 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="mb-3">
-        <button pButton pRipple label="Create Refund" class="p-button-success mx-1" icon="pi pi-plus"
-            routerLink="../create"></button>
-        <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
-        </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
-        </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()"
-            *ngIf="allRefunds.length">
-        </p-button>
-        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
-        </p-button>
-        <p-button (click)="uploadModal = true" class="mb-3 mx-1" icon="pi pi-external-link"
-        label="Upload"></p-button>
+        <button [disabled]="!createPermission" pButton pRipple label="Create Refund" class="p-button-success mx-1" icon="pi pi-plus" routerLink="../create"></button>
+        <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;"></p-button>
+        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()"></p-button>
+        <p-button [disabled]="!printPermission" class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allRefunds.length"></p-button>
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns"></p-button>
+        <p-button [disabled]="!downloadSamplePermission" (click)="displayUploadModal()" class="mb-3 mx-1" icon="pi pi-external-link" label="Upload"></p-button>
     </div>
 </div>
 
@@ -76,12 +69,12 @@
                 <td class="text-center" *ngIf="columns[19].status">{{refund.subscription_plan}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-upload" class="m-1 p-button-sm p-button-success"
-                    (click)="displayUploadFilesModal(refund.id)"></button>
+                    (click)="displayUploadFilesModal(refund.id)" [disabled]="!uploadFilesPermission"></button>
                     <button pButton type="button" icon="pi pi-file-o" class="m-1 p-button-sm p-button-warning"
-                        (click)="displayReportModal(refund.id)" *ngIf="role == 'super_admin' || role == 'accounting'"></button>
+                        (click)="displayReportModal(refund.id)" [disabled]="!uploadReportPermission"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(refund)"
                         class="m-1 p-button-sm"></button>
-                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
+                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" [disabled]="!printPermission"
                         (click)="print(refund)"></button>
                 </td>
             </tr>
@@ -127,49 +120,6 @@
                         appendTo="body" styleClass="w-100" placeholder="Select Reason" [filter]="true">
                     </p-dropdown>
                 </div>
-                <!-- <div class="col-lg-6 col-12 my-2">
-                    <label for="">name</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='name' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">email</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='email' />
-                </div> -->
-
-                <!-- <div class="col-lg-6 col-12 my-2">
-                    <label for="">subscription_plan</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='subscription_plan' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">remaining_days</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='remaining_days' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">payment_method</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='payment_method' />
-                </div> -->
-
-                <!-- <div class="col-lg-6 col-12 my-2">
-                    <label for="">address</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='address' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">bank_name</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='bank_name' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">iban</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='iban' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">bank_account_number</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='bank_account_number' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">account_hold_name</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='account_hold_name' />
-                </div> -->
-
             </div>
         </form>
     </div>

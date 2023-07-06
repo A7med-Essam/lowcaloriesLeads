@@ -218,6 +218,7 @@
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('cutlery')?.touched &&
                 paymentForm.get('cutlery')?.hasError('required')">This field is required.</small>
             </div>
+            <hr>
             <div class="col-xl-3 col-md-6 col-12 my-3">
                 <label for="">Emirates</label>
                 <p-dropdown [options]="paymentDetails?.emirates == undefined ?[]:paymentDetails.emirates"
