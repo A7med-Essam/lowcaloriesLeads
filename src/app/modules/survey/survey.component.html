@@ -1,8 +1,9 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="mb-3">
-        <p-button class="mb-3 mx-2" icon="pi pi-trash" label="Recycle Bin" routerLink="../recycle-bin"></p-button>
-        <p-button class="mb-3 mx-2" icon="pi pi-plus" label="Add Row" routerLink="../insert-question">
-        </p-button>
+        <button [disabled]="!createQuestionPermission" pButton pRipple label="Create Row" class="p-button-success mx-2"
+            icon="pi pi-plus" routerLink="../insert-question"></button>
+        <button [disabled]="!deleteQuestionPermission" pButton pRipple label="Recycle Bin" class="p-button-primary mx-2"
+            icon="pi pi-trash" routerLink="../recycle-bin"></button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
     </div>
@@ -16,7 +17,8 @@
         [rowsPerPageOptions]="[10,25,50,100]">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center"><button class="btn btn-danger" (click)="confirm2()">Delete Rows</button></th>
+                <th class="text-center" *ngIf="deleteQuestionPermission"><button class="btn btn-danger"
+                        (click)="confirm2()">Delete Rows</button></th>
                 <th class="text-center" *ngIf="columns[0].status">id</th>
                 <th class="text-center" *ngIf="columns[1].status">Label en</th>
                 <th class="text-center" *ngIf="columns[2].status">Label ar</th>
@@ -28,11 +30,13 @@
         </ng-template>
         <ng-template pTemplate="body" let-survey>
             <tr>
-                <td class="text-center"><input type="checkbox" #surveyIdInput (click)="getSpecificRows(surveyIdInput)"
-                        [value]="survey?.id">
+                <td class="text-center" *ngIf="deleteQuestionPermission"><input type="checkbox" #surveyIdInput
+                        (click)="getSpecificRows(surveyIdInput)" [value]="survey?.id">
                 </td>
                 <td class="text-center" *ngIf="columns[0].status">{{survey?.id}}</td>
-                <td class="text-center" (click)="update(col1_e1,col1_e2)" *ngIf="columns[1].status">
+                <td class="text-center" *ngIf="columns[1].status">{{survey?.question}}</td>
+                <td class="text-center" *ngIf="columns[2].status">{{survey?.question_ar}}</td>
+                <!-- <td class="text-center" (click)="update(col1_e1,col1_e2)" *ngIf="columns[1].status">
                     <div #col1_e1>{{survey?.question}}</div>
                     <input #col1_e2 class="d-none" type="text"
                         (blur)="confirmUpdate(survey,col1_e1, col1_e2,'question')" [value]="survey?.question">
@@ -41,18 +45,19 @@
                     <div #col2_e1>{{survey?.question_ar}}</div>
                     <input #col2_e2 class="d-none" type="text"
                         (blur)="confirmUpdate(survey,col2_e1, col2_e2,'question_ar')" [value]="survey?.question_ar">
-                </td>
+                </td> -->
                 <td class="text-center" *ngIf="columns[3].status">{{survey?.type}}</td>
                 <td class="text-center" *ngIf="columns[4].status">{{survey?.answers.length}}</td>
                 <td class="text-center" *ngIf="columns[5].status">{{survey?.required}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-trash" (click)="confirm(survey?.id)"
-                        class="m-1 p-button-danger p-button-sm"></button>
-                    <button pButton type="button" icon="pi pi-pencil" (click)="updateRow(survey?.id)"
-                        class="m-1 p-button-warning p-button-sm"></button>
+                        [disabled]="!deleteQuestionPermission" class="m-1 p-button-danger p-button-sm"></button>
+                    <button [disabled]="!updateQuestionPermission" pButton type="button" icon="pi pi-pencil"
+                        (click)="updateRow(survey?.id)" class="m-1 p-button-warning p-button-sm"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(survey?.id)"
                         class="m-1 p-button-sm"></button>
-                    <button pButton type="button" icon="pi pi-check-square" *ngIf="survey?.type != 'text' && survey?.type != 'date'" (click)="insertAnswer(survey)"
+                    <button [disabled]="!createAnswerPermission" pButton type="button" icon="pi pi-check-square"
+                        *ngIf="survey?.type != 'text' && survey?.type != 'date'" (click)="insertAnswer(survey)"
                         class="m-1 p-button-success p-button-sm"></button>
                 </td>
             </tr>
@@ -121,7 +126,7 @@
             </div>
             <div class="col-md-6 my-3">
                 <label for="">customer_name</label>
-                <input type="text" pInputText ngClass="w-100"  #filter4 />
+                <input type="text" pInputText ngClass="w-100" #filter4 />
             </div>
             <div class="col-md-6 my-3">
                 <label for="">customer_mobile</label>
@@ -141,7 +146,8 @@
     </div>
     <ng-template pTemplate="footer">
         <div class="upload-btn-wrapper">
-            <button class="btn btn-primary" (click)="filter(filter1,filter2,filter3,filter4,filter5,filter6);filterModal = false;">
+            <button class="btn btn-primary"
+                (click)="filter(filter1,filter2,filter3,filter4,filter5,filter6);filterModal = false;">
                 Apply Filter
             </button>
             <button class="btn btn-secondary" (click)="resetFilter(filter1,filter2,filter3,filter4,filter5,filter6)">
@@ -151,7 +157,7 @@
     </ng-template>
 </p-dialog>
 
-<p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
+<!-- <p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
     [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
 
     <ng-template pTemplate="footer">
@@ -163,4 +169,4 @@
             <input type="file" name="myfile" (change)="onFileSelected($event)" />
         </div>
     </ng-template>
-</p-dialog>
+</p-dialog> -->

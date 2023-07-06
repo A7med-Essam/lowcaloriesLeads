@@ -10,6 +10,7 @@ import { SurveyService } from 'src/app/services/survey.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Checkbox } from 'primeng/checkbox';
+import { GuardService } from 'src/app/services/guard.service';
 
 @Component({
   selector: 'app-show-target',
@@ -21,106 +22,132 @@ export class ShowTargetComponent implements OnInit {
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _AgentTargetService: AgentTargetService,
-    private _DislikeService: DislikeService
+    private _DislikeService: DislikeService,
+    private _GuardService: GuardService
   ) {}
 
-  exportAsPDF() {
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
-    doc.internal.pageSize.width = 420;
-    const imageFile = '../../../../assets/images/logo.png';
-    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
-
-    doc.setTextColor(50);
-    doc.setFontSize(14);
-    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Customer Service Target', 10, 45);
-    doc.text('Prepared By: Low Calories Technical Team', 10, 55);
-    doc.text('Requested By: Mohamed Fawzy', 10, 65);
-    doc.text('Low Calories Restaurant - Egypt', 320, 25);
-    doc.text('3rd Settelment, New Cairo', 320, 35);
-    doc.text('Phone: 201116202225', 320, 45);
-    doc.text('Email: info@thelowcalories.com', 320, 55);
-    doc.text('Website: thelowcalories.com', 320, 65);
-
-    const headers = [
-      'Date',
-      'Agent',
-      'Team',
-      'Branch',
-      'customer_CID',
-      'customer_number',
-      'customer_Type',
-      'Invoice_number',
-      'Status',
-      'Paid_by',
-      'Type',
-    ];
-    let filteredArray = this.allTargets.filter((item: any) =>
-      this.specificRows.includes(item.id)
+  createPermission: boolean = false;
+  printPermission: boolean = false;
+  exportPermission: boolean = false;
+  downloadSamplePermission: boolean = false;
+  getPermission() {
+    this.createPermission =
+      this._GuardService.getPermissionStatus('create_target');
+    this.printPermission =
+      this._GuardService.getPermissionStatus('print_target');
+    this.exportPermission =
+      this._GuardService.getPermissionStatus('export_target');
+    this.downloadSamplePermission = this._GuardService.getPermissionStatus(
+      'downloadSample_target'
     );
-    filteredArray.length == 0 &&
-      this.appliedFilters == null &&
-      (filteredArray = this.allTargets);
-    filteredArray.length == 0 &&
-      this.appliedFilters != null &&
-      (filteredArray = this.targets);
-    const convertedData = filteredArray.map((obj: any) => [
-      obj.date,
-      obj.agent.name,
-      obj.team,
-      obj.branch,
-      obj.client_cid,
-      obj.client_number,
-      obj.customer_type,
-      obj.invoice_number,
-      obj.status.toUpperCase(),
-      obj.paid_by,
-      obj.type,
-    ]);
-    autoTable(doc, { startY: 70 });
-    autoTable(doc, {
-      head: [headers],
-      body: convertedData,
-    });
+  }
 
-    // Set the line color and width
-    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
-    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-
-    // Draw a line at the bottom of the page
-
-    // Get the total number of pages
-    const totalPages = doc.internal.pages;
-
-    // Iterate over each page and add the footer
-    for (let i = 1; i <= totalPages.length; i++) {
-      doc.internal.pageSize.width = 420;
-      doc.line(
-        20,
-        doc.internal.pageSize.height - 20,
-        doc.internal.pageSize.width - 20,
-        doc.internal.pageSize.height - 20
-      );
-      // Set the current page as active
-      doc.setPage(i);
-      // Set the position and alignment of the footer
-      doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(
-        'Thelowcalories.com',
-        20,
-        doc.internal.pageSize.getHeight() - 10
-      );
+  displayUploadModal() {
+    if (this.downloadSamplePermission) {
+      this.uploadModal = true;
     }
+  }
 
-    doc.save('example.pdf');
+  exportAsPDF() {
+    if (this.printPermission) {
+      // Default export is a4 paper, portrait, using millimeters for units
+      const doc = new jsPDF();
+      doc.internal.pageSize.width = 420;
+      const imageFile = '../../../../assets/images/logo.png';
+      doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+
+      doc.setTextColor(50);
+      doc.setFontSize(14);
+      doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+      doc.text('Issue Subject:Customer Service Target', 10, 45);
+      doc.text('Prepared By: Low Calories Technical Team', 10, 55);
+      doc.text('Requested By: Mohamed Fawzy', 10, 65);
+      doc.text('Low Calories Restaurant - Egypt', 320, 25);
+      doc.text('3rd Settelment, New Cairo', 320, 35);
+      doc.text('Phone: 201116202225', 320, 45);
+      doc.text('Email: info@thelowcalories.com', 320, 55);
+      doc.text('Website: thelowcalories.com', 320, 65);
+
+      const headers = [
+        'Date',
+        'Agent',
+        'Team',
+        'Branch',
+        'customer_CID',
+        'customer_number',
+        'customer_Type',
+        'Invoice_number',
+        'Status',
+        'Paid_by',
+        'Type',
+      ];
+      let filteredArray = this.allTargets.filter((item: any) =>
+        this.specificRows.includes(item.id)
+      );
+      filteredArray.length == 0 &&
+        this.appliedFilters == null &&
+        (filteredArray = this.allTargets);
+      filteredArray.length == 0 &&
+        this.appliedFilters != null &&
+        (filteredArray = this.targets);
+      const convertedData = filteredArray.map((obj: any) => [
+        obj.date,
+        obj.agent.name,
+        obj.team,
+        obj.branch,
+        obj.client_cid,
+        obj.client_number,
+        obj.customer_type,
+        obj.invoice_number,
+        obj.status.toUpperCase(),
+        obj.paid_by,
+        obj.type,
+      ]);
+      autoTable(doc, { startY: 70 });
+      autoTable(doc, {
+        head: [headers],
+        body: convertedData,
+      });
+
+      // Set the line color and width
+      doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+      doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+      // Draw a line at the bottom of the page
+
+      // Get the total number of pages
+      const totalPages = doc.internal.pages;
+
+      // Iterate over each page and add the footer
+      for (let i = 1; i <= totalPages.length; i++) {
+        doc.internal.pageSize.width = 420;
+        doc.line(
+          20,
+          doc.internal.pageSize.height - 20,
+          doc.internal.pageSize.width - 20,
+          doc.internal.pageSize.height - 20
+        );
+        // Set the current page as active
+        doc.setPage(i);
+        // Set the position and alignment of the footer
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(
+          'Thelowcalories.com',
+          20,
+          doc.internal.pageSize.getHeight() - 10
+        );
+      }
+
+      doc.save('example.pdf');
+    }
   }
 
   targets: any;
   PaginationInfo: any;
 
   ngOnInit(): void {
+    this.getPermission();
     this.getTargets();
     this.createFilterForm();
     this.getAgents();
@@ -249,14 +276,16 @@ export class ShowTargetComponent implements OnInit {
   // ****************************************************export************************************************************************
 
   export() {
-    this._AgentTargetService.exportTarget().subscribe({
-      next: (res) => {
-        const link = document.createElement('a');
-        link.target = '_blank';
-        link.href = res.data;
-        link.click();
-      },
-    });
+    if (this.exportPermission) {
+      this._AgentTargetService.exportTarget().subscribe({
+        next: (res) => {
+          const link = document.createElement('a');
+          link.target = '_blank';
+          link.href = res.data;
+          link.click();
+        },
+      });
+    }
   }
 
   // ****************************************************filter options************************************************************************
@@ -359,77 +388,80 @@ export class ShowTargetComponent implements OnInit {
 
   // ****************************************************print row************************************************************************
   print(target: any) {
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
-    const imageFile = '../../../../assets/images/logo.png';
-    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
-    doc.setTextColor(50);
-    doc.setFontSize(10);
-    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Customer Service Target', 10, 40);
-    doc.text('Prepared By: Low Calories Technical Team', 10, 45);
-    doc.text('Requested By: Mohamed Fawzy', 10, 50);
-    doc.text('Low Calories Restaurant - Egypt', 150, 30);
-    doc.text('3rd Settelment, New Cairo', 150, 35);
-    doc.text('Phone: 201116202225', 150, 40);
-    doc.text('Email: info@thelowcalories.com', 150, 45);
-    doc.text('Website: thelowcalories.com', 150, 50);
-
-    autoTable(doc, { startY: 55 });
-
-    var columns = [
-      { title: 'Date', dataKey: target.date },
-      { title: 'agent_name', dataKey: target.agent.name },
-      { title: 'Team', dataKey: target.team },
-      { title: 'Branch', dataKey: target.branch },
-      { title: 'customer_cid', dataKey: target.client_cid },
-      { title: 'customer_number', dataKey: target.client_number },
-      { title: 'customer_type', dataKey: target.customer_type },
-      { title: 'invoice_number', dataKey: target.invoice_number },
-      { title: 'paid_by', dataKey: target.paid_by },
-      { title: 'type', dataKey: target.type },
-      { title: 'status', dataKey: target.status.toUpperCase() },
-    ];
-
-    // doc.text(140, 40, "Report");
-    autoTable(doc, { body: columns });
-
-    // Set the line color and width
-    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
-    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-
-    // Draw a line at the bottom of the page
-
-    // Get the total number of pages
-    const totalPages = doc.internal.pages;
-
-    // Iterate over each page and add the footer
-    for (let i = 1; i <= totalPages.length; i++) {
-      doc.line(
-        20,
-        doc.internal.pageSize.height - 20,
-        doc.internal.pageSize.width - 20,
-        doc.internal.pageSize.height - 20
-      );
-      // Set the current page as active
-      doc.setPage(i);
-      // Set the position and alignment of the footer
+    if (this.printPermission) {
+      // Default export is a4 paper, portrait, using millimeters for units
+      const doc = new jsPDF();
+      const imageFile = '../../../../assets/images/logo.png';
+      doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+      doc.setTextColor(50);
       doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(
-        'Thelowcalories.com',
-        20,
-        doc.internal.pageSize.getHeight() - 10
-      );
-    }
+      doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+      doc.text('Issue Subject:Customer Service Target', 10, 40);
+      doc.text('Prepared By: Low Calories Technical Team', 10, 45);
+      doc.text('Requested By: Mohamed Fawzy', 10, 50);
+      doc.text('Low Calories Restaurant - Egypt', 150, 30);
+      doc.text('3rd Settelment, New Cairo', 150, 35);
+      doc.text('Phone: 201116202225', 150, 40);
+      doc.text('Email: info@thelowcalories.com', 150, 45);
+      doc.text('Website: thelowcalories.com', 150, 50);
 
-    doc.save('target.pdf');
+      autoTable(doc, { startY: 55 });
+
+      var columns = [
+        { title: 'Date', dataKey: target.date },
+        { title: 'agent_name', dataKey: target.agent.name },
+        { title: 'Team', dataKey: target.team },
+        { title: 'Branch', dataKey: target.branch },
+        { title: 'customer_cid', dataKey: target.client_cid },
+        { title: 'customer_number', dataKey: target.client_number },
+        { title: 'customer_type', dataKey: target.customer_type },
+        { title: 'invoice_number', dataKey: target.invoice_number },
+        { title: 'paid_by', dataKey: target.paid_by },
+        { title: 'type', dataKey: target.type },
+        { title: 'status', dataKey: target.status.toUpperCase() },
+      ];
+
+      // doc.text(140, 40, "Report");
+      autoTable(doc, { body: columns });
+
+      // Set the line color and width
+      doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+      doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+      // Draw a line at the bottom of the page
+
+      // Get the total number of pages
+      const totalPages = doc.internal.pages;
+
+      // Iterate over each page and add the footer
+      for (let i = 1; i <= totalPages.length; i++) {
+        doc.line(
+          20,
+          doc.internal.pageSize.height - 20,
+          doc.internal.pageSize.width - 20,
+          doc.internal.pageSize.height - 20
+        );
+        // Set the current page as active
+        doc.setPage(i);
+        // Set the position and alignment of the footer
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(
+          'Thelowcalories.com',
+          20,
+          doc.internal.pageSize.getHeight() - 10
+        );
+      }
+
+      doc.save('target.pdf');
+    }
   }
 
-    // ****************************************************upload Modal************************************************************************
-    uploadModal: boolean = false;
+  // ****************************************************upload Modal************************************************************************
+  uploadModal: boolean = false;
 
-    getSample() {
+  getSample() {
+    if (this.downloadSamplePermission) {
       this._AgentTargetService.getSample().subscribe((res) => {
         const link = document.createElement('a');
         link.target = '_blank';
@@ -437,14 +469,16 @@ export class ShowTargetComponent implements OnInit {
         link.click();
       });
     }
-  
-    getFormData(object: any) {
-      const formData = new FormData();
-      Object.keys(object).forEach((key) => formData.append(key, object[key]));
-      return formData;
-    }
-  
-    onFileSelected(event: any) {
+  }
+
+  getFormData(object: any) {
+    const formData = new FormData();
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
+    return formData;
+  }
+
+  onFileSelected(event: any) {
+    if (this.downloadSamplePermission) {
       const file: File = event.target.files[0];
       if (file) {
         let f: File = this.getFormData({ file: file }) as any;
@@ -458,4 +492,5 @@ export class ShowTargetComponent implements OnInit {
         this.uploadModal = false;
       }
     }
+  }
 }

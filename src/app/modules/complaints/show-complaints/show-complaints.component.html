@@ -1,17 +1,17 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="mb-3">
-        <button pButton pRipple label="Add Complaint" class="p-button-success mx-1" icon="pi pi-plus"
+        <button [disabled]="!createPermission" pButton pRipple label="Add Complaint" class="p-button-success mx-1" icon="pi pi-plus"
             routerLink="../create"></button>
         <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
+        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
         </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" *ngIf="allComplaints.length"
+        <p-button [disabled]="!printPermission" class="mx-1" icon="pi pi-file" label="Export as PDF" *ngIf="allComplaints.length"
             (click)="exportAsPDF()">
         </p-button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
-        <p-button (click)="uploadModal = true" class="mb-3 mx-1" icon="pi pi-external-link"
+        <p-button [disabled]="!downloadSamplePermission" (click)="displayUploadModal()" class="mb-3 mx-1" icon="pi pi-external-link"
         label="Upload"></p-button>
     </div>
 </div>
@@ -57,13 +57,13 @@
                 <td class="text-center" *ngIf="columns[9].status">{{complaint.issue_details}}</td>
                 <td class="text-center" *ngIf="columns[10].status">{{complaint.status}}</td>
                 <td class="text-center">
-                    <button pButton type="button" icon="pi pi-upload" class="m-1 p-button-sm p-button-success"
+                    <button  [disabled]="!uploadFilesPermission" pButton type="button" icon="pi pi-upload" class="m-1 p-button-sm p-button-success"
                     (click)="displayUploadFilesModal(complaint.id)"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(complaint)"
                         class="m-1 p-button-sm"></button>
-                    <button pButton type="button" icon="pi pi-pencil" (click)="displayUpdateModal(complaint)"
+                    <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdateModal(complaint)"
                         class="m-1 p-button-sm p-button-warning"></button>
-                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(complaint)"></button>
+                    <button  [disabled]="!printPermission" pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(complaint)"></button>
                 </td>
             </tr>
         </ng-template>
@@ -195,7 +195,7 @@
 
 <p-dialog header="Upload Files" [(visible)]="uploadFilesModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
     [resizable]="false">
-    <form [formGroup]="uploadForm" (ngSubmit)='insertReport(uploadForm)'>
+    <form [formGroup]="uploadForm" (ngSubmit)='uploadFiles(uploadForm)'>
         <div class="row mx-0">
             <div class="col-12 my-2">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">

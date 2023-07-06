@@ -6,6 +6,7 @@ import { LocalService } from 'src/app/services/local.service';
 import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { GuardService } from 'src/app/services/guard.service';
 
 @Component({
   selector: 'app-show-dislike',
@@ -19,10 +20,32 @@ export class ShowDislikeComponent implements OnInit {
   constructor(
     private _Router: Router,
     private _DislikeService: DislikeService,
-    private _LocalService:LocalService
+    private _GuardService:GuardService
   ) {
-    this.userId = this._LocalService.getJsonValue("userInfo_oldLowCalories").id
-    this.role = this._LocalService.getJsonValue("userInfo_oldLowCalories").role
+    this.userId = _GuardService.getUser().id
+    this.role = _GuardService.getUser().role_name
+  }
+
+  printPermission: boolean = false;
+  exportPermission: boolean = false;
+  createPermission: boolean = false;
+  downloadSamplePermission: boolean = false;
+  uploadFilesPermission: boolean = false;
+  updatePermission: boolean = false;
+
+  getPermission() {
+    this.printPermission = this._GuardService.getPermissionStatus('print_dislike');
+    this.exportPermission = this._GuardService.getPermissionStatus('export_dislike');
+    this.createPermission = this._GuardService.getPermissionStatus('create_dislike');
+    this.updatePermission = this._GuardService.getPermissionStatus('update_dislike');
+    this.downloadSamplePermission = this._GuardService.getPermissionStatus('downloadSample_dislike');
+    this.uploadFilesPermission = this._GuardService.getPermissionStatus('uploadFiles_dislike');
+  }
+
+  displayUploadModal(){
+    if (this.downloadSamplePermission) {
+      this.uploadModal = true
+    }
   }
 
   branches: any[] = [];
@@ -31,6 +54,7 @@ export class ShowDislikeComponent implements OnInit {
   PaginationInfo: any;
 
   ngOnInit(): void {
+    this.getPermission();
     this.createUploadingForm();
     this.getDislikes();
     this.getAgentBranches();
@@ -163,14 +187,16 @@ export class ShowDislikeComponent implements OnInit {
   }
 
   export(){
-    this._DislikeService.exportDislike().subscribe({
-      next:res=>{
-        const link = document.createElement('a');
-        link.href = res.data;
-        link.target = "_blank"
-        link.click();
-      }
-    })
+    if (this.exportPermission) {      
+      this._DislikeService.exportDislike().subscribe({
+        next:res=>{
+          const link = document.createElement('a');
+          link.href = res.data;
+          link.target = "_blank"
+          link.click();
+        }
+      })
+    }
   }
 
     // ****************************************************filter columns************************************************************************
@@ -243,6 +269,7 @@ export class ShowDislikeComponent implements OnInit {
     }
 
     exportAsPDF() {
+      if (this.printPermission) {
       // Default export is a4 paper, portrait, using millimeters for units
       const doc = new jsPDF();
       doc.internal.pageSize.width = 420;
@@ -323,10 +350,12 @@ export class ShowDislikeComponent implements OnInit {
       }
   
       doc.save('example.pdf');
+      }
     }
 
      // ****************************************************print row************************************************************************
   print(dislike:any){
+    if (this.printPermission) {
     // Default export is a4 paper, portrait, using millimeters for units
     const doc = new jsPDF();
     const imageFile = '../../../../assets/images/logo.png';
@@ -394,17 +423,20 @@ export class ShowDislikeComponent implements OnInit {
     }
 
     doc.save('dislike.pdf');
+  }
 }
     // ****************************************************upload Modal************************************************************************
     uploadModal: boolean = false;
 
     getSample() {
+    if (this.downloadSamplePermission) {
       this._DislikeService.getSample().subscribe((res) => {
         const link = document.createElement('a');
         link.target = '_blank';
         link.href = res.data;
         link.click();
       });
+      }
     }
   
     getFormData(object: any) {
@@ -414,17 +446,19 @@ export class ShowDislikeComponent implements OnInit {
     }
   
     onFileSelected(event: any) {
-      const file: File = event.target.files[0];
-      if (file) {
-        let f: File = this.getFormData({ file: file }) as any;
-        this._DislikeService.uploadFile(f).subscribe({
-          next: (res) => {
-            this.uploadModal = false;
-            this.getDislikes();
-            this.getAllDislikes();
-          },
-        });
-        this.uploadModal = false;
+      if (this.downloadSamplePermission) {
+        const file: File = event.target.files[0];
+        if (file) {
+          let f: File = this.getFormData({ file: file }) as any;
+          this._DislikeService.uploadFile(f).subscribe({
+            next: (res) => {
+              this.uploadModal = false;
+              this.getDislikes();
+              this.getAllDislikes();
+            },
+          });
+          this.uploadModal = false;
+        }
       }
     }
 
@@ -434,14 +468,16 @@ export class ShowDislikeComponent implements OnInit {
       uploadForm!: FormGroup;
       
       displayUploadFilesModal(id:number){
-        this.uploadForm.patchValue({
-          dislike_request_id: id,
-        });
-        this.uploadFilesModal = true;
+        if (this.uploadFilesPermission) {
+          this.uploadForm.patchValue({
+            dislike_request_id: id,
+          });
+          this.uploadFilesModal = true;
+        }
       }
       
       getUploadedFile(event: any) {
-        if (event.target.files && event.target.files.length) {
+        if (event.target.files && event.target.files.length && this.uploadFilesPermission) {
           const files = event.target.files;
           const readFile = (file: any) => {
             return new Promise((resolve, reject) => {
@@ -481,8 +517,8 @@ export class ShowDislikeComponent implements OnInit {
         });
       }
   
-      insertReport(form:FormGroup){
-        if (form.valid) {
+      uploadFiles(form:FormGroup){
+        if (form.valid && this.uploadFilesPermission) {
           this.uploadingStatus = true
           this._DislikeService.uploadDislikeRequestFiles(form.value).subscribe(res=>{
             this.uploadingStatus = false

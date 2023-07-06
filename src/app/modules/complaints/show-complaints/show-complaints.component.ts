@@ -7,6 +7,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ComplaintsService } from 'src/app/services/complaints.service';
 import { Checkbox } from 'primeng/checkbox';
+import { GuardService } from 'src/app/services/guard.service';
 
 @Component({
   selector: 'app-show-complaints',
@@ -18,10 +19,35 @@ export class ShowComplaintsComponent implements OnInit {
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _DislikeService: DislikeService,
-    private _ComplaintsService: ComplaintsService
+    private _ComplaintsService: ComplaintsService,
+    private _GuardService:GuardService
   ) {}
 
+  printPermission: boolean = false;
+  exportPermission: boolean = false;
+  createPermission: boolean = false;
+  downloadSamplePermission: boolean = false;
+  uploadFilesPermission: boolean = false;
+  updatePermission: boolean = false;
+
+  getPermission() {
+    this.printPermission = this._GuardService.getPermissionStatus('print_complaints');
+    this.exportPermission = this._GuardService.getPermissionStatus('export_complaints');
+    this.createPermission = this._GuardService.getPermissionStatus('create_complaints');
+    this.updatePermission = this._GuardService.getPermissionStatus('update_complaints');
+    this.downloadSamplePermission = this._GuardService.getPermissionStatus('downloadSample_complaints');
+    this.uploadFilesPermission = this._GuardService.getPermissionStatus('uploadFiles_complaints');
+  }
+
+  displayUploadModal(){
+    if (this.downloadSamplePermission) {
+      this.uploadModal = true
+    }
+  }
+
   exportAsPDF() {
+    if (this.printPermission) {
+      
     // Default export is a4 paper, portrait, using millimeters for units
     const doc = new jsPDF();
     doc.internal.pageSize.width = 420;
@@ -109,10 +135,13 @@ export class ShowComplaintsComponent implements OnInit {
     doc.save('example.pdf');
   }
 
+  }
+
   complaints: any[] = [];
   PaginationInfo: any;
 
   ngOnInit(): void {
+    this.getPermission();
     this.createUploadingForm();
     this.createFilterForm();
     this.getComplaints();
@@ -226,6 +255,8 @@ export class ShowComplaintsComponent implements OnInit {
   // ****************************************************export************************************************************************
 
   export() {
+    if (this.exportPermission) {
+
     const ids = this.complaints.map((obj: any) => obj.id);
     this._ComplaintsService.exportComplaints(ids).subscribe({
       next: (res) => {
@@ -235,6 +266,7 @@ export class ShowComplaintsComponent implements OnInit {
         link.click();
       },
     });
+  }
   }
 
   // ****************************************************filter options************************************************************************
@@ -260,18 +292,20 @@ export class ShowComplaintsComponent implements OnInit {
   // ****************************************************update************************************************************************
 
   updateRow(status:string,reason:string){
-    this._ComplaintsService.updateIssueStatus({id:this.currentEditRow.id,status:status.toLowerCase(), reason}).subscribe(res=>{
-      this.getAllComplaints();
-      this.currentEditReason = null;
-      this.getComplaints();
-      this.updateModal = false;
-      this.complaints = this.complaints.map(e=> {
-        if (e.id == res.data.id) {
-          e = res.data
-        }
-        return e
+    if (this.updatePermission) {      
+      this._ComplaintsService.updateIssueStatus({id:this.currentEditRow.id,status:status.toLowerCase(), reason}).subscribe(res=>{
+        this.getAllComplaints();
+        this.currentEditReason = null;
+        this.getComplaints();
+        this.updateModal = false;
+        this.complaints = this.complaints.map(e=> {
+          if (e.id == res.data.id) {
+            e = res.data
+          }
+          return e
+        })
       })
-    })
+    }
   }
 
   updateModal:boolean = false;
@@ -279,9 +313,11 @@ export class ShowComplaintsComponent implements OnInit {
   currentEditStatus:any;
   currentEditReason:any;
   displayUpdateModal(issue:any){
-    this.currentEditRow = issue
-    this.currentEditStatus = issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
-    this.updateModal = true;
+    if (this.updatePermission) {
+      this.currentEditRow = issue
+      this.currentEditStatus = issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
+      this.updateModal = true;
+    }
   }
 
   // ****************************************************filter columns************************************************************************
@@ -346,6 +382,8 @@ export class ShowComplaintsComponent implements OnInit {
 
    // ****************************************************print row************************************************************************
    print(complaint:any){
+    if (this.printPermission) {
+
     // Default export is a4 paper, portrait, using millimeters for units
     const doc = new jsPDF();
     const imageFile = '../../../../assets/images/logo.png';
@@ -410,18 +448,21 @@ export class ShowComplaintsComponent implements OnInit {
     }
 
     doc.save('complaint.pdf');
+  }
 }
 
     // ****************************************************upload Modal************************************************************************
     uploadModal: boolean = false;
 
     getSample() {
+    if (this.downloadSamplePermission) {
       this._ComplaintsService.getSample().subscribe((res) => {
         const link = document.createElement('a');
         link.target = '_blank';
         link.href = res.data;
         link.click();
       });
+    }
     }
   
     getFormData(object: any) {
@@ -431,6 +472,8 @@ export class ShowComplaintsComponent implements OnInit {
     }
   
     onFileSelected(event: any) {
+    if (this.downloadSamplePermission) {
+
       const file: File = event.target.files[0];
       if (file) {
         let f: File = this.getFormData({ file: file }) as any;
@@ -444,6 +487,7 @@ export class ShowComplaintsComponent implements OnInit {
         this.uploadModal = false;
       }
     }
+    }
 
     // ****************************************************upload File Modal************************************************************************
     uploadFilesModal:boolean = false;
@@ -451,14 +495,17 @@ export class ShowComplaintsComponent implements OnInit {
     uploadForm!: FormGroup;
     
     displayUploadFilesModal(id:number){
+    if (this.uploadFilesPermission) {
+
       this.uploadForm.patchValue({
         issue_id: id,
       });
       this.uploadFilesModal = true;
     }
+    }
     
     getUploadedFile(event: any) {
-      if (event.target.files && event.target.files.length) {
+      if (event.target.files && event.target.files.length && this.uploadFilesPermission) {
         const files = event.target.files;
         const readFile = (file: any) => {
           return new Promise((resolve, reject) => {
@@ -498,8 +545,8 @@ export class ShowComplaintsComponent implements OnInit {
       });
     }
 
-    insertReport(form:FormGroup){
-      if (form.valid) {
+    uploadFiles(form:FormGroup){
+      if (form.valid && this.uploadFilesPermission) {
         this.uploadingStatus = true
         this._ComplaintsService.uploadIssueFiles(form.value).subscribe(res=>{
           this.uploadingStatus = false

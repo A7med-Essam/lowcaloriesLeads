@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import {
   FormArray,
-  FormBuilder,
   FormControl,
   FormGroup,
   Validators,
@@ -27,7 +26,7 @@ import {
   styleUrls: ['./create-paymentlink.component.scss'],
 })
 export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
-  PaymentLink!: string;
+  PaymentLink!: string|undefined;
   exchangeStatus: boolean = false;
   mealTypes: string[] = [];
   snackTypes: string[] = [];
@@ -108,8 +107,8 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       bag: new FormControl(null, [Validators.required]),
       cutlery: new FormControl(null, [Validators.required]),
       exchange_paymentLink: new FormControl('no', [Validators.required]),
-      dislike: new FormArray([], [Validators.required]),
-      branch_paid: new FormControl(null),
+      dislike: new FormArray([]),
+      branch_paid_on_id: new FormControl(null),
       branch_invoice_image: new FormControl(null),
     });
     this.valueChanges();
@@ -140,7 +139,9 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
           obj[key] = form.value[key];
           return obj;
         }, {});
-      filteredData.dislike = filteredData.dislike.join(',');
+        if (filteredData.dislike) {
+          filteredData.dislike = filteredData.dislike.join(',');
+        }
       this._PaymentlinkService
         .create_payment_link(filteredData)
         .subscribe((res) => {
@@ -150,6 +151,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
             this.paymentForm.reset();
             this.createPaymentForm();
             this.uncheckAllCheckboxes();
+            this.exchangeStatus = false;
             this._MessageService.add({
               severity: 'success',
               summary: 'Payment Created Successfully',

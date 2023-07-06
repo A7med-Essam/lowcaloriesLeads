@@ -22,9 +22,9 @@ export class ShowCallsComponent implements OnInit {
     private _Router: Router,
     private _GuardService:GuardService
   ) {}
-  createCallsPermission: boolean = false;
+  createPermission: boolean = false;
   getPermission() {
-    this.createCallsPermission = this._GuardService.getPermissionStatus('create_calls');
+    this.createPermission = this._GuardService.getPermissionStatus('create_calls');
   }
 
   calls: ICalls[] = [];

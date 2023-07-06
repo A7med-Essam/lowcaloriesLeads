@@ -26,11 +26,11 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     private _Router:Router,
     private _GuardService:GuardService
   ) {}
-  printCallsPermission: boolean = false;
-  exportCallsPermission: boolean = false;
+  printPermission: boolean = false;
+  exportPermission: boolean = false;
   getPermission() {
-    this.printCallsPermission = this._GuardService.getPermissionStatus('print_calls');
-    this.exportCallsPermission = this._GuardService.getPermissionStatus('export_calls');
+    this.printPermission = this._GuardService.getPermissionStatus('print_calls');
+    this.exportPermission = this._GuardService.getPermissionStatus('export_calls');
   }
 
   calls: ICalls[] = [];
@@ -210,7 +210,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
   // ****************************************************export************************************************************************
 
   export() {
-    if (this.exportCallsPermission) {      
+    if (this.exportPermission) {      
       const ids = this.calls.map((obj: any) => obj.id);
       this._CallsService.export(ids).subscribe({
         next: (res) => {
@@ -288,7 +288,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
 
   // ****************************************************print row************************************************************************
   print(call: any) {
-    if (this.printCallsPermission) {      
+    if (this.printPermission) {      
       // Default export is a4 paper, portrait, using millimeters for units
       const doc = new jsPDF();
       const imageFile = '../../../../assets/images/logo.png';
@@ -369,7 +369,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
   }
 
   exportAsPDF() {
-    if (this.printCallsPermission) {      
+    if (this.printPermission) {      
     // Default export is a4 paper, portrait, using millimeters for units
     const doc = new jsPDF();
     doc.internal.pageSize.width = 600;

@@ -31,7 +31,7 @@ const routes: Routes = [
       import('./modules/survey/survey.module').then((m) => m.SurveyModule),
     canActivate: [PermissionGuard],
      data: {
-      permission: ["show_inputLeads"],
+      permission: ["show_inputs"],
     },
   },
   {

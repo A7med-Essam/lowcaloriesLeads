@@ -269,11 +269,11 @@
             <div class="col-md-6 col-12 my-3" *ngIf="exchangeStatus">
                 <label for="">Branches</label>
                 <p-dropdown [options]="paymentDetails?.branches == undefined ?[]:paymentDetails.branches"
-                    formControlName='branch_paid' appendTo="body" styleClass="w-100" placeholder="Select Branch"
-                    optionLabel="name" optionValue="name" [filter]="true">
+                    formControlName='branch_paid_on_id' appendTo="body" styleClass="w-100" placeholder="Select Branch"
+                    optionLabel="name" optionValue="id" [filter]="true">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('branch_paid')?.touched &&
-                paymentForm.get('branch_paid')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="paymentForm.get('branch_paid_on_id')?.touched &&
+                paymentForm.get('branch_paid_on_id')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-2" *ngIf="exchangeStatus">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">INVOICE

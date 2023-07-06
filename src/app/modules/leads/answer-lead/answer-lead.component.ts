@@ -7,13 +7,14 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import { MessageService } from 'primeng/api';
+import { GuardService } from 'src/app/services/guard.service';
 
 @Component({
   selector: 'app-answer-lead',
   templateUrl: './answer-lead.component.html',
-  styleUrls: ['./answer-lead.component.scss']
+  styleUrls: ['./answer-lead.component.scss'],
 })
-export class AnswerLeadComponent implements OnInit , OnDestroy {
+export class AnswerLeadComponent implements OnInit, OnDestroy {
   isSuperAdmin: boolean = false;
   lead_id: number = 0;
   constructor(
@@ -21,17 +22,20 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
     private _Router: Router,
     private _FormBuilder: FormBuilder,
     private _MessageService: MessageService,
-    private _AuthService: AuthService
+    private _AuthService: AuthService,
+    private _GuardService: GuardService
   ) {
-    _AuthService.currentUser.subscribe((data) => {
-      if (data != null) {
-        data.role_name == 'super_admin'
-        ? (this.isSuperAdmin = true)
-        : (this.isSuperAdmin = false);
-      } else {
-        this.isSuperAdmin = false;
-      }
-    });
+    _AuthService.currentUser
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data) => {
+        if (data != null) {
+          data.role_name == 'super_admin'
+            ? (this.isSuperAdmin = true)
+            : (this.isSuperAdmin = false);
+        } else {
+          this.isSuperAdmin = false;
+        }
+      });
   }
   private unsubscribe$ = new Subject<void>();
 
@@ -41,6 +45,7 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
         if (res == 0) {
           this._Router.navigate(['leads/show']);
         } else {
+          this.getPermission();
           this.getLeadDetails(res);
           this.getAgents();
           this.setAdminForm();
@@ -50,20 +55,33 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
     });
   }
 
+  assignPermission: boolean = false;
+  replayPermission: boolean = false;
+  updatePermission: boolean = false;
+
+  getPermission() {
+    this.assignPermission =
+      this._GuardService.getPermissionStatus('assign_leads');
+    this.replayPermission =
+      this._GuardService.getPermissionStatus('replay_leads');
+    this.updatePermission =
+      this._GuardService.getPermissionStatus('update_leads');
+  }
+
   lead: any;
   getLeadDetails(id: number) {
     this._SurveyService.showLead(id).subscribe({
       next: (res) => {
         this.lead = res.data;
-        this.lead.inputs = this.removeDuplicates()
+        this.lead.inputs = this.removeDuplicates();
       },
     });
   }
 
-  removeDuplicates(){
-    const combinedArr:any[] = [];
-    const groupedObj:any = {};
-    this.lead.inputs.forEach((obj:any) => {
+  removeDuplicates() {
+    const combinedArr: any[] = [];
+    const groupedObj: any = {};
+    this.lead.inputs.forEach((obj: any) => {
       const leadQuestionId = obj.lead_question_id;
       if (!groupedObj[leadQuestionId]) {
         groupedObj[leadQuestionId] = obj;
@@ -74,19 +92,23 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
           groupedObj[leadQuestionId] = [existingObj];
         }
         groupedObj[leadQuestionId].push(obj);
-        existingObj.answer = groupedObj[leadQuestionId].map((item:any) => item.answer);
+        existingObj.answer = groupedObj[leadQuestionId].map(
+          (item: any) => item.answer
+        );
       }
     });
-    return combinedArr
+    return combinedArr;
   }
 
   backDetailsBtn() {
     this._Router.navigate(['leads/show']);
   }
 
-  displayUpdate(lead:any) {
-    this._SurveyService.updateLead.next(lead);
-    this._Router.navigate(['leads/update']);
+  displayUpdate(lead: any) {
+    if (this.updatePermission) {
+      this._SurveyService.updateLead.next(lead);
+      this._Router.navigate(['leads/update']);
+    }
   }
 
   ngOnDestroy(): void {
@@ -106,8 +128,11 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
   }
 
   displayAssignedUsersModal(leadId: number) {
-    this.currentLeadId = leadId;
-    this.assignModal = true;
+    if (this.assignPermission) {
+      this.getAssignedUsers();
+      this.currentLeadId = leadId;
+      this.assignModal = true;
+    }
   }
 
   addReplayModal: boolean = false;
@@ -129,8 +154,10 @@ export class AnswerLeadComponent implements OnInit , OnDestroy {
 
   currentLeadId: number = 0;
   displayReplayModal(leadId: number) {
-    this.currentLeadId = leadId;
-    this.addReplayModal = true;
+    if (this.replayPermission) {
+      this.currentLeadId = leadId;
+      this.addReplayModal = true;
+    }
   }
 
   displayAllRepliesModal(leadId: number) {

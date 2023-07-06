@@ -1,16 +1,16 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="mb-3">
-        <button pButton pRipple label="Add Target" class="p-button-success mx-1" icon="pi pi-plus"
+        <button [disabled]="!createPermission" pButton pRipple label="Add Target" class="p-button-success mx-1" icon="pi pi-plus"
             routerLink="../create"></button>
         <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
+        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
         </p-button>
-        <p-button class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allTargets.length">
+        <p-button [disabled]="!printPermission" class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allTargets.length">
         </p-button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-1" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
-        <p-button (click)="uploadModal = true" class="mb-3 mx-1" icon="pi pi-external-link"
+        <p-button (click)="displayUploadModal()" class="mb-3 mx-1" icon="pi pi-external-link" [disabled]="!downloadSamplePermission"
         label="Upload"></p-button>
     </div>
 </div>
@@ -66,7 +66,8 @@
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
                         class="m-1 p-button-sm"></button>
-                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(agent)"></button>
+                    <button [disabled]="!printPermission"
+                     pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(agent)"></button>
                 </td>
             </tr>
         </ng-template>

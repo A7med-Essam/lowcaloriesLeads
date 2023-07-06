@@ -17,7 +17,6 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
@@ -32,7 +31,6 @@ import { ListboxModule } from 'primeng/listbox';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ChipsModule } from 'primeng/chips';
 import { AccordionModule } from 'primeng/accordion';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const APP_PRIMENG_MODULE = [
   SharedModule,

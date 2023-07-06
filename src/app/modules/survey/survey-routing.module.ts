@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PermissionGuard } from 'src/app/core/permission.guard';
-import { FilterDetailsComponent } from './filter-details/filter-details.component';
 import { InsertSurveyAnswerComponent } from './insert-survey-answer/insert-survey-answer.component';
 import { InsertSurveyQuestionComponent } from './insert-survey-question/insert-survey-question.component';
 import { SurveyDetailsComponent } from './survey-details/survey-details.component';
@@ -17,7 +16,7 @@ const routes: Routes = [
     component: SurveyComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['show_inputLeads'],
+      permission: ['show_inputs'],
     },
   },
   {
@@ -25,23 +24,15 @@ const routes: Routes = [
     component: SurveyDetailsComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['show_inputLeads'],
+      permission: ['show_inputs'],
     },
   },
-  // {
-  //   path: 'filter-details',
-  //   component: FilterDetailsComponent,
-  //   canActivate: [PermissionGuard],
-  //   data: {
-  //     permission: ['show_inputLeads'],
-  //   },
-  // },
   {
     path: 'update-question',
     component: UpdateSurveyQuestionComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['updateQuestion_inputLeads'],
+      permission: ['updateQuestion_inputs'],
     },
   },
   {
@@ -49,7 +40,7 @@ const routes: Routes = [
     component: UpdateSurveyAnswerComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['updateAnswer_inputLeads'],
+      permission: ['updateAnswer_inputs'],
     },
   },
   {
@@ -57,7 +48,7 @@ const routes: Routes = [
     component: InsertSurveyQuestionComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['createQuestion_inputLeads'],
+      permission: ['createQuestion_inputs'],
     },
   },
   {
@@ -65,7 +56,7 @@ const routes: Routes = [
     component: InsertSurveyAnswerComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['createAnswer_inputLeads'],
+      permission: ['createAnswer_inputs'],
     },
   },
   {
@@ -73,7 +64,7 @@ const routes: Routes = [
     component: SurveyRecyclebinComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['deleteQuestion_inputLeads'],
+      permission: ['deleteQuestion_inputs'],
     },
   },
 ];

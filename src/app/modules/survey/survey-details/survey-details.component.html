@@ -27,9 +27,9 @@
                         <b>Input Value {{i+1}}</b> : {{answer?.type_value}} - {{answer?.type_value_ar}}
                     </div>
                     <div>
-                        <button pButton type="button" icon="pi pi-pencil"
+                        <button [disabled]="!updateAnswerPermission" pButton type="button" icon="pi pi-pencil"
                             (click)="updateRow(answer)" class="m-1 p-button-warning p-button-sm"></button>
-                        <button pButton type="button" icon="pi pi-trash"
+                        <button [disabled]="!deleteAnswerPermission" pButton type="button" icon="pi pi-trash"
                             (click)="deleteAnswers(survey?.id, answer.id)"
                             class="m-1 p-button-danger p-button-sm"></button>
                     </div>

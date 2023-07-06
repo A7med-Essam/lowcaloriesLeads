@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GuardService } from 'src/app/services/guard.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -13,10 +14,24 @@ export class SurveyDetailsComponent implements OnInit {
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _ActivatedRoute: ActivatedRoute,
+    private _GuardService: GuardService
   ) {}
 
   ngOnInit(): void {
+    this.getPermission();
     this.getDetails();
+  }
+
+  updateAnswerPermission: boolean = false;
+  deleteAnswerPermission: boolean = false;
+
+  getPermission() {
+    this.updateAnswerPermission = this._GuardService.getPermissionStatus(
+      'updateAnswer_inputs'
+    );
+    this.deleteAnswerPermission = this._GuardService.getPermissionStatus(
+      'deleteAnswer_inputs'
+    );
   }
 
   getFormData(object: any) {
@@ -47,17 +62,20 @@ export class SurveyDetailsComponent implements OnInit {
   }
 
   updateRow(answer: any) {
-    this._SurveyService.surveyAnswers.next(answer);
-    this._Router.navigate(['update-answer'], {
-      relativeTo: this._ActivatedRoute.parent,
-    });
+    if (this.updateAnswerPermission) {
+      this._SurveyService.surveyAnswers.next(answer);
+      this._Router.navigate(['update-answer'], {
+        relativeTo: this._ActivatedRoute.parent,
+      });
+    }
   }
 
   deleteAnswers(surveyId: number, answerId: number) {
-    this._SurveyService.surveyQuestionsId.next(surveyId);
-    this._SurveyService.deleteAnswers(answerId).subscribe((res) => {
-      this.getDetails();
-    });
+    if (this.updateAnswerPermission) {
+      this._SurveyService.surveyQuestionsId.next(surveyId);
+      this._SurveyService.deleteAnswers(answerId).subscribe((res) => {
+        this.getDetails();
+      });
+    }
   }
-
 }

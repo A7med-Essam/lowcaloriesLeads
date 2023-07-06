@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Checkbox } from 'primeng/checkbox';
+import { GuardService } from 'src/app/services/guard.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -22,24 +23,44 @@ export class SurveyComponent implements OnInit {
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _ActivatedRoute: ActivatedRoute,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private _GuardService: GuardService
   ) {}
   ngOnInit(): void {
+    this.getPermission();
     this.getSurveyQuestions();
     this.getAgents();
+  }
+
+  createQuestionPermission: boolean = false;
+  updateQuestionPermission: boolean = false;
+  deleteQuestionPermission: boolean = false;
+  createAnswerPermission: boolean = false;
+
+  getPermission() {
+    this.createQuestionPermission = this._GuardService.getPermissionStatus(
+      'createQuestion_inputs'
+    );
+    this.updateQuestionPermission = this._GuardService.getPermissionStatus(
+      'updateQuestion_inputs'
+    );
+    this.deleteQuestionPermission = this._GuardService.getPermissionStatus(
+      'deleteQuestion_inputs'
+    );
+    this.createAnswerPermission = this._GuardService.getPermissionStatus(
+      'createAnswer_inputs'
+    );
   }
 
   getSurveyQuestions(page: number = 1, paginate?: any) {
     // if (this.appliedFilters) {
     //   this.filter(...this.appliedFilters);
     // } else {
-      this.currentPage > 1 ? (page = this.currentPage) : (page = 1);
-      this._SurveyService
-        .getSurveyQuestions(page, paginate)
-        .subscribe((res) => {
-          this.PaginationInfo = res.data;
-          this.Survey = res.data.data;
-        });
+    this.currentPage > 1 ? (page = this.currentPage) : (page = 1);
+    this._SurveyService.getSurveyQuestions(page, paginate).subscribe((res) => {
+      this.PaginationInfo = res.data;
+      this.Survey = res.data.data;
+    });
     // }
   }
 
@@ -82,23 +103,29 @@ export class SurveyComponent implements OnInit {
   }
 
   updateRow(id: number) {
-    this._SurveyService.surveyQuestionsId.next(id);
-    this._Router.navigate(['../update-question'], {
-      relativeTo: this._ActivatedRoute,
-    });
+    if (this.updateQuestionPermission) {
+      this._SurveyService.surveyQuestionsId.next(id);
+      this._Router.navigate(['../update-question'], {
+        relativeTo: this._ActivatedRoute,
+      });
+    }
   }
 
   insertAnswer(id: number) {
-    this._SurveyService.surveyAnswers.next(id);
-    this._Router.navigate(['../insert-answer'], {
-      relativeTo: this._ActivatedRoute,
-    });
+    if (this.createAnswerPermission) {
+      this._SurveyService.surveyAnswers.next(id);
+      this._Router.navigate(['../insert-answer'], {
+        relativeTo: this._ActivatedRoute,
+      });
+    }
   }
 
   deleteRow(areaId: number) {
-    this._SurveyService.deleteRow(areaId).subscribe((res) => {
-      this.getSurveyQuestions();
-    });
+    if (this.deleteQuestionPermission) {
+      this._SurveyService.deleteRow(areaId).subscribe((res) => {
+        this.getSurveyQuestions();
+      });
+    }
   }
 
   showRow(e: number) {
@@ -107,12 +134,14 @@ export class SurveyComponent implements OnInit {
   }
 
   confirm(id: any) {
-    this.confirmationService.confirm({
-      message: 'Are you sure that you want to perform this action?',
-      accept: () => {
-        this.deleteRow(id);
-      },
-    });
+    if (this.deleteQuestionPermission) {
+      this.confirmationService.confirm({
+        message: 'Are you sure that you want to perform this action?',
+        accept: () => {
+          this.deleteRow(id);
+        },
+      });
+    }
   }
 
   confirm2() {
@@ -124,14 +153,14 @@ export class SurveyComponent implements OnInit {
     });
   }
 
-  getSample() {
-    this._SurveyService.getSample().subscribe((res) => {
-      const link = document.createElement('a');
-      link.target = "_blank"
-      link.href = res.data;
-      link.click();
-    });
-  }
+  // getSample() {
+  //   this._SurveyService.getSample().subscribe((res) => {
+  //     const link = document.createElement('a');
+  //     link.target = '_blank';
+  //     link.href = res.data;
+  //     link.click();
+  //   });
+  // }
 
   currentPage: number = 1;
   paginate(e: any) {
@@ -146,25 +175,25 @@ export class SurveyComponent implements OnInit {
   //   this.filter(this.filter_1, this.filter_2, this.filter_3, page, e.rows);
   // }
 
-  update(e1: HTMLElement, e2: HTMLElement) {
-    e1.classList.add('d-none');
-    e2.classList.remove('d-none');
-  }
+  // update(e1: HTMLElement, e2: HTMLElement) {
+  //   e1.classList.add('d-none');
+  //   e2.classList.remove('d-none');
+  // }
 
-  confirmUpdate(row: any, e1: HTMLElement, e2: HTMLInputElement, type: string) {
-    e1.classList.remove('d-none');
-    e2.classList.add('d-none');
-    let updateData: any = {
-      question_ar: row.question_ar,
-      question: row.question,
-      id: row.id,
-      type: row.type,
-    };
-    updateData[type] = e2.value;
-    this._SurveyService.updateRow(updateData).subscribe((res) => {
-      this.getSurveyQuestions();
-    });
-  }
+  // confirmUpdate(row: any, e1: HTMLElement, e2: HTMLInputElement, type: string) {
+  //   e1.classList.remove('d-none');
+  //   e2.classList.add('d-none');
+  //   let updateData: any = {
+  //     question_ar: row.question_ar,
+  //     question: row.question,
+  //     id: row.id,
+  //     type: row.type,
+  //   };
+  //   updateData[type] = e2.value;
+  //   this._SurveyService.updateRow(updateData).subscribe((res) => {
+  //     this.getSurveyQuestions();
+  //   });
+  // }
 
   columns: any[] = [
     { name: 'id', status: false },

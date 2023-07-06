@@ -53,7 +53,7 @@
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
                     class="mx-1 p-button-sm"></button>
                     <button pButton pRipple class="p-button-success mx-1 p-button-sm" icon="pi pi-plus"
-                       [disabled]="!createCallsPermission" (click)="routeToCreateCall(call)"></button>
+                       [disabled]="!createPermission" (click)="routeToCreateCall(call)"></button>
                 </td>
             </tr>
         </ng-template>
