@@ -1,37 +1,47 @@
 <div class="container">
     <form [formGroup]="insertForm" (ngSubmit)='insertRow(insertForm)'>
         <div class="row mx-0">
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
                 <label for="">Emirate</label>
-                <p-dropdown [options]="emirates" optionLabel="en_name" optionValue="id" (onChange)="onSelectEmirate($event.value)"
-                  formControlName='emirate_id' styleClass="w-100" placeholder="Select Emirate" [filter]="true">
+                <p-dropdown [options]="emirates" optionLabel="en_name" optionValue="id"
+                    (onChange)="onSelectEmirate($event.value)" formControlName='emirate_id' styleClass="w-100"
+                    placeholder="Select Emirate" [filter]="true">
                 </p-dropdown>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
                 <label for="">Appointments</label>
-                <p-dropdown [options]="appointments" optionLabel="dateDay" optionValue="id" [filter]="true" (onChange)="onSelectAppointments($event.value)"
-                  formControlName='date_id' styleClass="w-100" placeholder="Select Appointment">
+                <p-dropdown [options]="appointments" optionLabel="dateDay" optionValue="id" [filter]="true"
+                    (onChange)="onSelectAppointments($event.value)" formControlName='date_id' styleClass="w-100"
+                    placeholder="Select Appointment">
                 </p-dropdown>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
                 <label for="">Times</label>
-                <p-dropdown [options]="times" optionLabel="time_from" optionValue="id" 
-                  formControlName='time_id' styleClass="w-100" placeholder="Select time" [filter]="true">
+                <p-dropdown [options]="times" optionLabel="time_from" optionValue="id" formControlName='time_id'
+                    styleClass="w-100" placeholder="Select time" [filter]="true">
                 </p-dropdown>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
+                <label for="">max people</label>
+                <p-dropdown [options]="maxPeople" formControlName='max_people'
+                    styleClass="w-100" placeholder="Select Number Of Clients" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('max_people')?.touched &&
+                insertForm.get('max_people')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
                 <label for="">first_name</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='first_name' />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('first_name')?.touched &&
                 insertForm.get('first_name')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
                 <label for="">last_name</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='last_name' />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('last_name')?.touched &&
                 insertForm.get('last_name')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
                 <label for="">email</label>
                 <input type="email" pInputText ngClass="w-100" formControlName='email' />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('email')?.touched &&
@@ -39,32 +49,27 @@
                 <small class="text-danger ms-1" *ngIf="insertForm.get('email')?.touched &&
                 insertForm.get('email')?.hasError('email')">The email is not valid.</small>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
                 <label for="">whatsApp</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='whatsApp' 
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
+                <input type="text" pInputText ngClass="w-100" formControlName='whatsApp' maxlength="10"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('whatsApp')?.touched &&
                 insertForm.get('whatsApp')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
                 <label for="">phone_number</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='phone_number' 
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
+                <input type="text" pInputText ngClass="w-100" formControlName='phone_number' maxlength="10"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('phone_number')?.touched &&
                 insertForm.get('phone_number')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('phone_number')?.touched &&
+                insertForm.get('phone_number')?.hasError('pattern')">Length must be 10</small>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-md-6 col-12 my-3">
                 <label for="">address</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='address' />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('address')?.touched &&
                 insertForm.get('address')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-12 my-3">
-                <label for="">max_people</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='max_people' maxlength="2"
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
-                <small class="text-danger ms-1" *ngIf="insertForm.get('max_people')?.touched &&
-                insertForm.get('max_people')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12" *ngIf="PaymentLink">
                 <div class="mb-2 mt-4 d-flex justify-content-between">
@@ -75,7 +80,7 @@
                     #PaymentUrl />
             </div>
             <div class="col-12 my-3">
-                <button class="btn btn-primary w-100">Create Link</button>
+                <button class="btn btn-primary w-100" [disabled]="insertForm.invalid">Create Link</button>
             </div>
         </div>
     </form>

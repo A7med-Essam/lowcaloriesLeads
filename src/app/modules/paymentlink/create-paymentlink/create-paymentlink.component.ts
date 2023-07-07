@@ -144,19 +144,29 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         }
       this._PaymentlinkService
         .create_payment_link(filteredData)
-        .subscribe((res) => {
-          if (res.status == 1) {
+        .subscribe({
+          next:(res) => {
+            if (res.status == 1) {
+              this.creatingStatus = false;
+              this.PaymentLink = res.data;
+              this.paymentForm.reset();
+              this.createPaymentForm();
+              this.uncheckAllCheckboxes();
+              this.exchangeStatus = false;
+              this._MessageService.add({
+                severity: 'success',
+                summary: 'Payment Created Successfully',
+                detail: 'Payment link returned',
+              });
+            }
+            else{
+              this.creatingStatus = false;
+              this.paymentForm.patchValue({ start_date: new Date(filteredData.start_date),birthday: new Date(filteredData.birthday) });
+            }
+          },
+          error:err=>{
             this.creatingStatus = false;
-            this.PaymentLink = res.data;
-            this.paymentForm.reset();
-            this.createPaymentForm();
-            this.uncheckAllCheckboxes();
-            this.exchangeStatus = false;
-            this._MessageService.add({
-              severity: 'success',
-              summary: 'Payment Created Successfully',
-              detail: 'Payment link returned',
-            });
+            this.paymentForm.patchValue({ start_date: new Date(filteredData.start_date),birthday: new Date(filteredData.birthday) });
           }
         });
     }
@@ -240,7 +250,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       });
     }
 
-    if (type != 'snack_types') {
+    if (type != 'snack_types' && type != 'dislike') {
       if (formArray.length > 0) {
         this.paymentForm.get(type)?.setErrors(null);
       } else {

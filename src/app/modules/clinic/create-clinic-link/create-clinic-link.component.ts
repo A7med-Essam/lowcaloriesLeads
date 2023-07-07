@@ -28,7 +28,7 @@ export class CreateClinicLinkComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.setInsertForm();
+    this.createClinicForm();
     this.getEmirateAppointments();
   }
 
@@ -58,13 +58,16 @@ export class CreateClinicLinkComponent implements OnInit {
     }
   }
 
-  setInsertForm() {
+  createClinicForm() {
     this.insertForm = new FormGroup({
       first_name: new FormControl(null, [Validators.required]),
       last_name: new FormControl(null, [Validators.required]),
       email: new FormControl(null, [Validators.required, Validators.email]),
       whatsApp: new FormControl(null, [Validators.required]),
-      phone_number: new FormControl(null, [Validators.required]),
+      phone_number: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('^[\\d]{10}$'),
+      ]),
       address: new FormControl(null, [Validators.required]),
       emirate_id: new FormControl(null, [Validators.required]),
       date_id: new FormControl(null, [Validators.required]),
@@ -109,10 +112,13 @@ export class CreateClinicLinkComponent implements OnInit {
     }
   }
 
+  maxPeople:string[] = [];
   onSelectAppointments(id: number) {
     this.times = [];
     if (id) {
       this.times = this.appointments.filter((e) => e.id == id)[0].times;
+      this.insertForm.get('max_people')?.reset();
+      this.maxPeople =  this.getMaxPeople(this.appointments.filter((e) => e.id == id)[0].max_people);
     }
   }
 
@@ -133,5 +139,13 @@ export class CreateClinicLinkComponent implements OnInit {
       summary: 'Notification ',
       detail: 'Copied to clipboard!',
     });
+  }
+
+  getMaxPeople(max: number): string[] {
+    const result: string[] = [];
+    for (let i = 1; i <= max; i++) {
+      result.push(i.toString());
+    }
+    return result;
   }
 }
