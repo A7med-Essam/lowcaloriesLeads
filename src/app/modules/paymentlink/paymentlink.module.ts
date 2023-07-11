@@ -9,11 +9,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { PrintPaymentlinkComponent } from './print-paymentlink/print-paymentlink.component';
 
 
 @NgModule({
   declarations: [
-    CreatePaymentlinkComponent
+    CreatePaymentlinkComponent,
+    PrintPaymentlinkComponent
   ],
   imports: [
     CommonModule,

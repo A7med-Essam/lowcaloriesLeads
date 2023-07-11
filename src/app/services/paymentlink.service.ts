@@ -22,6 +22,14 @@ export class PaymentlinkService {
   }> {
     return this._ApiConfigService.postReq3(`create_payment_link`, payment);
   }
+
+  print_payment_link(payment:PaymentData): Observable<{
+    status:  number;
+    message: string;
+    data:    any;
+  }> {
+    return this._ApiConfigService.postReq3(`create_payment_complete`, payment);
+  }
 }
 
 

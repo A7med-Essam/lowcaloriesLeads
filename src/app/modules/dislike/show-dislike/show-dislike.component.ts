@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Checkbox } from 'primeng/checkbox';
 import { DislikeService } from 'src/app/services/dislike.service';
-import { LocalService } from 'src/app/services/local.service';
 import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import { FormControl, FormGroup, Validators } from '@angular/forms';

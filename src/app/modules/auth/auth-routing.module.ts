@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PermissionGuard } from 'src/app/core/permission.guard';
+import { RolesComponent } from './roles/roles.component';
 import { ShowUsersComponent } from './show-users/show-users.component';
+import { UpdateRoleComponent } from './update-role/update-role.component';
 import { UpdateUsersComponent } from './update-users/update-users.component';
 
 const routes: Routes = [
@@ -17,6 +19,22 @@ const routes: Routes = [
   {
     path: 'show',
     component: ShowUsersComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: [""],
+    },
+  },
+  {
+    path: 'roles',
+    component: RolesComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: [""],
+    },
+  },
+  {
+    path: 'update-role',
+    component: UpdateRoleComponent,
     canActivate: [PermissionGuard],
     data: {
       permission: [""],
