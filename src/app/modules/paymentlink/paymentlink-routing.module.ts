@@ -19,7 +19,7 @@ const routes: Routes = [
     component: PrintPaymentlinkComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['print_paymentlink'],
+      permission: ['createPayment_Branches'],
     },
   },
 ];

@@ -24,7 +24,7 @@
         <td>{{user.name}}</td>
         <td>{{user.team}}</td>
         <td>{{user.web_role}}</td>
-        <td>{{user.status}}</td>
+        <td>{{user.status?user.status:'Offline'}}</td>
         <td [width]="750">
           <div class="row">
             <div class="col-4" *ngFor="let permission of user.permissions">
