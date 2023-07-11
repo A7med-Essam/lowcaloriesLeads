@@ -137,14 +137,14 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
       this._PaymentlinkService.print_payment_link(filteredData).subscribe({
         next: (res) => {
           if (res.status == 1) {
-            this.print(res.data)
+            this.print(res.data);
             this.creatingStatus = false;
             this.paymentForm.reset();
             this.createPaymentForm();
             this.uncheckAllCheckboxes();
             this._MessageService.add({
               severity: 'success',
-              summary: 'Payment Link',
+              summary: 'Payment Branch',
               detail: res.message,
             });
           } else {
@@ -341,7 +341,7 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     doc.setTextColor(50);
     doc.setFontSize(10);
     doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Payment Link Report', 10, 40);
+    doc.text('Issue Subject:Payment Branch Report', 10, 40);
     doc.text('Prepared By: Low Calories Technical Team', 10, 45);
     doc.text('Requested By: Mohamed Fawzy', 10, 50);
     doc.text('Low Calories Restaurant - Egypt', 150, 30);
@@ -353,30 +353,38 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     autoTable(doc, { startY: 55 });
 
     var columns = [
-      // { title: 'Date', dataKey: res.created_at.substring(0, 10) },
-      { title: 'user_id', dataKey: res.user_id },
-      { title: 'mode', dataKey: res.mode },
-      { title: 'program_id', dataKey: res.program_id },
-      { title: 'deleted', dataKey: res.deleted },
-      { title: 'sub_from', dataKey: res.sub_from },
-      { title: 'code_id', dataKey: res.code_id },
-      { title: 'location_id', dataKey: res.location_id },
-      { title: 'price', dataKey: res.price },
-      { title: 'total_price', dataKey: res.total_price },
-      { title: 'branch', dataKey: res.branch },
-      { title: 'bag', dataKey: res.bag },
-      { title: 'agent_id', dataKey: res.agent_id },
-      { title: 'cutlery', dataKey: res.cutlery },
-      { title: 'delivery_starting_day', dataKey: res.delivery_starting_day },
-      { title: 'days_of_week', dataKey: res.days_of_week },
-      { title: 'dislike', dataKey: res.dislike },
-      { title: 'note', dataKey: res.note },
-      { title: 'dis_like_user', dataKey: res.dis_like_user },
-      { title: 'subscriptions_note', dataKey: res.subscriptions_note },
-      { title: 'full_plan_name', dataKey: res.full_plan_name },
-      { title: 'id', dataKey: res.id },
-      { title: 'invoice_no', dataKey: res.invoice_no },
+      { title: 'Subscription from', dataKey: res.sub_from },
+      { title: 'Price', dataKey: res.price },
+      { title: 'Vat', dataKey: res.vat },
+      { title: 'Cutlery', dataKey: res.cutlery },
+      { title: 'Bag', dataKey: res.bag },
+      { title: 'Total Price', dataKey: res.total_price },
+      { title: 'Start Date', dataKey: res.delivery_starting_day },
+      { title: 'Delivery Days', dataKey: res.days_of_week },
+      { title: 'Meal Types', dataKey: res.dislike },
+      { title: 'Dislike Meals', dataKey: res.dis_like_user },
+      { title: 'Subscriptions Note', dataKey: res.subscriptions_note },
+      { title: 'Full Plan Name', dataKey: res.full_plan_name },
+      { title: 'Invoice_no', dataKey: res.invoice_no },
+      { title: 'Address', dataKey: res.location.area_id },
+      { title: 'Emirate', dataKey: res.location.emirate.en_name },
+      { title: 'Giftcode', dataKey: res.gift_code.code },
+      { title: 'Giftcode Percentage', dataKey: res.gift_code.percentage +"%"},
+      { title: 'Agent', dataKey: res.agent.name },
+      {
+        title: 'Client Name',
+        dataKey: res.user.first_name + ' ' + res.user.last_name,
+      },
+      { title: 'Client Mobile', dataKey: res.user.phone_number },
+      { title: 'Client Email', dataKey: res.user.email },
     ];
+
+    if (res.user.second_phone_number) {
+      columns.push({
+        title: 'Client Second Phone',
+        dataKey: res.user.second_phone_number,
+      });
+    }
 
     // doc.text(140, 40, "Report");
     autoTable(doc, { body: columns });
@@ -410,31 +418,6 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
       );
     }
 
-    doc.save('dislike.pdf');
+    doc.save(res.invoice_no);
   }
 }
-
-// {
-//   "user_id": 26463,
-//   "mode": 2,
-//   "program_id": 50,
-//   "deleted": 0,
-//   "sub_from": "Branch",
-//   "code_id": 1,
-//   "location_id": 47379,
-//   "price": 0,
-//   "total_price": 50,
-//   "branch": "yes",
-//   "bag": 50,
-//   "agent_id": 1000,
-//   "cutlery": "checked",
-//   "delivery_starting_day": "2023-07-31",
-//   "days_of_week": "\"Sat\"",
-//   "dislike": "[\"Meal 1\"]",
-//   "note": null,
-//   "dis_like_user": null,
-//   "subscriptions_note": "1M-VEG-7-1DD",
-//   "full_plan_name": "1Meal-VEGAN DIET-7Days-1Delivery Days",
-//   "id": 48003,
-//   "invoice_no": "CH-20230711-164216-50"
-// }
