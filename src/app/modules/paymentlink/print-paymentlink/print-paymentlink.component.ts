@@ -64,6 +64,15 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createPaymentForm();
     this.getPaymentDetails();
+    this.selectAllDeliveryDays();
+  }
+  @ViewChildren('deliveryDaysBox') DeliveryCheckboxElements!: QueryList<Checkbox>;
+  selectAllDeliveryDays(){
+    setTimeout(() => {
+      this.DeliveryCheckboxElements.forEach((checkbox: Checkbox) => {
+        checkbox.updateModel(true)
+      });
+    }, 1);
   }
 
   getPaymentDetails() {
@@ -99,8 +108,8 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
       emirate_id: new FormControl(null, [Validators.required]),
       address: new FormControl(null, [Validators.required]),
       code_id: new FormControl(null, [Validators.required]),
-      bag: new FormControl(null, [Validators.required]),
-      cutlery: new FormControl(null, [Validators.required]),
+      bag: new FormControl('no', [Validators.required]),
+      cutlery: new FormControl('no', [Validators.required]),
       dislike: new FormArray([]),
     });
     this.valueChanges();

@@ -66,9 +66,19 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     private _MessageService: MessageService
   ) {}
 
+  @ViewChildren('deliveryDaysBox') DeliveryCheckboxElements!: QueryList<Checkbox>;
   ngOnInit(): void {
     this.createPaymentForm();
     this.getPaymentDetails();
+    this.selectAllDeliveryDays();
+  }
+
+  selectAllDeliveryDays(){
+    setTimeout(() => {
+      this.DeliveryCheckboxElements.forEach((checkbox: Checkbox) => {
+        checkbox.updateModel(true)
+      });
+    }, 1);
   }
 
   getPaymentDetails() {
@@ -104,8 +114,8 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       emirate_id: new FormControl(null, [Validators.required]),
       address: new FormControl(null, [Validators.required]),
       code_id: new FormControl(null, [Validators.required]),
-      bag: new FormControl(null, [Validators.required]),
-      cutlery: new FormControl(null, [Validators.required]),
+      bag: new FormControl('no', [Validators.required]),
+      cutlery: new FormControl('no', [Validators.required]),
       exchange_paymentLink: new FormControl('no', [Validators.required]),
       dislike: new FormArray([]),
       branch_paid_on_id: new FormControl(null),

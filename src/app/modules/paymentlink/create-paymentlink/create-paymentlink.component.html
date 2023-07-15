@@ -64,7 +64,7 @@
                 paymentForm.get('gender')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
-            <div class="col-md-6 col-12 my-3">
+            <div class="col-12 my-3" [class.col-md-6]="paymentForm.get('program_type')?.value">
                 <label for="">SELECT YOUR PROGRAM TYPE</label>
                 <div class="d-flex flex-wrap">
                     <div class="flex align-items-center m-3" *ngFor="let obj of paymentDetails?.Programs | keyvalue">
@@ -76,23 +76,13 @@
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('program_type')?.touched &&
                 paymentForm.get('program_type')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-md-6 col-12 my-3">
-                <div *ngIf="isCustom">
-                    <label for="">SELECT YOUR PROGRAM</label>
-                    <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name"
-                        styleClass="w-100" placeholder="Select Program">
-                    </p-dropdown>
-                    <small class="text-danger ms-1" *ngIf="paymentForm.get('program_id')?.touched &&
-                    paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
-                </div>
-                <div *ngIf="!isCustom">
-                    <label for="">SELECT YOUR PROGRAM</label>
-                    <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name"
-                        styleClass="w-100" placeholder="Select Program">
-                    </p-dropdown>
-                    <small class="text-danger ms-1" *ngIf="paymentForm.get('program_id')?.touched &&
-                    paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
-                </div>
+            <div class="col-md-6 col-12 my-3" *ngIf="paymentForm.get('program_type')?.value">
+                <label for="">SELECT YOUR PROGRAM</label>
+                <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name"
+                    styleClass="w-100" placeholder="Select Program">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="paymentForm.get('program_id')?.touched &&
+                paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3" *ngIf="isCustom && paymentForm.get('program_id')?.value">
                 <label for="">SELECT NUMBER OF DAYS</label>
@@ -160,7 +150,7 @@
                 <label for="">Days Of Delivery</label>
                 <div class="d-flex flex-wrap">
                     <div class="field-checkbox m-3" *ngFor="let day of days">
-                        <p-checkbox [value]="day.value" [inputId]="day.name" #checkbox
+                        <p-checkbox [value]="day.value" [inputId]="day.name" #checkbox #deliveryDaysBox
                             (onChange)="onCheckboxChange($event,'delivery_days',day.value)">
                         </p-checkbox>
                         <label class="mx-1" [for]="day.name">{{day.name}}</label>
