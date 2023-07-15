@@ -125,7 +125,7 @@ export class UpdateRoleComponent  implements OnInit, OnDestroy {
     PermissionsList.forEach((e:HTMLInputElement) => (e.checked = false));
     for (let i = 0; i < this.role?.role_permissions.length; i++) {
       for (let j = 0; j < PermissionsList.length; j++) {
-        if (this.role?.role_permissions[i]?.permission == PermissionsList[j].value) {
+        if (this.role?.role_permissions[i]?.permission.id == PermissionsList[j].value) {
           PermissionsList[j].checked = true;
           FormArray.push(new FormControl(PermissionsList[j].value));
         }
