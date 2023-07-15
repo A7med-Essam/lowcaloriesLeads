@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Dropdown } from 'primeng/dropdown';
+import { MultiSelect } from 'primeng/multiselect';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -67,21 +68,26 @@ export class ShowUsersComponent implements OnInit {
     this.addRoleModal = true;
   }
 
-  addRole(input: Dropdown) {
+  addRole(input: MultiSelect) {
     let permissions: string[] = [];
-    input.value.role_permissions.forEach((p: any) => {
-      if (p.permission?.name) {
-        permissions.push(p.permission.name);
-      }
+    let roles: string[] = [];
+    input.value.forEach((e:any) => {
+        e.role_permissions.forEach((p: any) => {
+          if (p.permission?.name) {
+            permissions.push(p.permission.name);
+            roles.push(e.name);
+          }
+        });
     });
     const updateData = {
       agent_id: this.currentAgent.id,
-      role_name: input.value.name,
-      permissions,
+      role_name: roles.filter((value, index, self) => self.indexOf(value) === index),
+      permissions:permissions.filter((value, index, self) => self.indexOf(value) === index),
     };
     this._UsersService.updateAgent(updateData).subscribe((res) => {
       this.getAgents();
       this.addRoleModal = false;
     });
   }
+
 }

@@ -18,7 +18,7 @@
                                       <div class="col-md-6">
                                         <div class="form-group">
                                           <label>Name</label>
-                                          <input type="text" class="form-control" formControlName='name'>
+                                          <input type="text" class="form-control" formControlName='role_name'>
                                         </div>
                                       </div>
                                     </div>
@@ -33,10 +33,15 @@
                                             <div class="form-group">
                                               <div class="d-flex flex-wrap">
                                                   <div *ngFor="let permission of permissions[model]; let j=index"
-                                                    class="m-3 d-flex justify-content-center align-items-center">
-                                                    <input [id]="'check'+i+'_'+j" class="ckb ckb-primary" type="checkbox" [value]="permission.id"
+                                                    class="mx-2 d-flex justify-content-center align-items-center">
+                                                    <input [id]="'check'+i+'_'+j" class="ckb ckb-primary" name="check" type="checkbox" [value]="permission.id"
                                                       (change)="onCheckChange($event)" />
                                                     <label [for]="'check'+i+'_'+j">{{permission.name}}</label>
+                                                  </div>
+                                                  <div class="mx-2 d-flex justify-content-center align-items-center" #AllBoxes>
+                                                    <input [id]="'checkAll'+i" class="ckb ckb-primary" type="checkbox"
+                                                    (change)="onCheckAllChange(AllBoxes,$event)" />
+                                                    <label [for]="'checkAll'+i">Check All</label>
                                                   </div>
                                               </div>
                                             </div>

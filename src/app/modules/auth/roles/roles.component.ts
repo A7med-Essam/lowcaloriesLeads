@@ -1,17 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
-  styleUrls: ['./roles.component.scss']
+  styleUrls: ['./roles.component.scss'],
 })
 export class RolesComponent implements OnInit {
   roles: any[] = [];
-  addRoleModal:boolean = false;
+  addRoleModal: boolean = false;
 
-  constructor(private _UsersService: UsersService, private _Router: Router) {}
+  constructor(
+    private _UsersService: UsersService,
+    private _Router: Router,
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit(): void {
     this.getRoles();
@@ -30,20 +35,20 @@ export class RolesComponent implements OnInit {
     });
   }
 
-  addNewRole(input:any){
+  addNewRole(input: any) {
     const role = {
       name: input.value.replace(/\s/g, '_'),
-      display_name:input.value
-    }
-    this._UsersService.addRoles(role).subscribe(res=>{
+      display_name: input.value,
+    };
+    this._UsersService.addRoles(role).subscribe((res) => {
       if (res.status == 1) {
         this.getRoles();
         this.addRoleModal = false;
       }
-    })
+    });
   }
 
-  deleteRole(id:number){
+  deleteRole(id: number) {
     this._UsersService.deleteRole(id).subscribe(res=>{
       if (res.status == 1) {
         this.getRoles();
@@ -51,4 +56,12 @@ export class RolesComponent implements OnInit {
     })
   }
 
+  confirmDelete(id: any) {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to perform this action?',
+      accept: () => {
+        this.deleteRole(id);
+      },
+    });
+  }
 }

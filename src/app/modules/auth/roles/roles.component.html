@@ -30,7 +30,7 @@
                     <button pButton type="button" icon="pi pi-pencil"
                         (click)="updateRole(role)" class="m-1 p-button-sm p-button-warning"></button>
                     <button pButton type="button" icon="pi pi-trash"
-                        (click)="deleteRole(role.id)" class="m-1 p-button-sm p-button-danger"></button>
+                        (click)="confirmDelete(role.id)" class="m-1 p-button-sm p-button-danger"></button>
                 </td>
             </tr>
         </ng-template>
@@ -49,3 +49,6 @@
         </div>
     </ng-template>
 </p-dialog>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

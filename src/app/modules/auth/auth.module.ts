@@ -13,6 +13,8 @@ import { DropdownModule } from "primeng/dropdown";
 import { RolesComponent } from './roles/roles.component';
 import { UpdateRoleComponent } from './update-role/update-role.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 const APP_PRIMENG_MODULE = [
   TableModule,
@@ -20,7 +22,9 @@ const APP_PRIMENG_MODULE = [
   TabViewModule,
   DialogModule,
   DropdownModule,
-  InputTextModule
+  InputTextModule,
+  MultiSelectModule,
+  ConfirmDialogModule
 ];
 
 @NgModule({

@@ -80,17 +80,22 @@ export class CreateleadComponent implements OnInit, OnDestroy {
     }
   }
 
+  private isFilterApplied: boolean = false;
   getAgents() {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
         res.data.forEach((e: any) => {
           if (e.status == 'Online') {
-            e.name = `${e.name} - Online 🟢`;
+            e.name = `${e.name} - Lead Count: ${e.lead_counts} - Online 🟢`;
           } else {
-            e.name = `${e.name} - Offline 🔴`;
+            e.name = `${e.name} - Lead Count: ${e.lead_counts} - Offline 🔴`;
           }
         });
         this.agents = res.data;
+        if (!this.isFilterApplied) {
+          this.filterAgents();
+          this.isFilterApplied = true;
+        }
       },
     });
   }
@@ -111,6 +116,17 @@ export class CreateleadComponent implements OnInit, OnDestroy {
       customer_mobile: new FormControl(null, [Validators.required]),
       user_ids: new FormControl(null, [Validators.required]),
       platforms: new FormControl(null, [Validators.required]),
+    });
+  }
+
+  filterAgents(){
+    const minLeadCount = Math.min(...this.agents.map((user) => user.lead_counts));
+    const usersWithMinLeadCount = this.agents.filter((user) => user.lead_counts === minLeadCount);
+    const filterAgentsByTeams = usersWithMinLeadCount.filter((user) => user.team.toLowerCase() === "management" || user.team.toLowerCase() === "update");
+    const filterAgentsByStatus = filterAgentsByTeams.filter((user) => user.status.toLowerCase() === "online");
+    const ids = filterAgentsByStatus.map((item) => item.id);
+    this.createForm.patchValue({
+      user_ids: [ids[0]]
     });
   }
 }

@@ -23,7 +23,11 @@
         <td>{{rowIndex + 1}}</td>
         <td>{{user.name}}</td>
         <td>{{user.team}}</td>
-        <td>{{user.web_role}}</td>
+        <td>
+          <div class="" *ngFor="let role of user.web_role">
+            {{role}}
+          </div>
+        </td>
         <td>{{user.status?user.status:'Offline'}}</td>
         <td [width]="750">
           <div class="row">
@@ -47,13 +51,16 @@
 <p-dialog header="Add User Role Modal" [(visible)]="addRoleModal" [modal]="true" [style]="{width: '50vw'}"
   [draggable]="false" [resizable]="false">
   <div class="container">
-    <p-dropdown [options]="roles" optionLabel="name" appendTo="body" #RoleDropDown
+    <!-- <p-dropdown [options]="roles" optionLabel="name" appendTo="body" #RoleDropDown
       styleClass="w-100" placeholder="Select Role" [filter]="true">
-    </p-dropdown>
+    </p-dropdown> -->
+    <p-multiSelect [options]="roles" appendTo="body" optionLabel="name" #multieSelectRoles
+    defaultLabel="Select Roles" styleClass="w-100" display="chip">
+    </p-multiSelect>
   </div>
   <ng-template pTemplate="footer">
     <div class="upload-btn-wrapper">
-      <button class="btn btn-primary" (click)="addRole(RoleDropDown)">Add Role</button>
+      <button class="btn btn-primary" (click)="addRole(multieSelectRoles)">Add Role</button>
     </div>
   </ng-template>
 </p-dialog>
