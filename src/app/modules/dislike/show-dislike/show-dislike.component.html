@@ -86,7 +86,9 @@
             </div>
             <div class="col-md-6 my-1">
                 <label for="">Reason</label>
-                <input type="text" pInputText ngClass="w-100" [(ngModel)]="filter_selectedReason" />
+                <p-dropdown [options]="reasons" optionLabel="reason" optionValue="reason" styleClass="w-100" appendTo="body"
+                placeholder="Select Reason" [(ngModel)]="filter_selectedReason">
+            </p-dropdown>
             </div>
             <div class="col-md-6 my-1">
                 <label for="">Name</label>
@@ -95,7 +97,7 @@
             <div class="col-md-6 my-1">
                 <label for="">branch</label>
                 <p-dropdown [options]="branches" optionLabel="name" optionValue="name"
-                    appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                    appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true" [(ngModel)]="filter_selectedBranch">
                 </p-dropdown>
             </div>
             <div class="col-md-6 my-1">

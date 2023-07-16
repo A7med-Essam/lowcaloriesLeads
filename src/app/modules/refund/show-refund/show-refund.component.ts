@@ -315,7 +315,6 @@ export class ShowRefundComponent implements OnInit {
     { name: 'id', status: false },
     { name: 'account_hold_name', status: false },
     { name: 'address', status: false },
-    { name: 'agent_id', status: false },
     { name: 'agent_name', status: true },
     { name: 'amount_paid', status: true },
     { name: 'bank_account_number', status: false },

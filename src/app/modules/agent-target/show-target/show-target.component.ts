@@ -331,7 +331,6 @@ export class ShowTargetComponent implements OnInit {
     { name: 'id', status: false },
     { name: 'team', status: false },
     { name: 'type', status: false },
-    { name: 'agent_id', status: false },
     { name: 'agent_name', status: false },
     { name: 'date', status: true },
     { name: 'client_number', status: true },

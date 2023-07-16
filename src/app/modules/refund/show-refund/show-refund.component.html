@@ -22,23 +22,22 @@
                 <th class="text-center" *ngIf="columns[0].status">id</th>
                 <th class="text-center" *ngIf="columns[1].status">account_hold_name</th>
                 <th class="text-center" *ngIf="columns[2].status">address</th>
-                <th class="text-center" *ngIf="columns[3].status">agent_id</th>
-                <th class="text-center" *ngIf="columns[4].status">agent_name</th>
-                <th class="text-center" *ngIf="columns[5].status">amount_paid</th>
-                <th class="text-center" *ngIf="columns[6].status">bank_account_number</th>
-                <th class="text-center" *ngIf="columns[7].status">bank_name</th>
-                <th class="text-center" *ngIf="columns[8].status">branch</th>
-                <th class="text-center" *ngIf="columns[9].status">cid</th>
-                <th class="text-center" *ngIf="columns[10].status">created_at</th>
-                <th class="text-center" *ngIf="columns[11].status">delivery_branch</th>
-                <th class="text-center" *ngIf="columns[12].status">email</th>
-                <th class="text-center" *ngIf="columns[13].status">iban</th>
-                <th class="text-center" *ngIf="columns[14].status">mobile</th>
-                <th class="text-center" *ngIf="columns[15].status">name</th>
-                <th class="text-center" *ngIf="columns[16].status">payment_method</th>
-                <th class="text-center" *ngIf="columns[17].status">reason</th>
-                <th class="text-center" *ngIf="columns[18].status">remaining_days</th>
-                <th class="text-center" *ngIf="columns[19].status">subscription_plan</th>
+                <th class="text-center" *ngIf="columns[3].status">agent_name</th>
+                <th class="text-center" *ngIf="columns[4].status">amount_paid</th>
+                <th class="text-center" *ngIf="columns[5].status">bank_account_number</th>
+                <th class="text-center" *ngIf="columns[6].status">bank_name</th>
+                <th class="text-center" *ngIf="columns[7].status">branch</th>
+                <th class="text-center" *ngIf="columns[8].status">cid</th>
+                <th class="text-center" *ngIf="columns[9].status">created_at</th>
+                <th class="text-center" *ngIf="columns[10].status">delivery_branch</th>
+                <th class="text-center" *ngIf="columns[11].status">email</th>
+                <th class="text-center" *ngIf="columns[12].status">iban</th>
+                <th class="text-center" *ngIf="columns[13].status">mobile</th>
+                <th class="text-center" *ngIf="columns[14].status">name</th>
+                <th class="text-center" *ngIf="columns[15].status">payment_method</th>
+                <th class="text-center" *ngIf="columns[16].status">reason</th>
+                <th class="text-center" *ngIf="columns[17].status">remaining_days</th>
+                <th class="text-center" *ngIf="columns[18].status">subscription_plan</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -50,23 +49,22 @@
                 <td class="text-center" *ngIf="columns[0].status">{{refund.id}}</td>
                 <td class="text-center" *ngIf="columns[1].status">{{refund.account_hold_name}}</td>
                 <td class="text-center" *ngIf="columns[2].status">{{refund.address}}</td>
-                <td class="text-center" *ngIf="columns[3].status">{{refund.agent_id}}</td>
-                <td class="text-center" *ngIf="columns[4].status">{{refund.agent_name}}</td>
-                <td class="text-center" *ngIf="columns[5].status">{{refund.amount_paid}}</td>
-                <td class="text-center" *ngIf="columns[6].status">{{refund.bank_account_number}}</td>
-                <td class="text-center" *ngIf="columns[7].status">{{refund.bank_name}}</td>
-                <td class="text-center" *ngIf="columns[8].status">{{refund.branch}}</td>
-                <td class="text-center" *ngIf="columns[9].status">{{refund.cid}}</td>
-                <td class="text-center" *ngIf="columns[10].status">{{refund.created_at}}</td>
-                <td class="text-center" *ngIf="columns[11].status">{{refund.delivery_branch}}</td>
-                <td class="text-center" *ngIf="columns[12].status">{{refund.email}}</td>
-                <td class="text-center" *ngIf="columns[13].status">{{refund.iban}}</td>
-                <td class="text-center" *ngIf="columns[14].status">{{refund.mobile}}</td>
-                <td class="text-center" *ngIf="columns[15].status">{{refund.name}}</td>
-                <td class="text-center" *ngIf="columns[16].status">{{refund.payment_method}}</td>
-                <td class="text-center" *ngIf="columns[17].status">{{refund.reason}}</td>
-                <td class="text-center" *ngIf="columns[18].status">{{refund.remaining_days}}</td>
-                <td class="text-center" *ngIf="columns[19].status">{{refund.subscription_plan}}</td>
+                <td class="text-center" *ngIf="columns[3].status">{{refund.agent_name}}</td>
+                <td class="text-center" *ngIf="columns[4].status">{{refund.amount_paid}}</td>
+                <td class="text-center" *ngIf="columns[5].status">{{refund.bank_account_number}}</td>
+                <td class="text-center" *ngIf="columns[6].status">{{refund.bank_name}}</td>
+                <td class="text-center" *ngIf="columns[7].status">{{refund.branch}}</td>
+                <td class="text-center" *ngIf="columns[8].status">{{refund.cid}}</td>
+                <td class="text-center" *ngIf="columns[9].status">{{refund.created_at | date}}</td>
+                <td class="text-center" *ngIf="columns[10].status">{{refund.delivery_branch}}</td>
+                <td class="text-center" *ngIf="columns[11].status">{{refund.email}}</td>
+                <td class="text-center" *ngIf="columns[12].status">{{refund.iban}}</td>
+                <td class="text-center" *ngIf="columns[13].status">{{refund.mobile}}</td>
+                <td class="text-center" *ngIf="columns[14].status">{{refund.name}}</td>
+                <td class="text-center" *ngIf="columns[15].status">{{refund.payment_method}}</td>
+                <td class="text-center" *ngIf="columns[16].status">{{refund.reason}}</td>
+                <td class="text-center" *ngIf="columns[17].status">{{refund.remaining_days}}</td>
+                <td class="text-center" *ngIf="columns[18].status">{{refund.subscription_plan}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-upload" class="m-1 p-button-sm p-button-success"
                     (click)="displayUploadFilesModal(refund.id)" [disabled]="!uploadFilesPermission"></button>

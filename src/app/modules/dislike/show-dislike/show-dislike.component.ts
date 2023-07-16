@@ -59,7 +59,10 @@ export class ShowDislikeComponent implements OnInit {
     this.getAgentBranches();
     this.getMeals();
     this.getAllDislikes();
+    this.getReasons();
   }
+  reasons: any[] = [];
+
 
   getDislikes(page: number = 1) {
     if (this.filterStatus) {
@@ -99,7 +102,12 @@ export class ShowDislikeComponent implements OnInit {
   // *******************************
   // FILTERS
   // *******************************
-
+  getReasons() {
+    this._DislikeService.getReasons().subscribe((res) => {
+      this.reasons = res.data;
+    });
+  }
+  
   getAgentBranches() {
     this._DislikeService.getAgentBranches().subscribe({
       next: (res) => (this.branches = res.data),
