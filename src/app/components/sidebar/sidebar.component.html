@@ -28,6 +28,12 @@
           <span>Roles</span>
         </a>
       </li>
+      <li>
+        <a routerLink="leads/create" routerLinkActive="active">
+          <i class="fas fa-gem"></i>
+          <span>Create Lead</span>
+        </a>
+      </li>
     </ul>
     <div class="menu-header mt-3 mb-2">
       Components
@@ -85,12 +91,6 @@
         <a routerLink="/leadControls/show" routerLinkActive="active">
           <i class="fa fa-align-center"></i>
           <span>Lead Inputs</span>
-        </a>
-      </li>
-      <li *ngIf="createLeadsPermission">
-        <a routerLink="leads/create" routerLinkActive="active">
-          <i class="fas fa-gem"></i>
-          <span>Create Lead</span>
         </a>
       </li>
       <li *ngIf="assignCallsPermission">

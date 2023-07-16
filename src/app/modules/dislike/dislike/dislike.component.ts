@@ -43,7 +43,6 @@ export class DislikeComponent implements OnInit {
     this.getMeals();
     this.getReasons();
     this.getAgentBranches();
-    setTimeout(() => {}, 15000);
     // this.renderer.addClass(document.body, 'h-side');
   }
 

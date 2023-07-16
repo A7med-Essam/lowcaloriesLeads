@@ -19,6 +19,10 @@
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td>Created By</td>
+                                            <td>{{dislike?.agent.name}}</td>
+                                        </tr>
+                                        <tr>
                                             <td>Name</td>
                                             <td>{{dislike?.name}}</td>
                                         </tr>
@@ -44,7 +48,7 @@
                                         </tr>
                                         <tr>
                                             <td>Date Issue</td>
-                                            <td>{{dislike?.created_at}}</td>
+                                            <td>{{dislike?.created_at | date}}</td>
                                         </tr>
                                         <tr>
                                             <td>Reasons</td>

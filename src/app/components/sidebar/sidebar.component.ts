@@ -21,7 +21,6 @@ export class SidebarComponent implements OnInit {
   createClinicPermission: boolean = false;
   showComplaintsPermission: boolean = false;
   showInputsPermission: boolean = false;
-  createLeadsPermission: boolean = false;
   assignCallsPermission: boolean = false;
   showDislikeReasonsPermission: boolean = false;
   showRefundReasonsPermission: boolean = false;
@@ -67,8 +66,6 @@ export class SidebarComponent implements OnInit {
       this._GuardService.getPermissionStatus('show_complaints');
     this.showInputsPermission =
       this._GuardService.getPermissionStatus('show_inputs');
-    this.createLeadsPermission =
-      this._GuardService.getPermissionStatus('create_leads');
     this.assignCallsPermission =
       this._GuardService.getPermissionStatus('assign_calls');
     this.showDislikeReasonsPermission = this._GuardService.getPermissionStatus(

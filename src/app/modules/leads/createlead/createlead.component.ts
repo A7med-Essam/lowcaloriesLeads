@@ -34,7 +34,6 @@ export class CreateleadComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.createLeadForm();
     this.getPlatforms();
-    this.checkAgent();
     setTimeout(() => {
       this.getAgents();
     }, 500);
@@ -50,6 +49,8 @@ export class CreateleadComponent implements OnInit, OnDestroy {
       this.createForm.patchValue({
         user_ids: [this._GuardService.getUser().id]
       });
+    }else{
+      this.filterAgents();
     }
   }
 
@@ -93,7 +94,7 @@ export class CreateleadComponent implements OnInit, OnDestroy {
         });
         this.agents = res.data;
         if (!this.isFilterApplied) {
-          this.filterAgents();
+          this.checkAgent();
           this.isFilterApplied = true;
         }
       },

@@ -29,11 +29,11 @@ export class DislikeService {
   }
 
   getDislikes(page:number):Observable<any> {
-    return this._ApiConfigService.postReq(`allDislikeRequests?page=${page}`,'')
+    return this._ApiConfigService.postReq3(`allDislikeRequests?page=${page}`,'')
   }
-
+ 
   getAllDislikes():Observable<any> {
-    return this._ApiConfigService.postReq(`allDislikeRequests`, {withoutPagination:true});
+    return this._ApiConfigService.postReq3(`allDislikeRequests`, {withoutPagination:true});
   }
 
   updateDislikes(dislike:any):Observable<any> {

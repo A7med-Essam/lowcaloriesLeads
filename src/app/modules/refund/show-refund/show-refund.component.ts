@@ -151,7 +151,7 @@ export class ShowRefundComponent implements OnInit {
       );
     }
 
-    doc.save('example.pdf');
+    doc.save('All_Refunds.pdf');
     }
   }
 

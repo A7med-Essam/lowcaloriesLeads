@@ -25,12 +25,15 @@ export class ShowLeadComponent implements OnInit {
 
   exportPermission: boolean = false;
   answerPermission: boolean = false;
+  createLeadsPermission: boolean = false;
 
   getPermission() {
     this.exportPermission =
       this._GuardService.getPermissionStatus('export_leads');
     this.answerPermission =
       this._GuardService.getPermissionStatus('answer_leads');
+      this.createLeadsPermission =
+      this._GuardService.getPermissionStatus('create_leads');
   }
 
   getLeads(page: number = 1) {

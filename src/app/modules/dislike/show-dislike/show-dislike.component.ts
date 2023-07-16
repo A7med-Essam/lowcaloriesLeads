@@ -209,7 +209,7 @@ export class ShowDislikeComponent implements OnInit {
       { name: 'email', status: true },
       { name: 'mobile', status: true },
       { name: 'branch', status: true },
-      { name: 'agent_id', status: false },
+      { name: 'created_by', status: false },
       { name: 'sent_by', status: false },
       { name: 'dislike_meals', status: false },
       { name: 'reasons', status: false },
@@ -297,6 +297,7 @@ export class ShowDislikeComponent implements OnInit {
         'branch',
         'reasons',
         'dislike_meals',
+        'created_by',
       ];
       let filteredArray = this.allDislikes.filter((item:any) => this.specificRows.includes(item.id));
       (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allDislikes);
@@ -311,6 +312,7 @@ export class ShowDislikeComponent implements OnInit {
         obj.branch,
         obj.reasons,
         obj.dislike_meals,
+        obj.agent.name,
       ]);
       autoTable(doc, { startY: 70 });
       autoTable(doc, {
@@ -348,7 +350,7 @@ export class ShowDislikeComponent implements OnInit {
         );
       }
   
-      doc.save('example.pdf');
+      doc.save('All_Dislikes.pdf');
       }
     }
 
@@ -385,6 +387,7 @@ export class ShowDislikeComponent implements OnInit {
       {title: "reasons", dataKey:dislike.reasons},
       {title: "cid", dataKey:dislike.cid},
       {title: "dislike_meals", dataKey:dislike.dislike_meals},
+      {title: "created_by", dataKey:dislike.agent.name},
   ];
 
 

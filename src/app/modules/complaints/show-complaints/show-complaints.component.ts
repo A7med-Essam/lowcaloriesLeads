@@ -132,7 +132,7 @@ export class ShowComplaintsComponent implements OnInit {
             doc.internal.pageSize.getHeight() - 5
           );
         }
-    doc.save('example.pdf');
+    doc.save('All_Complaints.pdf');
   }
 
   }

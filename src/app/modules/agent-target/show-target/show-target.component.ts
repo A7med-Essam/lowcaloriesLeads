@@ -139,7 +139,7 @@ export class ShowTargetComponent implements OnInit {
         );
       }
 
-      doc.save('example.pdf');
+      doc.save('All_Targets.pdf');
     }
   }
 
