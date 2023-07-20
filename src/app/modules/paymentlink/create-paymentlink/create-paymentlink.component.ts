@@ -104,6 +104,23 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     });
   }
 
+  currentPrice:number = 0
+  calculate_payment_link(){
+    const data = {
+      program_id:this.paymentForm.value.program_id,
+      plan_id:this.paymentForm.value.plan_id,
+      meal_types:this.paymentForm.value.meal_types,
+      snack_types:this.paymentForm.value.snack_types,
+      subscription_days:this.paymentForm.value.subscription_days,
+      code_id:this.paymentForm.value.code_id,
+      bag:this.paymentForm.value.bag
+    }
+    this._PaymentlinkService.calculate_payment_link(data).subscribe(res=>{
+      if (res.status == 1) {
+        this.currentPrice = res.data.toFixed(2)
+      }
+    })
+  }
 
   createPaymentForm() {
     this.paymentForm = new FormGroup({

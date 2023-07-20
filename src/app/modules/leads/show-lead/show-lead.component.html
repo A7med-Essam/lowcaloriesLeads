@@ -16,6 +16,8 @@
                 <th class="text-center">Name</th>
                 <th class="text-center">Mobile</th>
                 <th class="text-center">Email</th>
+                <th class="text-center">Agent Assigned</th>
+                <th class="text-center">Created By</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -24,6 +26,12 @@
                 <td class="text-center">{{lead?.customer_name}}</td>
                 <td class="text-center">{{lead?.customer_mobile}}</td>
                 <td class="text-center">{{lead?.customer_email}}</td>
+                <td class="text-center">
+                    <div *ngFor="let user of lead?.lead_users">
+                        {{user.user.name}}
+                    </div>
+                </td>
+                <td class="text-center">{{lead?.user_created.name}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(lead)"
                     class="m-1 p-button-sm"></button>

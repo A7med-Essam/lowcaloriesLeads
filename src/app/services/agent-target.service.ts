@@ -24,8 +24,8 @@ export class AgentTargetService {
     return this._ApiConfigService.postReq3(`addTargetRequest`, target);
   }
 
-  getSubDetails(mobile:number): Observable<{status:number,data:any,message:string}> {
-    return this._ApiConfigService.postReq3(`getSubDetails`, {mobile});
+  getSubDetails(invoice_no:number): Observable<{status:number,data:any,message:string}> {
+    return this._ApiConfigService.postReq3(`getSubDetailFromInvoiceNumber`, {invoice_no});
   }
 
   exportAll(): Observable<any> {

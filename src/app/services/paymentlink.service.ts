@@ -34,6 +34,10 @@ export class PaymentlinkService {
   checkMobileEmails(mobile:string): Observable<any>{
     return this._ApiConfigService.postReq3(`getEmailsByMobile`, {mobile});
   }
+
+  calculate_payment_link(data:any): Observable<any>{
+    return this._ApiConfigService.postReq3(`calculate_payment_link`, data);
+  }
 }
 
 

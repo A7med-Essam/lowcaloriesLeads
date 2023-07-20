@@ -22,10 +22,10 @@ export class LeadDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._SurveyService.lead.pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (res) => {
-        if (res == 0) {
-          this._Router.navigate(['leads/show']);
-        } else {
+        if (res) {
           this.lead = res;
+        } else {
+          this._Router.navigate(['leads/show']);
         }
       },
     });

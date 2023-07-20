@@ -39,7 +39,7 @@
             <i class="far fa-bell"></i>
             <span class="link-text">Notifications</span>
             <span class="nav-alert notifications" *ngIf="hasNotification"></span>
-            <div class="notification-list shadow-lg" *ngIf="hasNotification">
+            <div class="notification-list shadow-lg" id="style-3" *ngIf="hasNotification">
               <div class="overlay"></div>
               <div *ngFor="let notification of notifications" class="notification-item">
                 <div class="d-flex align-items-center notification" [ngClass]="{'isReaded':notification.read == 0}"

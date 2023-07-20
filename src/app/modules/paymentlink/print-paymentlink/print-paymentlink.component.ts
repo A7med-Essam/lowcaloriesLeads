@@ -69,6 +69,43 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     });
   }
 
+  currentPrice:number = 0
+  calculate_payment_link(){
+    const data = {
+      program_id:this.paymentForm.value.program_id,
+      plan_id:this.paymentForm.value.plan_id,
+      meal_types:this.paymentForm.value.meal_types,
+      snack_types:this.paymentForm.value.snack_types,
+      subscription_days:this.paymentForm.value.subscription_days,
+      code_id:this.paymentForm.value.code_id,
+      bag:this.paymentForm.value.bag
+    }
+    this._PaymentlinkService.calculate_payment_link(data).subscribe(res=>{
+      if (res.status == 1) {
+        this.currentPrice = res.data.toFixed(2)
+      }
+    })
+  }
+    // ====================================================================Copy Message==========================================================================
+    copyMessage(Input: HTMLInputElement) {
+      const selBox = document.createElement('textarea');
+      selBox.style.position = 'fixed';
+      selBox.style.left = '0';
+      selBox.style.top = '0';
+      selBox.style.opacity = '0';
+      selBox.value = Input.value;
+      document.body.appendChild(selBox);
+      selBox.focus();
+      selBox.select();
+      document.execCommand('copy');
+      document.body.removeChild(selBox);
+      this._MessageService.add({
+        severity: 'success',
+        summary: 'Notification ',
+        detail: 'Copied to clipboard!',
+      });
+    }
+
   ngOnInit(): void {
     this.createPaymentForm();
     this.getPaymentDetails();

@@ -100,8 +100,8 @@ export class AddTargetComponent implements OnInit {
   getTargetOptions() {
     this._AgentTargetService.getTargetOptions().subscribe({
       next: (res) => {
-        this.customer_types = res.data.customer_types;
-        this.paid_by = res.data.payment_types;
+        this.customer_types  = res.data.customer_types;
+        this.paid_by = this.paid_by_clone = res.data.payment_types;
         this.teams = res.data.teams;
         this.status = res.data.status;
         this.types = res.data.type;
@@ -115,21 +115,6 @@ export class AddTargetComponent implements OnInit {
   getCustomerCID() {
     if (this.insertForm.controls.client_number.valid) {
       this._AgentTargetService
-        .getSubDetails(this.insertForm.value.client_number)
-        .subscribe((res) => {
-          if (res.status) {
-            this.insertPaid_by(res);
-            this.insertForm.patchValue({
-              invoice_number: res.data.invoice_no,
-              date: new Date(res.data.delivery_starting_day),
-            });
-            this.insertTeam();
-            this.insertStatus();
-          } else {
-            this.insertForm.reset();
-          }
-        });
-      this._AgentTargetService
         .getCustomerCIDS(this.insertForm.value.client_number)
         .subscribe((res) => {
           this.cids = res.map((item: any) => item.cid);
@@ -141,19 +126,23 @@ export class AddTargetComponent implements OnInit {
     }
   }
 
-  onNumberChange(e: any) {
-    this._AgentTargetService.getSubDetails(e.value).subscribe((res) => {
-      this.insertCustomerType(this.cids);
-      if (res.status) {
-        this.insertPaid_by(res);
-        this.insertStatus();
-        this.insertTeam();
-        this.insertForm.patchValue({
-          invoice_number: res.data.invoice_no,
-          date: new Date(res.data.delivery_starting_day),
-        });
-      }
-    });
+  getSubDetails(e: any) {
+    if (e.value) {
+      this._AgentTargetService.getSubDetails(e.value).subscribe((res) => {
+        this.insertCustomerType(this.cids);
+        if (res.status) {
+          this.insertPaid_by(res);
+          this.insertStatus();
+          this.insertTeam();
+          this.insertForm.patchValue({
+            invoice_number: res.data.invoice_no,
+            date: new Date(res.data.delivery_starting_day),
+            client_number:res.data.client_number
+          });
+          this.getCustomerCID();
+        }
+      });
+    }
   }
 
   customerPhones: any[] = [];
@@ -258,5 +247,12 @@ export class AddTargetComponent implements OnInit {
         this.currentUser = user
       },
     });
+  }
+
+  paid_by_clone:any;
+  onTypeChange(e:any){
+    this.paid_by = this.paid_by_clone;
+    let [selectedType] = this.types.filter(item => item.name === e.value)
+    this.paid_by = this.paid_by.filter(item => item.type_id === selectedType.id);
   }
 }

@@ -281,6 +281,16 @@
                 <input type="text" pInputText [style]="{'width':'100%'}" [value]="PaymentLink" disabled readonly
                     #PaymentUrl />
             </div>
+            <div class="col-12">
+                <div class="mb-2 mt-4 d-flex justify-content-between">
+                    <label>Calc Price</label>
+                    <label class="text-primary pointer" (click)="copyMessage(price)"><small>Copy</small></label>
+                </div>
+                <div class="d-flex">
+                    <input type="text" pInputText disabled readonly #price [style]="{'width':'100%'}" class="me-1" [value]="currentPrice">
+                    <button class="btn btn-success w-25 ms-1" (click)="calculate_payment_link()" type="button">Calc</button>
+                </div>
+            </div>
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
                     <span *ngIf="!creatingStatus">Create</span>

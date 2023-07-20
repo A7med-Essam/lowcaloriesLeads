@@ -58,6 +58,9 @@ export class NavbarComponent implements OnInit {
       this._PusherService.pusherEventLeadData.subscribe((res) => {
         this.processNotification(res);
         this.notifications = res?.notifications||[]
+        setTimeout(() => {
+          this.getAllNotifications();
+        }, 500);
       });
     } else {
       this.isLogin = false;
@@ -85,8 +88,8 @@ export class NavbarComponent implements OnInit {
   }
 
   toggleNotifications() {
-    this.getAllNotifications();
     this.hasNotification = !this.hasNotification;
+    this.getAllNotifications();
   }
 
   getAllNotifications() {
