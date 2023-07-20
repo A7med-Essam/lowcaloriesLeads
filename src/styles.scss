@@ -864,3 +864,12 @@ input[type=file]::file-selector-button:hover {
 .p-tabview-nav-content{
   border-bottom: 1px solid #bbb;
 }
+
+.table-buttons-container{
+  position: fixed;
+    z-index: 9;
+    background-color: #242939;
+    top: 60px;
+    width: -webkit-fill-available;
+    padding: 10px 0px;
+}

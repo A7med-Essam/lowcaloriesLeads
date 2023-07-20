@@ -249,12 +249,12 @@ export class AssignCallComponent implements OnInit, OnDestroy {
   columns: any[] = [
     { name: 'id', status: false },
     { name: 'cid', status: true },
-    { name: 'Remaining_days', status: false },
+    { name: 'Remaining_days', status: true },
     { name: 'branch', status: false },
     { name: 'customer_name', status: true },
     { name: 'customer_phone', status: false },
     { name: 'customer_mobile', status: false },
-    { name: 'plan', status: true },
+    { name: 'plan', status: false },
     { name: 'date', status: false },
     { name: 'note', status: false },
     { name: 'agent_uploaded', status: false },
@@ -580,4 +580,29 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     }
   }
 
+// ========================================================sort========================================================
+  sort(event: any) {
+    const sortField = event.sortField;
+    const sortOrder = event.sortOrder === 1 ? 1 : -1;
+    this.calls?.sort((a: any, b: any) => {
+      const aValue = a[sortField];
+      const bValue = b[sortField];
+      if (typeof aValue === 'string' && Date.parse(aValue) && typeof bValue === 'string' && Date.parse(bValue)) {
+        const aDate = new Date(aValue);
+        const bDate = new Date(bValue);
+        return (aDate.getTime() - bDate.getTime()) * sortOrder; 
+      }
+      else if (!isNaN(parseFloat(aValue)) && typeof parseFloat(aValue) === 'number' && !isNaN(parseFloat(bValue)) && typeof parseFloat(bValue) === 'number') {
+        return (aValue - bValue) * sortOrder;
+      } else if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return aValue.localeCompare(bValue) * sortOrder;
+      }
+      else if (Array.isArray(aValue) && Array.isArray(bValue)) {
+        return (aValue.length - bValue.length) * sortOrder;
+      }
+       else {
+        return 0;
+      }
+    });
+  }
 }

@@ -1,5 +1,5 @@
-<div class="d-flex justify-content-end align-items-center">
-    <div class="mb-3">
+<div class="d-flex justify-content-end align-items-center  table-buttons-container">
+    <div class="m-3">
         <button [disabled]="!createPermission" pButton pRipple label="Add Complaint" class="p-button-success mx-1" icon="pi pi-plus"
             routerLink="../create"></button>
         <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
@@ -18,7 +18,9 @@
 
 <div class="card">
     <p-table [value]="complaints" [paginator]="true" [rows]="PaginationInfo?.per_page"
-        [totalRecords]="PaginationInfo?.total" [lazy]="false" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        [totalRecords]="PaginationInfo?.total" [lazy]="true" 
+        (onLazyLoad)="sort($event)"
+        (onPage)="paginate($event)" [showCurrentPageReport]="true"
         responsiveLayout="scroll"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">

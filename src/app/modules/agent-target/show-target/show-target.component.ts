@@ -171,7 +171,6 @@ export class ShowTargetComponent implements OnInit {
       this.allTargets = res.data;
     });
   }
-
   getTargets(page: number = 1) {
     if (this.appliedFilters) {
       this.getOldFilters(page);
@@ -197,6 +196,7 @@ export class ShowTargetComponent implements OnInit {
     this.currentPage = e.first / e.rows + 1;
     this.getTargets(e.first / e.rows + 1);
   }
+  
 
   // ****************************************************filter************************************************************************
 
@@ -364,7 +364,7 @@ export class ShowTargetComponent implements OnInit {
     { name: 'date', status: true },
     { name: 'client_number', status: true },
     { name: 'client_cid', status: false },
-    { name: 'branch', status: true },
+    { name: 'branch', status: false },
     { name: 'customer_type', status: false },
     { name: 'paid_by', status: true },
     { name: 'status', status: false },
@@ -532,5 +532,31 @@ export class ShowTargetComponent implements OnInit {
         this.uploadModal = false;
       }
     }
+  }
+
+  // ****************************************************sort************************************************************************
+  sort(event: any) {
+    const sortField = event.sortField;
+    const sortOrder = event.sortOrder === 1 ? 1 : -1;
+    this.targets?.sort((a: any, b: any) => {
+      const aValue = a[sortField];
+      const bValue = b[sortField];
+      if (typeof aValue === 'string' && Date.parse(aValue) && typeof bValue === 'string' && Date.parse(bValue)) {
+        const aDate = new Date(aValue);
+        const bDate = new Date(bValue);
+        return (aDate.getTime() - bDate.getTime()) * sortOrder; 
+      }
+      else if (!isNaN(parseFloat(aValue)) && typeof parseFloat(aValue) === 'number' && !isNaN(parseFloat(bValue)) && typeof parseFloat(bValue) === 'number') {
+        return (aValue - bValue) * sortOrder;
+      } else if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return aValue.localeCompare(bValue) * sortOrder;
+      }
+      else if (Array.isArray(aValue) && Array.isArray(bValue)) {
+        return (aValue.length - bValue.length) * sortOrder;
+      } 
+      else {
+        return 0;
+      }
+    });
   }
 }
