@@ -17,39 +17,41 @@
 
 <div class="card">
     <p-table [value]="targets" [paginator]="true" [rows]="PaginationInfo?.per_page"
-        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        [totalRecords]="PaginationInfo?.total" [lazy]="false" (onPage)="paginate($event)" [showCurrentPageReport]="true"
         responsiveLayout="scroll"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
                 <th class="text-center">
-                    Select Columns
+                    <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)" [pSelectableRow]="targets"></p-tableHeaderCheckbox>
                 </th>
-                <th class="text-center"*ngIf="columns[0].status">id</th>
-                <th class="text-center"*ngIf="columns[1].status">team</th>
-                <th class="text-center"*ngIf="columns[2].status">type</th>
-                <th class="text-center"*ngIf="columns[3].status">agent_name</th>
-                <th class="text-center"*ngIf="columns[4].status">date</th>
-                <th class="text-center"*ngIf="columns[5].status">client_number</th>
-                <th class="text-center"*ngIf="columns[6].status">client_cid</th>
-                <th class="text-center"*ngIf="columns[7].status">branch</th>
-                <th class="text-center"*ngIf="columns[8].status">customer_type</th>
-                <th class="text-center"*ngIf="columns[9].status">paid_by</th>
-                <th class="text-center"*ngIf="columns[10].status">status</th>
-                <th class="text-center"*ngIf="columns[11].status">invoice_number</th>
-                <th class="text-center"*ngIf="columns[12].status">created_at</th>
+                <th class="text-center"*ngIf="columns[0].status" pSortableColumn="id">id  <p-sortIcon field="id"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[1].status" pSortableColumn="team">team  <p-sortIcon field="team"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[2].status" pSortableColumn="type">type  <p-sortIcon field="type"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[3].status" pSortableColumn="agent.name">agent_name  <p-sortIcon field="agent.name"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[4].status" pSortableColumn="date">date  <p-sortIcon field="date"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[5].status" pSortableColumn="client_number">client_number  <p-sortIcon field="client_number"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[6].status" pSortableColumn="client_cid">client_cid  <p-sortIcon field="client_cid"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[7].status" pSortableColumn="branch">branch  <p-sortIcon field="branch"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[8].status" pSortableColumn="customer_type">customer_type  <p-sortIcon field="customer_type"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[9].status" pSortableColumn="paid_by">paid_by  <p-sortIcon field="paid_by"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[10].status" pSortableColumn="status">status  <p-sortIcon field="status"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[11].status" pSortableColumn="invoice_number">invoice_number  <p-sortIcon field="invoice_number"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[12].status" pSortableColumn="created_at">created_at  <p-sortIcon field="created_at"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[13].status" pSortableColumn="client_name">client_name  <p-sortIcon field="client_name"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[14].status" pSortableColumn="amount_paid">amount_paid  <p-sortIcon field="amount_paid"></p-sortIcon></th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-agent>
-            <tr>
+            <tr [pSelectableRow]="agent">
                 <td class="text-center">
-                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="agent.id">
+                    <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="agent"></p-tableCheckbox>
                 </td>
                 <td class="text-center" *ngIf="columns[0].status">{{agent.id}}</td>
                 <td class="text-center" *ngIf="columns[1].status">{{agent.team}}</td>
                 <td class="text-center" *ngIf="columns[2].status">{{agent.type}}</td>
-                <td class="text-center" *ngIf="columns[3].status">{{agent.agent.name}}</td>
+                <td class="text-center" *ngIf="columns[3].status">{{agent.agent?.name}}</td>
                 <td class="text-center" *ngIf="columns[4].status">{{agent.date}}</td>
                 <td class="text-center" *ngIf="columns[5].status">{{agent.client_number}}</td>
                 <td class="text-center" *ngIf="columns[6].status">{{agent.client_cid}}</td>
@@ -59,6 +61,9 @@
                 <td class="text-center" *ngIf="columns[10].status">{{agent.status}}</td>
                 <td class="text-center" *ngIf="columns[11].status">{{agent.invoice_number}}</td>
                 <td class="text-center" *ngIf="columns[12].status">{{agent.created_at|date}}</td>
+                <td class="text-center" *ngIf="columns[13].status">{{agent.client_name}}</td>
+                <td class="text-center" *ngIf="columns[14].status">{{agent.amount_paid}}</td>
+
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
                         class="m-1 p-button-sm"></button>
@@ -107,7 +112,7 @@
                 </div>
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Customer types</label>
-                    <p-dropdown [options]="customer_types" formControlName='customer_types' optionLabel="name"
+                    <p-dropdown [options]="customer_types" formControlName='customer_type' optionLabel="name"
                         optionValue="name" styleClass="w-100" placeholder="Select Customer Type" appendTo="body"
                         [filter]="true">
                     </p-dropdown>

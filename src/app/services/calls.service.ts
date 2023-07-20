@@ -43,8 +43,13 @@ export class CallsService {
     return this._ApiConfigService.postReq3(`assignMultiCallForAgent`, info);
   }
 
-  export(ids:number[]): Observable<any>{
-    return this._ApiConfigService.postReq3(`exportCalls`, {callIds:ids});
+  exportAll(): Observable<any>{
+    return this._ApiConfigService.postReq3(`exportCalls`, '');
+  }
+
+  // TODO: check 
+  exportByIds(callIds:number[]): Observable<any>{
+    return this._ApiConfigService.postReq3(`callExportByIds`, {callIds});
   }
 
   filterCalls(page: number,filter:any){

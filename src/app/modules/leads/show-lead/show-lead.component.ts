@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { GuardService } from 'src/app/services/guard.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
@@ -12,7 +13,8 @@ export class ShowLeadComponent implements OnInit {
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
-    private _GuardService: GuardService
+    private _GuardService: GuardService,
+    private _MessageService:MessageService
   ) {}
 
   leads: any;
@@ -205,6 +207,11 @@ export class ShowLeadComponent implements OnInit {
       const ids = this.leads.map((obj: any) => obj.id);
       this._SurveyService.exportLeads(ids).subscribe({
         next: (res) => {
+          this._MessageService.add({
+            severity: 'success',
+            summary: 'Export Excel',
+            detail: 'Leads Exported Successfully',
+          });
           const link = document.createElement('a');
           link.target = '_blank';
           link.href = res.data;

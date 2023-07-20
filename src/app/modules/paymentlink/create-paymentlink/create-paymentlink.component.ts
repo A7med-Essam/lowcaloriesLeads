@@ -85,9 +85,25 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     this._PaymentlinkService.getPaymentDetails().subscribe((res) => {
       if (res.status == 1) {
         this.paymentDetails = res.data;
+        this.paymentDetails.GiftCodes = this.paymentDetails.GiftCodes.map( c => {
+          return {
+            code:`${c.code} (${c.percentage}%)`,
+            id:c.id,
+            percentage:c.percentage
+          }
+        })
       }
     });
   }
+
+  getEmailByMobile(mobile:string) {
+    this._PaymentlinkService.checkMobileEmails(mobile).subscribe((res) => {
+      this.paymentForm.patchValue({
+        email: res.data,
+      });
+    });
+  }
+
 
   createPaymentForm() {
     this.paymentForm = new FormGroup({

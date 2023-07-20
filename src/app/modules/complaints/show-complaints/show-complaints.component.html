@@ -18,32 +18,32 @@
 
 <div class="card">
     <p-table [value]="complaints" [paginator]="true" [rows]="PaginationInfo?.per_page"
-        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        [totalRecords]="PaginationInfo?.total" [lazy]="false" (onPage)="paginate($event)" [showCurrentPageReport]="true"
         responsiveLayout="scroll"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
                 <th class="text-center">
-                    Select Columns
+                    <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)" [pSelectableRow]="complaints"></p-tableHeaderCheckbox>
                 </th>
-                <th class="text-center"*ngIf="columns[0].status">id</th>
-                <th class="text-center"*ngIf="columns[1].status">action</th>
-                <th class="text-center"*ngIf="columns[2].status">agent_name</th>
-                <th class="text-center"*ngIf="columns[3].status">branch</th>
-                <th class="text-center"*ngIf="columns[4].status">c_mobile</th>
-                <th class="text-center"*ngIf="columns[5].status">c_name</th>
-                <th class="text-center"*ngIf="columns[6].status">cid</th>
-                <th class="text-center"*ngIf="columns[7].status">created_at</th>
-                <th class="text-center"*ngIf="columns[8].status">date</th>
-                <th class="text-center"*ngIf="columns[9].status">issue_details</th>
-                <th class="text-center"*ngIf="columns[10].status">status</th>
+                <th class="text-center"*ngIf="columns[0].status" pSortableColumn="id">id <p-sortIcon field="id"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[1].status" pSortableColumn="action">action <p-sortIcon field="action"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[2].status" pSortableColumn="agent_name">agent_name <p-sortIcon field="agent_name"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[3].status" pSortableColumn="branch">branch <p-sortIcon field="branch"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[4].status" pSortableColumn="c_mobile">c_mobile <p-sortIcon field="c_mobile"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[5].status" pSortableColumn="c_name">c_name <p-sortIcon field="c_name"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[6].status" pSortableColumn="cid">cid <p-sortIcon field="cid"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[7].status" pSortableColumn="created_at">created_at <p-sortIcon field="created_at"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[8].status" pSortableColumn="date">date <p-sortIcon field="date"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[9].status" pSortableColumn="issue_details">issue_details <p-sortIcon field="issue_details"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[10].status" pSortableColumn="status">status <p-sortIcon field="status"></p-sortIcon></th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-complaint>
-            <tr>
+            <tr [pSelectableRow]="complaint">
                 <td class="text-center">
-                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="complaint.id">
+                    <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="complaint"></p-tableCheckbox>
                 </td>
                 <td class="text-center" *ngIf="columns[0].status">{{complaint.id}}</td>
                 <td class="text-center" *ngIf="columns[1].status">{{complaint.action}}</td>

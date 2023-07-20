@@ -6,6 +6,8 @@ import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GuardService } from 'src/app/services/guard.service';
+import { MessageService } from 'primeng/api';
+import { TableCheckbox } from 'primeng/table';
 
 @Component({
   selector: 'app-show-dislike',
@@ -19,7 +21,8 @@ export class ShowDislikeComponent implements OnInit {
   constructor(
     private _Router: Router,
     private _DislikeService: DislikeService,
-    private _GuardService:GuardService
+    private _GuardService:GuardService,
+    private _MessageService:MessageService
   ) {
     this.userId = _GuardService.getUser().id
     this.role = _GuardService.getUser().role_name
@@ -192,18 +195,38 @@ export class ShowDislikeComponent implements OnInit {
     this.filter_selectedMobile = null;
     this.filter_selectedCid = null;
   }
+    // ****************************************************export************************************************************************
 
-  export(){
-    if (this.exportPermission) {      
-      this._DislikeService.exportDislike().subscribe({
-        next:res=>{
-          const link = document.createElement('a');
-          link.href = res.data;
-          link.target = "_blank"
-          link.click();
-        }
-      })
+  export() {
+    if (this.exportPermission) {
+      let exportObservable;
+      if (this.specificRows.length > 0) {
+        exportObservable = this._DislikeService.exportByIds(this.specificRows);
+      } else if (this.appliedFilters) {
+        const ids = this.dislikes.map((obj: any) => obj.id);
+        exportObservable = this._DislikeService.exportByIds(ids);
+      } else {
+        exportObservable = this._DislikeService.exportAll();
+      }
+      exportObservable.subscribe({
+        next: (res) => {
+          this.handleExportSuccess(res.data);
+        },
+      });
     }
+  }
+  
+  private handleExportSuccess(data: any) {
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Export Excel',
+      detail: 'Dislike Exported Successfully',
+    });
+  
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = data;
+    link.click();
   }
 
     // ****************************************************filter columns************************************************************************
@@ -255,14 +278,22 @@ export class ShowDislikeComponent implements OnInit {
       }, 1);
     }
   
-    getSpecificRows(input: HTMLInputElement) {
+    getSpecificRows(input: TableCheckbox) {
       if (input.checked) {
-        this.specificRows.push(Number(input.value));
+        this.specificRows.push(Number(input.value.id));
       } else {
-        const index = this.specificRows.indexOf(Number(input.value));
+        const index = this.specificRows.indexOf(Number(input.value.id));
         if (index > -1) {
           this.specificRows.splice(index, 1);
         }
+      }
+    }
+  
+    selectAllRows(input: any): void {
+      if (input.checked) {
+        this.specificRows = this.dislikes.map((obj: any) => obj.id);
+      } else {
+        this.specificRows = []
       }
     }
 

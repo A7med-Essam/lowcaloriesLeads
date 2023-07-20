@@ -61,6 +61,14 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     private _MessageService: MessageService
   ) {}
 
+  getEmailByMobile(mobile:string) {
+    this._PaymentlinkService.checkMobileEmails(mobile).subscribe((res) => {
+      this.paymentForm.patchValue({
+        email: res.data,
+      });
+    });
+  }
+
   ngOnInit(): void {
     this.createPaymentForm();
     this.getPaymentDetails();

@@ -15,32 +15,32 @@
 </div>
 <div class="card">
     <p-table [value]="dislikes" [paginator]="true" [rows]="PaginationInfo?.per_page"
-        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        [totalRecords]="PaginationInfo?.total" [lazy]="false" (onPage)="paginate($event)" [showCurrentPageReport]="true"
         responsiveLayout="scroll"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
                 <th class="text-center">
-                    Select Columns
+                    <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)" [pSelectableRow]="dislikes"></p-tableHeaderCheckbox>
                 </th>
-                <th class="text-center"*ngIf="columns[0].status">id</th>
-                <th class="text-center"*ngIf="columns[1].status">name</th>
-                <th class="text-center"*ngIf="columns[2].status">cid</th>
-                <th class="text-center"*ngIf="columns[3].status">email</th>
-                <th class="text-center"*ngIf="columns[4].status">mobile</th>
-                <th class="text-center"*ngIf="columns[5].status">branch</th>
-                <th class="text-center"*ngIf="columns[6].status">Created By</th>
-                <th class="text-center"*ngIf="columns[7].status">sent_by</th>
-                <th class="text-center"*ngIf="columns[8].status">dislike_meals</th>
-                <th class="text-center"*ngIf="columns[9].status">reasons</th>
-                <th class="text-center"*ngIf="columns[9].status">created_at</th>
+                <th class="text-center"*ngIf="columns[0].status" pSortableColumn="id">id <p-sortIcon field="id"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[1].status" pSortableColumn="name">name <p-sortIcon field="name"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[2].status" pSortableColumn="cid">cid <p-sortIcon field="cid"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[3].status" pSortableColumn="email">email <p-sortIcon field="email"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[4].status" pSortableColumn="mobile">mobile <p-sortIcon field="mobile"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[5].status" pSortableColumn="branch">branch <p-sortIcon field="branch"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[6].status" pSortableColumn="agent.name">Created by<p-sortIcon field="agent.name"></p-sortIcon> </th>
+                <th class="text-center"*ngIf="columns[7].status" pSortableColumn="sent_by">sent_by <p-sortIcon field="sent_by"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[8].status" pSortableColumn="dislike_meals">dislike_meals <p-sortIcon field="dislike_meals"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[9].status" pSortableColumn="reasons">reasons <p-sortIcon field="reasons"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[9].status" pSortableColumn="created_at">created_at <p-sortIcon field="created_at"></p-sortIcon></th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-dislike>
-            <tr>
+            <tr [pSelectableRow]="dislike">
                 <td class="text-center">
-                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="dislike.id">
+                    <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="dislike"></p-tableCheckbox>
                 </td>
                 <td class="text-center" *ngIf="columns[0].status">{{dislike.id}}</td>
                 <td class="text-center" *ngIf="columns[1].status">{{dislike.name}}</td>
@@ -48,7 +48,7 @@
                 <td class="text-center" *ngIf="columns[3].status">{{dislike.email}}</td>
                 <td class="text-center" *ngIf="columns[4].status">{{dislike.mobile}}</td>
                 <td class="text-center" *ngIf="columns[5].status">{{dislike.branch}}</td>
-                <td class="text-center" *ngIf="columns[6].status">{{dislike.agent.name}}</td>
+                <td class="text-center" *ngIf="columns[6].status">{{dislike.agent?.name}}</td>
                 <td class="text-center" *ngIf="columns[7].status">{{dislike.sent_by}}</td>
                 <td class="text-center" *ngIf="columns[8].status">{{dislike.dislike_meals}}</td>
                 <td class="text-center" *ngIf="columns[9].status">{{dislike.reasons}}</td>

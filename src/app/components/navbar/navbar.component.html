@@ -35,14 +35,33 @@
     <div class="collapse navbar-collapse right-nav" id="collapseBasic" *ngIf="isLogin" [attr.collapse]="isCollapsed">
       <ul class="navbar-nav ">
         <li class="nav-item" style="outline: 0px !important;">
-          <a class="btn nav-link notifications-container" (click)="closeNotify()">
+          <a class="btn nav-link notifications-container" (click)="toggleNotifications()">
             <i class="far fa-bell"></i>
             <span class="link-text">Notifications</span>
             <span class="nav-alert notifications" *ngIf="hasNotification"></span>
-            <div class="notification-list" (click)="answerLead(LeadNotification.lead.id)">
-              <div class="item shadow-lg" *ngIf="hasNotification">
-                <div>Lead Assigned</div>
-                <small class="text-muted">{{LeadNotification.lead.created_at | date}}</small>
+            <div class="notification-list shadow-lg" *ngIf="hasNotification">
+              <div class="overlay"></div>
+              <div *ngFor="let notification of notifications" class="notification-item">
+                <div class="d-flex align-items-center notification" [ngClass]="{'isReaded':notification.read == 0}"
+                (click)="updateNotifications(notification)">
+                  <div>
+                    <i class="fas"
+                    [ngClass]="{
+                      'fa-people-carry': notification.type == 'lead',
+                      'fa-headset': notification.type == 'call',
+                      'fa-user-tag': notification.type == 'target',
+                      'fa-hand-holding-usd': notification.type == 'refund',
+                      'fa-thumbs-down': notification.type == 'dislike'
+                    }"></i>
+                  </div>
+                  <div class="item text-start">
+                    <div>{{notification.title}}</div>
+                    <small class="text-muted">
+                      {{notification.created_ago}}
+                    </small>
+                  </div>
+                </div>
+                <hr class="my-0">
               </div>
             </div>
           </a>
@@ -51,8 +70,6 @@
           <a class="btn nav-link" routerLink="leads/reminder">
             <i class="far fa-envelope"></i>
             <span class="link-text">Messages</span>
-            <!-- <span class="badge badge-pill badge-success">5</span> -->
-            <!-- <span class="nav-alert messages"></span> -->
           </a>
         </li>
         <li class="nav-item">

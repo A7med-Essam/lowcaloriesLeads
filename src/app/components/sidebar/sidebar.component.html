@@ -12,8 +12,17 @@
   </div>
 
   <nav class="sidebar-menu pt-3 pb-3">
+    <ul class="menu-items">
+      <li>
+        <a routerLink="/home" routerLinkActive="active">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+      </li>
+    </ul>
+    <hr>
     <div class="menu-header mt-3 mb-2" *ngIf="isSuperAdmin">
-      Super Admin
+      Super Admin Components
     </div>
     <ul class="menu-items" *ngIf="isSuperAdmin">
       <li>
@@ -28,13 +37,135 @@
           <span>Roles</span>
         </a>
       </li>
-      <li>
+      <hr>
+    </ul>
+    <div class="menu-header mt-3 mb-2">
+      Lead Components
+    </div>
+    <ul class="menu-items">
+      <li *ngIf="showLeadsPermission">
+        <a routerLink="/leads/show" routerLinkActive="active">
+          <i class="fa fa-star"></i>
+          <span>My Leads</span>
+        </a>
+      </li>
+      <li *ngIf="showInputsPermission">
+        <a routerLink="/leadControls/show" routerLinkActive="active">
+          <i class="fa fa-align-center"></i>
+          <span>Lead Inputs</span>
+        </a>
+      </li>
+      <!-- <li>
         <a routerLink="leads/create" routerLinkActive="active">
           <i class="fas fa-gem"></i>
           <span>Create Lead</span>
         </a>
+      </li> -->
+    </ul>
+    <hr>
+    <div class="menu-header mt-3 mb-2">
+      Call Components
+    </div>
+    <ul class="menu-items">
+      <li *ngIf="showCallsPermission">
+        <a routerLink="/calls/show" routerLinkActive="active">
+          <i class="fas fa-headset"></i>
+          <span>Calls</span>
+        </a>
+      </li>
+      <li *ngIf="assignCallsPermission">
+        <a routerLink="calls/assign" routerLinkActive="active">
+          <i class="fas fa-link"></i>
+          <span>Assign Calls</span>
+        </a>
       </li>
     </ul>
+    <hr>
+    <div class="menu-header mt-3 mb-2">
+      Payment Components
+    </div>
+    <ul class="menu-items">
+      <li *ngIf="createClinicPermission">
+        <a routerLink="/clinic" routerLinkActive="active">
+          <i class="fas fa-hospital-symbol"></i>
+          <span>Clinic</span>
+        </a>
+      </li>
+      <li *ngIf="createPaymentLinkPermission">
+        <a routerLink="paymentlink/create" routerLinkActive="active">
+          <i class="fas fa-money-check-alt"></i>
+          <span>Payment Link</span>
+        </a>
+      </li>
+      <li *ngIf="createPaymentBranchesPermission">
+        <a routerLink="paymentlink/print" routerLinkActive="active">
+          <i class="fas fa-money-check-alt"></i>
+          <span>Payment Branch</span>
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <div class="menu-header mt-3 mb-2">
+      Refund Components
+    </div>
+    <ul class="menu-items">
+      <li *ngIf="showRefundPermission">
+        <a routerLink="/refund/show" routerLinkActive="active">
+          <i class="fas fa-hand-holding-usd"></i>
+          <span>Refund</span>
+        </a>
+      </li>
+      <li *ngIf="showRefundReasonsPermission">
+        <a routerLink="refund/reasons" routerLinkActive="active">
+          <i class="fas fa-list"></i>
+          <span>Refund Reasons</span>
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <div class="menu-header mt-3 mb-2">
+      Dislike Components
+    </div>
+    <ul class="menu-items">
+      <li *ngIf="showDislikePermission">
+        <a routerLink="/dislike/show" routerLinkActive="active">
+          <i class="fas fa-thumbs-down"></i>
+          <span>Dislike</span>
+        </a>
+      </li>
+      <li *ngIf="showDislikeReasonsPermission">
+        <a routerLink="dislike/reasons" routerLinkActive="active">
+          <i class="fas fa-list"></i>
+          <span>Dislike Reasons</span>
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <div class="menu-header mt-3 mb-2">
+      Target Components
+    </div>
+    <ul class="menu-items">
+      <li *ngIf="showTargetPermission">
+        <a routerLink="/target/show" routerLinkActive="active">
+          <i class="fas fa-user-tag"></i>
+          <span>Target</span>
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <div class="menu-header mt-3 mb-2">
+      Complaint Components
+    </div>
+    <ul class="menu-items">
+      <li *ngIf="showComplaintsPermission">
+        <a routerLink="/complaints/show" routerLinkActive="active">
+          <i class="fas fa-clipboard-list"></i>
+          <span>Complaints</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- <hr>
     <div class="menu-header mt-3 mb-2">
       Components
     </div>
@@ -124,7 +255,9 @@
         </a>
       </li>
 
-    </ul>
+    </ul> -->
+
+    <hr>
     <ul class="menu-items">
       <li (click)="logOut()">
         <a style="cursor: pointer;">

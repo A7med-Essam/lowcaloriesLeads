@@ -30,7 +30,12 @@ export class PaymentlinkService {
   }> {
     return this._ApiConfigService.postReq3(`create_payment_complete`, payment);
   }
+
+  checkMobileEmails(mobile:string): Observable<any>{
+    return this._ApiConfigService.postReq3(`getEmailsByMobile`, {mobile});
+  }
 }
+
 
 
 export interface PaymentDetailsResponse {

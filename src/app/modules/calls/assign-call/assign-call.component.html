@@ -14,80 +14,99 @@
 </div>
 <div class="card">
     <p-table [value]="calls" [paginator]="true" [rows]="PaginationInfo?.per_page" [totalRecords]="PaginationInfo?.total"
-        [lazy]="false" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
-        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
-        <ng-template pTemplate="header">
-            <tr>
-                <th class="text-center">
-                    Select Columns
-                </th>
-                <th class="text-center" *ngIf="columns[0].status">id</th>
-                <th class="text-center" *ngIf="columns[1].status">cid</th>
-                <th class="text-center" pSortableColumn="subscription_id" *ngIf="columns[2].status">
-                    Remaining Days <p-sortIcon field="subscription_id"></p-sortIcon>
-                </th>
-                <th class="text-center" *ngIf="columns[3].status">branch</th>
-                <th class="text-center" *ngIf="columns[4].status">customer_name</th>
-                <th class="text-center" *ngIf="columns[5].status">customer_phone</th>
-                <th class="text-center" *ngIf="columns[6].status">customer_mobile</th>
-                <th class="text-center" *ngIf="columns[7].status">plan</th>
-                <th class="text-center" *ngIf="columns[8].status">date</th>
-                <th class="text-center" *ngIf="columns[9].status">note</th>
-                <!-- <th class="text-center" *ngIf="columns[10].status">voice</th> -->
-                <th class="text-center" *ngIf="columns[10].status">agent_uploaded</th>
-                <th class="text-center" *ngIf="columns[11].status">created_at</th>
-                <th class="text-center" *ngIf="columns[12].status">assigned_agent</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-call>
-            <tr>
-                <td class="text-center">
-                    <input type="checkbox" #areaIdInput (click)="getSpecificRows(areaIdInput)" [value]="call.id">
-                </td>
-                <td class="text-center" *ngIf="columns[0].status">{{call.id}}</td>
-                <td class="text-center" *ngIf="columns[1].status">{{call.cid}}</td>
-                <td class="text-center" *ngIf="columns[2].status">{{call.subscription_id}}</td>
-                <td class="text-center" *ngIf="columns[3].status">{{call.branch}}</td>
-                <td class="text-center" *ngIf="columns[4].status">{{call.customer_name}}</td>
-                <td class="text-center" *ngIf="columns[5].status">{{call.customer_mobile}}</td>
-                <td class="text-center" *ngIf="columns[6].status">{{call.customer_phone}}</td>
-                <td class="text-center" *ngIf="columns[7].status">{{call.plan}}</td>
-                <td class="text-center" *ngIf="columns[8].status">{{call.date}}</td>
-                <td class="text-center" *ngIf="columns[9].status">{{call.note}}</td>
-                <!-- <td class="text-center" *ngIf="columns[10].status">
-                    <audio controls>
-                        <source [src]="call.voice" type="audio/mpeg">
-                    </audio>
-                </td> -->
-                <td class="text-center" *ngIf="columns[10].status">
-                    <span *ngIf="call.agent_uploaded_name">
-                        {{call.agent_uploaded_name}}
-                    </span>
-                    <span *ngIf="!call.agent_uploaded_name">
-                        None
-                    </span>
-                </td>
-                <td class="text-center" *ngIf="columns[11].status">{{call.created_at | date}}</td>
-                <td class="text-center" *ngIf="columns[12].status">
-                    <span *ngIf="call.call_users.length">
-                        <small *ngFor="let user of call.call_users" style="display: block;">
-                            {{user.user.name}}
-                        </small>
-                    </span>
-                    <span *ngIf="call.call_users.length == 0">NOT ASSIGNED</span>
-                </td>
-                <td class="text-center">
-                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
-                        class="m-1 p-button-sm"></button>
-                    <button pButton pRipple class="p-button-success mx-1" icon="pi pi-link"
-                        (click)="displayAssignedUsersModal(call.id);getAssignedUsers(call)"></button>
-                    <button pButton type="button" [disabled]="!printPermission" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
-                        (click)="print(call)"></button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+    [lazy]="false" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
+    currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="text-center">
+                <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)" [pSelectableRow]="calls"></p-tableHeaderCheckbox>
+            </th>
+            <th class="text-center"  pSortableColumn="id" *ngIf="columns[0].status">id 
+                <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th class="text-center" *ngIf="columns[1].status"  pSortableColumn="cid">cid
+                <p-sortIcon field="cid"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="subscription_id" *ngIf="columns[2].status">
+                Remaining Days <p-sortIcon field="subscription_id"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="branch" *ngIf="columns[3].status">branch 
+                <p-sortIcon field="branch"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="customer_name" *ngIf="columns[4].status">customer_name 
+                <p-sortIcon field="customer_name"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="customer_phone" *ngIf="columns[5].status">customer_phone 
+                <p-sortIcon field="customer_phone"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="customer_mobile" *ngIf="columns[6].status">customer_mobile 
+                <p-sortIcon field="customer_mobile"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="plan" *ngIf="columns[7].status">plan 
+                <p-sortIcon field="plan"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="date" *ngIf="columns[8].status">date 
+                <p-sortIcon field="date"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="note" *ngIf="columns[9].status">note 
+                <p-sortIcon field="note"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="agent_uploaded" *ngIf="columns[10].status">agent_uploaded 
+                <p-sortIcon field="agent_uploaded"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="created_at" *ngIf="columns[11].status">created_at 
+                <p-sortIcon field="created_at"></p-sortIcon>
+            </th>
+            <th class="text-center"  pSortableColumn="assigned_agent" *ngIf="columns[12].status">assigned_agent 
+                <p-sortIcon field="assigned_agent"></p-sortIcon>
+            </th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-call>
+        <tr [pSelectableRow]="call">
+            <td class="text-center">
+                <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="call"></p-tableCheckbox>
+            </td>
+            <td class="text-center" *ngIf="columns[0].status">{{call.id}}</td>
+            <td class="text-center" *ngIf="columns[1].status">{{call.cid}}</td>
+            <td class="text-center" *ngIf="columns[2].status">{{call.subscription_id}}</td>
+            <td class="text-center" *ngIf="columns[3].status">{{call.branch}}</td>
+            <td class="text-center" *ngIf="columns[4].status">{{call.customer_name}}</td>
+            <td class="text-center" *ngIf="columns[5].status">{{call.customer_mobile}}</td>
+            <td class="text-center" *ngIf="columns[6].status">{{call.customer_phone}}</td>
+            <td class="text-center" *ngIf="columns[7].status">{{call.plan}}</td>
+            <td class="text-center" *ngIf="columns[8].status">{{call.date}}</td>
+            <td class="text-center" *ngIf="columns[9].status">{{call.note}}</td>
+            <td class="text-center" *ngIf="columns[10].status">
+                <span *ngIf="call.agent_uploaded_name">
+                    {{call.agent_uploaded_name}}
+                </span>
+                <span *ngIf="!call.agent_uploaded_name">
+                    None
+                </span>
+            </td>
+            <td class="text-center" *ngIf="columns[11].status">{{call.created_at | date}}</td>
+            <td class="text-center" *ngIf="columns[12].status">
+                <span *ngIf="call.call_users.length">
+                    <small *ngFor="let user of call.call_users" style="display: block;">
+                        {{user.user.name}}
+                    </small>
+                </span>
+                <span *ngIf="call.call_users.length == 0">NOT ASSIGNED</span>
+            </td>
+            <td class="text-center">
+                <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
+                    class="m-1 p-button-sm"></button>
+                <button pButton pRipple class="p-button-success mx-1" icon="pi pi-link"
+                    (click)="displayAssignedUsersModal(call.id);getAssignedUsers(call)"></button>
+                <button pButton type="button" [disabled]="!printPermission" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
+                    (click)="print(call)"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
 </div>
 
 <p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"

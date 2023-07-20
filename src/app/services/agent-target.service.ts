@@ -28,8 +28,12 @@ export class AgentTargetService {
     return this._ApiConfigService.postReq3(`getSubDetails`, {mobile});
   }
 
-  exportTarget(): Observable<any> {
-    return this._ApiConfigService.postReq3(`TargetExport`, '');
+  exportAll(): Observable<any> {
+    return this._ApiConfigService.postReq3(`TargetExport`,'');
+  }
+
+  exportByIds(targetIds:number[]): Observable<any> {
+    return this._ApiConfigService.postReq3(`TargetExportByIds`, {targetIds});
   }
 
   getTargetOptions():Observable<any>{

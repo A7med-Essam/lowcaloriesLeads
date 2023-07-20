@@ -63,8 +63,13 @@ export class DislikeService {
     return this._ApiConfigService.postReq3(`deleteReasons`,{reason_id});
   }
 
-  exportDislike(): Observable<any>{
+  exportAll(): Observable<any>{
     return this._ApiConfigService.postReq3(`disLikeExport`,'');
+  }
+  
+  // TODO: check dislikeIds
+  exportByIds(dislikeIds:number[]): Observable<any>{
+    return this._ApiConfigService.postReq3(`dislikeExportByIds`,dislikeIds);
   }
 
   getSample(): Observable<any>{

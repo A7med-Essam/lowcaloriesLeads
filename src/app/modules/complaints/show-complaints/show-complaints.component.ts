@@ -8,6 +8,8 @@ import autoTable from 'jspdf-autotable';
 import { ComplaintsService } from 'src/app/services/complaints.service';
 import { Checkbox } from 'primeng/checkbox';
 import { GuardService } from 'src/app/services/guard.service';
+import { MessageService } from 'primeng/api';
+import { TableCheckbox } from 'primeng/table';
 
 @Component({
   selector: 'app-show-complaints',
@@ -20,7 +22,8 @@ export class ShowComplaintsComponent implements OnInit {
     private _Router: Router,
     private _DislikeService: DislikeService,
     private _ComplaintsService: ComplaintsService,
-    private _GuardService:GuardService
+    private _GuardService:GuardService,
+    private _MessageService: MessageService
   ) {}
 
   printPermission: boolean = false;
@@ -256,17 +259,34 @@ export class ShowComplaintsComponent implements OnInit {
 
   export() {
     if (this.exportPermission) {
-
-    const ids = this.complaints.map((obj: any) => obj.id);
-    this._ComplaintsService.exportComplaints(ids).subscribe({
-      next: (res) => {
-        const link = document.createElement('a');
-        link.target = '_blank';
-        link.href = res.data;
-        link.click();
-      },
-    });
+      let exportObservable;
+      if (this.specificRows.length > 0) {
+        exportObservable = this._ComplaintsService.exportByIds(this.specificRows);
+      } else if (this.appliedFilters) {
+        const ids = this.complaints.map((obj: any) => obj.id);
+        exportObservable = this._ComplaintsService.exportByIds(ids);
+      } else {
+        exportObservable = this._ComplaintsService.exportAll();
+      }
+      exportObservable.subscribe({
+        next: (res) => {
+          this.handleExportSuccess(res.data);
+        },
+      });
+    }
   }
+  
+  private handleExportSuccess(data: any) {
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Export Excel',
+      detail: 'Complaints Exported Successfully',
+    });
+  
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = data;
+    link.click();
   }
 
   // ****************************************************filter options************************************************************************
@@ -369,14 +389,22 @@ export class ShowComplaintsComponent implements OnInit {
     }, 1);
   }
 
-  getSpecificRows(input: HTMLInputElement) {
+  getSpecificRows(input: TableCheckbox) {
     if (input.checked) {
-      this.specificRows.push(Number(input.value));
+      this.specificRows.push(Number(input.value.id));
     } else {
-      const index = this.specificRows.indexOf(Number(input.value));
+      const index = this.specificRows.indexOf(Number(input.value.id));
       if (index > -1) {
         this.specificRows.splice(index, 1);
       }
+    }
+  }
+
+  selectAllRows(input: any): void {
+    if (input.checked) {
+      this.specificRows = this.complaints.map((obj: any) => obj.id);
+    } else {
+      this.specificRows = []
     }
   }
 

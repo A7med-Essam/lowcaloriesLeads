@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { DislikeService } from 'src/app/services/dislike.service';
 import { Router } from '@angular/router';
 import { GuardService } from 'src/app/services/guard.service';
+import { TableCheckbox } from 'primeng/table';
 
 @Component({
   selector: 'app-assign-call',
@@ -210,17 +211,35 @@ export class AssignCallComponent implements OnInit, OnDestroy {
   // ****************************************************export************************************************************************
 
   export() {
-    if (this.exportPermission) {      
-      const ids = this.calls.map((obj: any) => obj.id);
-      this._CallsService.export(ids).subscribe({
+    if (this.exportPermission) {
+      let exportObservable;
+      if (this.specificRows.length > 0) {
+        exportObservable = this._CallsService.exportByIds(this.specificRows);
+      } else if (this.appliedFilters) {
+        const ids = this.calls.map((obj: any) => obj.id);
+        exportObservable = this._CallsService.exportByIds(ids);
+      } else {
+        exportObservable = this._CallsService.exportAll();
+      }
+      exportObservable.subscribe({
         next: (res) => {
-          const link = document.createElement('a');
-          link.target = '_blank';
-          link.href = res.data;
-          link.click();
+          this.handleExportSuccess(res.data);
         },
       });
     }
+  }
+  
+  private handleExportSuccess(data: any) {
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Export Excel',
+      detail: 'Calls Exported Successfully',
+    });
+  
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = data;
+    link.click();
   }
 
   // ****************************************************filter columns************************************************************************
@@ -238,7 +257,6 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     { name: 'plan', status: true },
     { name: 'date', status: false },
     { name: 'note', status: false },
-    // { name: 'voice', status: false },
     { name: 'agent_uploaded', status: false },
     { name: 'created_at', status: false },
     { name: 'assigned_agent', status: true },
@@ -275,14 +293,22 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     }, 1);
   }
 
-  getSpecificRows(input: HTMLInputElement) {
+  getSpecificRows(input: TableCheckbox) {
     if (input.checked) {
-      this.specificRows.push(Number(input.value));
+      this.specificRows.push(Number(input.value.id));
     } else {
-      const index = this.specificRows.indexOf(Number(input.value));
+      const index = this.specificRows.indexOf(Number(input.value.id));
       if (index > -1) {
         this.specificRows.splice(index, 1);
       }
+    }
+  }
+
+  selectAllRows(input: any): void {
+    if (input.checked) {
+      this.specificRows = this.calls.map((obj: any) => obj.id);
+    } else {
+      this.specificRows = []
     }
   }
 
@@ -553,4 +579,5 @@ export class AssignCallComponent implements OnInit, OnDestroy {
       this._Router.navigate(['calls/details']);
     }
   }
+
 }

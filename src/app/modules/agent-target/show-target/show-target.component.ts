@@ -11,6 +11,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Checkbox } from 'primeng/checkbox';
 import { GuardService } from 'src/app/services/guard.service';
+import { MessageService } from 'primeng/api';
+import { TableCheckbox } from 'primeng/table';
 
 @Component({
   selector: 'app-show-target',
@@ -23,7 +25,8 @@ export class ShowTargetComponent implements OnInit {
     private _Router: Router,
     private _AgentTargetService: AgentTargetService,
     private _DislikeService: DislikeService,
-    private _GuardService: GuardService
+    private _GuardService: GuardService,
+    private _MessageService:MessageService
   ) {}
 
   createPermission: boolean = false;
@@ -72,15 +75,19 @@ export class ShowTargetComponent implements OnInit {
         'Date',
         'Agent',
         'Team',
+        'client_CID',
+        'client_name',
+        'client_number',
+        'Type',
+        'client_Type',
         'Branch',
-        'customer_CID',
-        'customer_number',
-        'customer_Type',
         'Invoice_number',
+        'amount_paid',
         'Status',
         'Paid_by',
-        'Type',
       ];
+
+
       let filteredArray = this.allTargets.filter((item: any) =>
         this.specificRows.includes(item.id)
       );
@@ -94,14 +101,16 @@ export class ShowTargetComponent implements OnInit {
         obj.date,
         obj.agent.name,
         obj.team,
-        obj.branch,
         obj.client_cid,
+        obj.client_name,
         obj.client_number,
+        obj.type,
         obj.customer_type,
+        obj.branch,
         obj.invoice_number,
+        obj.amount_paid,
         obj.status.toUpperCase(),
         obj.paid_by,
-        obj.type,
       ]);
       autoTable(doc, { startY: 70 });
       autoTable(doc, {
@@ -204,7 +213,7 @@ export class ShowTargetComponent implements OnInit {
       paid_by: new FormControl(null),
       status: new FormControl(null),
       date: new FormControl(null),
-      customer_types: new FormControl(null),
+      customer_type: new FormControl(null),
       agent_id: new FormControl(null),
       invoice_number: new FormControl(null),
       type: new FormControl(null),
@@ -277,16 +286,36 @@ export class ShowTargetComponent implements OnInit {
 
   export() {
     if (this.exportPermission) {
-      this._AgentTargetService.exportTarget().subscribe({
+      let exportObservable;
+      if (this.specificRows.length > 0) {
+        exportObservable = this._AgentTargetService.exportByIds(this.specificRows);
+      } else if (this.appliedFilters) {
+        const ids = this.targets.map((obj: any) => obj.id);
+        exportObservable = this._AgentTargetService.exportByIds(ids);
+      } else {
+        exportObservable = this._AgentTargetService.exportAll();
+      }
+      exportObservable.subscribe({
         next: (res) => {
-          const link = document.createElement('a');
-          link.target = '_blank';
-          link.href = res.data;
-          link.click();
+          this.handleExportSuccess(res.data);
         },
       });
     }
   }
+  
+  private handleExportSuccess(data: any) {
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Export Excel',
+      detail: 'Target Exported Successfully',
+    });
+  
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = data;
+    link.click();
+  }
+  
 
   // ****************************************************filter options************************************************************************
 
@@ -341,6 +370,8 @@ export class ShowTargetComponent implements OnInit {
     { name: 'status', status: false },
     { name: 'invoice_number', status: false },
     { name: 'created_at', status: false },
+    { name: 'client_name', status: true },
+    { name: 'amount_paid', status: true },
   ];
 
   getFilterColumns() {
@@ -374,14 +405,22 @@ export class ShowTargetComponent implements OnInit {
     }, 1);
   }
 
-  getSpecificRows(input: HTMLInputElement) {
+  getSpecificRows(input: TableCheckbox) {
     if (input.checked) {
-      this.specificRows.push(Number(input.value));
+      this.specificRows.push(Number(input.value.id));
     } else {
-      const index = this.specificRows.indexOf(Number(input.value));
+      const index = this.specificRows.indexOf(Number(input.value.id));
       if (index > -1) {
         this.specificRows.splice(index, 1);
       }
+    }
+  }
+
+  selectAllRows(input: any): void {
+    if (input.checked) {
+      this.specificRows = this.targets.map((obj: any) => obj.id);
+    } else {
+      this.specificRows = []
     }
   }
 
@@ -408,16 +447,18 @@ export class ShowTargetComponent implements OnInit {
 
       var columns = [
         { title: 'Date', dataKey: target.date },
-        { title: 'agent_name', dataKey: target.agent.name },
+        { title: 'Agent', dataKey: target.agent.name },
         { title: 'Team', dataKey: target.team },
-        { title: 'Branch', dataKey: target.branch },
-        { title: 'customer_cid', dataKey: target.client_cid },
-        { title: 'customer_number', dataKey: target.client_number },
-        { title: 'customer_type', dataKey: target.customer_type },
-        { title: 'invoice_number', dataKey: target.invoice_number },
-        { title: 'paid_by', dataKey: target.paid_by },
+        { title: 'client_cid', dataKey: target.client_cid },
+        { title: 'client_name', dataKey: target.client_name },
+        { title: 'client_number', dataKey: target.client_number },
         { title: 'type', dataKey: target.type },
+        { title: 'client_type', dataKey: target.customer_type },
+        { title: 'Branch', dataKey: target.branch },
+        { title: 'invoice_number', dataKey: target.invoice_number },
+        { title: 'amount_paid', dataKey: target.amount_paid },
         { title: 'status', dataKey: target.status.toUpperCase() },
+        { title: 'paid_by', dataKey: target.paid_by },
       ];
 
       // doc.text(140, 40, "Report");
