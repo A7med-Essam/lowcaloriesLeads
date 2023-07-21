@@ -14,13 +14,10 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SubscriptionDetailsComponent } from './subscription-details/subscription-details.component';
 import { CalendarModule } from 'primeng/calendar';
-
+import { ImageModule } from 'primeng/image';
 
 @NgModule({
-  declarations: [
-    ShowSubscriptionComponent,
-    SubscriptionDetailsComponent
-  ],
+  declarations: [ShowSubscriptionComponent, SubscriptionDetailsComponent],
   imports: [
     CommonModule,
     SubscriptionsRoutingModule,
@@ -34,7 +31,8 @@ import { CalendarModule } from 'primeng/calendar';
     ButtonModule,
     DialogModule,
     CheckboxModule,
-    CalendarModule
-  ]
+    CalendarModule,
+    ImageModule,
+  ],
 })
-export class SubscriptionsModule { }
+export class SubscriptionsModule {}

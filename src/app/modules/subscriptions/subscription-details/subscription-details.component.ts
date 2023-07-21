@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SubscriptionsService } from 'src/app/services/subscriptions.service';
+import { SubscriptionDetails, SubscriptionsService } from 'src/app/services/subscriptions.service';
 
 @Component({
   selector: 'app-subscription-details',
@@ -10,7 +10,7 @@ import { SubscriptionsService } from 'src/app/services/subscriptions.service';
   styleUrls: ['./subscription-details.component.scss'],
 })
 export class SubscriptionDetailsComponent implements OnInit {
-  sub: any;
+  sub!: any;
   columns: any[] = [];
 
   constructor(
@@ -28,15 +28,21 @@ export class SubscriptionDetailsComponent implements OnInit {
           if (res == null) {
             this._Router.navigate(['subscriptions/show']);
           } else {
-            this.sub = res;
-            this.columns = Object.keys(res).map((key) => ({
-              label: this.capitalize(key.replace(/_/g, ' ')),
-              key: key,
-            }));
+            this.getSubscriptionDetails(res.id)
           }
         },
       });
   }
+  // In your component or service
+isObject(value: any): boolean {
+  return typeof value === 'object' && value !== null;
+}
+
+// In your component or service
+getObjectKeys(obj: any): string[] {
+  return Object.keys(obj);
+}
+
 
   capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -49,5 +55,25 @@ export class SubscriptionDetailsComponent implements OnInit {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  getSubscriptionDetails(id:number){
+    this._SubscriptionsService.getSubscriptionDetails(id).subscribe({
+      next:res=>{
+        if (res.status) {
+          this.sub = res.data
+          this.columns = Object.keys(res.data).map((key) => ({
+            label: this.capitalize(key.replace(/_/g, ' ')),
+            key: key,
+          }));
+        }
+        else{
+          this._Router.navigate(['subscriptions/show']);
+        }
+      },
+      error:err=>{
+        this._Router.navigate(['subscriptions/show']);
+      }
+    })
   }
 }

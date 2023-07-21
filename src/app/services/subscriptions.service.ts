@@ -34,6 +34,10 @@ export class SubscriptionsService {
   exportByIds(subscriptionIds:number[]): Observable<any> {
     return this._ApiConfigService.postReq3(`SubscriptionsExportByIds`, {subscriptionIds});
   }
+
+  getSubscriptionDetails(subscription_id:number): Observable<ISubscriptionsDetailsResponse> {
+    return this._ApiConfigService.postReq3(`getSubscriptionDetails`, {subscription_id});
+  }
 }
 
 
@@ -175,4 +179,144 @@ export enum MealUnit {
 export enum Version {
   V1 = "v1",
   V3 = "v3",
+}
+//===================================================================== details interfaces
+export interface ISubscriptionsDetailsResponse {
+  status:  number;
+  message: string;
+  data:    SubscriptionDetails;
+}
+
+export interface SubscriptionDetails {
+  id:                                number;
+  version:                           string;
+  deleted:                           number;
+  status:                            string;
+  sub_from:                          string;
+  order_id:                          null;
+  user_id:                           number;
+  program_id:                        number;
+  plan_id:                           null;
+  custom:                            null;
+  option_id:                         null;
+  location_id:                       number;
+  erp_location:                      null;
+  code_id:                           number;
+  code:                              null;
+  price:                             number;
+  vat:                               string;
+  cutlery:                           null;
+  bag:                               number;
+  total_price:                       number;
+  delivery_starting_day:             Date;
+  days_of_week:                      string;
+  dislike:                           string;
+  dis_like_user:                     string;
+  note:                              null;
+  order_notes:                       null;
+  subscriptions_note:                string;
+  full_plan_name:                    string;
+  invoice_no:                        string;
+  mastercard_session_id:             null;
+  mastercard_session_version:        null;
+  mastercard_successIndicator:       null;
+  mastercard_result_session_version: null;
+  mastercard_resultIndicator:        null;
+  mode:                              number;
+  branch:                            string;
+  branch_paid_on_id:                 null;
+  branch_invoice_image:              null;
+  agent_id:                          number;
+  updated_text:                      null;
+  created_date:                      Date;
+  created_time:                      number;
+  total_price_without_vat:           number;
+  discount_amount:                   number;
+  total_after_discount:              number;
+  vat_amount:                        number;
+  refundable_security_amount:        number;
+  grand_total:                       number;
+  subscription_days:                 any[];
+  cids:                              null;
+  location:                          Location;
+  codes:                             Codes;
+  agent:                             Agent;
+  user:                              User;
+}
+
+export interface Agent {
+  id:           number;
+  status:       null;
+  team:         string;
+  branch_id:    number;
+  role:         number;
+  role_name:    string;
+  web_role:     string[];
+  agent_id:     number;
+  name:         string;
+  email:        null;
+  agent_email:  string;
+  created_at:   Date;
+  updated_at:   Date;
+  access_token: string;
+  permissions:  any[];
+}
+
+export interface Codes {
+  id:                  number;
+  code:                string;
+  flag:                string;
+  type:                string;
+  percentage:          number;
+  no_of_use:           number;
+  available_for_plans: string;
+  status:              string;
+  created_at:          Date;
+  updated_at:          Date;
+}
+
+export interface Location {
+  id:              number;
+  emirate_id:      number;
+  area_id:         string;
+  property_number: string;
+  landmark:        string;
+  emirate:         Emirate;
+}
+
+export interface Emirate {
+  id:           number;
+  en_name:      string;
+  ar_name:      string;
+  inbody_price: number;
+}
+
+export interface User {
+  id:                  number;
+  role:                string;
+  first_name:          string;
+  last_name:           string;
+  status:              number;
+  type:                string;
+  gender:              string;
+  birthday:            Date;
+  email:               string;
+  height:              string;
+  Weight:              string;
+  phone_number:        string;
+  second_phone_number: string;
+  land_line:           string;
+  email_verified_at:   null;
+  created_at:          Date;
+  updated_at:          Date;
+  deleted_at:          null;
+  emirate_id:          number;
+  area:                string;
+  address:             string;
+  floor:               null;
+  flat_number:         null;
+  access_token:        null;
+  auth_token:          null;
+  image:               null;
+  cids:                any[];
 }
