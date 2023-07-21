@@ -110,6 +110,15 @@ const routes: Routes = [
       permission: ["create_paymentlink"],
     },
   },
+  {
+    path: 'subscriptions',
+    loadChildren: () =>
+      import('./modules/subscriptions/subscriptions.module').then((m) => m.SubscriptionsModule),
+    canActivate: [PermissionGuard],
+     data: {
+      permission: ["show_subscription"],
+    },
+  },
   { path: '**', component: Error404Component },
 ];
 

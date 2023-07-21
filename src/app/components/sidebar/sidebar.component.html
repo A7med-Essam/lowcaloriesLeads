@@ -41,6 +41,19 @@
       </li>
       <hr>
     </ul>
+    <!-- ================================================SUBSCRIPTIONS================================================== -->
+    <div class="menu-header mt-3 mb-2" *ngIf="showSubscriptionPermission">
+      Subscriptions Components
+    </div>
+    <ul class="menu-items" *ngIf="showSubscriptionPermission">
+      <li>
+        <a routerLink="/subscriptions/show" routerLinkActive="active">
+          <i class="fas fa-archive"></i>
+          <span>Subscriptions</span>
+        </a>
+      </li>
+      <hr>
+    </ul>
     <!-- ================================================LEADS================================================== -->
     <div class="menu-header mt-3 mb-2" *ngIf="showInputsPermission||showLeadsPermission">
       Lead Components
@@ -80,7 +93,8 @@
       <hr>
     </ul>
     <!-- ================================================PAYMENTS================================================== -->
-    <div class="menu-header mt-3 mb-2" *ngIf="createClinicPermission||createPaymentLinkPermission||createPaymentBranchesPermission">
+    <div class="menu-header mt-3 mb-2"
+      *ngIf="createClinicPermission||createPaymentLinkPermission||createPaymentBranchesPermission">
       Payment Components
     </div>
     <ul class="menu-items" *ngIf="createClinicPermission||createPaymentLinkPermission||createPaymentBranchesPermission">
@@ -164,19 +178,6 @@
         <a routerLink="/complaints/show" routerLinkActive="active">
           <i class="fas fa-clipboard-list"></i>
           <span>Complaints</span>
-        </a>
-      </li>
-      <hr>
-    </ul>
-    <!-- ================================================SUBSCRIPTIONS================================================== -->
-    <div class="menu-header mt-3 mb-2" *ngIf="showSubscriptionPermission">
-      Subscriptions Components
-    </div>
-    <ul class="menu-items" *ngIf="showSubscriptionPermission">
-      <li>
-        <a routerLink="/subscriptions/show" routerLinkActive="active">
-          <i class="fa-solid fa-receipt"></i>
-          <span>Subscriptions</span>
         </a>
       </li>
       <hr>

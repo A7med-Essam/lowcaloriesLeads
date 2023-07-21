@@ -19,7 +19,7 @@
     <p-table [value]="targets" [lazy]="true" [paginator]="true" [rows]="PaginationInfo?.per_page"
     (onLazyLoad)="sort($event)"
         [totalRecords]="PaginationInfo?.total"  (onPage)="paginate($event)" [showCurrentPageReport]="true"
-        responsiveLayout="scroll" stateStorage="session" stateKey="statedemo-session" selectionMode="single"
+        responsiveLayout="scroll"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>

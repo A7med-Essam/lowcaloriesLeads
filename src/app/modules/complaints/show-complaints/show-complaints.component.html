@@ -18,7 +18,7 @@
 
 <div class="card">
     <p-table [value]="complaints" [paginator]="true" [rows]="PaginationInfo?.per_page"
-        [totalRecords]="PaginationInfo?.total" [lazy]="true" 
+        [totalRecords]="PaginationInfo?.total" [lazy]="true"
         (onLazyLoad)="sort($event)"
         (onPage)="paginate($event)" [showCurrentPageReport]="true"
         responsiveLayout="scroll"

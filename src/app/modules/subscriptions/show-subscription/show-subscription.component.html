@@ -1,1 +1,181 @@
-<p>show-subscription works!</p>
+<div class="d-flex justify-content-end align-items-center">
+    <div class="m-3">
+        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel"
+            (click)="export()"></p-button>
+        <!-- <p-button [disabled]="!printPermission" class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allSubscriptions.length"></p-button> -->
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
+        </p-button>
+    </div>
+</div>
+
+<div class="card">
+    <p-table [value]="subscriptions" [paginator]="true" [rows]="PaginationInfo?.per_page"
+        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onLazyLoad)="sort($event)" (onPage)="paginate($event)"
+        [showCurrentPageReport]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+        <ng-template pTemplate="caption">
+            <h5 class="mb-4">Table Filters</h5>
+            <form [formGroup]="filterForm" (ngSubmit)='filter(filterForm)'>
+                <div class="row mx-0">
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Invoice_no</label>
+                        <input type="text" pInputText ngClass="w-100" formControlName='Invoice_no' />
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Mobile Number</label>
+                        <input type="text" pInputText ngClass="w-100" formControlName='Mobile_no' />
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Plan</label>
+                        <input type="text" pInputText ngClass="w-100" formControlName='plan' />
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Version</label>
+                        <p-dropdown [options]="versions" optionLabel="label" optionValue="value"
+                            formControlName='version' appendTo="body" styleClass="w-100" placeholder="Select Version"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Mode</label>
+                        <p-dropdown [options]="modes" optionLabel="label" optionValue="value"
+                            formControlName='mode' appendTo="body" styleClass="w-100" placeholder="Select Mode"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Company</label>
+                        <p-dropdown [options]="companies" optionLabel="label" optionValue="value"
+                            formControlName='company' appendTo="body" styleClass="w-100" placeholder="Select Company"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Payment</label>
+                        <p-dropdown [options]="payments" optionLabel="label" optionValue="value"
+                            formControlName='program_id' appendTo="body" styleClass="w-100" placeholder="Select Payment Method"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Agent</label>
+                        <p-dropdown [options]="agents" optionLabel="name" optionValue="id"
+                            formControlName='agent_id' appendTo="body" styleClass="w-100" placeholder="Select Agent"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Emirate</label>
+                        <p-dropdown [options]="emirates" optionLabel="en_name" optionValue="id"
+                            formControlName='emirate' appendTo="body" styleClass="w-100" placeholder="Select Emirate"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Branch</label>
+                        <p-dropdown [options]="branches" optionLabel="name" optionValue="id"
+                            formControlName='branch_id' appendTo="body" styleClass="w-100" placeholder="Select Branch"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">Discount</label>
+                        <p-dropdown [options]="giftCodes" optionLabel="percentage" optionValue="percentage"
+                            formControlName='discount' appendTo="body" styleClass="w-100" placeholder="Select Discount Code"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="">GiftCode</label>
+                        <p-dropdown [options]="giftCodes" optionLabel="code" optionValue="id"
+                            formControlName='code' appendTo="body" styleClass="w-100" placeholder="Select GiftCode"
+                            [filter]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="range">Date Range</label>
+                        <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+                            ngClass="w-100" appendTo="body">
+                        </p-calendar>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
+                        <label for="range">Start Day</label>
+                        <p-calendar [readonlyInput]="true" formControlName="delivery_starting_day" ngClass="w-100" appendTo="body">
+                        </p-calendar>
+                    </div>
+                    <div class="col-12 my-2">
+                        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+                            <div>
+                                <p-button type="button" (click)="resetFields()" styleClass="p-button-raised p-button-secondary mx-2" label="Reset Fields" icon="pi pi-refresh"></p-button>
+                            </div>
+                            <div>
+                                <p-button type="button" (click)="resetFilter()" styleClass="p-button-raised p-button-secondary mx-2" label="Reset" icon="pi pi-filter-slash"></p-button>
+                                <p-button type="submit" styleClass="p-button-raised p-button-success mx-2" label="Apply Filter" icon="pi pi-filter"></p-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">
+                    <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)"
+                        [pSelectableRow]="subscriptions"></p-tableHeaderCheckbox>
+                </th>
+                <ng-container *ngFor="let column of columns">
+                    <th class="text-center" *ngIf="column.status" [pSortableColumn]="column.name">
+                        {{ column.name }}
+                        <p-sortIcon [field]="column.name"></p-sortIcon>
+                    </th>
+                </ng-container>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-sub>
+            <tr [pSelectableRow]="sub">
+                <td class="text-center">
+                    <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="sub">
+                    </p-tableCheckbox>
+                </td>
+                <ng-container *ngFor="let column of columns">
+                    <td class="text-center" *ngIf="column.status">
+                        <ng-container *ngIf="column.name === 'status'; else otherContent">
+                            <p-tag [severity]="getSeverity(sub[column.name])" [value]="sub[column.name]"></p-tag>
+                          </ng-container>
+                          <ng-template #otherContent>
+                            {{ sub[column.name] }}
+                          </ng-template>
+                    </td>
+                </ng-container>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                        class="m-1 p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
+                        [disabled]="!printPermission" (click)="print(sub)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container" #checkboxContainer>
+        <div class="field-checkbox my-3" *ngFor="let obj of columns">
+            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name">
+            </p-checkbox>
+            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+                value="selectAll" inputId="c100"></p-checkbox>
+            <label class="mx-3" for="c100">Select All</label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
+        </div>
+    </ng-template>
+</p-dialog>

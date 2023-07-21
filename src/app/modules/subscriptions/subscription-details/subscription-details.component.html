@@ -1,0 +1,105 @@
+<div class="row animated">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Subscription Info</h4>
+                            <div>
+                                <button class="btn btn-dark" (click)="backDetailsBtn()">Back</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive overflow-auto">
+                                <table class="table">
+                                    <thead class="text-muted">
+                                        <th class="py-3">Title</th>
+                                        <th class="py-3">Description</th>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let column of columns">
+                                            <tr>
+                                                <ng-container
+                                                    *ngIf="column.key === 'subscription_days'; else otherContent">
+                                                    <td>{{ column.label }}</td>
+                                                    <td>
+                                                        <p-table [value]="sub?.[column.key]" dataKey="id" *ngIf="column.key.length"
+                                                            [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"
+                                                            scrollHeight="400px">
+                                                            <ng-template pTemplate="header">
+                                            <tr>
+                                                <th></th>
+                                                <th>status</th>
+                                                <th>updated</th>
+                                                <th>subscription_id</th>
+                                                <th>day</th>
+                                                <th>date</th>
+                                                <th>location_id</th>
+                                            </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-subDay let-expanded="expanded">
+                                                <tr>
+                                                    <td>
+                                                        <button type="button" pButton pRipple [pRowToggler]="subDay"
+                                                            class="p-button-text p-button-rounded p-button-plain"
+                                                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                                    </td>
+                                                    <td>{{subDay.status}}</td>
+                                                    <td>{{subDay.updated}}</td>
+                                                    <td>{{subDay.subscription_id}}</td>
+                                                    <td>{{subDay.day}}</td>
+                                                    <td>{{subDay.date}}</td>
+                                                    <td>{{subDay.location_id}}</td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="rowexpansion" let-meal>
+                                                <tr>
+                                                    <td colspan="7">
+                                                        <div class="p-3">
+                                                            <p-table [value]="meal.day_meals" dataKey="id">
+                                                                <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>meal name</th>
+                                                    <th>meal image</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-meal>
+                                                <tr>
+                                                    <td>{{ meal.meal.name }}</td>
+                                                    <td>
+                                                        <img [src]="meal.meal.image" [alt]="meal.meal.image" width="50"
+                                                            class="shadow-4" />
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage">
+                                                <tr>
+                                                    <td colspan="6">There are no meals for this subscriber in this day.
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            </p-table>
+                            </div>
+                                                    </td>
+                                                </tr>
+                            </ng-template>
+                            </p-table>
+                                                    </td>
+                                                </ng-container>
+                            <ng-template #otherContent>
+                                <td>{{ column.label }}</td>
+                                <td>{{ sub?.[column.key] }}</td>
+                            </ng-template>
+                            </tr>
+                            </ng-container>
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

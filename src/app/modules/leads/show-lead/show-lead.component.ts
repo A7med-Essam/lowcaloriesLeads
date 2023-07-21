@@ -122,23 +122,53 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
     this.answers = currentQuestion?.answers;
   }
 // ===============================================================Export======================================================================
+  // export() {
+  //   if (this.exportPermission) {
+  //     const ids = this.leads.map((obj: any) => obj.id);
+  //     this._SurveyService.exportLeads(ids).subscribe({
+  //       next: (res) => {
+  //         this._MessageService.add({
+  //           severity: 'success',
+  //           summary: 'Export Excel',
+  //           detail: 'Leads Exported Successfully',
+  //         });
+  //         const link = document.createElement('a');
+  //         link.target = '_blank';
+  //         link.href = res.data;
+  //         link.click();
+  //       },
+  //     });
+  //   }
+  // }
+
   export() {
     if (this.exportPermission) {
-      const ids = this.leads.map((obj: any) => obj.id);
-      this._SurveyService.exportLeads(ids).subscribe({
+      let exportObservable;
+      if (this.appliedFilters) {
+        const ids = this.leads.map((obj: any) => obj.id);
+        exportObservable = this._SurveyService.exportLeads(ids);
+      } else {
+        exportObservable = this._SurveyService.exportLeads();
+      }
+      exportObservable.subscribe({
         next: (res) => {
-          this._MessageService.add({
-            severity: 'success',
-            summary: 'Export Excel',
-            detail: 'Leads Exported Successfully',
-          });
-          const link = document.createElement('a');
-          link.target = '_blank';
-          link.href = res.data;
-          link.click();
+          this.handleExportSuccess(res.data);
         },
       });
     }
+  }
+  
+  private handleExportSuccess(data: any) {
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Export Excel',
+      detail: 'Leads Exported Successfully',
+    });
+  
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = data;
+    link.click();
   }
 // ===============================================================Filter======================================================================
   filterModal: boolean = false;

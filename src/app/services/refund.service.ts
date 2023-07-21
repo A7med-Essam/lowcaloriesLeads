@@ -28,7 +28,7 @@ export class RefundService  {
     return this._ApiConfigService.postReq3(`refundRequests?page=${page}`, '');
   }
 
-  filterRefund(page: number,filter:any){
+  filterRefund(page: number,filter:any):Observable<any>{
     return this._ApiConfigService.postReq3(`refundRequests?page=${page}`, filter);
   }
 

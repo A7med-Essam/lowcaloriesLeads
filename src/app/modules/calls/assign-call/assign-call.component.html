@@ -14,7 +14,7 @@
 </div>
 <div class="card">
     <p-table [value]="calls" [paginator]="true" [rows]="PaginationInfo?.per_page" [totalRecords]="PaginationInfo?.total"
-    [lazy]="true" 
+    [lazy]="true"
     (onLazyLoad)="sort($event)"
     (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
     currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
