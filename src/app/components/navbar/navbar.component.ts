@@ -33,6 +33,8 @@ export class NavbarComponent implements OnInit {
     this._AuthService.currentUser.subscribe((data) => {
       if (data != null) {
         this.getNotifications();
+      }else{
+        this.isLogin = false;
       }
     });
   }
