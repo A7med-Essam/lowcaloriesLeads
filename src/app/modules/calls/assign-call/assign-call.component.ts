@@ -11,6 +11,8 @@ import { DislikeService } from 'src/app/services/dislike.service';
 import { Router } from '@angular/router';
 import { GuardService } from 'src/app/services/guard.service';
 import { TableCheckbox } from 'primeng/table';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-assign-call',
@@ -38,11 +40,21 @@ export class AssignCallComponent implements OnInit, OnDestroy {
   PaginationInfo: any;
   interval: any;
 
+  private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
     clearInterval(this.interval);
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ngOnInit(): void {
+    this._CallsService.call_filter
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res=>{
+      if (res) {
+        this.appliedFilters = res
+      }
+    })
     this.getPermission();
     this.getAllCalls();
     this.getCalls();
@@ -533,6 +545,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     }
 
     this.appliedFilters = form.value;
+    this._CallsService.call_filter.next(this.appliedFilters)
     this._CallsService.filterCalls(1, form.value).subscribe((res) => {
       this.calls = res.data.data;
       this.PaginationInfo = res.data;
@@ -560,6 +573,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     this.filterModal = false;
     this.filterForm.reset();
     this.getCalls();
+    this._CallsService.call_filter.next(null)
   }
 
   resetFields() {

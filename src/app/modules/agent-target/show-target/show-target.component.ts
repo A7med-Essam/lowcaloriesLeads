@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -13,13 +13,15 @@ import { Checkbox } from 'primeng/checkbox';
 import { GuardService } from 'src/app/services/guard.service';
 import { MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-show-target',
   templateUrl: './show-target.component.html',
   styleUrls: ['./show-target.component.scss'],
 })
-export class ShowTargetComponent implements OnInit {
+export class ShowTargetComponent implements OnInit, OnDestroy {
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
@@ -154,8 +156,19 @@ export class ShowTargetComponent implements OnInit {
 
   targets: any;
   PaginationInfo: any;
-
+  private unsubscribe$ = new Subject<void>();
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
   ngOnInit(): void {
+    this._AgentTargetService.target_filter
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res=>{
+      if (res) {
+        this.appliedFilters = res
+      }
+    })
     this.getPermission();
     this.getTargets();
     this.createFilterForm();
@@ -248,6 +261,7 @@ export class ShowTargetComponent implements OnInit {
       }
     }
     this.appliedFilters = form.value;
+    this._AgentTargetService.target_filter.next(this.appliedFilters)
     this._AgentTargetService.filterTargets(1, form.value).subscribe((res) => {
       this.targets = res.data.data;
       this.PaginationInfo = res.data;
@@ -276,6 +290,7 @@ export class ShowTargetComponent implements OnInit {
     this.filterModal = false;
     this.filterForm.reset();
     this.getTargets();
+    this._AgentTargetService.target_filter.next(null)
   }
 
   resetFields() {

@@ -19,6 +19,7 @@ export class SurveyService {
   leadId: BehaviorSubject<number> = new BehaviorSubject(0);
   lead: BehaviorSubject<any> = new BehaviorSubject(null);
   updateLead: BehaviorSubject<any> = new BehaviorSubject(null);
+  lead_filter: BehaviorSubject<any> = new BehaviorSubject(null);
 
   deleteRow(id: number): Observable<any> {
     return this._ApiConfigService.postReq(`lead_questions/delete`, {
@@ -122,8 +123,8 @@ export class SurveyService {
     return this._ApiConfigService.getReq3(`leads?page=${page}`);
   }
 
-  filterLeads(filter: any): Observable<any> {
-    return this._ApiConfigService.getReq3(`leads`, filter);
+  filterLeads(page: number,filter:any){
+    return this._ApiConfigService.getReq3(`leads?page=${page}`, filter);
   }
 
   showLead(id: number): Observable<any> {

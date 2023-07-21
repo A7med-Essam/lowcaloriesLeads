@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Checkbox } from 'primeng/checkbox';
 import { DislikeService } from 'src/app/services/dislike.service';
@@ -8,13 +8,15 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GuardService } from 'src/app/services/guard.service';
 import { MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-show-dislike',
   templateUrl: './show-dislike.component.html',
   styleUrls: ['./show-dislike.component.scss'],
 })
-export class ShowDislikeComponent implements OnInit {
+export class ShowDislikeComponent implements OnInit,OnDestroy {
 
   userId:number = 0;
   role:string = ''
@@ -27,6 +29,7 @@ export class ShowDislikeComponent implements OnInit {
     this.userId = _GuardService.getUser().id
     this.role = _GuardService.getUser().role_name
   }
+
 
   printPermission: boolean = false;
   exportPermission: boolean = false;
@@ -54,8 +57,20 @@ export class ShowDislikeComponent implements OnInit {
   meals: any[] = [];
   dislikes: any[] = [];
   PaginationInfo: any;
-
+  private unsubscribe$ = new Subject<void>();
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
   ngOnInit(): void {
+    this._DislikeService.dislike_filter
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res=>{
+      if (res) {
+        this.appliedFilters = res
+      }
+    })
+    this.createFilterForm();
     this.getPermission();
     this.createUploadingForm();
     this.getDislikes();
@@ -68,9 +83,9 @@ export class ShowDislikeComponent implements OnInit {
 
 
   getDislikes(page: number = 1) {
-    if (this.filterStatus) {
-      this.filter();
-    } else {
+    if (this.appliedFilters) {
+      this.getOldFilters(page);
+    }else {
       this._DislikeService.getDislikes(page)
       .subscribe({
         next: (res) => {
@@ -122,79 +137,78 @@ export class ShowDislikeComponent implements OnInit {
       next: (res) => (this.meals = res.data),
     });
   }
-  // ===========================
+
+  // ****************************************************filter************************************************************************
 
   filterModal: boolean = false;
   appliedFilters: any = null;
-  filterStatus: boolean = false;
-
-  filter_selectedEmail: any = null;
-  filter_selectedName: any = null;
-  filter_selectedBranch: any = null;
-  filter_selectedSentBy: any = null;
-  filter_selectedDates: any = null;
-  filter_selectedReason: any = null;
-  filter_selectedMeal: any = null;
-  filter_selectedMobile: any = null;
-  filter_selectedCid:any = null
-
-  filter() {
-    let FILTER: any = {
-      date:
-        this.filter_selectedDates && this.filter_selectedDates[1] == null
-          ? new Date(this.filter_selectedDates[0]).toLocaleDateString()
-          : null,
-      from:
-        this.filter_selectedDates && this.filter_selectedDates[1] != null
-          ? new Date(this.filter_selectedDates[0]).toLocaleDateString()
-          : null,
-      to:
-        this.filter_selectedDates && this.filter_selectedDates[1] != null
-          ? new Date(this.filter_selectedDates[1]).toLocaleDateString()
-          : null,
-      name: this.filter_selectedName || null,
-      branch: this.filter_selectedBranch || null,
-      email: this.filter_selectedEmail || null,
-      sent_by: this.filter_selectedSentBy || null,
-      reason: this.filter_selectedReason || null,
-      dislike_meal: this.filter_selectedMeal || null,
-      mobile: this.filter_selectedMobile || null,
-      cid: this.filter_selectedCid || null,
-    };
-    Object.keys(FILTER).forEach((k) => FILTER[k] == null && delete FILTER[k]);
-    this.filterStatus = true;
-    this._DislikeService.filterDislikes(FILTER).subscribe((res) => {
-      this.dislikes = res.data;
-      this.PaginationInfo = [];
+  filterForm!: FormGroup;
+  createFilterForm() {
+    this.filterForm = new FormGroup({
+      name: new FormControl(null),
+      branch: new FormControl(null),
+      email: new FormControl(null),
+      sent_by: new FormControl(null),
+      reason: new FormControl(null),
+      dislike_meal: new FormControl(null),
+      mobile: new FormControl(null),
+      cid: new FormControl(null),
+      date: new FormControl(null),
+      from: new FormControl(null),
+      to: new FormControl(null),
     });
   }
 
-  resetFilter() {
-    this.filterModal = false;
-    this.filterStatus = false;
-    this.filter_selectedEmail = null;
-    this.filter_selectedName = null;
-    this.filter_selectedBranch = null;
-    this.filter_selectedSentBy = null;
-    this.filter_selectedDates = null;
-    this.filter_selectedReason = null;
-    this.filter_selectedMeal = null;
-    this.filter_selectedMobile = null;
-    this.filter_selectedCid = null;
-    this.getDislikes();
+  applyFilter(form: FormGroup) {
+    for (const prop in form.value) {
+      if (form.value[prop] === null) {
+        delete form.value[prop];
+      }
+    }
+    if (form.value.date) {
+      if (form.value.date[1]) {
+        form.patchValue({
+          from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+          to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+          date: null,
+        });
+      } else {
+        form.patchValue({
+          date: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+        });
+      }
+    }
+    this.appliedFilters = form.value;
+    this._DislikeService.dislike_filter.next(this.appliedFilters)
+    this._DislikeService.filterDislikes(1, form.value).subscribe((res) => {
+      this.dislikes = res.data.data;
+      this.PaginationInfo = res.data;
+      this.filterModal = false;
+    });
   }
 
-  resetFields(){
-    this.filter_selectedEmail = null;
-    this.filter_selectedName = null;
-    this.filter_selectedBranch = null;
-    this.filter_selectedSentBy = null;
-    this.filter_selectedDates = null;
-    this.filter_selectedReason = null;
-    this.filter_selectedMeal = null;
-    this.filter_selectedMobile = null;
-    this.filter_selectedCid = null;
+  getOldFilters(page:number) {
+    this._DislikeService
+      .filterDislikes(page, this.appliedFilters)
+      .subscribe((res) => {
+        this.dislikes = res.data.data;
+        this.PaginationInfo = res.data;
+        this.filterModal = false;
+      });
   }
+
+  resetFilter() {
+    this.appliedFilters = null;
+    this.filterModal = false;
+    this.filterForm.reset();
+    this.getDislikes();
+    this._DislikeService.dislike_filter.next(null)
+  }
+
+  resetFields() {
+    this.filterForm.reset();
+  }
+
     // ****************************************************export************************************************************************
 
   export() {

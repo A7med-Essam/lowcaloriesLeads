@@ -7,6 +7,7 @@ import { ApiConfigService } from '../core/api-config.service';
 })
 export class AgentTargetService {
   target: BehaviorSubject<any> = new BehaviorSubject(null);
+  target_filter: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(
     private _ApiConfigService: ApiConfigService

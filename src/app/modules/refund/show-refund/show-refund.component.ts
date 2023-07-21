@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DislikeService } from 'src/app/services/dislike.service';
@@ -10,13 +10,15 @@ import { Checkbox } from 'primeng/checkbox';
 import { GuardService } from 'src/app/services/guard.service';
 import { MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-show-refund',
   templateUrl: './show-refund.component.html',
   styleUrls: ['./show-refund.component.scss']
 })
-export class ShowRefundComponent implements OnInit {
+export class ShowRefundComponent implements OnInit, OnDestroy {
   role:string = ''
   constructor(
     private _SurveyService: SurveyService,
@@ -160,8 +162,19 @@ export class ShowRefundComponent implements OnInit {
 
   refunds: any;
   PaginationInfo: any;
-
+  private unsubscribe$ = new Subject<void>();
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
   ngOnInit(): void {
+    this._RefundService.refund_filter
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res=>{
+      if (res) {
+        this.appliedFilters = res
+      }
+    })
     this.getPermission();
     this.createUploadingForm()
     this.getRefunds();
@@ -246,8 +259,8 @@ export class ShowRefundComponent implements OnInit {
         delete form.value[prop];
       }
     }
-
     this.appliedFilters = form.value;
+    this._RefundService.refund_filter.next(this.appliedFilters)
     this._RefundService.filterRefund(1, form.value).subscribe((res) => {
       this.refunds = res.data.data;
       this.PaginationInfo = res.data;
@@ -271,6 +284,7 @@ export class ShowRefundComponent implements OnInit {
     this.filterModal = false;
     this.filterForm.reset();
     this.getRefunds();
+    this._RefundService.refund_filter.next(null)
   }
 
   resetFields() {

@@ -12,6 +12,7 @@ export class RefundService  {
     private _ApiConfigService: ApiConfigService
   )  { }
   refund: BehaviorSubject<any> = new BehaviorSubject(null);
+  refund_filter: BehaviorSubject<any> = new BehaviorSubject(null);
 
   getCIDs(phone: string): Observable<any> {
     return this._ApiConfigService.getReq2(`Subscription/GetCid?phone=${phone}`);

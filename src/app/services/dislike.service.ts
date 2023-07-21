@@ -11,6 +11,7 @@ export class DislikeService {
     private _ApiConfigService: ApiConfigService
   )  { }
   dislikeDetails: BehaviorSubject<any> = new BehaviorSubject(null);
+  dislike_filter: BehaviorSubject<any> = new BehaviorSubject(null);
 
   getCustomerInfo(CID: number): Observable<any> {
     return this._ApiConfigService.getReq2(`Subscription/SqlQuery?Qry=SELECT * FROM [KOTDB].[dbo].[Customers] WHERE [CustomerId] =${CID}`);
@@ -44,9 +45,13 @@ export class DislikeService {
     return this._ApiConfigService.postReq3('showDislikeRequest',{dislike_request_id})
   }
 
-  filterDislikes(filter: any): Observable<any> {
+  filterDislikesWithoutPagination(filter: any): Observable<any> {
     filter.withoutPagination = true;
     return this._ApiConfigService.postReq3(`allDislikeRequests`, filter);
+  }
+
+  filterDislikes(page: number,filter:any){
+    return this._ApiConfigService.postReq3(`allDislikeRequests?page=${page}`, filter);
   }
 
   // =========================== reasons ===========================

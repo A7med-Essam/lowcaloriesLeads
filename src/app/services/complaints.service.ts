@@ -7,6 +7,7 @@ import { ApiConfigService } from '../core/api-config.service';
 })
 export class ComplaintsService {
   complaint: BehaviorSubject<any> = new BehaviorSubject(null);
+  complaints_filter: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(
     private _ApiConfigService: ApiConfigService

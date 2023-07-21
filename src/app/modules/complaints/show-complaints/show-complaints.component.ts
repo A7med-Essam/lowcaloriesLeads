@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DislikeService } from 'src/app/services/dislike.service';
@@ -10,13 +10,15 @@ import { Checkbox } from 'primeng/checkbox';
 import { GuardService } from 'src/app/services/guard.service';
 import { MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-show-complaints',
   templateUrl: './show-complaints.component.html',
   styleUrls: ['./show-complaints.component.scss'],
 })
-export class ShowComplaintsComponent implements OnInit {
+export class ShowComplaintsComponent implements OnInit, OnDestroy {
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
@@ -25,6 +27,11 @@ export class ShowComplaintsComponent implements OnInit {
     private _GuardService:GuardService,
     private _MessageService: MessageService
   ) {}
+  private unsubscribe$ = new Subject<void>();
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   printPermission: boolean = false;
   exportPermission: boolean = false;
@@ -144,6 +151,13 @@ export class ShowComplaintsComponent implements OnInit {
   PaginationInfo: any;
 
   ngOnInit(): void {
+    this._ComplaintsService.complaints_filter
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res=>{
+      if (res) {
+        this.appliedFilters = res
+      }
+    })
     this.getPermission();
     this.createUploadingForm();
     this.createFilterForm();
@@ -226,6 +240,7 @@ export class ShowComplaintsComponent implements OnInit {
       }
     }
     this.appliedFilters = form.value;
+    this._ComplaintsService.complaints_filter.next(this.appliedFilters)
     this._ComplaintsService.filterComplaints(1, form.value).subscribe((res) => {
       this.complaints = res.data.data;
       this.PaginationInfo = res.data;
@@ -249,6 +264,7 @@ export class ShowComplaintsComponent implements OnInit {
     this.filterModal = false;
     this.filterForm.reset();
     this.getComplaints();
+    this._ComplaintsService.complaints_filter.next(null)
   }
 
   resetFields() {
