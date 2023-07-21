@@ -26,6 +26,7 @@ export class SidebarComponent implements OnInit {
   showRefundReasonsPermission: boolean = false;
   createPaymentLinkPermission: boolean = false;
   createPaymentBranchesPermission: boolean = false;
+  showSubscriptionPermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -70,6 +71,9 @@ export class SidebarComponent implements OnInit {
       this._GuardService.getPermissionStatus('assign_calls');
     this.showDislikeReasonsPermission = this._GuardService.getPermissionStatus(
       'reasons_dislike'
+    );
+    this.showSubscriptionPermission = this._GuardService.getPermissionStatus(
+      'show_subscription'
     );
     this.showRefundReasonsPermission = this._GuardService.getPermissionStatus('reasons_refund');
     this.createPaymentLinkPermission = this._GuardService.getPermissionStatus('create_paymentlink');
