@@ -1,89 +1,111 @@
 <nav class="navbar navbar-expand-md fixed-top navbar-dark flex-fill no-print">
-    <!-- <button class="sidebar-toggler ml-4" type="button">
+  <!-- <button class="sidebar-toggler ml-4" type="button">
       <i class="fa fa-navicon"></i>
     </button> -->
-    <!-- header -->
-    <div class="navbar-header pl-2 pr-2 ml-3 text-center">
-      <a class="navbar-brand m-0 w-100">
-        <!-- <i class="fa fa-flash mr-1"></i> -->
-        <img src="../../../assets/images/logo.png" alt="lightning logo" width="35px" class="mb-1 mx-2">
-        <span class="ms-3s">Low-Calories</span>
-      </a>
-    </div>
-    <!-- sidebar toggler -->
-    <div class="sidebar-toggler ml-auto mx-3" *ngIf="isLogin">
-      <a class="btn nav-link" (click)="toggleSidebar()"><i class="fa fa-bars"></i></a>
-    </div>
-    <!-- right menu toggler -->
-    <!-- <div class="nav-toggler-right mr-4 d-md-none" *ngIf="isLogin">
+  <!-- header -->
+  <div class="navbar-header pl-2 pr-2 ml-3 text-center">
+    <a class="navbar-brand m-0 w-100">
+      <!-- <i class="fa fa-flash mr-1"></i> -->
+      <img src="../../../assets/images/logo.png" alt="lightning logo" width="35px" class="mb-1 mx-2">
+      <span class="ms-3s">Low-Calories</span>
+    </a>
+  </div>
+  <!-- sidebar toggler -->
+  <div class="sidebar-toggler ml-auto mx-3" *ngIf="isLogin">
+    <a class="btn nav-link" (click)="toggleSidebar()"><i class="fa fa-bars"></i></a>
+  </div>
+  <!-- right menu toggler -->
+  <!-- <div class="nav-toggler-right mr-4 d-md-none" *ngIf="isLogin">
       <button class="" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
         aria-controls="collapseBasic">
         <img src="../../assets/images/default-avatar.png" class="img-fluid" alt="">
       </button>
       <span class="user-profile nav-alert bg-danger"></span>
     </div> -->
-    <!-- left box -->
-    <ul class="navbar-nav flex-fill mt-1 align-items-center left-nav" *ngIf="isLogin">
-      <li class="nav-item navicon">
-        <a class="btn nav-link" (click)="toggleSidebarPin()"><i class="fa fa-bars"></i></a>
-      </li>
-      <li class="nav-item flex-fill">
-        <input class="form-control navbar-search" type="text" placeholder="Search . . .">
-      </li>
-    </ul>
-    <!-- right menu -->
-    <div class="collapse navbar-collapse right-nav" id="collapseBasic" *ngIf="isLogin" [attr.collapse]="isCollapsed">
-      <ul class="navbar-nav ">
-        <li class="nav-item" style="outline: 0px !important;">
-          <a class="btn nav-link notifications-container" (click)="toggleNotifications()">
-            <i class="far fa-bell"></i>
-            <span class="link-text">Notifications</span>
-            <span class="nav-alert notifications" *ngIf="hasNotification"></span>
-            <div class="notification-list shadow-lg" id="style-3" *ngIf="hasNotification">
-              <div class="overlay"></div>
-              <div *ngFor="let notification of notifications" class="notification-item">
-                <div class="d-flex align-items-center notification" [ngClass]="{'isReaded':notification.read == 0}"
+  <!-- left box -->
+  <ul class="navbar-nav flex-fill mt-1 align-items-center left-nav" *ngIf="isLogin">
+    <li class="nav-item navicon">
+      <a class="btn nav-link" (click)="toggleSidebarPin()"><i class="fa fa-bars"></i></a>
+    </li>
+    <li class="nav-item flex-fill">
+      <input class="form-control navbar-search" type="text" placeholder="Search . . .">
+    </li>
+  </ul>
+  <!-- right menu -->
+  <div class="collapse navbar-collapse right-nav" id="collapseBasic" *ngIf="isLogin" [attr.collapse]="isCollapsed">
+    <ul class="navbar-nav ">
+      <li class="nav-item" style="outline: 0px !important;">
+        <a class="btn nav-link notifications-container" (click)="toggleNotifications()">
+          <i class="far fa-bell"></i>
+          <span class="link-text">Notifications</span>
+          <span class="nav-alert notifications" *ngIf="hasNotification"></span>
+          <div class="notification-list shadow-lg" id="style-3" *ngIf="hasNotification">
+            <div class="overlay"></div>
+            <div *ngFor="let notification of notifications" class="notification-item">
+              <div class="d-flex align-items-center notification" [ngClass]="{'isReaded':notification.read == 0}"
                 (click)="updateNotifications(notification)">
-                  <div>
-                    <i class="fas"
-                    [ngClass]="{
+                <div>
+                  <i class="fas" [ngClass]="{
                       'fa-people-carry': notification.type == 'lead',
                       'fa-headset': notification.type == 'call',
                       'fa-user-tag': notification.type == 'target',
                       'fa-hand-holding-usd': notification.type == 'refund',
                       'fa-thumbs-down': notification.type == 'dislike'
                     }"></i>
-                  </div>
-                  <div class="item text-start">
-                    <div>{{notification.title}}</div>
-                    <small class="text-muted">
-                      {{notification.created_ago}}
-                    </small>
-                  </div>
                 </div>
-                <hr class="my-0">
+                <div class="item text-start">
+                  <div>{{notification.title}}</div>
+                  <small class="text-muted">
+                    {{notification.created_ago}}
+                  </small>
+                </div>
               </div>
+              <hr class="my-0">
             </div>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="btn nav-link" routerLink="leads/reminder">
-            <i class="far fa-envelope"></i>
-            <span class="link-text">Messages</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="btn nav-link">
-            <i class="far fa-user"></i>
-            <span class="link-text">Profile</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="btn nav-link">
-            <i class="fas fa-cog"></i>
-            <span class="link-text">Setting</span>
-          </a>
-        </li>
-      </ul>
+          </div>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="btn nav-link" routerLink="leads/reminder">
+          <i class="far fa-envelope"></i>
+          <span class="link-text">Messages</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="btn nav-link">
+          <i class="far fa-user"></i>
+          <span class="link-text">Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="btn nav-link">
+          <i class="fas fa-cog"></i>
+          <span class="link-text">Setting</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<p-dialog [(visible)]="notificationModal" [modal]="true" [style]="{width: '25vw'}"
+  [draggable]="false" [resizable]="false">
+  <ng-container *ngIf="currentNotification?.notifications.length > 0; else noNotification">
+    <div class="modal-content py-md-5 px-md-4 p-sm-3 p-4">
+      <h3>{{ currentNotification?.notifications[0]?.title }}</h3>
+      <i class="fa fa-bell"></i>
+      <p class="r3 px-md-5 px-sm-1">{{ currentNotification?.notifications[0]?.details }}</p>
+
+      <div class="text-center mb-3">
+        <button class="btn btn-primary w-50 rounded-pill b1" (click)="redirect(currentNotification?.notifications[0]);notificationModal=false">
+          GO TO {{ currentNotification?.notifications[0]?.type | uppercase }}
+        </button>
+      </div>
+
+      <div class="notification-date">Created at: {{ currentNotification?.notifications[0]?.created_at | date }}</div>
+      <div class="notification-ago">Created {{ currentNotification?.notifications[0]?.created_ago }}</div>
     </div>
-  </nav>
+  </ng-container>
+  <ng-template #noNotification>
+    <div class="no-notification">No notifications to display.</div>
+  </ng-template>
+</p-dialog>

@@ -419,6 +419,11 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+  getUniquePercentages(giftcode:any[]) :string[]{
+    const uniquePercentages = [...new Set(giftcode.map(item => item.percentage))];
+    return uniquePercentages;
+  }
   // ****************************************************export************************************************************************
 
   export() {

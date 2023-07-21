@@ -21,10 +21,10 @@
                                         <ng-container *ngFor="let column of columns">
                                             <tr>
                                                 <ng-container
-                                                    *ngIf="column.key === 'subscription_days'; else otherContent">
+                                                    *ngIf="column.key === 'subscription_days' && sub[column.key].length; else otherContent">
                                                     <td>{{ column.label }}</td>
                                                     <td>
-                                                        <p-table [value]="sub?.[column.key]" dataKey="id" *ngIf="column.key.length"
+                                                        <p-table [value]="sub?.[column.key]" dataKey="id"
                                                             [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"
                                                             scrollHeight="400px">
                                                             <ng-template pTemplate="header">
@@ -56,7 +56,7 @@
                                             <ng-template pTemplate="rowexpansion" let-meal>
                                                 <tr>
                                                     <td colspan="7">
-                                                        <div class="p-3">
+                                                        <div class="p-3 w-100">
                                                             <p-table [value]="meal.day_meals" dataKey="id">
                                                                 <ng-template pTemplate="header">
                                                 <tr>

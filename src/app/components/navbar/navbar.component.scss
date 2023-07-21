@@ -3,6 +3,7 @@
 
     .notification-list {
         overflow: auto;
+
         .notification-item {
             z-index: 99999;
             position: relative;
@@ -58,19 +59,56 @@
     cursor: auto;
 }
 
-#style-3::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
+#style-3::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
 }
 
-#style-3::-webkit-scrollbar
-{
-	width: 6px;
-	background-color: #F5F5F5;
+#style-3::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
 }
 
-#style-3::-webkit-scrollbar-thumb
-{
-	background-color: #242939;
+#style-3::-webkit-scrollbar-thumb {
+    background-color: #242939;
+}
+
+// ==========================================================Notifications=================================================================
+.modal-content{
+    .notification-date,
+    .notification-ago {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 4px;
+    }
+    text-align: center;
+    
+    .fa {
+        color: #242939;
+        font-size: 90px;
+        padding: 30px 0px;
+    }
+    
+    .b1 {
+        background-color: #242939;
+        box-shadow: 0px 4px #474e65;
+        border: solid 1px #474e65;
+        font-size: 17px;
+    }
+    
+    .r3 {
+        color: #c1c1c1;
+        font-weight: 500;
+    }
+    
+    a,
+    a:hover {
+        text-decoration: none;
+    }
+}
+.no-notification {
+    text-align: center;
+    padding: 16px;
+    font-size: 16px;
+    color: #888;
 }

@@ -21,13 +21,15 @@ export class NavbarComponent implements OnInit {
     private _GuardService: GuardService,
     private _AuthService: AuthService,
     private _PusherService: PusherService,
-    private _SurveyService: SurveyService,
-    private _DislikeService: DislikeService,
-    private _RefundService: RefundService,
-    private _AgentTargetService: AgentTargetService,
-    private _CallsService: CallsService,
+    // private _SurveyService: SurveyService,
+    // private _DislikeService: DislikeService,
+    // private _RefundService: RefundService,
+    // private _AgentTargetService: AgentTargetService,
+    // private _CallsService: CallsService,
     private _Router: Router
   ) {}
+
+  notificationModal:boolean = false;
 
   ngOnInit() {
     this._AuthService.currentUser.subscribe((data) => {
@@ -53,16 +55,17 @@ export class NavbarComponent implements OnInit {
   hasNotification: boolean = false;
   audioPlayer!: HTMLAudioElement;
   notifications: any[] = [];
-
+  currentNotification:any;
   getNotifications() {
     if (this._GuardService.getUser()) {
       this.isLogin = true;
       this._PusherService.pusherEventLeadData.subscribe((res) => {
-        this.processNotification(res);
-        this.notifications = res?.notifications||[]
-        setTimeout(() => {
-          this.getAllNotifications();
-        }, 500);
+        if (res) {
+          this.notificationModal = true;
+          this.currentNotification = res;
+          this.processNotification(res);
+          this.notifications = res?.notifications
+        }
       });
     } else {
       this.isLogin = false;
