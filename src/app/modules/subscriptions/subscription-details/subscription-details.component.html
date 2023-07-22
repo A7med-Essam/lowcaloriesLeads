@@ -1,4 +1,115 @@
-<div class="row animated">
+<div class="row animated" *ngIf="sub">
+    <div class="col-md-12 my-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Client Info</h4>
+                            <div>
+                                <button class="btn btn-dark" (click)="backDetailsBtn()">Back</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive overflow-auto">
+                                <table class="table">
+                                    <thead class="text-muted">
+                                        <th class="py-3">Title</th>
+                                        <th class="py-3">Description</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>First Name</td>
+                                            <td>{{ sub.user.first_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Last Name</td>
+                                            <td>{{ sub.user.last_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gender</td>
+                                            <td>{{ sub.user.gender }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Birthday</td>
+                                            <td>{{ sub.user.birthday }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Height</td>
+                                            <td>{{ sub.user.height }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Weight</td>
+                                            <td>{{ sub.user.Weight }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td>{{ sub.user.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Land Line</td>
+                                            <td>{{ sub.user.land_line }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phone Number</td>
+                                            <td>{{ sub.user.phone_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Second Phone Number</td>
+                                            <td>{{ sub.user.second_phone_number }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 my-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Subscription Info</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive overflow-auto">
+                                <table class="table">
+                                    <thead class="text-muted">
+                                        <th class="py-3">Title</th>
+                                        <th class="py-3">Description</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Program</td>
+                                            <td>{{ sub.full_plan_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Plan Title</td>
+                                            <td>{{ sub.subscriptions_note }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Meal Types</td>
+                                            <td>{{ sub.dislike }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cutlery</td>
+                                            <td>{{ sub.cutlery }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-12 my-2">
         <div class="card">
             <div class="card-body">
@@ -20,8 +131,8 @@
                                             <td>{{ sub.total_price_without_vat.toFixed(3) }}</td>
                                         </tr>
                                         <tr>
-                                            <td>DISCOUNT <sup *ngIf="sub.codes">({{sub.codes.percentage}}%)</sup></td>
-                                            <td class="text-danger">-{{ sub.discount_amount }}</td>
+                                            <td>DISCOUNT <sup *ngIf="sub?.codes">({{sub.codes.percentage}}%)</sup></td>
+                                            <td class="text-danger">-{{ sub.discount_amount.toFixed(3) }}</td>
                                         </tr>
                                         <tr>
                                             <td>NET TOTAL WITHOUT VAT</td>
@@ -39,12 +150,62 @@
                                             <td>GRAND TOTAL</td>
                                             <td class="text-success">{{ sub.grand_total }}</td>
                                         </tr>
-                                        <tr *ngIf="sub.branch_invoice_image">
+                                        <!-- <tr *ngIf="sub?.branch_invoice_image">
                                             <td>INVOICE IMAGE</td>
                                             <td>
                                                 <p-image [src]="sub.branch_invoice_image" alt="Invoice" width="250"
                                                     [preview]="true"></p-image>
                                             </td>
+                                        </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 my-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Delivery Info</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive overflow-auto">
+                                <table class="table">
+                                    <thead class="text-muted">
+                                        <th class="py-3">Title</th>
+                                        <th class="py-3">Description</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Start Date</td>
+                                            <td>{{ sub.delivery_starting_day }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Emirate</td>
+                                            <td>{{ sub.location.emirate.en_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Land Mark</td>
+                                            <td>{{ sub.location.landmark }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Area</td>
+                                            <td>{{ sub.location.area_id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Villa/Flat</td>
+                                            <td>{{ sub.location.property_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Delivery Days</td>
+                                            <td>{{ sub.days_of_week }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -55,138 +216,9 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12 my-2">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-md-12">
-                    <div class="card card-plain">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Subscription Info</h4>
-                            <div>
-                                <button class="btn btn-dark" (click)="backDetailsBtn()">Back</button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <!-- <div class="table-responsive overflow-auto">
-                                <table class="table">
-                                    <thead class="text-muted">
-                                        <th class="py-3">Title</th>
-                                        <th class="py-3">Description</th>
-                                    </thead>
-                                    <tbody>
-                                        <ng-container *ngFor="let column of columns">
-                                            <tr>
-                                                <ng-container
-                                                    *ngIf="column.key === 'subscription_days' && sub[column.key].length; else otherContent">
-                                                    <td>{{ column.label }}</td>
-                                                    <td>
-                                                        <p-table [value]="sub?.[column.key]" dataKey="id"
-                                                            [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"
-                                                            scrollHeight="400px">
-                                                            <ng-template pTemplate="header">
-                                            <tr>
-                                                <th></th>
-                                                <th>status</th>
-                                                <th>updated</th>
-                                                <th>subscription_id</th>
-                                                <th>day</th>
-                                                <th>date</th>
-                                                <th>location_id</th>
-                                            </tr>
-                                            </ng-template>
-                                            <ng-template pTemplate="body" let-subDay let-expanded="expanded">
-                                                <tr>
-                                                    <td>
-                                                        <button type="button" pButton pRipple [pRowToggler]="subDay"
-                                                            class="p-button-text p-button-rounded p-button-plain"
-                                                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                                                    </td>
-                                                    <td>{{subDay.status}}</td>
-                                                    <td>{{subDay.updated}}</td>
-                                                    <td>{{subDay.subscription_id}}</td>
-                                                    <td>{{subDay.day}}</td>
-                                                    <td>{{subDay.date}}</td>
-                                                    <td>{{subDay.location_id}}</td>
-                                                </tr>
-                                            </ng-template>
-                                            <ng-template pTemplate="rowexpansion" let-meal>
-                                                <tr>
-                                                    <td colspan="7">
-                                                        <div class="p-3 w-100">
-                                                            <p-table [value]="meal.day_meals" dataKey="id">
-                                                                <ng-template pTemplate="header">
-                                                <tr>
-                                                    <th>meal name</th>
-                                                    <th>meal image</th>
-                                                </tr>
-                                            </ng-template>
-                                            <ng-template pTemplate="body" let-meal>
-                                                <tr>
-                                                    <td>{{ meal.meal.name }}</td>
-                                                    <td>
-                                                        <img [src]="meal.meal.image" [alt]="meal.meal.image" width="50"
-                                                            class="shadow-4" />
-                                                    </td>
-                                                </tr>
-                                            </ng-template>
-                                            <ng-template pTemplate="emptymessage">
-                                                <tr>
-                                                    <td colspan="6">There are no meals for this subscriber in this day.
-                                                    </td>
-                                                </tr>
-                                            </ng-template>
-                                            </p-table>
-                            </div>
-                            </td>
-                            </tr>
-                            </ng-template>
-                            </p-table>
-                            </td>
-                            </ng-container>
-                            <ng-template #otherContent>
-                                <td>{{ column.label }}</td>
-                                <td>{{ sub?.[column.key] }}</td>
-                            </ng-template>
-                            </tr>
-                            </ng-container>
-                            </tbody>
-                            </table>
-                        </div> -->
-
-
-
-                            <div class="table-responsive overflow-auto">
-                                <table class="table">
-                                    <thead class="text-muted">
-                                        <th class="py-3">Title</th>
-                                        <th class="py-3">Description</th>
-                                    </thead>
-                                    <tbody>
-                                        <ng-container *ngFor="let column of columns">
-                                            <tr>
-                                                <td>{{ column.label }}</td>
-                                                <td>
-                                                    <ng-container *ngIf="isObject(sub?.[column.key])">
-                                                        <ng-container *ngFor="let key2 of getObjectKeys(sub?.[column.key])">
-                                                            <div *ngIf="!isObject(sub?.[column.key][key2]) && sub?.[column.key][key2].length < 20">
-                                                                {{ key2 }}: {{ sub?.[column.key][key2] }}<br>
-                                                            </div>
-                                                        </ng-container>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="!isObject(sub?.[column.key])">
-                                                        {{ sub?.[column.key] }}
-                                                    </ng-container>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+
+<!-- TODO: DISCOUNT SORT -->
+<!-- TODO: PRINT MODE -->
+<!-- TODO: Details Print -->
+<!-- TODO: ADD CID  -->

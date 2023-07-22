@@ -10,7 +10,7 @@ import { SubscriptionDetails, SubscriptionsService } from 'src/app/services/subs
   styleUrls: ['./subscription-details.component.scss'],
 })
 export class SubscriptionDetailsComponent implements OnInit {
-  sub!: any;
+  sub!: SubscriptionDetails;
   columns: any[] = [];
 
   constructor(
@@ -33,16 +33,6 @@ export class SubscriptionDetailsComponent implements OnInit {
         },
       });
   }
-  // In your component or service
-isObject(value: any): boolean {
-  return typeof value === 'object' && value !== null;
-}
-
-// In your component or service
-getObjectKeys(obj: any): string[] {
-  return Object.keys(obj);
-}
-
 
   capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);

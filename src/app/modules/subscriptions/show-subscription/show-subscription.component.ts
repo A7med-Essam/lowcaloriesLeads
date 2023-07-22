@@ -96,16 +96,29 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     this.getSubscriptions(e.first / e.rows + 1);
   }
 
-  getSeverity(status: string) {
-    switch (status.toLowerCase()) {
-      case 'not complete':
+  getSeverity(status: number) {
+    switch (status) {
+      case 0: //pending
         return 'danger';
-      case 'completed':
-        return 'success';
-      case 'pending':
+      case 1://not complete
         return 'warning';
+      case 2://completed
+        return 'success';
       default:
         return 'info';
+    }
+  }
+
+  getMode(status: number) {
+    switch (status) {
+      case 0: 
+        return 'Pending';
+      case 1:
+        return 'Not Complete';
+      case 2:
+        return 'Completed';
+      default:
+        return '';
     }
   }
   // ****************************************************PDF************************************************************************
@@ -239,16 +252,30 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
 
       autoTable(doc, { startY: 50 });
 
-      let columns:any[] = [];
-      for (const key in sub) {
-        if (sub.hasOwnProperty(key) && key !== 'subscription_days') {
-          const columnObj = { title: key, dataKey: sub[key] };
-          if (columnObj.title && columnObj.dataKey) {
-            columns.push(columnObj);
-          }
-        }
-      }
+      let columns:any[] = [
+        { title: "invoice_no", dataKey:  sub?.invoice_no},
+        { title: "subscribed from", dataKey:  sub?.sub_from},
+        { title: "Agent", dataKey:  sub?.agent?.name},
+        { title: "Client Name", dataKey:  sub?.user?.first_name+' '+sub?.user?.last_name},
+        { title: "Mobile", dataKey:  sub?.user?.phone_number},
+        { title: "Mode", dataKey:  sub?.mode},
+        { title: "Emirate", dataKey:  sub?.location?.emirate?.en_name},
+        { title: "Start Date", dataKey:  sub?.delivery_starting_day},
+        { title: "Plan", dataKey:  sub?.subscriptions_note},
+        { title: "Area", dataKey:  sub?.location?.area_id},
+        { title: "Total Price", dataKey:  sub?.total_price},
+      ];
+      const isVersionV1 = sub.version === 'v1';
+      columns.push({
+        title: 'Discount',
+        dataKey: isVersionV1 ? sub?.codes?.percentage && sub.codes.percentage + '%' : sub?.gift_code?.percentage && sub.gift_code.percentage + '%',
+      },
+      {
+        title: 'Code',
+        dataKey: isVersionV1 ? sub?.codes?.code : sub?.gift_code?.code,
+      });
 
+      columns = columns.filter(item => item.dataKey !== null && item.dataKey !== undefined);
 
       // doc.text(140, 40, "Report");
       autoTable(doc, { body: columns });
@@ -465,48 +492,19 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   selectedColumns: any[] = [];
   specificRows: number[] = [];
   columns: any[] = [
-    { name: 'id', status: false },
-    { name: 'version', status: false },
-    { name: 'deleted', status: false },
-    { name: 'sub_from', status: true },
-    { name: 'status', status: true },
-    { name: 'order_id', status: false },
-    { name: 'user_id', status: false },
-    { name: 'program_id', status: false },
-    { name: 'plan_id', status: false },
-    { name: 'custom', status: false },
-    { name: 'option_id', status: false },
-    { name: 'location_id', status: false },
-    { name: 'erp_location', status: false },
-    { name: 'code_id', status: false },
-    { name: 'code', status: false },
-    { name: 'price', status: true },
-    { name: 'vat', status: true },
-    { name: 'cutlery', status: true },
-    { name: 'bag', status: true },
-    { name: 'total_price', status: true },
-    { name: 'delivery_starting_day', status: true },
-    { name: 'days_of_week', status: false },
-    { name: 'dislike', status: false },
-    { name: 'dis_like_user', status: false },
-    { name: 'note', status: false },
-    { name: 'order_notes', status: false },
-    { name: 'subscriptions_note', status: true },
-    { name: 'full_plan_name', status: false },
-    { name: 'invoice_no', status: true },
-    { name: 'mastercard_session_id', status: false },
-    { name: 'mastercard_session_version', status: false },
-    { name: 'mastercard_successIndicator', status: false },
-    { name: 'mastercard_result_session_version', status: false },
-    { name: 'mastercard_resultIndicator', status: false },
-    { name: 'mode', status: false },
-    { name: 'branch', status: false },
-    { name: 'branch_paid_on_id', status: false },
-    { name: 'branch_invoice_image', status: false },
-    { name: 'agent_id', status: false },
-    { name: 'updated_text', status: false },
-    { name: 'created_date', status: false },
-    { name: 'created_time', status: false },
+    { name: 'invoice_no', status: true, key:"invoice_no", sortKey:"invoice_no" },
+    { name: 'subscribed from', status: true, key:"sub_from", sortKey:"sub_from" },
+    { name: 'Agent', status: true, key:"agent", sortKey:"agent[name]" },
+    { name: 'Client Name', status: true, key:"user", sortKey:"user[first_name]" },
+    { name: 'Mobile', status: true, key:"user", sortKey:"user[phone_number]" },
+    { name: 'Mode', status: true, key:"mode", sortKey:"mode" },
+    { name: 'Emirate', status: true, key:"location", sortKey:"location[area_id]" },
+    { name: 'Start Date', status: true, key:"delivery_starting_day", sortKey:"delivery_starting_day" },
+    { name: 'Plan', status: true, key:"subscriptions_note", sortKey:"subscriptions_note" },
+    { name: 'Area', status: true, key:"location", sortKey:"location[area_id]" },
+    { name: 'Total Price', status: true, key:"total_price", sortKey:"total_price" },
+    { name: 'Code', status: true, key:"codes", sortKey:"codes[code]" },
+    { name: 'Discount', status: true, key:"codes", sortKey:"codes[percentage]" },
   ];
 
   getFilterColumns() {
@@ -560,12 +558,25 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   }
 
   // ****************************************************SORT************************************************************************
+
   sort(event: any) {
     const sortField = event.sortField;
     const sortOrder = event.sortOrder === 1 ? 1 : -1;
+    const hasBrackets = this.hasBrackets(sortField);
+  
     this.subscriptions?.sort((a: any, b: any) => {
-      const aValue = a[sortField];
-      const bValue = b[sortField];
+      const getValue = (obj: any, key: string) => {
+        if (hasBrackets) {
+          const [keyWithoutBrackets] = key.match(/\[(.*?)\]/) || [];
+          return obj?.[key.replace(/\s*\[.*?\]/, '')]?.[keyWithoutBrackets?.replace(/\[|\]/g, '')];
+        } else {
+          return obj?.[key];
+        }
+      };
+  
+      const aValue = getValue(a, sortField);
+      const bValue = getValue(b, sortField);
+  
       if (
         typeof aValue === 'string' &&
         Date.parse(aValue) &&
@@ -591,4 +602,9 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       }
     });
   }
+  
+  hasBrackets(input: string) {
+    return /\[.*?\]/.test(input);
+  }
+  
 }

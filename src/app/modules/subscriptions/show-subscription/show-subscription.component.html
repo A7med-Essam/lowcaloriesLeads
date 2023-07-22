@@ -66,7 +66,7 @@
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
                         <label for="">Emirate</label>
-                        <p-dropdown [options]="emirates" optionLabel="en_name" optionValue="id"
+                        <p-dropdown [options]="emirates" optionLabel="en_name" optionValue="en_name"
                             formControlName='emirate' appendTo="body" styleClass="w-100" placeholder="Select Emirate"
                             [filter]="true">
                         </p-dropdown>
@@ -123,10 +123,10 @@
                     <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)"
                         [pSelectableRow]="subscriptions"></p-tableHeaderCheckbox>
                 </th>
-                <ng-container *ngFor="let column of columns">
-                    <th class="text-center" *ngIf="column.status" [pSortableColumn]="column.name">
+                <ng-container *ngFor="let column of columns; let i = index">
+                    <th class="text-center" *ngIf="column.status" [pSortableColumn]="column.sortKey">
                         {{ column.name }}
-                        <p-sortIcon [field]="column.name"></p-sortIcon>
+                        <p-sortIcon [field]="column.sortKey"></p-sortIcon>
                     </th>
                 </ng-container>
                 <th class="text-center">Actions</th>
@@ -140,13 +140,47 @@
                 </td>
                 <ng-container *ngFor="let column of columns">
                     <td class="text-center" *ngIf="column.status">
-                        <ng-container *ngIf="column.name === 'status'; else otherContent">
-                            <p-tag [severity]="getSeverity(sub[column.name])" [value]="sub[column.name]"></p-tag>
-                          </ng-container>
-                          <ng-template #otherContent>
-                            {{ sub[column.name] }}
-                          </ng-template>
-                    </td>
+                          <div [ngSwitch]="column.name.toLowerCase()">
+                            <div *ngSwitchCase="'agent'">
+                                {{ sub[column.key]? sub[column.key]?.name:"ONLINE" }}
+                            </div>
+                            <div *ngSwitchCase="'client name'">
+                                {{ sub[column.key].first_name +' '+ sub[column.key].last_name }}
+                            </div>
+                            <div *ngSwitchCase="'mobile'">
+                                {{ sub[column.key].phone_number }}
+                            </div>
+                            <div *ngSwitchCase="'emirate'">
+                                {{ sub[column.key].emirate.en_name }}
+                            </div>
+                            <div *ngSwitchCase="'area'">
+                                {{ sub[column.key].area_id }}
+                            </div>
+                            <div *ngSwitchCase="'code'">
+                                <div *ngIf="sub.version == 'v1'">
+                                    {{ sub[column.key]?.code }}
+                                </div>
+                                <div *ngIf="sub.version == 'v3'">
+                                    {{ sub['gift_code']?.code }}
+                                </div>
+                            </div>
+                            <div *ngSwitchCase="'discount'">
+                                <div *ngIf="sub.version == 'v1'">
+                                    {{ sub[column.key]?.percentage }}
+                                </div>
+                                <div *ngIf="sub.version == 'v3'">
+                                    {{ sub['gift_code']?.percentage }}
+                                </div>
+                            </div>
+                            <div *ngSwitchCase="'mode'">
+                                <p-tag [severity]="getSeverity(sub[column.key])" [value]="getMode(sub[column.key])"></p-tag>
+                            </div>
+                            <div *ngSwitchDefault>
+                                {{ sub[column.key] }}
+                            </div>
+                          </div>
+                          
+                        </td>
                 </ng-container>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
