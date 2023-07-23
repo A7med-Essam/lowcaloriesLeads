@@ -124,6 +124,14 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     this._PaymentlinkService.getPaymentDetails().subscribe((res) => {
       if (res.status == 1) {
         this.paymentDetails = res.data;
+        this.emiratesClone = this.paymentDetails.emirates
+        this.paymentDetails.GiftCodes = this.paymentDetails.GiftCodes.map( c => {
+          return {
+            code:`${c.code} (${c.percentage}%)`,
+            id:c.id,
+            percentage:c.percentage
+          }
+        })
       }
     });
   }
@@ -297,11 +305,32 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
 
   // ====================================================================Value Changes==========================================================================
   isCustom: Boolean = true;
+  emiratesClone:any;
+  customEmirateFilter(type: string) {
+    if (type === "Chef Gourmet") {
+      const emiratesFilterOptions = ["DUBAI", "SHARJAH", "ABU DHABI"];
+      const filteredEmirates: any[] = [];
+  
+      for (const filterValue of emiratesFilterOptions) {
+        const filteredResults = this.paymentDetails.emirates.filter((e: any) =>
+          e.en_name.toLowerCase().includes(filterValue.toLowerCase())
+        );
+        filteredEmirates.push(...filteredResults);
+      }
+      const uniqueData = filteredEmirates.filter((item, index, self) =>
+        index === self.findIndex((t) => t.en_name === item.en_name)
+      );
+      return uniqueData;
+    } else {
+      return this.emiratesClone;
+    }
+  }
   valueChanges() {
     this.valueChangesSubscription1 = this.paymentForm
       .get('program_type')
       ?.valueChanges.subscribe((value) => {
         if (value) {
+          this.paymentDetails.emirates = this.customEmirateFilter(value);
           this.handleProgramTypeChange(value);
         }
       });
