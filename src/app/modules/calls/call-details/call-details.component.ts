@@ -7,36 +7,40 @@ import { CallsService } from 'src/app/services/calls.service';
 @Component({
   selector: 'app-call-details',
   templateUrl: './call-details.component.html',
-  styleUrls: ['./call-details.component.scss']
+  styleUrls: ['./call-details.component.scss'],
 })
 export class CallDetailsComponent implements OnInit {
-
   call: any;
 
-  constructor(
-    private _Router: Router,
-    private _CallsService: CallsService
-  ) {}
+  constructor(private _Router: Router, private _CallsService: CallsService) {}
 
   private unsubscribe$ = new Subject<void>();
 
   ngOnInit(): void {
-    this._CallsService.call
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (res) => {
-          if (res == null) {
+    this._CallsService.call.pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (res) => {
+        if (res == null) {
+          if (localStorage.getItem('prevPage')) {
             this._Router.navigate(['calls/assign']);
+            localStorage.removeItem("prevPage")
           } else {
-            this.call = res
-            this.getCallFiles(res.id);
+            this._Router.navigate(['calls/show']);
           }
-        },
-      });
+        } else {
+          this.call = res;
+          this.getCallFiles(res.id);
+        }
+      },
+    });
   }
 
   backDetailsBtn() {
-    this._Router.navigate(['calls/assign']);
+    if (localStorage.getItem('prevPage')) {
+      this._Router.navigate(['calls/assign']);
+      localStorage.removeItem("prevPage")
+    } else {
+      this._Router.navigate(['calls/show']);
+    }
   }
 
   ngOnDestroy(): void {
@@ -44,12 +48,10 @@ export class CallDetailsComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-
-  files:any[]=[]
-  getCallFiles(id:number){
-    this._CallsService.getFiles(id).subscribe(res=>{
-      this.files = res.data.call_files
-    })
+  files: any[] = [];
+  getCallFiles(id: number) {
+    this._CallsService.getFiles(id).subscribe((res) => {
+      this.files = res.data.call_files;
+    });
   }
-
 }

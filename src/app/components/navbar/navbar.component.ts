@@ -61,10 +61,7 @@ export class NavbarComponent implements OnInit {
       this.isLogin = true;
       this._PusherService.pusherEventLeadData.subscribe((res) => {
         if (res) {
-          this.notificationModal = true;
-          this.currentNotification = res;
           this.processNotification(res);
-          this.notifications = res?.notifications
         }
       });
     } else {
@@ -81,6 +78,9 @@ export class NavbarComponent implements OnInit {
         Number(this._GuardService.getUser().id)
       );
       if (this.hasNotification) {
+        this.notificationModal = true;
+        this.currentNotification = res;
+        this.notifications = res?.notifications
         this.playNotificationSound();
       }
     }

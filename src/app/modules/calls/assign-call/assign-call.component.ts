@@ -589,6 +589,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
 
   showRow(call: any) {
     if (call) {
+      localStorage.setItem("prevPage","assign")
       this._CallsService.call.next(call);
       this._Router.navigate(['calls/details']);
     }

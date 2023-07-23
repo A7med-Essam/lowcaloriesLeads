@@ -9,7 +9,6 @@ export class CallsService {
   constructor(private _ApiConfigService: ApiConfigService) {}
   call: BehaviorSubject<any> = new BehaviorSubject(null);
   call_filter: BehaviorSubject<any> = new BehaviorSubject(null);
-
   getCalls(page: number): Observable<{
     status: number;
     data: {
