@@ -27,6 +27,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   allSubscriptions: any[] = [];
   printPermission: boolean = false;
   exportPermission: boolean = false;
+  updatePermission: boolean = false;
   currentPage: number = 1;
   PaginationInfo: any;
 
@@ -35,8 +36,8 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     private _GuardService: GuardService,
     private _Router: Router,
     private _MessageService: MessageService,
-    private _PaymentlinkService:PaymentlinkService,
-    private _SurveyService:SurveyService
+    private _PaymentlinkService: PaymentlinkService,
+    private _SurveyService: SurveyService
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +61,9 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     this.exportPermission = this._GuardService.getPermissionStatus(
       'export_subscription'
     );
+    this.updatePermission = this._GuardService.getPermissionStatus(
+      'update_subscription'
+    );
   }
 
   ngOnDestroy(): void {
@@ -78,10 +82,20 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       this.getOldFilters(page);
     } else {
       this._SubscriptionsService.getSubscriptions(page).subscribe((res) => {
-        this.subscriptions = res.data.data;
+        this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
       });
     }
+  }
+
+  transformObjects(arr: any) {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].gift_code) {
+        arr[i].codes = arr[i].gift_code;
+        delete arr[i].gift_code;
+      }
+    }
+    return arr;
   }
 
   showRow(sub: any) {
@@ -100,9 +114,9 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     switch (status) {
       case 0: //pending
         return 'danger';
-      case 1://not complete
+      case 1: //not complete
         return 'warning';
-      case 2://completed
+      case 2: //completed
         return 'success';
       default:
         return 'info';
@@ -111,7 +125,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
 
   getMode(status: number) {
     switch (status) {
-      case 0: 
+      case 0:
         return 'Pending';
       case 1:
         return 'Not Complete';
@@ -252,30 +266,28 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
 
       autoTable(doc, { startY: 50 });
 
-      let columns:any[] = [
-        { title: "invoice_no", dataKey:  sub?.invoice_no},
-        { title: "subscribed from", dataKey:  sub?.sub_from},
-        { title: "Agent", dataKey:  sub?.agent?.name},
-        { title: "Client Name", dataKey:  sub?.user?.first_name+' '+sub?.user?.last_name},
-        { title: "Mobile", dataKey:  sub?.user?.phone_number},
-        { title: "Mode", dataKey:  sub?.mode},
-        { title: "Emirate", dataKey:  sub?.location?.emirate?.en_name},
-        { title: "Start Date", dataKey:  sub?.delivery_starting_day},
-        { title: "Plan", dataKey:  sub?.subscriptions_note},
-        { title: "Area", dataKey:  sub?.location?.area_id},
-        { title: "Total Price", dataKey:  sub?.total_price},
+      let columns: any[] = [
+        { title: 'invoice_no', dataKey: sub?.invoice_no },
+        { title: 'subscribed from', dataKey: sub?.sub_from },
+        { title: 'Agent', dataKey: sub?.agent?.name },
+        {
+          title: 'Client Name',
+          dataKey: sub?.user?.first_name + ' ' + sub?.user?.last_name,
+        },
+        { title: 'Mobile', dataKey: sub?.user?.phone_number },
+        { title: 'Mode', dataKey: this.getMode(sub?.mode) },
+        { title: 'Emirate', dataKey: sub?.location?.emirate?.en_name },
+        { title: 'Start Date', dataKey: sub?.delivery_starting_day },
+        { title: 'Plan', dataKey: sub?.subscriptions_note },
+        { title: 'Area', dataKey: sub?.location?.area_id },
+        { title: 'Total Price', dataKey: sub?.total_price },
+        { title: 'Code', dataKey: sub?.codes?.code },
+        { title: 'Discount', dataKey: sub?.codes?.percentage + '%' },
       ];
-      const isVersionV1 = sub.version === 'v1';
-      columns.push({
-        title: 'Discount',
-        dataKey: isVersionV1 ? sub?.codes?.percentage && sub.codes.percentage + '%' : sub?.gift_code?.percentage && sub.gift_code.percentage + '%',
-      },
-      {
-        title: 'Code',
-        dataKey: isVersionV1 ? sub?.codes?.code : sub?.gift_code?.code,
-      });
 
-      columns = columns.filter(item => item.dataKey !== null && item.dataKey !== undefined);
+      columns = columns.filter(
+        (item) => item.dataKey !== null && item.dataKey !== undefined
+      );
 
       // doc.text(140, 40, "Report");
       autoTable(doc, { body: columns });
@@ -352,9 +364,11 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         });
       }
     }
-    if(form.value.delivery_starting_day){
+    if (form.value.delivery_starting_day) {
       form.patchValue({
-        delivery_starting_day: new Date(form.value.delivery_starting_day).toLocaleDateString('en-CA'),
+        delivery_starting_day: new Date(
+          form.value.delivery_starting_day
+        ).toLocaleDateString('en-CA'),
       });
     }
     for (const prop in form.value) {
@@ -367,7 +381,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     this._SubscriptionsService
       .filterSubscriptions(1, form.value)
       .subscribe((res) => {
-        this.subscriptions = res.data.data;
+        this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
       });
   }
@@ -376,7 +390,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     this._SubscriptionsService
       .filterSubscriptions(page, this.appliedFilters)
       .subscribe((res) => {
-        this.subscriptions = res.data.data;
+        this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
       });
   }
@@ -393,47 +407,47 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   }
   // ****************************************************filter Options************************************************************************
   versions: any[] = [
-    { label: "Version 1", value: 'v1' },
-    { label: "Version 3", value: 'v3' },
+    { label: 'Version 1', value: 'v1' },
+    { label: 'Version 3', value: 'v3' },
   ];
   modes: any[] = [
-    { label: "Pending", value: 0 },
-    { label: "Not Completed", value: 1 },
-    { label: "Completed", value: 2 },
+    { label: 'Pending', value: 0 },
+    { label: 'Not Completed', value: 1 },
+    { label: 'Completed', value: 2 },
   ];
   companies: any[] = [
-    { label: "Low Calories", value: 'lc' },
-    { label: "Chef Gourmet", value: 'ch' },
+    { label: 'Low Calories', value: 'lc' },
+    { label: 'Chef Gourmet', value: 'ch' },
   ];
   payments: any[] = [
-    { label: "Web", value: 'web' },
-    { label: "Mobile", value: 'mobile' },
-    { label: "Online", value: 'online' },
-    { label: "Payment Link", value: '50' },
-    { label: "Cash", value: '51' },
-    { label: "Credit Card", value: '52' },
-    { label: "EXCHANGE", value: '53' },
-    { label: "NUTRAION Online", value: '60' },
-    { label: "NUTRAION Clinic", value: '61' },
-    { label: "C & C & E", value: '51-52-53' },
+    { label: 'Web', value: 'web' },
+    { label: 'Mobile', value: 'mobile' },
+    { label: 'Online', value: 'online' },
+    { label: 'Payment Link', value: '50' },
+    { label: 'Cash', value: '51' },
+    { label: 'Credit Card', value: '52' },
+    { label: 'EXCHANGE', value: '53' },
+    { label: 'NUTRAION Online', value: '60' },
+    { label: 'NUTRAION Clinic', value: '61' },
+    { label: 'C & C & E', value: '51-52-53' },
   ];
 
-  giftCodes:any[]=[]
-  emirates:any[]=[]
-  branches:any[]=[]
+  giftCodes: any[] = [];
+  emirates: any[] = [];
+  branches: any[] = [];
   getPaymentDetails() {
     this._PaymentlinkService.getPaymentDetails().subscribe((res) => {
       if (res.status == 1) {
         this.giftCodes = res.data.GiftCodes;
         this.branches = res.data.branches;
         this.emirates = res.data.emirates;
-        this.giftCodes = this.giftCodes.map( c => {
+        this.giftCodes = this.giftCodes.map((c) => {
           return {
-            code:`${c.code} (${c.percentage}%)`,
-            id:c.id,
-            percentage:c.percentage
-          }
-        })
+            code: `${c.code} (${c.percentage}%)`,
+            id: c.id,
+            percentage: c.percentage,
+          };
+        });
       }
     });
   }
@@ -447,8 +461,10 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     });
   }
 
-  getUniquePercentages(giftcode:any[]) :string[]{
-    const uniquePercentages = [...new Set(giftcode.map(item => item.percentage))];
+  getUniquePercentages(giftcode: any[]): string[] {
+    const uniquePercentages = [
+      ...new Set(giftcode.map((item) => item.percentage)),
+    ];
     return uniquePercentages;
   }
   // ****************************************************export************************************************************************
@@ -492,19 +508,70 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   selectedColumns: any[] = [];
   specificRows: number[] = [];
   columns: any[] = [
-    { name: 'invoice_no', status: true, key:"invoice_no", sortKey:"invoice_no" },
-    { name: 'subscribed from', status: true, key:"sub_from", sortKey:"sub_from" },
-    { name: 'Agent', status: true, key:"agent", sortKey:"agent[name]" },
-    { name: 'Client Name', status: true, key:"user", sortKey:"user[first_name]" },
-    { name: 'Mobile', status: true, key:"user", sortKey:"user[phone_number]" },
-    { name: 'Mode', status: true, key:"mode", sortKey:"mode" },
-    { name: 'Emirate', status: true, key:"location", sortKey:"location[area_id]" },
-    { name: 'Start Date', status: true, key:"delivery_starting_day", sortKey:"delivery_starting_day" },
-    { name: 'Plan', status: true, key:"subscriptions_note", sortKey:"subscriptions_note" },
-    { name: 'Area', status: true, key:"location", sortKey:"location[area_id]" },
-    { name: 'Total Price', status: true, key:"total_price", sortKey:"total_price" },
-    { name: 'Code', status: true, key:"codes", sortKey:"codes[code]" },
-    { name: 'Discount', status: true, key:"codes", sortKey:"codes[percentage]" },
+    {
+      name: 'invoice_no',
+      status: true,
+      key: 'invoice_no',
+      sortKey: 'invoice_no',
+    },
+    {
+      name: 'subscribed from',
+      status: true,
+      key: 'sub_from',
+      sortKey: 'sub_from',
+    },
+    { name: 'Agent', status: true, key: 'agent', sortKey: 'agent[name]' },
+    {
+      name: 'Client Name',
+      status: true,
+      key: 'user',
+      sortKey: 'user[first_name]',
+    },
+    {
+      name: 'Mobile',
+      status: true,
+      key: 'user',
+      sortKey: 'user[phone_number]',
+    },
+    { name: 'Mode', status: true, key: 'mode', sortKey: 'mode' },
+    {
+      name: 'Emirate',
+      status: true,
+      key: 'location',
+      sortKey: 'location[area_id]',
+    },
+    {
+      name: 'Start Date',
+      status: true,
+      key: 'delivery_starting_day',
+      sortKey: 'delivery_starting_day',
+    },
+    {
+      name: 'Plan',
+      status: true,
+      key: 'subscriptions_note',
+      sortKey: 'subscriptions_note',
+    },
+    {
+      name: 'Area',
+      status: true,
+      key: 'location',
+      sortKey: 'location[area_id]',
+    },
+    {
+      name: 'Total Price',
+      status: true,
+      key: 'total_price',
+      sortKey: 'total_price',
+    },
+    { name: 'Code', status: true, key: 'codes', sortKey: 'codes[code]' },
+    {
+      name: 'Discount',
+      status: true,
+      key: 'codes',
+      sortKey: 'codes[percentage]',
+    },
+    { name: 'Version', status: false, key: 'version', sortKey: 'version' },
   ];
 
   getFilterColumns() {
@@ -563,20 +630,26 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     const sortField = event.sortField;
     const sortOrder = event.sortOrder === 1 ? 1 : -1;
     const hasBrackets = this.hasBrackets(sortField);
-  
     this.subscriptions?.sort((a: any, b: any) => {
       const getValue = (obj: any, key: string) => {
         if (hasBrackets) {
           const [keyWithoutBrackets] = key.match(/\[(.*?)\]/) || [];
-          return obj?.[key.replace(/\s*\[.*?\]/, '')]?.[keyWithoutBrackets?.replace(/\[|\]/g, '')];
+          return obj?.[key.replace(/\s*\[.*?\]/, '')]?.[
+            keyWithoutBrackets?.replace(/\[|\]/g, '')
+          ];
         } else {
           return obj?.[key];
         }
       };
-  
+
       const aValue = getValue(a, sortField);
       const bValue = getValue(b, sortField);
-  
+      if (aValue === null || aValue === undefined) {
+        return sortOrder;
+      }
+      if (bValue === null || bValue === undefined) {
+        return -sortOrder;
+      }
       if (
         typeof aValue === 'string' &&
         Date.parse(aValue) &&
@@ -602,9 +675,36 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+
   hasBrackets(input: string) {
     return /\[.*?\]/.test(input);
   }
-  
+  // ****************************************************UPDATE************************************************************************
+  updateModal: boolean = false;
+  currentEditRow: any;
+  displayUpdateModal(sub: any) {
+    if (this.updatePermission) {
+      this.currentEditRow = sub;
+      this.updateModal = true;
+    }
+  }
+  updateRow(input: HTMLInputElement) {
+    if (this.updatePermission) {
+      const data = {
+        cid: input.value,
+        subscription_id: this.currentEditRow.id,
+      };
+      this._SubscriptionsService.addCidForInvoice(data).subscribe((res) => {
+        this.currentEditRow = null;
+        this.updateModal = false;
+        this.subscriptions = this.subscriptions.map((e) => {
+          if (e.id == res.data.subscription_id) {
+            e.cids = res.data;
+          }
+          return e;
+        });
+        this.getSubscriptions();
+      });
+    }
+  }
 }

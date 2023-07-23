@@ -38,9 +38,8 @@
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
                         <label for="">Mode</label>
-                        <p-dropdown [options]="modes" optionLabel="label" optionValue="value"
-                            formControlName='mode' appendTo="body" styleClass="w-100" placeholder="Select Mode"
-                            [filter]="true">
+                        <p-dropdown [options]="modes" optionLabel="label" optionValue="value" formControlName='mode'
+                            appendTo="body" styleClass="w-100" placeholder="Select Mode" [filter]="true">
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
@@ -53,15 +52,14 @@
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
                         <label for="">Payment</label>
                         <p-dropdown [options]="payments" optionLabel="label" optionValue="value"
-                            formControlName='program_id' appendTo="body" styleClass="w-100" placeholder="Select Payment Method"
-                            [filter]="true">
+                            formControlName='program_id' appendTo="body" styleClass="w-100"
+                            placeholder="Select Payment Method" [filter]="true">
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
                         <label for="">Agent</label>
-                        <p-dropdown [options]="agents" optionLabel="name" optionValue="id"
-                            formControlName='agent_id' appendTo="body" styleClass="w-100" placeholder="Select Agent"
-                            [filter]="true">
+                        <p-dropdown [options]="agents" optionLabel="name" optionValue="id" formControlName='agent_id'
+                            appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
@@ -73,23 +71,20 @@
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
                         <label for="">Branch</label>
-                        <p-dropdown [options]="branches" optionLabel="name" optionValue="id"
-                            formControlName='branch_id' appendTo="body" styleClass="w-100" placeholder="Select Branch"
-                            [filter]="true">
+                        <p-dropdown [options]="branches" optionLabel="name" optionValue="id" formControlName='branch_id'
+                            appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
                         <label for="">Discount</label>
-                        <p-dropdown [options]="getUniquePercentages(this.giftCodes)"
-                            formControlName='discount' appendTo="body" styleClass="w-100" placeholder="Select Discount Code"
-                            [filter]="true">
+                        <p-dropdown [options]="getUniquePercentages(this.giftCodes)" formControlName='discount'
+                            appendTo="body" styleClass="w-100" placeholder="Select Discount Code" [filter]="true">
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
                         <label for="">GiftCode</label>
-                        <p-dropdown [options]="giftCodes" optionLabel="code" optionValue="id"
-                            formControlName='code' appendTo="body" styleClass="w-100" placeholder="Select GiftCode"
-                            [filter]="true">
+                        <p-dropdown [options]="giftCodes" optionLabel="code" optionValue="id" formControlName='code'
+                            appendTo="body" styleClass="w-100" placeholder="Select GiftCode" [filter]="true">
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
@@ -100,17 +95,23 @@
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-12 my-2">
                         <label for="range">Start Day</label>
-                        <p-calendar [readonlyInput]="true" formControlName="delivery_starting_day" ngClass="w-100" appendTo="body">
+                        <p-calendar [readonlyInput]="true" formControlName="delivery_starting_day" ngClass="w-100"
+                            appendTo="body">
                         </p-calendar>
                     </div>
                     <div class="col-12 my-2">
                         <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
                             <div>
-                                <p-button type="button" (click)="resetFields()" styleClass="p-button-raised p-button-secondary mx-2" label="Reset Fields" icon="pi pi-refresh"></p-button>
+                                <p-button type="button" (click)="resetFields()"
+                                    styleClass="p-button-raised p-button-secondary mx-2" label="Reset Fields"
+                                    icon="pi pi-refresh"></p-button>
                             </div>
                             <div>
-                                <p-button type="button" (click)="resetFilter()" styleClass="p-button-raised p-button-secondary mx-2" label="Reset" icon="pi pi-filter-slash"></p-button>
-                                <p-button type="submit" styleClass="p-button-raised p-button-success mx-2" label="Apply Filter" icon="pi pi-filter"></p-button>
+                                <p-button type="button" (click)="resetFilter()"
+                                    styleClass="p-button-raised p-button-secondary mx-2" label="Reset"
+                                    icon="pi pi-filter-slash"></p-button>
+                                <p-button type="submit" styleClass="p-button-raised p-button-success mx-2"
+                                    label="Apply Filter" icon="pi pi-filter"></p-button>
                             </div>
                         </div>
                     </div>
@@ -140,7 +141,7 @@
                 </td>
                 <ng-container *ngFor="let column of columns">
                     <td class="text-center" *ngIf="column.status">
-                          <div [ngSwitch]="column.name.toLowerCase()">
+                        <div [ngSwitch]="column.name.toLowerCase()">
                             <div *ngSwitchCase="'agent'">
                                 {{ sub[column.key]? sub[column.key]?.name:"ONLINE" }}
                             </div>
@@ -157,34 +158,28 @@
                                 {{ sub[column.key].area_id }}
                             </div>
                             <div *ngSwitchCase="'code'">
-                                <div *ngIf="sub.version == 'v1'">
-                                    {{ sub[column.key]?.code }}
-                                </div>
-                                <div *ngIf="sub.version == 'v3'">
-                                    {{ sub['gift_code']?.code }}
-                                </div>
+                                {{ sub[column.key]?.code }}
                             </div>
                             <div *ngSwitchCase="'discount'">
-                                <div *ngIf="sub.version == 'v1'">
-                                    {{ sub[column.key]?.percentage }}
-                                </div>
-                                <div *ngIf="sub.version == 'v3'">
-                                    {{ sub['gift_code']?.percentage }}
-                                </div>
+                                {{ sub[column.key]?.percentage }}
                             </div>
                             <div *ngSwitchCase="'mode'">
-                                <p-tag [severity]="getSeverity(sub[column.key])" [value]="getMode(sub[column.key])"></p-tag>
+                                <p-tag [severity]="getSeverity(sub[column.key])" [value]="getMode(sub[column.key])">
+                                </p-tag>
                             </div>
                             <div *ngSwitchDefault>
                                 {{ sub[column.key] }}
                             </div>
-                          </div>
-                          
-                        </td>
+                        </div>
+
+                    </td>
                 </ng-container>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
                         class="m-1 p-button-sm"></button>
+                    <button *ngIf="!sub.cids"
+                     [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdateModal(sub)"
+                        class="m-1 p-button-sm p-button-warning"></button>
                     <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
                         [disabled]="!printPermission" (click)="print(sub)"></button>
                 </td>
@@ -210,6 +205,26 @@
     <ng-template pTemplate="footer">
         <div class="upload-btn-wrapper">
             <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Update Complaint Status Modal" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="">CID</label>
+                <input type="text" pInputText ngClass="w-100" #CID_UPDATE_INPUT 
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div>
+            <button class="btn btn-primary" (click)="updateRow(CID_UPDATE_INPUT)">
+                Update
+            </button>
         </div>
     </ng-template>
 </p-dialog>

@@ -38,6 +38,10 @@ export class SubscriptionsService {
   getSubscriptionDetails(subscription_id:number): Observable<ISubscriptionsDetailsResponse> {
     return this._ApiConfigService.postReq3(`getSubscriptionDetails`, {subscription_id});
   }
+
+  addCidForInvoice(data:any): Observable<any> {
+    return this._ApiConfigService.postReq3(`addCidForInvoice`, data);
+  }
 }
 
 
@@ -225,7 +229,8 @@ export interface SubscriptionDetails {
   mode:                              number;
   branch:                            string;
   branch_paid_on_id:                 null;
-  branch_invoice_image:              null;
+  branch_paid_on:                    string;
+  branch_invoice_image:              string;
   agent_id:                          number;
   updated_text:                      null;
   created_date:                      Date;

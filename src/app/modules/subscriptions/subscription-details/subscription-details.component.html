@@ -7,7 +7,9 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title">Client Info</h4>
                             <div>
-                                <button class="btn btn-dark" (click)="backDetailsBtn()">Back</button>
+                                <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
+                                    (click)="print()">Print</button>
+                                <button class="btn btn-dark mx-1" (click)="backDetailsBtn()">Back</button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -85,8 +87,17 @@
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td>Invoice Number</td>
+                                            <td>{{ sub.invoice_no }}</td>
+                                        </tr>
+                                        <tr>
                                             <td>Program</td>
-                                            <td>{{ sub.full_plan_name }}</td>
+                                            <td>
+                                                {{sub.subscriptions_note.split('-')[1]}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                {{sub.full_plan_name.split('-')[0] + ""}} &#160;&#160;&#160;&#160;&#160;
+                                                {{sub.full_plan_name.split('-')[2] + ""}} &#160;&#160;&#160;&#160;&#160;
+                                                {{sub.full_plan_name.split('-')[3]}}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Plan Title</td>
@@ -94,11 +105,19 @@
                                         </tr>
                                         <tr>
                                             <td>Meal Types</td>
-                                            <td>{{ sub.dislike }}</td>
+                                            <td>{{ replaceMeals(sub.dislike).join(" - ") }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Cutlery</td>
-                                            <td>{{ sub.cutlery }}</td>
+                                            <td>Need Cutlery?</td>
+                                            <td>{{ sub.cutlery == 'checked' ? "yes" : "no" }}</td>
+                                        </tr>
+                                        <tr *ngIf="sub.program_id == 50 || sub.program_id < 15">
+                                            <td>Confirmed Terms</td>
+                                            <td>yes</td>
+                                        </tr>
+                                        <tr *ngIf="sub.agent">
+                                            <td>Agent</td>
+                                            <td>{{ sub.agent.name }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -150,13 +169,6 @@
                                             <td>GRAND TOTAL</td>
                                             <td class="text-success">{{ sub.grand_total }}</td>
                                         </tr>
-                                        <!-- <tr *ngIf="sub?.branch_invoice_image">
-                                            <td>INVOICE IMAGE</td>
-                                            <td>
-                                                <p-image [src]="sub.branch_invoice_image" alt="Invoice" width="250"
-                                                    [preview]="true"></p-image>
-                                            </td>
-                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>
@@ -216,9 +228,48 @@
             </div>
         </div>
     </div>
-</div>
 
-<!-- TODO: DISCOUNT SORT -->
-<!-- TODO: PRINT MODE -->
-<!-- TODO: Details Print -->
-<!-- TODO: ADD CID  -->
+    <div class="col-md-12 my-2" *ngIf="sub.branch_paid_on">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Exchange Info</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive overflow-auto">
+                                <table class="table">
+                                    <thead class="text-muted">
+                                        <th class="py-3">Title</th>
+                                        <th class="py-3">Description</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>EXCHANGE INVOICE BRANCH</td>
+                                            <td>{{ sub.branch_paid_on }}</td>
+                                        </tr>
+                                        <tr *ngIf="sub?.branch_invoice_image && !endsWithPDF(sub.branch_invoice_image)">
+                                            <td>EXCHANGE INVOICE IMAGE</td>
+                                            <td>
+                                                <p-image [src]="sub.branch_invoice_image" alt="Invoice" width="250"
+                                                    [preview]="true"></p-image>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="sub?.branch_invoice_image && endsWithPDF(sub.branch_invoice_image)">
+                                            <td>EXCHANGE INVOICE IMAGE</td>
+                                            <td>
+                                                <a target="_blank" [href]="sub.branch_invoice_image"
+                                                    download>{{sub.branch_invoice_image}}</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
