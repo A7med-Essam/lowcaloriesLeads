@@ -33,7 +33,6 @@ export class DislikeComponent implements OnInit {
       // this._Router.navigate([this._LocalService.getJsonValue('returnUrl')]);
     // }else{
       this._Location.back();
-    // }
   }
 
   // ngOnDestroy(): void {

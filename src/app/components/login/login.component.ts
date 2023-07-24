@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { GuardService } from 'src/app/services/guard.service';
+import { LocalService } from 'src/app/services/local.service';
 import { PusherService } from 'src/app/services/pusher.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
     private _GuardService: GuardService,
     private _AuthService: AuthService,
     private _Router: Router,
-    private _PusherService: PusherService
+    private _PusherService: PusherService,
+    private _LocalService:LocalService
   ) {}
 
   ngOnInit() {
@@ -37,8 +39,9 @@ export class LoginComponent implements OnInit {
           if (res.status === 1) {
             this._AuthService.saveUser(res.data);
             this._PusherService.firePusher();
-            const returnUrl = this._AuthService.returnUrl;
+            const returnUrl = this._AuthService.returnUrl.value;
             const navigationUrl = returnUrl ? returnUrl : '/home';
+            this._AuthService.returnUrl.next(null)
             this._Router.navigateByUrl(navigationUrl);
           }
         });

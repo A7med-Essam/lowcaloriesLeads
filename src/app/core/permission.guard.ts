@@ -45,8 +45,7 @@ export class PermissionGuard implements CanActivate {
       });
       return false;
     } else {
-      this._AuthService.returnUrl = state.url;
-      this._LocalService.setJsonValue('returnUrl', state.url);
+      this._AuthService.returnUrl.next(state.url);
       this._Router.navigate(['/login']);
       return false;
     }

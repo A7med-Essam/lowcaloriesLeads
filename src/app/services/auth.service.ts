@@ -17,7 +17,7 @@ interface IUser {
 })
 export class AuthService {
   currentUser: BehaviorSubject<User|null> = new BehaviorSubject<User|null>(null);
-  returnUrl!:string;
+  returnUrl: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   constructor(
     private _Router: Router,
     private _LocalService: LocalService,
