@@ -6,7 +6,7 @@
     <hr>
     <form [formGroup]="insertForm" (ngSubmit)='insertRow(insertForm)'>
         <div class="row mx-0">
-            <div class="col-md-6 col-12 my-3"  *ngIf="customerPhones.length == 0">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"  *ngIf="customerPhones.length == 0">
                 <label for="">Client Number</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='client_number' maxlength="10"
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" (blur)="getCustomerCID()"/>
@@ -15,7 +15,7 @@
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_number')?.touched &&
                 insertForm.get('client_number')?.hasError('pattern')">Length must be 10</small>
             </div>
-            <div class="col-md-6 col-12 my-3" *ngIf="customerPhones.length">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="customerPhones.length">
                 <label for="">Client Number</label>
                 <p-dropdown [options]="customerPhones" formControlName='client_number' appendTo="body" 
                  styleClass="w-100" placeholder="Select Number" [filter]="true">
@@ -23,19 +23,31 @@
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_number')?.touched &&
                 insertForm.get('client_number')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-md-6 col-12 my-3" *ngIf="cids.length == 0">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="cids.length == 0">
                 <label for="">Client CID</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='client_cid' (blur)="getCustomerPhones()" />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_cid')?.touched &&
                 insertForm.get('client_cid')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-md-6 col-12 my-3" *ngIf="cids.length">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="cids.length">
                 <label for="">Client CID</label>
                 <p-dropdown [options]="cids" formControlName='client_cid' appendTo="body" 
                     styleClass="w-100" placeholder="Select CID" [filter]="true">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_cid')?.touched &&
                 insertForm.get('client_cid')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Client Name</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='client_name' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('client_name')?.touched &&
+                insertForm.get('client_name')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Amount</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='amount_paid' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('amount_paid')?.touched &&
+                insertForm.get('amount_paid')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Invoice Number</label>

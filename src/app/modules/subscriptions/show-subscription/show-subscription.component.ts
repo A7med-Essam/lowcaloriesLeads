@@ -438,10 +438,19 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   getPaymentDetails() {
     this._PaymentlinkService.getPaymentDetails().subscribe((res) => {
       if (res.status == 1) {
-        this.giftCodes = res.data.GiftCodes;
+        // this.giftCodes = res.data.GiftCodes;
         this.branches = res.data.branches;
-        this.emirates = res.data.emirates;
-        this.giftCodes = this.giftCodes.map((c) => {
+        // this.emirates = res.data.emirates;
+        this.emirates = res.data.emirates.map((c) => {
+          return {
+            id : c.id,
+            en_name : `${c.en_name} - (${c.type})`,
+            ar_name : c.ar_name,
+            inbody_price : c.inbody_price,
+            type : c.type,
+          };
+        });
+        this.giftCodes = res.data.GiftCodes.map((c) => {
           return {
             code: `${c.code} (${c.percentage}%)`,
             id: c.id,

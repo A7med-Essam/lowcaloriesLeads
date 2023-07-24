@@ -134,6 +134,7 @@ export interface Emirate {
   en_name:      string;
   ar_name:      string;
   inbody_price: number;
+  type:         string;
 }
 
 

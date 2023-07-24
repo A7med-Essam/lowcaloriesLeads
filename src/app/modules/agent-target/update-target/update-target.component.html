@@ -1,0 +1,101 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Update Target</h2>
+        <button class="btn btn-outline-primary" (click)="goBack()">Back</button>
+    </div>
+    <hr>
+    <form [formGroup]="updateForm" (ngSubmit)='insertRow(updateForm)'>
+        <div class="row mx-0">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Client Number</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='client_number' maxlength="10"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('client_number')?.touched &&
+                updateForm.get('client_number')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('client_number')?.touched &&
+                updateForm.get('client_number')?.hasError('pattern')">Length must be 10</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Client CID</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='client_cid' />
+                <small class="text-danger ms-1" *ngIf="updateForm.get('client_cid')?.touched &&
+                updateForm.get('client_cid')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Client Name</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='client_name' />
+                <small class="text-danger ms-1" *ngIf="updateForm.get('client_name')?.touched &&
+                updateForm.get('client_name')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Amount</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='amount_paid' />
+                <small class="text-danger ms-1" *ngIf="updateForm.get('amount_paid')?.touched &&
+                updateForm.get('amount_paid')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Invoice Number</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='invoice_number' />
+                <small class="text-danger ms-1" *ngIf="updateForm.get('invoice_number')?.touched &&
+                updateForm.get('invoice_number')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">date</label>
+                <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='date'></p-calendar>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('date')?.touched &&
+                updateForm.get('date')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Type</label>
+                <p-dropdown [options]="types" optionLabel="name" formControlName='type' appendTo="body" optionValue="name"
+                    styleClass="w-100" placeholder="Select Type" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('type')?.touched &&
+                updateForm.get('type')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Paid By</label>
+                <p-dropdown [options]="paid_by" formControlName='paid_by' styleClass="w-100" placeholder="Select Method" optionLabel="name" optionValue="name"
+                    appendTo="body" [filter]="true" filterValue="Payment Link">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('paid_by')?.touched &&
+                updateForm.get('paid_by')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Teams</label>
+                <p-dropdown [options]="teams" formControlName='team' styleClass="w-100" placeholder="Select Team" optionLabel="name" optionValue="name"
+                    appendTo="body" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('team')?.touched &&
+                updateForm.get('team')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Customer Type</label>
+                <p-dropdown [options]="customer_types" formControlName='customer_type' styleClass="w-100" optionLabel="name" optionValue="name"
+                    placeholder="Select Customer Type" appendTo="body" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('customer_type')?.touched &&
+                updateForm.get('customer_type')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Status</label>
+                <p-dropdown [options]="status" formControlName='status' styleClass="w-100" placeholder="Select Status" optionLabel="name" optionValue="name"
+                    appendTo="body" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('status')?.touched &&
+                updateForm.get('status')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Branches</label>
+                <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='branch' appendTo="body"
+                    styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('branch')?.touched &&
+                updateForm.get('branch')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">Update</button>
+            </div>
+        </div>
+    </form>
+</div>

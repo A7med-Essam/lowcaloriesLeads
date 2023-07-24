@@ -12,6 +12,8 @@ import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
+import { UpdateTargetComponent } from './update-target/update-target.component';
+import { FixTargetComponent } from './fix-target/fix-target.component';
 
 const APP_PRIMENG_MODULE = [
   // ButtonModule,
@@ -30,7 +32,9 @@ const APP_PRIMENG_MODULE = [
   declarations: [
     ShowTargetComponent,
     TargetDetailsComponent,
-    AddTargetComponent
+    AddTargetComponent,
+    UpdateTargetComponent,
+    FixTargetComponent
   ],
   imports: [
     CommonModule,

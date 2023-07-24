@@ -314,22 +314,11 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
   isCustom: Boolean = true;
   emiratesClone:any;
   customEmirateFilter(type: string) {
+    this.paymentDetails.emirates = this.emiratesClone;
     if (type === "Chef Gourmet") {
-      const emiratesFilterOptions = ["DUBAI", "SHARJAH", "ABU DHABI"];
-      const filteredEmirates: any[] = [];
-  
-      for (const filterValue of emiratesFilterOptions) {
-        const filteredResults = this.paymentDetails.emirates.filter((e: any) =>
-          e.en_name.toLowerCase().includes(filterValue.toLowerCase())
-        );
-        filteredEmirates.push(...filteredResults);
-      }
-      const uniqueData = filteredEmirates.filter((item, index, self) =>
-        index === self.findIndex((t) => t.en_name === item.en_name)
-      );
-      return uniqueData;
+      return this.paymentDetails.emirates.filter(e => e.type.toLowerCase() == "ch");
     } else {
-      return this.emiratesClone;
+      return this.paymentDetails.emirates.filter(e => e.type.toLowerCase() == "lc");
     }
   }
   

@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-// import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { DislikeService } from 'src/app/services/dislike.service';
@@ -78,6 +77,8 @@ export class AddTargetComponent implements OnInit {
       type: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),
       team: new FormControl(null, [Validators.required]),
+      amount_paid: new FormControl(null, [Validators.required]),
+      client_name: new FormControl(null, [Validators.required]),
       agent_id: new FormControl(null),
     });
   }

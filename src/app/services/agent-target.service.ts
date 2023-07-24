@@ -7,6 +7,8 @@ import { ApiConfigService } from '../core/api-config.service';
 })
 export class AgentTargetService {
   target: BehaviorSubject<any> = new BehaviorSubject(null);
+  currentUpdatedTarget: BehaviorSubject<any> = new BehaviorSubject(null);
+  currentFixedTarget: BehaviorSubject<any> = new BehaviorSubject(null);
   target_filter: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(
@@ -23,6 +25,10 @@ export class AgentTargetService {
 
   addTarget(target:ITarget): Observable<{status:number,data:ITarget,message:string}> {
     return this._ApiConfigService.postReq3(`addTargetRequest`, target);
+  }
+
+  updateTarget(target:ITarget): Observable<{status:number,data:ITarget,message:string}> {
+    return this._ApiConfigService.postReq3(`target/updateTarget`, target);
   }
 
   getSubDetails(invoice_no:number): Observable<{status:number,data:any,message:string}> {

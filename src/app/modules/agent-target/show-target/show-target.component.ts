@@ -33,6 +33,8 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
 
   createPermission: boolean = false;
   printPermission: boolean = false;
+  updatePermission: boolean = false;
+  fixPermission: boolean = false;
   exportPermission: boolean = false;
   downloadSamplePermission: boolean = false;
   getPermission() {
@@ -40,6 +42,10 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       this._GuardService.getPermissionStatus('create_target');
     this.printPermission =
       this._GuardService.getPermissionStatus('print_target');
+      this.updatePermission =
+      this._GuardService.getPermissionStatus('update_target');
+      this.fixPermission =
+      this._GuardService.getPermissionStatus('fix_target');
     this.exportPermission =
       this._GuardService.getPermissionStatus('export_target');
     this.downloadSamplePermission = this._GuardService.getPermissionStatus(
@@ -154,7 +160,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     }
   }
 
-  targets: any;
+  targets: any[] = [];
   PaginationInfo: any;
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -184,6 +190,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       this.allTargets = res.data;
     });
   }
+
   getTargets(page: number = 1) {
     if (this.appliedFilters) {
       this.getOldFilters(page);
@@ -192,9 +199,21 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
         next: (res) => {
           this.targets = res?.data?.data;
           this.PaginationInfo = res.data;
+          this.checkNullValues();
         },
       });
     }
+  }
+
+  checkNullValues(){
+    this.targets = this.targets.map(t => {
+      if (t.status === null || t.branch === null || t.client_cid === null) {
+        t.hasNullValues = true
+      }else{
+        t.hasNullValues = false
+      }
+      return t
+    })
   }
 
   showRow(target: ITarget) {
@@ -204,12 +223,25 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     }
   }
 
+  displayUpdate(target: ITarget) {
+    if (target && this.updatePermission) {
+      this._AgentTargetService.currentUpdatedTarget.next(target);
+      this._Router.navigate(['target/update']);
+    }
+  }
+
+  displayFix(target: ITarget) {
+    if (target && this.fixPermission) {
+      this._AgentTargetService.currentFixedTarget.next(target);
+      this._Router.navigate(['target/fix']);
+    }
+  }
+
   currentPage: number = 1;
   paginate(e: any) {
     this.currentPage = e.first / e.rows + 1;
     this.getTargets(e.first / e.rows + 1);
   }
-  
 
   // ****************************************************filter************************************************************************
 
@@ -264,6 +296,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     this._AgentTargetService.target_filter.next(this.appliedFilters)
     this._AgentTargetService.filterTargets(1, form.value).subscribe((res) => {
       this.targets = res.data.data;
+      this.checkNullValues();
       this.PaginationInfo = res.data;
       this.filterModal = false;
       this.filterForm.patchValue({
@@ -282,6 +315,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
         this.targets = res.data.data;
         this.PaginationInfo = res.data;
         this.filterModal = false;
+        this.checkNullValues();
       });
   }
 
