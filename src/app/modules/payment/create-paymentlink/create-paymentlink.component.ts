@@ -9,20 +9,21 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Checkbox } from 'primeng/checkbox';
 import { Subscription } from 'rxjs';
+import { GiftcodeService } from 'src/app/services/giftcode.service';
+import { GuardService } from 'src/app/services/guard.service';
 import {
   PaymentDetails,
   PaymentlinkService,
-  Programs,
 } from 'src/app/services/paymentlink.service';
-import autoTable from 'jspdf-autotable';
-import jsPDF from 'jspdf';
 
 @Component({
-  selector: 'app-print-paymentlink',
-  templateUrl: './print-paymentlink.component.html',
-  styleUrls: ['./print-paymentlink.component.scss'],
+  selector: 'app-create-paymentlink',
+  templateUrl: './create-paymentlink.component.html',
+  styleUrls: ['./create-paymentlink.component.scss'],
 })
-export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
+export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
+  PaymentLink!: string | undefined;
+  exchangeStatus: boolean = false;
   mealTypes: string[] = [];
   snackTypes: string[] = [];
   plans: any[] = [];
@@ -58,64 +59,32 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
 
   constructor(
     private _PaymentlinkService: PaymentlinkService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _GiftcodeService: GiftcodeService,
+    private _GuardService: GuardService
   ) {}
 
-  getEmailByMobile(mobile:string) {
-    this._PaymentlinkService.checkMobileEmails(mobile).subscribe((res) => {
-      this.paymentForm.patchValue({
-        email: res.data,
-      });
-    });
-  }
-
-  currentPrice:number = 0
-  calculate_payment_link(){
-    const data = {
-      program_id:this.paymentForm.value.program_id,
-      plan_id:this.paymentForm.value.plan_id,
-      meal_types:this.paymentForm.value.meal_types,
-      snack_types:this.paymentForm.value.snack_types,
-      subscription_days:this.paymentForm.value.subscription_days,
-      code_id:this.paymentForm.value.code_id,
-      bag:this.paymentForm.value.bag
-    }
-    this._PaymentlinkService.calculate_payment_link(data).subscribe(res=>{
-      if (res.status == 1) {
-        this.currentPrice = res.data.toFixed(2)
-      }
-    })
-  }
-    // ====================================================================Copy Message==========================================================================
-    copyMessage(Input: HTMLInputElement) {
-      const selBox = document.createElement('textarea');
-      selBox.style.position = 'fixed';
-      selBox.style.left = '0';
-      selBox.style.top = '0';
-      selBox.style.opacity = '0';
-      selBox.value = Input.value;
-      document.body.appendChild(selBox);
-      selBox.focus();
-      selBox.select();
-      document.execCommand('copy');
-      document.body.removeChild(selBox);
-      this._MessageService.add({
-        severity: 'success',
-        summary: 'Notification ',
-        detail: 'Copied to clipboard!',
-      });
-    }
-
+  @ViewChildren('deliveryDaysBox')
+  DeliveryCheckboxElements!: QueryList<Checkbox>;
   ngOnInit(): void {
     this.createPaymentForm();
     this.getPaymentDetails();
     this.selectAllDeliveryDays();
+    this.createGiftCodeForm();
+    this.getPermission();
   }
-  @ViewChildren('deliveryDaysBox') DeliveryCheckboxElements!: QueryList<Checkbox>;
-  selectAllDeliveryDays(){
+
+  createGiftCodePermission: boolean = false;
+  getPermission() {
+    this.createGiftCodePermission = this._GuardService.getPermissionStatus(
+      'createGiftcode_paymentlink'
+    );
+  }
+
+  selectAllDeliveryDays() {
     setTimeout(() => {
       this.DeliveryCheckboxElements.forEach((checkbox: Checkbox) => {
-        checkbox.updateModel(true)
+        checkbox.updateModel(true);
       });
     }, 1);
   }
@@ -124,14 +93,48 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     this._PaymentlinkService.getPaymentDetails().subscribe((res) => {
       if (res.status == 1) {
         this.paymentDetails = res.data;
-        this.emiratesClone = this.paymentDetails.emirates
-        this.paymentDetails.GiftCodes = this.paymentDetails.GiftCodes.map( c => {
+        this.emiratesClone = this.paymentDetails.emirates;
+        this.paymentDetails.GiftCodes = this.paymentDetails.GiftCodes.filter(
+          (f) => f.flag == 'Head Office'
+        ).map((c) => {
           return {
-            code:`${c.code} (${c.percentage}%)`,
-            id:c.id,
-            percentage:c.percentage
-          }
-        })
+            code:
+              c.type == 'percentage'
+                ? `${c.code} (${c.percentage}%)`
+                : `${c.code} (${c.value} AED)`,
+            id: c.id,
+            percentage: c.percentage,
+            value: c.value,
+            type: c.type,
+            flag: c.flag,
+          };
+        });
+      }
+    });
+  }
+
+  getEmailByMobile(mobile: string) {
+    this._PaymentlinkService.checkMobileEmails(mobile).subscribe((res) => {
+      this.paymentForm.patchValue({
+        email: res.data,
+      });
+    });
+  }
+
+  currentPrice: number = 0;
+  calculate_payment_link() {
+    const data = {
+      program_id: this.paymentForm.value.program_id,
+      plan_id: this.paymentForm.value.plan_id,
+      meal_types: this.paymentForm.value.meal_types,
+      snack_types: this.paymentForm.value.snack_types,
+      subscription_days: this.paymentForm.value.subscription_days,
+      code_id: this.paymentForm.value.code_id,
+      bag: this.paymentForm.value.bag,
+    };
+    this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
+      if (res.status == 1) {
+        this.currentPrice = res.data.toFixed(2);
       }
     });
   }
@@ -163,7 +166,10 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
       code_id: new FormControl(null, [Validators.required]),
       bag: new FormControl('no', [Validators.required]),
       cutlery: new FormControl('no', [Validators.required]),
+      exchange_paymentLink: new FormControl('no', [Validators.required]),
       dislike: new FormArray([]),
+      branch_paid_on_id: new FormControl(null),
+      branch_invoice_image: new FormControl(null),
     });
     this.valueChanges();
   }
@@ -196,18 +202,19 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
       if (filteredData.dislike) {
         filteredData.dislike = filteredData.dislike.join(',');
       }
-      this._PaymentlinkService.print_payment_link(filteredData).subscribe({
+      this._PaymentlinkService.create_payment_link(filteredData).subscribe({
         next: (res) => {
           if (res.status == 1) {
-            this.print(res.data);
             this.creatingStatus = false;
+            this.PaymentLink = res.data;
             this.paymentForm.reset();
             this.createPaymentForm();
             this.uncheckAllCheckboxes();
+            this.exchangeStatus = false;
             this._MessageService.add({
               severity: 'success',
-              summary: 'Payment Branch',
-              detail: res.message,
+              summary: 'Payment Created Successfully',
+              detail: 'Payment link returned',
             });
           } else {
             this.creatingStatus = false;
@@ -271,6 +278,25 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     return meals;
   }
 
+  // ====================================================================Copy Message==========================================================================
+  copyMessage(Input: HTMLInputElement) {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = Input.value;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Notification ',
+      detail: 'Copied to clipboard!',
+    });
+  }
   // ====================================================================Checkbox==========================================================================
   onCheckboxChange(event: any, type: string, value: string) {
     let formArray: FormArray = this.paymentForm.get(type) as FormArray;
@@ -305,15 +331,20 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
 
   // ====================================================================Value Changes==========================================================================
   isCustom: Boolean = true;
-  emiratesClone:any;
+  emiratesClone: any;
   customEmirateFilter(type: string) {
     this.paymentDetails.emirates = this.emiratesClone;
-    if (type === "Chef Gourmet") {
-      return this.paymentDetails.emirates.filter(e => e.type.toLowerCase() == "ch");
+    if (type === 'Chef Gourmet') {
+      return this.paymentDetails.emirates.filter(
+        (e) => e.type.toLowerCase() == 'ch'
+      );
     } else {
-      return this.paymentDetails.emirates.filter(e => e.type.toLowerCase() == "lc");
+      return this.paymentDetails.emirates.filter(
+        (e) => e.type.toLowerCase() == 'lc'
+      );
     }
   }
+
   valueChanges() {
     this.valueChangesSubscription1 = this.paymentForm
       .get('program_type')
@@ -328,6 +359,14 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
       ?.valueChanges.subscribe((value) => {
         if (value) {
           this.handleProgramIdChange(value);
+        }
+      });
+
+    this.valueChangesSubscription3 = this.paymentForm
+      .get('exchange_paymentLink')
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          this.handleExchangePaymentLinkChange(value);
         }
       });
   }
@@ -372,6 +411,35 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     }
   }
 
+  handleExchangePaymentLinkChange(value: string) {
+    if (value == 'yes') {
+      this.exchangeStatus = true;
+      this.paymentForm
+        .get('branch_invoice_image')
+        ?.setValidators([Validators.required]);
+      this.paymentForm
+        .get('branch_paid_on_id')
+        ?.setValidators([Validators.required]);
+    } else {
+      this.paymentForm.patchValue(
+        {
+          branch_invoice_image: null,
+          branch_paid_on_id: null,
+        },
+        { emitEvent: false }
+      );
+      this.exchangeStatus = false;
+      this.paymentForm.get('branch_invoice_image')?.clearValidators();
+      this.paymentForm.get('branch_paid_on_id')?.clearValidators();
+    }
+    this.paymentForm
+      .get('branch_invoice_image')
+      ?.updateValueAndValidity({ emitEvent: false });
+    this.paymentForm
+      .get('branch_paid_on_id')
+      ?.updateValueAndValidity({ emitEvent: false });
+  }
+
   resetFormFields() {
     this.paymentForm.patchValue({
       program: null,
@@ -405,91 +473,70 @@ export class PrintPaymentlinkComponent implements OnInit, OnDestroy {
     this.paymentForm.addControl('snack_types', new FormArray([]));
   }
 
-  print(res: any) {
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
-    const imageFile = '../../../../assets/images/logo.png';
-    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
-    doc.setTextColor(50);
-    doc.setFontSize(10);
-    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Payment Branch Report', 10, 40);
-    doc.text('Prepared By: Low Calories Technical Team', 10, 45);
-    doc.text('Requested By: Mohamed Fawzy', 10, 50);
-    doc.text('Low Calories Restaurant - Egypt', 150, 30);
-    doc.text('3rd Settelment, New Cairo', 150, 35);
-    doc.text('Phone: 201116202225', 150, 40);
-    doc.text('Email: info@thelowcalories.com', 150, 45);
-    doc.text('Website: thelowcalories.com', 150, 50);
+  // ===========================================================GIFTCODE===============================================================
+  giftcodeForm!: FormGroup;
+  types: string[] = ['percentage', 'value'];
+  giftcodeModal: boolean = false;
+  gitCodeMinExpireAt:Date = new Date(new Date().setDate(new Date().getDate() + 1))
 
-    autoTable(doc, { startY: 55 });
+  displayGiftcodeModal() {
+    if (this.createGiftCodePermission) {
+      this.giftcodeModal = true;
+    }
+  }
 
-    var columns = [
-      { title: 'Subscription from', dataKey: res.sub_from },
-      { title: 'Price', dataKey: res.price },
-      { title: 'Vat', dataKey: res.vat },
-      { title: 'Cutlery', dataKey: res.cutlery },
-      { title: 'Bag', dataKey: res.bag },
-      { title: 'Total Price', dataKey: res.total_price },
-      { title: 'Start Date', dataKey: res.delivery_starting_day },
-      { title: 'Delivery Days', dataKey: res.days_of_week },
-      { title: 'Meal Types', dataKey: res.dislike },
-      { title: 'Dislike Meals', dataKey: res.dis_like_user },
-      { title: 'Subscriptions Note', dataKey: res.subscriptions_note },
-      { title: 'Full Plan Name', dataKey: res.full_plan_name },
-      { title: 'Invoice_no', dataKey: res.invoice_no },
-      { title: 'Address', dataKey: res.location.area_id },
-      { title: 'Emirate', dataKey: res.location.emirate.en_name },
-      { title: 'Giftcode', dataKey: res.gift_code.code },
-      { title: 'Giftcode Percentage', dataKey: res.gift_code.percentage +"%"},
-      { title: 'Agent', dataKey: res.agent.name },
-      {
-        title: 'Client Name',
-        dataKey: res.user.first_name + ' ' + res.user.last_name,
-      },
-      { title: 'Client Mobile', dataKey: res.user.phone_number },
-      { title: 'Client Email', dataKey: res.user.email },
-    ];
-
-    if (res.user.second_phone_number) {
-      columns.push({
-        title: 'Client Second Phone',
-        dataKey: res.user.second_phone_number,
+  createGiftCode(form: FormGroup) {
+    form.patchValue({
+      expired_at: new Date(form.value.expired_at).toLocaleDateString('en-CA'),
+    });
+    if (form.value.type == 'value') {
+      form.patchValue({
+        percentage: 0,
+      });
+    } else {
+      form.patchValue({
+        value: 0,
       });
     }
-
-    // doc.text(140, 40, "Report");
-    autoTable(doc, { body: columns });
-
-    // Set the line color and width
-    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
-    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-
-    // Draw a line at the bottom of the page
-
-    // Get the total number of pages
-    const totalPages = doc.internal.pages;
-
-    // Iterate over each page and add the footer
-    for (let i = 1; i <= totalPages.length; i++) {
-      doc.line(
-        20,
-        doc.internal.pageSize.height - 20,
-        doc.internal.pageSize.width - 20,
-        doc.internal.pageSize.height - 20
-      );
-      // Set the current page as active
-      doc.setPage(i);
-      // Set the position and alignment of the footer
-      doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(
-        'Thelowcalories.com',
-        20,
-        doc.internal.pageSize.getHeight() - 10
-      );
+    if (form.valid) {
+      this._GiftcodeService.createGiftCode(form.value).subscribe((res) => {
+        if (res.status) {
+          this.giftcodeForm.reset();
+          this.giftcodeForm.patchValue({
+            percentage: 0,
+            value: 0,
+            flag: 'Head Office',
+          });
+          this.giftcodeModal = false;
+          this._MessageService.add({
+            severity: 'success',
+            summary: 'GiftCode',
+            detail: res.message,
+          });
+          this.paymentDetails.GiftCodes.push({
+            code:
+              res.data.type == 'percentage'
+                ? `${res.data.code} (${res.data.percentage}%)`
+                : `${res.data.code} (${res.data.value} AED)`,
+            id: res.data.id,
+            percentage: res.data.percentage,
+            value: res.data.value,
+            type: res.data.type,
+            flag: res.data.flag,
+          });
+        }
+      });
     }
+  }
 
-    doc.save(res.invoice_no);
+  createGiftCodeForm() {
+    this.giftcodeForm = new FormGroup({
+      flag: new FormControl('Head Office', [Validators.required]),
+      type: new FormControl(null, [Validators.required]),
+      code: new FormControl(null, [Validators.required]),
+      percentage: new FormControl(0, [Validators.required]),
+      value: new FormControl(0, [Validators.required]),
+      expired_at: new FormControl(null, [Validators.required]),
+    });
   }
 }

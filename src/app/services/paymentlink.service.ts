@@ -60,6 +60,9 @@ export interface GiftCode {
   id:         number;
   code:       string;
   percentage: string;
+  type:       string;
+  value:      string;
+  flag:      string;
 }
 
 export interface Programs {

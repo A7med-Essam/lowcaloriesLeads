@@ -66,6 +66,12 @@ export interface User {
   updated_at:   Date;
   access_token: string;
   permissions:  Permission[];
+  web_role:     string[];
+  pusher_token: string;
+  channel_data: {
+    user_id:number,
+    user_info:any
+  };
 }
 
 export interface Permission {

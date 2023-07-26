@@ -80,27 +80,6 @@ export class PusherService {
     });
   }
 
-  loginPusher(){
-    let pusher = new Pusher('2453154bb7ba5edf59c3', {
-      cluster: 'eu',
-    });
-    let channel = pusher.subscribe('lowcalories');
-    // channel.bind('newLead', (data:any)=> {
-    //   this.pusherEventLeadData.next(data);
-    // });
-  }
-
-//   pusher_token
-//   channel_data: {
-//     "user_id": "1",
-//     "user_info": {
-//         "user_id": 1,
-//         "user_info": {
-//             "name": "John Doe"
-//         }
-//     }
-// }
-
   notifications(): Observable<any> {
     return this._ApiConfigService.postReq3(`notifications`,'');
   }

@@ -452,10 +452,12 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         });
         this.giftCodes = res.data.GiftCodes.map((c) => {
           return {
-            code: `${c.code} (${c.percentage}%)`,
-            id: c.id,
-            percentage: c.percentage,
-          };
+            code:c.type == "percentage" ? `${c.code} (${c.percentage}%)` : `${c.code} (${c.value} AED)`,
+            id:c.id,
+            percentage:c.percentage,
+            value:c.value,
+            type: c.type
+          }
         });
       }
     });

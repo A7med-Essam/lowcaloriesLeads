@@ -13,7 +13,7 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ["show_home"],
+      permission: ['show_home'],
     },
   },
   {
@@ -22,7 +22,7 @@ const routes: Routes = [
       import('./modules/auth/auth.module').then((m) => m.AuthModule),
     canActivate: [PermissionGuard],
     data: {
-      permission: [""],
+      permission: [''],
     },
   },
   {
@@ -30,8 +30,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/survey/survey.module').then((m) => m.SurveyModule),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["show_inputs"],
+    data: {
+      permission: ['show_inputs'],
     },
   },
   {
@@ -39,8 +39,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/leads/leads.module').then((m) => m.LeadsModule),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["show_leads"],
+    data: {
+      permission: ['show_leads'],
     },
   },
   {
@@ -48,8 +48,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/dislike/dislike.module').then((m) => m.DislikeModule),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["show_dislike"],
+    data: {
+      permission: ['show_dislike'],
     },
   },
   {
@@ -57,8 +57,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/clinic/clinic.module').then((m) => m.ClinicModule),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["create_clinic"],
+    data: {
+      permission: ['create_clinic'],
     },
   },
   {
@@ -68,8 +68,8 @@ const routes: Routes = [
         (m) => m.AgentTargetModule
       ),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["show_target"],
+    data: {
+      permission: ['show_target'],
     },
   },
   {
@@ -79,8 +79,8 @@ const routes: Routes = [
         (m) => m.ComplaintsModule
       ),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["show_complaints"],
+    data: {
+      permission: ['show_complaints'],
     },
   },
   {
@@ -88,8 +88,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/refund/refund.module').then((m) => m.RefundModule),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["show_refund"],
+    data: {
+      permission: ['show_refund'],
     },
   },
   {
@@ -97,26 +97,41 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/calls/calls.module').then((m) => m.CallsModule),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["show_calls"],
+    data: {
+      permission: ['show_calls'],
     },
   },
   {
     path: 'paymentlink',
     loadChildren: () =>
-      import('./modules/paymentlink/paymentlink.module').then((m) => m.PaymentlinkModule),
+      import('./modules/payment/payment.module').then(
+        (m) => m.PaymentModule
+      ),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["create_paymentlink"],
+    data: {
+      permission: ['create_paymentlink'],
+    },
+  },
+  {
+    path: 'paymentbranch',
+    loadChildren: () =>
+      import('./modules/payment/payment.module').then(
+        (m) => m.PaymentModule
+      ),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['createPayment_Branches'],
     },
   },
   {
     path: 'subscriptions',
     loadChildren: () =>
-      import('./modules/subscriptions/subscriptions.module').then((m) => m.SubscriptionsModule),
+      import('./modules/subscriptions/subscriptions.module').then(
+        (m) => m.SubscriptionsModule
+      ),
     canActivate: [PermissionGuard],
-     data: {
-      permission: ["show_subscription"],
+    data: {
+      permission: ['show_subscription'],
     },
   },
   { path: '**', component: Error404Component },

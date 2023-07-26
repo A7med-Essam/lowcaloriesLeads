@@ -269,7 +269,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     { name: 'plan', status: false },
     { name: 'date', status: false },
     { name: 'note', status: false },
-    { name: 'agent_uploaded', status: false },
+    { name: 'agent_uploaded', status: true },
     { name: 'created_at', status: false },
     { name: 'assigned_agent', status: true },
   ];

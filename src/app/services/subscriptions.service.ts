@@ -236,6 +236,7 @@ export interface SubscriptionDetails {
   created_date:                      Date;
   created_time:                      number;
   total_price_without_vat:           number;
+  total_with_vat:                    number;
   discount_amount:                   number;
   total_after_discount:              number;
   vat_amount:                        number;

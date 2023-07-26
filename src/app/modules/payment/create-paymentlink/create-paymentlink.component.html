@@ -1,6 +1,9 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center">
-        <h2>Create Payment Branch</h2>
+        <h2>Create Payment Link</h2>
+        <div>
+            <button class="btn btn-success" [disabled]="!createGiftCodePermission" (click)="displayGiftcodeModal()">Create Gift Code</button>
+        </div>
     </div>
     <hr>
     <form [formGroup]="paymentForm" (ngSubmit)='createPaymentLink(paymentForm)'>
@@ -20,8 +23,8 @@
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Phone Number</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='phone_number' maxlength="10"
-                (blur)="getEmailByMobile(paymentForm.get('phone_number')?.value)"   
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                    (blur)="getEmailByMobile(paymentForm.get('phone_number')?.value)"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('phone_number')?.touched &&
                 paymentForm.get('phone_number')?.hasError('required')">This field is required.</small>
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('phone_number')?.touched &&
@@ -65,7 +68,7 @@
                 paymentForm.get('gender')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
-            <div class="col-12 my-3"  [class.col-md-6]="paymentForm.get('program_type')?.value">
+            <div class="col-12 my-3" [class.col-md-6]="paymentForm.get('program_type')?.value">
                 <label for="">SELECT YOUR PROGRAM TYPE</label>
                 <div class="d-flex flex-wrap">
                     <div class="flex align-items-center m-3" *ngFor="let obj of paymentDetails?.Programs | keyvalue">
@@ -241,6 +244,46 @@
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('start_date')?.touched &&
                 paymentForm.get('start_date')?.hasError('required')">This field is required.</small>
             </div>
+            <hr>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">EXCHANGE PAYMENT LINK?</label>
+                <div class="d-flex flex-wrap">
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="exchange_paymentLink" value="yes" inputId="EXCHANGE_YES">
+                        </p-radioButton>
+                        <label class="mx-1" for="EXCHANGE_YES">YES</label>
+                    </div>
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="exchange_paymentLink" value="no" inputId="EXCHANGE_NO">
+                        </p-radioButton>
+                        <label class="mx-1" for="EXCHANGE_NO">NO</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 my-3" *ngIf="exchangeStatus">
+                <label for="">Branches</label>
+                <p-dropdown [options]="paymentDetails?.branches == undefined ?[]:paymentDetails.branches"
+                    formControlName='branch_paid_on_id' appendTo="body" styleClass="w-100" placeholder="Select Branch"
+                    optionLabel="name" optionValue="id" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="paymentForm.get('branch_paid_on_id')?.touched &&
+                paymentForm.get('branch_paid_on_id')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-2" *ngIf="exchangeStatus">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">INVOICE
+                    PAID PICTURE</label>
+                <input (change)="uploadFile($event)"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="file_input" type="file" accept="image/*">
+            </div>
+            <div class="col-12" *ngIf="PaymentLink">
+                <div class="mb-2 mt-4 d-flex justify-content-between">
+                    <label>PAYMENT LINK</label>
+                    <label class="text-primary pointer" (click)="copyMessage(PaymentUrl)"><small>Copy</small></label>
+                </div>
+                <input type="text" pInputText [style]="{'width':'100%'}" [value]="PaymentLink" disabled readonly
+                    #PaymentUrl />
+            </div>
             <div class="col-12">
                 <div class="mb-2 mt-4 d-flex justify-content-between">
                     <label>Calc Price</label>
@@ -253,10 +296,50 @@
             </div>
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
-                    <span *ngIf="!creatingStatus">Print Invoice</span>
-                    <span *ngIf="creatingStatus">Printing...<i class="fas fa-spinner fa-spin"></i></span>
+                    <span *ngIf="!creatingStatus">Create</span>
+                    <span *ngIf="creatingStatus">Creating...<i class="fas fa-spinner fa-spin"></i></span>
                 </button>
             </div>
         </div>
     </form>
 </div>
+
+<p-dialog header="Create Manager Gift Code" [(visible)]="giftcodeModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <form [formGroup]="giftcodeForm" (ngSubmit)='createGiftCode(giftcodeForm)'>
+        <div class="row mx-0">
+            <div class="col-12 my-3">
+                <label for="">Types</label>
+                <p-dropdown [options]="types"  formControlName='type' styleClass="w-100" placeholder="Select Type">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Code</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='code' />
+                <small class="text-danger ms-1" *ngIf="giftcodeForm.get('code')?.touched &&
+                giftcodeForm.get('code')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Expired At</label>
+                <p-calendar [minDate]="gitCodeMinExpireAt" [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='expired_at'></p-calendar>
+                <small class="text-danger ms-1" *ngIf="giftcodeForm.get('expired_at')?.touched &&
+                giftcodeForm.get('expired_at')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3" *ngIf="giftcodeForm.get('type')?.value == 'value'">
+                <label for="">Value</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='value' />
+                <small class="text-danger ms-1" *ngIf="giftcodeForm.get('value')?.touched &&
+                giftcodeForm.get('value')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3" *ngIf="giftcodeForm.get('type')?.value == 'percentage'">
+                <label for="">Percentage</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='percentage' />
+                <small class="text-danger ms-1" *ngIf="giftcodeForm.get('percentage')?.touched &&
+                giftcodeForm.get('percentage')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-success w-100">Create</button>
+            </div>
+        </div>
+    </form>
+</p-dialog>

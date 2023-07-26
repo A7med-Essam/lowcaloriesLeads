@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PermissionGuard } from 'src/app/core/permission.guard';
 import { CreatePaymentlinkComponent } from './create-paymentlink/create-paymentlink.component';
-import { PrintPaymentlinkComponent } from './print-paymentlink/print-paymentlink.component';
+import { PrintPaymentbranchComponent } from './print-paymentbranch/print-paymentbranch.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'create', pathMatch: 'full' },
@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'print',
-    component: PrintPaymentlinkComponent,
+    component: PrintPaymentbranchComponent,
     canActivate: [PermissionGuard],
     data: {
       permission: ['createPayment_Branches'],
@@ -26,6 +26,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PaymentlinkRoutingModule { }
+export class PaymentRoutingModule {}
