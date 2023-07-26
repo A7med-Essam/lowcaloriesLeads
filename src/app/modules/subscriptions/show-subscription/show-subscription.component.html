@@ -158,14 +158,29 @@
                                 {{ sub[column.key]?.area_id }}
                             </div>
                             <div *ngSwitchCase="'code'">
-                                {{ sub[column.key]?.code }}
+                                <div [ngSwitch]="sub[column.key]">
+                                    <div *ngSwitchCase="null">
+                                        <span class="text-danger">No Code</span>
+                                    </div>
+                                    <div *ngSwitchDefault>
+                                        {{sub[column.key]?.code}}
+                                    </div>
+                                </div>
                             </div>
                             <div *ngSwitchCase="'discount'">
-                                <div *ngIf="sub[column.key]?.type == 'value'">
-                                    {{sub[column.key]?.value+" AED"}}
-                                </div>
-                                <div *ngIf="sub[column.key]?.type == 'percentage'">
-                                    {{sub[column.key]?.percentage + "%"}}
+                                <div [ngSwitch]="sub[column.key]?.type.toLowerCase()">
+                                    <div *ngSwitchCase="'value'">
+                                        {{sub[column.key]?.value+" AED"}}
+                                    </div>
+                                    <div *ngSwitchCase="'percentage'">
+                                        {{sub[column.key]?.percentage + "%"}}
+                                    </div>
+                                    <div *ngSwitchCase="null">
+                                        <span class="text-danger">No Discount</span>
+                                    </div>
+                                    <div *ngSwitchDefault>
+                                        {{sub[column.key]?.percentage + "%"}}
+                                    </div>
                                 </div>
                             </div>
                             <div *ngSwitchCase="'mode'">

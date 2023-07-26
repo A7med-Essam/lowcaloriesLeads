@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Checkbox } from 'primeng/checkbox';
 import { TableCheckbox } from 'primeng/table';
-import { PaymentlinkService } from 'src/app/services/paymentlink.service';
+import { GiftCode, PaymentlinkService } from 'src/app/services/paymentlink.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -472,9 +472,15 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     });
   }
 
-  getUniquePercentages(giftcode: any[]): string[] {
+  getUniquePercentages(giftcode: GiftCode[]): string[] {
     const uniquePercentages = [
-      ...new Set(giftcode.map((item) => item.percentage)),
+      ...new Set(giftcode.map((item) => {
+        if (item.type == 'value') {
+          return item.value + " AED"
+        }else{
+          return item.percentage + "%"
+        }
+      })),
     ];
     return uniquePercentages;
   }
@@ -583,6 +589,8 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       sortKey: 'codes[percentage]',
     },
     { name: 'Version', status: false, key: 'version', sortKey: 'version' },
+    { name: 'Price', status: false, key: 'price', sortKey: 'price' },
+    { name: 'Bag', status: false, key: 'bag', sortKey: 'bag' },
   ];
 
   getFilterColumns() {

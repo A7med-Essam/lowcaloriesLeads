@@ -14,7 +14,6 @@ import { GuardService } from 'src/app/services/guard.service';
 })
 export class SubscriptionDetailsComponent implements OnInit {
   sub!: SubscriptionDetails;
-  // columns: any[] = [];
 
   constructor(
     private _Router: Router,
@@ -44,10 +43,6 @@ export class SubscriptionDetailsComponent implements OnInit {
       this._GuardService.getPermissionStatus('print_subscription');
   }
 
-  // capitalize(str: string): string {
-  //   return str.charAt(0).toUpperCase() + str.slice(1);
-  // }
-
   backDetailsBtn() {
     this._Router.navigate(['subscriptions/show']);
   }
@@ -61,11 +56,7 @@ export class SubscriptionDetailsComponent implements OnInit {
     this._SubscriptionsService.getSubscriptionDetails(id).subscribe({
       next:res=>{
         if (res.status) {
-          this.sub = res.data
-          // this.columns = Object.keys(res.data).map((key) => ({
-          //   label: this.capitalize(key.replace(/_/g, ' ')),
-          //   key: key,
-          // }));
+          this.sub = this.transformObjects(res.data);
         }
         else{
           this._Router.navigate(['subscriptions/show']);
@@ -75,6 +66,14 @@ export class SubscriptionDetailsComponent implements OnInit {
         this._Router.navigate(['subscriptions/show']);
       }
     })
+  }
+
+  transformObjects(arr: any) {
+      if (arr.gift_code) {
+        arr.codes = arr.gift_code;
+        delete arr.gift_code;
+      }
+    return arr;
   }
 
   // ===============================================================PRINT PDF=====================================================================
