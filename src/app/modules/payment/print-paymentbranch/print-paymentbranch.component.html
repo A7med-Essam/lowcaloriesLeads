@@ -1,9 +1,6 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center">
         <h2>Create Payment Branch</h2>
-        <div>
-            <button class="btn btn-success" [disabled]="!createGiftCodePermission" (click)="displayGiftcodeModal()">Create Gift Code</button>
-        </div>
     </div>
     <hr>
     <form [formGroup]="paymentForm" (ngSubmit)='createPaymentLink(paymentForm)'>
@@ -239,11 +236,17 @@
             </div>
             <div class="col-xl-3 col-md-6 col-12 my-3">
                 <label for="">Start Date</label>
-                <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='start_date'>
+                <p-calendar [minDate]="tomorrow" [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='start_date'>
                 </p-calendar>
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('start_date')?.touched &&
                 paymentForm.get('start_date')?.hasError('required')">This field is required.</small>
             </div>
+            <div class="col-12 my-3">
+                <div class="text-end">
+                    <button class="btn btn-success" [disabled]="!createGiftCodePermission" (click)="displayGiftcodeModal()">Create Manager Gift Code</button>
+                </div>
+            </div>
+            <hr>
             <div class="col-12">
                 <div class="mb-2 mt-4 d-flex justify-content-between">
                     <label>Calc Price</label>
@@ -281,7 +284,7 @@
             </div>
             <div class="col-12 my-3">
                 <label for="">Expired At</label>
-                <p-calendar [minDate]="gitCodeMinExpireAt" [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='expired_at'></p-calendar>
+                <p-calendar [minDate]="tomorrow" [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='expired_at'></p-calendar>
                 <small class="text-danger ms-1" *ngIf="giftcodeForm.get('expired_at')?.touched &&
                 giftcodeForm.get('expired_at')?.hasError('required')">This field is required.</small>
             </div>

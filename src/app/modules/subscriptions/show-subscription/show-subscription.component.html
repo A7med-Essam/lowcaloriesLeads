@@ -161,7 +161,12 @@
                                 {{ sub[column.key]?.code }}
                             </div>
                             <div *ngSwitchCase="'discount'">
-                                {{ sub[column.key]?.percentage }}
+                                <div *ngIf="sub[column.key]?.type == 'value'">
+                                    {{sub[column.key]?.value+" AED"}}
+                                </div>
+                                <div *ngIf="sub[column.key]?.type == 'percentage'">
+                                    {{sub[column.key]?.percentage + "%"}}
+                                </div>
                             </div>
                             <div *ngSwitchCase="'mode'">
                                 <p-tag [severity]="getSeverity(sub[column.key])" [value]="getMode(sub[column.key])">

@@ -477,7 +477,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
   giftcodeForm!: FormGroup;
   types: string[] = ['percentage', 'value'];
   giftcodeModal: boolean = false;
-  gitCodeMinExpireAt:Date = new Date(new Date().setDate(new Date().getDate() + 1))
+  tomorrow:Date = new Date(new Date().setDate(new Date().getDate() + 1))
 
   displayGiftcodeModal() {
     if (this.createGiftCodePermission) {
