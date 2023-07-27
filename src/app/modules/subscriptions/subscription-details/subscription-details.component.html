@@ -8,7 +8,9 @@
                             <h4 class="card-title">Client Info</h4>
                             <div>
                                 <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
-                                    (click)="print(sub)">Print</button>
+                                    (click)="printInvoice(sub)">Print Invoice</button>
+                                <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
+                                    (click)="print()">Print</button>
                                 <button class="btn btn-dark mx-1" (click)="backDetailsBtn()">Back</button>
                             </div>
                         </div>
@@ -188,7 +190,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td>DISCOUNT <sup *ngIf="sub?.codes && sub?.codes?.type == 'percentage'">({{sub.codes.percentage}}%)</sup></td>
+                                            <td>DISCOUNT <sup
+                                                    *ngIf="sub?.codes && sub?.codes?.type == 'percentage'">({{sub.codes.percentage}}%)</sup>
+                                            </td>
                                             <td class="text-danger">-{{ sub.discount_amount.toFixed(3) }}</td>
                                         </tr>
                                         <tr>
