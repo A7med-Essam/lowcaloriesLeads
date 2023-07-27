@@ -13,7 +13,10 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Checkbox } from 'primeng/checkbox';
 import { TableCheckbox } from 'primeng/table';
-import { GiftCode, PaymentlinkService } from 'src/app/services/paymentlink.service';
+import {
+  GiftCode,
+  PaymentlinkService,
+} from 'src/app/services/paymentlink.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -443,21 +446,24 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         // this.emirates = res.data.emirates;
         this.emirates = res.data.emirates.map((c) => {
           return {
-            id : c.id,
-            en_name : `${c.en_name} - (${c.type})`,
-            ar_name : c.ar_name,
-            inbody_price : c.inbody_price,
-            type : c.type,
+            id: c.id,
+            en_name: `${c.en_name} - (${c.type})`,
+            ar_name: c.ar_name,
+            inbody_price: c.inbody_price,
+            type: c.type,
           };
         });
         this.giftCodes = res.data.GiftCodes.map((c) => {
           return {
-            code:c.type == "percentage" ? `${c.code} (${c.percentage}%)` : `${c.code} (${c.value} AED)`,
-            id:c.id,
-            percentage:c.percentage,
-            value:c.value,
-            type: c.type
-          }
+            code:
+              c.type == 'percentage'
+                ? `${c.code} (${c.percentage}%)`
+                : `${c.code} (${c.value} AED)`,
+            id: c.id,
+            percentage: c.percentage,
+            value: c.value,
+            type: c.type,
+          };
         });
       }
     });
@@ -474,13 +480,15 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
 
   getUniquePercentages(giftcode: GiftCode[]): string[] {
     const uniquePercentages = [
-      ...new Set(giftcode.map((item) => {
-        if (item.type == 'value') {
-          return item.value + " AED"
-        }else{
-          return item.percentage + "%"
-        }
-      })),
+      ...new Set(
+        giftcode.map((item) => {
+          if (item.type == 'value') {
+            return item.value + ' AED';
+          } else {
+            return item.percentage + '%';
+          }
+        })
+      ),
     ];
     return uniquePercentages;
   }
@@ -726,4 +734,5 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       });
     }
   }
+
 }

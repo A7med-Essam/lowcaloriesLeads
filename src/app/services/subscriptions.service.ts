@@ -212,7 +212,7 @@ export interface SubscriptionDetails {
   cutlery:                           null;
   bag:                               number;
   total_price:                       number;
-  delivery_starting_day:             Date;
+  delivery_starting_day:             string;
   days_of_week:                      string;
   dislike:                           string;
   dis_like_user:                     string;
@@ -305,7 +305,7 @@ export interface User {
   status:              number;
   type:                string;
   gender:              string;
-  birthday:            Date;
+  birthday:            string;
   email:               string;
   height:              string;
   Weight:              string;
