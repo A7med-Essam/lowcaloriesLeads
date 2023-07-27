@@ -39,11 +39,13 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
     this.getPermission();
     this.createFilterForm();
     this.getLeads();
+    this.getReasons();
   }
 
   exportPermission: boolean = false;
   answerPermission: boolean = false;
   createLeadsPermission: boolean = false;
+  updatePermission: boolean = false;
 
   getPermission() {
     this.exportPermission =
@@ -52,7 +54,10 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
       this._GuardService.getPermissionStatus('answer_leads');
       this.createLeadsPermission =
       this._GuardService.getPermissionStatus('create_leads');
+    this.updatePermission = this._GuardService.getPermissionStatus('update_leads');
+
   }
+
 
   getLeads(page: number = 1) {
     if (this.appliedFilters) {
@@ -239,4 +244,100 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
   resetFields() {
     this.filterForm.reset();
   }
+      // ========================================================sort========================================================
+      sort(event: any) {
+        const sortField = event.sortField;
+        const sortOrder = event.sortOrder === 1 ? 1 : -1;
+        const hasBrackets = this.hasBrackets(sortField);
+        this.leads?.sort((a: any, b: any) => {
+          const getValue = (obj: any, key: string) => {
+            if (hasBrackets) {
+              const [keyWithoutBrackets] = key.match(/\[(.*?)\]/) || [];
+              return obj?.[key.replace(/\s*\[.*?\]/, '')]?.[
+                keyWithoutBrackets?.replace(/\[|\]/g, '')
+              ];
+            } else {
+              return obj?.[key];
+            }
+          };
+    
+          const aValue = getValue(a, sortField);
+          const bValue = getValue(b, sortField);
+          if (aValue === null || aValue === undefined) {
+            return sortOrder;
+          }
+          if (bValue === null || bValue === undefined) {
+            return -sortOrder;
+          }
+          if (
+            typeof aValue === 'string' &&
+            Date.parse(aValue) &&
+            typeof bValue === 'string' &&
+            Date.parse(bValue)
+          ) {
+            const aDate = new Date(aValue);
+            const bDate = new Date(bValue);
+            return (aDate.getTime() - bDate.getTime()) * sortOrder;
+          } else if (
+            !isNaN(parseFloat(aValue)) &&
+            typeof parseFloat(aValue) === 'number' &&
+            !isNaN(parseFloat(bValue)) &&
+            typeof parseFloat(bValue) === 'number'
+          ) {
+            return (aValue - bValue) * sortOrder;
+          } else if (typeof aValue === 'string' && typeof bValue === 'string') {
+            return aValue.localeCompare(bValue) * sortOrder;
+          } else if (Array.isArray(aValue) && Array.isArray(bValue)) {
+            return (aValue.length - bValue.length) * sortOrder;
+          } else {
+            return 0;
+          }
+        });
+      }
+    
+      hasBrackets(input: string) {
+        return /\[.*?\]/.test(input);
+      }
+        // ****************************************************update************************************************************************
+        status: string[] = ['open','closed','follow','lost'];
+
+      updateRow(status:string,reason:string){
+        if (this.updatePermission) {      
+          const data = {
+           lead_id:this.currentEditRow.id,
+           status:status.toLowerCase(),
+           lost_reasons:status == 'lost'? reason:null
+          }
+          this._SurveyService.updateLeadStatus(data).subscribe(res=>{
+            this.currentEditReason = null;
+            this.getLeads();
+            this.updateModal = false;
+            // this.leads = this.leads.map((e:any)=> {
+            //   if (e.id == res.data.id) {
+            //     e = res.data
+            //   }
+            //   return e
+            // })
+          })
+        }
+      }
+
+      updateModal:boolean = false;
+      currentEditRow:any;
+      currentEditStatus:any;
+      currentEditReason:any;
+      displayUpdateModal(lead:any){
+        if (this.updatePermission) {
+          this.currentEditRow = lead
+          this.currentEditStatus = lead.status
+          this.updateModal = true;
+        }
+      }
+
+      reasons:any[]=[]
+      getReasons() {
+        this._SurveyService.lostReasons().subscribe((res) => {
+          this.reasons = res.data;
+        });
+      }
 }

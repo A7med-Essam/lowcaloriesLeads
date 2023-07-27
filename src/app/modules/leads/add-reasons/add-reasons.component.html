@@ -1,0 +1,12 @@
+<div class="container">
+    <h1>Insert Reason</h1>
+        <div class="row mx-0">
+            <div class="col-12 my-3">
+                <label for="">Reason</label>
+                <input type="text" pInputText ngClass="w-100"  [(ngModel)]="selectedReason"/>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100" (click)="addReason(selectedReason)">Insert</button>
+            </div>
+        </div>
+</div>

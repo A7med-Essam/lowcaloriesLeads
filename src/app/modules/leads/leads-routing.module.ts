@@ -7,6 +7,8 @@ import { ShowLeadComponent } from './show-lead/show-lead.component';
 import { AnswerLeadComponent } from './answer-lead/answer-lead.component';
 import { PermissionGuard } from 'src/app/core/permission.guard';
 import { CreateLeadQuestionsComponent } from './create-lead-questions/create-lead-questions.component';
+import { AddReasonsComponent } from './add-reasons/add-reasons.component';
+import { ShowReasonsComponent } from './show-reasons/show-reasons.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'show', pathMatch: 'full' },
@@ -56,6 +58,22 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       permission: ['answer_leads'],
+    },
+  },
+  {
+    path: 'reasons',
+    component: ShowReasonsComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['reasons_leads'],
+    },
+  },
+  {
+    path: 'add-reason',
+    component: AddReasonsComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['reasons_leads'],
     },
   },
 ];

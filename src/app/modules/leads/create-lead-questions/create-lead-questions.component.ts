@@ -232,7 +232,7 @@ export class CreateLeadQuestionsComponent implements OnInit {
     });
   }
 
-  updatedLead = this._SurveyService.updateLead.value;
+  updatedLead = this._SurveyService.currentUpdatedLead.value;
   ngOnInit() {
     if (this.updatedLead) {
       this.lead_id = this.updatedLead.id;

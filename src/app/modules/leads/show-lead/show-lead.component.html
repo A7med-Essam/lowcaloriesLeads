@@ -10,15 +10,18 @@
 
 <div class="card">
     <p-table [value]="leads" [paginator]="true" [rows]="PaginationInfo?.per_page" [totalRecords]="PaginationInfo?.total"
-        [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
+        [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll" (onLazyLoad)="sort($event)"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center">Name</th>
-                <th class="text-center">Mobile</th>
-                <th class="text-center">Email</th>
-                <th class="text-center">Agent Assigned</th>
-                <th class="text-center">Created By</th>
+                <th class="text-center" pSortableColumn="customer_name">Name <p-sortIcon field="customer_name"></p-sortIcon></th>
+                <th class="text-center" pSortableColumn="customer_mobile">Mobile  <p-sortIcon field="customer_mobile"></p-sortIcon></th>
+                <th class="text-center" pSortableColumn="customer_email">Email  <p-sortIcon field="customer_email"></p-sortIcon></th>
+                <th class="text-center" pSortableColumn="status">Status  <p-sortIcon field="status"></p-sortIcon></th>
+                <th class="text-center" pSortableColumn="platforms">Platform  <p-sortIcon field="platforms"></p-sortIcon></th>
+                <th class="text-center" pSortableColumn="type">Type  <p-sortIcon field="type"></p-sortIcon></th>
+                <th class="text-center" pSortableColumn="lead_users">Agent Assigned  <p-sortIcon field="lead_users"></p-sortIcon></th>
+                <th class="text-center" pSortableColumn="user_created[name]">Created By  <p-sortIcon field="user_created[name]"></p-sortIcon></th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -27,6 +30,9 @@
                 <td class="text-center">{{lead?.customer_name}}</td>
                 <td class="text-center">{{lead?.customer_mobile}}</td>
                 <td class="text-center">{{lead?.customer_email}}</td>
+                <td class="text-center">{{lead?.status}}</td>
+                <td class="text-center">{{lead?.platforms}}</td>
+                <td class="text-center">{{lead?.type}}</td>
                 <td class="text-center">
                     <div *ngFor="let user of lead?.lead_users">
                         {{user.user.name}}
@@ -36,6 +42,8 @@
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(lead)"
                     class="m-1 p-button-sm"></button>
+                    <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdateModal(lead)"
+                        class="m-1 p-button-sm p-button-warning"></button>
                     <button pButton type="button" icon="pi pi-check-square" (click)="answerLead(lead?.id)"
                     [disabled]="!answerPermission"  class="m-1 p-button-sm p-button-success"></button>
                 </td>
@@ -116,6 +124,33 @@
                     Reset Filter
                 </button>
             </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Update Lead Status Modal" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="">Status</label>
+                <p-dropdown [options]="status" appendTo="body" styleClass="w-100" [(ngModel)]="currentEditStatus" placeholder="Select Status">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-2" *ngIf="currentEditStatus == 'lost'">
+                <label for="">reason</label>
+                <p-multiSelect [options]="reasons" appendTo="body" optionLabel="name" optionValue="name" 
+                defaultLabel="Select Reasons" styleClass="w-100" display="chip" [(ngModel)]="currentEditReason">
+                </p-multiSelect>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div>
+            <button class="btn btn-primary" (click)="updateRow(currentEditStatus,currentEditReason)" 
+                [disabled]="(currentEditStatus == 'lost' && !currentEditReason) ||  (currentEditStatus != 'lost' && !currentEditStatus)">
+                Update Status
+            </button>
         </div>
     </ng-template>
 </p-dialog>

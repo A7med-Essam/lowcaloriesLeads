@@ -24,6 +24,7 @@ export class SidebarComponent implements OnInit {
   assignCallsPermission: boolean = false;
   showDislikeReasonsPermission: boolean = false;
   showRefundReasonsPermission: boolean = false;
+  showLeadReasonsPermission: boolean = false;
   createPaymentLinkPermission: boolean = false;
   createPaymentBranchesPermission: boolean = false;
   showSubscriptionPermission: boolean = false;
@@ -76,6 +77,7 @@ export class SidebarComponent implements OnInit {
       'show_subscription'
     );
     this.showRefundReasonsPermission = this._GuardService.getPermissionStatus('reasons_refund');
+    this.showLeadReasonsPermission = this._GuardService.getPermissionStatus('reasons_leads');
     this.createPaymentLinkPermission = this._GuardService.getPermissionStatus('create_paymentlink');
     this.createPaymentBranchesPermission = this._GuardService.getPermissionStatus('createPayment_Branches');
   }

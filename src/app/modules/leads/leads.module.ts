@@ -22,6 +22,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { AnswerLeadComponent } from './answer-lead/answer-lead.component';
 import { StepsModule } from 'primeng/steps';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ShowReasonsComponent } from './show-reasons/show-reasons.component';
+import { AddReasonsComponent } from './add-reasons/add-reasons.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   CheckboxModule,
@@ -36,6 +39,7 @@ const APP_PRIMENG_MODULE = [
   InputTextareaModule,
   StepsModule,
   RadioButtonModule,
+  ConfirmDialogModule
 ];
 
 @NgModule({
@@ -46,6 +50,8 @@ const APP_PRIMENG_MODULE = [
     LeadReminderComponent,
     CreateLeadQuestionsComponent,
     AnswerLeadComponent,
+    ShowReasonsComponent,
+    AddReasonsComponent,
   ],
   imports: [
     CommonModule,

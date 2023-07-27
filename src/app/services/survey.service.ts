@@ -18,7 +18,7 @@ export class SurveyService {
   filterId: BehaviorSubject<number> = new BehaviorSubject(0);
   leadId: BehaviorSubject<number> = new BehaviorSubject(0);
   lead: BehaviorSubject<any> = new BehaviorSubject(null);
-  updateLead: BehaviorSubject<any> = new BehaviorSubject(null);
+  currentUpdatedLead: BehaviorSubject<any> = new BehaviorSubject(null);
   lead_filter: BehaviorSubject<any> = new BehaviorSubject(null);
 
   deleteRow(id: number): Observable<any> {
@@ -169,6 +169,21 @@ export class SurveyService {
 
   getPlatforms(): Observable<any> {
     return this._ApiConfigService.postReq3(`platforms`, '');
+  }
+
+
+  // =============================UPDATE STATUS============================================
+  updateLeadStatus(data:any): Observable<any> {
+    return this._ApiConfigService.postReq3(`leads/updateLead`, data);
+  }
+  lostReasons(): Observable<any> {
+    return this._ApiConfigService.postReq3(`lostReasons`, '');
+  }
+  addLostReasons(name:string): Observable<any> {
+    return this._ApiConfigService.postReq3(`addLostReasons`, {name});
+  }
+  deleteLostReason(lost_reason_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`deleteLostReason`, {lost_reason_id});
   }
 
 }

@@ -71,6 +71,12 @@
           <span>Lead Inputs</span>
         </a>
       </li>
+      <li *ngIf="showLeadReasonsPermission">
+        <a routerLink="refund/reasons" routerLinkActive="active">
+          <i class="fas fa-list"></i>
+          <span>Lead Reasons</span>
+        </a>
+      </li>
       <hr>
     </ul>
     <!-- ================================================CALLS================================================== -->

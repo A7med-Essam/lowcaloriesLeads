@@ -57,15 +57,15 @@ export class AnswerLeadComponent implements OnInit, OnDestroy {
 
   assignPermission: boolean = false;
   replayPermission: boolean = false;
-  updatePermission: boolean = false;
+  // updatePermission: boolean = false;
 
   getPermission() {
     this.assignPermission =
       this._GuardService.getPermissionStatus('assign_leads');
     this.replayPermission =
       this._GuardService.getPermissionStatus('replay_leads');
-    this.updatePermission =
-      this._GuardService.getPermissionStatus('update_leads');
+    // this.updatePermission =
+    //   this._GuardService.getPermissionStatus('update_leads');
   }
 
   lead: any;
@@ -105,10 +105,10 @@ export class AnswerLeadComponent implements OnInit, OnDestroy {
   }
 
   displayUpdate(lead: any) {
-    if (this.updatePermission) {
-      this._SurveyService.updateLead.next(lead);
-      this._Router.navigate(['leads/update']);
-    }
+    // if (this.updatePermission) {
+    //   this._SurveyService.currentUpdatedLead.next(lead);
+    //   this._Router.navigate(['leads/update']);
+    // }
   }
 
   ngOnDestroy(): void {
