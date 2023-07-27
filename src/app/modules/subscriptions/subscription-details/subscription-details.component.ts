@@ -416,7 +416,37 @@ export class SubscriptionDetailsComponent implements OnInit {
             theme: 'grid',
           });
           doc.line(10, 203, 200, 203); // (x1, y1, x2, y2) Horizontal
-  
+        // =================================TABLE=================================
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold'); // Set font and style to bold
+        doc.setTextColor('#545454'); // Set text color to black
+        doc.text('Payment Info', 15, 210);
+
+        let columns: any[] = [
+        { title:`TOTAL PRICE WITHOUT VAT (${(this.sub?.subscriptions_note)})`, dataKey:  this.sub?.total_price_without_vat.toFixed(3)},
+        { title: `DISCOUNT (${this.sub?.codes.percentage} %)`, dataKey:  -this.sub?.discount_amount.toFixed(3)},
+        { title: "NET TOTAL WITHOUT VAT", dataKey:  this.sub?.total_after_discount.toFixed(3) },
+        { title: "VAT", dataKey:  this.sub?.vat_amount.toFixed(3)},
+        { title: "REFUNDABLE SECURITY AMOUNT", dataKey:  this.sub?.refundable_security_amount},
+        { title: "GRAND TOTAL", dataKey:  this.sub?.grand_total},
+        ];
+
+               // columnStyles:{0: {textColor: [30, 212, 145],fillColor:[3, 146, 48]}},
+        // headStyles :{lineWidth: 1,fillColor: [30, 212, 145],textColor: [232, 252, 245],}
+
+      autoTable(doc, 
+        { body: columns ,
+           startY:215,
+           didParseCell: function (data) {
+            if (data.row.index === 5) {
+              data.cell.styles.textColor = [3, 146, 48];
+            }
+            else if (data.row.index === 1) {
+              data.cell.styles.textColor = [239, 67, 67];
+            }
+          },
+        });
+
       doc.save('Subscription.pdf');
     }
 }
