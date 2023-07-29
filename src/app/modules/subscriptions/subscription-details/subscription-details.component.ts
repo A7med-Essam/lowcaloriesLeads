@@ -136,30 +136,64 @@ export class SubscriptionDetailsComponent implements OnInit {
         { title: 'Delivery Days', dataKey: this.sub?.days_of_week },
       ];
 
-      let columns4: any[] = [
-        {
-          title: `TOTAL PRICE WITHOUT VAT ${this.sub?.subscriptions_note}`,
-          dataKey: this.sub?.total_price_without_vat.toFixed(3),
-        },
-        {
-          title: `DISCOUNT ${
-            this.sub?.codes?.percentage
-              ? '(' + this.sub?.codes?.percentage + '%)'
-              : ''
-          }`,
-          dataKey: -this.sub?.discount_amount.toFixed(3),
-        },
-        {
-          title: 'NET TOTAL WITHOUT VAT',
-          dataKey: this.sub?.total_after_discount.toFixed(3),
-        },
-        { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
-        {
-          title: 'REFUNDABLE SECURITY AMOUNT',
-          dataKey: this.sub?.refundable_security_amount,
-        },
-        { title: 'GRAND TOTAL', dataKey: this.sub?.grand_total },
-      ];
+      let columns4: any[] = [];
+
+      if (this.sub.version == 'v4') {
+        columns4 = [
+          {
+            title: `TOTAL PRICE WITHOUT VAT ${this.sub?.subscriptions_note}`,
+            dataKey: this.sub?.total_price_without_vat.toFixed(3),
+          },
+          {
+            title: `DISCOUNT ${
+              this.sub?.codes?.percentage
+                ? '(' + this.sub?.codes?.percentage + '%)'
+                : ''
+            }`,
+            dataKey: -this.sub?.discount_amount.toFixed(3),
+          },
+          {
+            title: 'NET TOTAL WITHOUT VAT',
+            dataKey: this.sub?.total_after_discount.toFixed(3),
+          },
+          { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
+          {
+            title: 'REFUNDABLE SECURITY AMOUNT',
+            dataKey: this.sub?.refundable_security_amount,
+          },
+          { title: 'GRAND TOTAL', dataKey: this.sub?.grand_total },
+        ];
+      } else {
+        columns4 = [
+          {
+            title: `TOTAL PRICE WITHOUT VAT ${this.sub?.subscriptions_note}`,
+            dataKey: this.sub?.total_price_without_vat.toFixed(3),
+          },
+          { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
+          {
+            title: 'NET TOTAL WITH VAT',
+            dataKey: this.sub?.total_with_vat.toFixed(3),
+          },
+          {
+            title: `DISCOUNT ${
+              this.sub?.codes?.percentage
+                ? '(' + this.sub?.codes?.percentage + '%)'
+                : ''
+            }`,
+            dataKey: -this.sub?.discount_amount.toFixed(3),
+          },
+          {
+            title: 'NET TOTAL AFTER DISCOUNT',
+            dataKey: this.sub?.total_after_discount.toFixed(3),
+          },
+          {
+            title: 'REFUNDABLE SECURITY AMOUNT',
+            dataKey: this.sub?.refundable_security_amount,
+          },
+          { title: 'GRAND TOTAL', dataKey: this.sub?.grand_total },
+        ];
+      }
+
       columns1 = columns1.filter(
         (item) => item.dataKey !== null && item.dataKey !== undefined
       );
@@ -482,41 +516,109 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setTextColor('#545454'); // Set text color to black
       doc.text('Payment Info', 15, 210);
 
-      let columns: any[] = [
-        {
-          title: `TOTAL PRICE WITHOUT VAT (${this.sub?.subscriptions_note})`,
-          dataKey: this.sub?.total_price_without_vat.toFixed(3),
-        },
-        {
-          title: `DISCOUNT (${this.sub?.codes.percentage} %)`,
-          dataKey: -this.sub?.discount_amount.toFixed(3),
-        },
-        {
-          title: 'NET TOTAL WITHOUT VAT',
-          dataKey: this.sub?.total_after_discount.toFixed(3),
-        },
-        { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
-        {
-          title: 'REFUNDABLE SECURITY AMOUNT',
-          dataKey: this.sub?.refundable_security_amount,
-        },
-        { title: 'GRAND TOTAL', dataKey: this.sub?.grand_total },
-      ];
+      // let columns: any[] = [
+      //   {
+      //     title: `TOTAL PRICE WITHOUT VAT (${this.sub?.subscriptions_note})`,
+      //     dataKey: this.sub?.total_price_without_vat.toFixed(3),
+      //   },
+      //   {
+      //     title: `DISCOUNT (${this.sub?.codes.percentage} %)`,
+      //     dataKey: -this.sub?.discount_amount.toFixed(3),
+      //   },
+      //   {
+      //     title: 'NET TOTAL WITHOUT VAT',
+      //     dataKey: this.sub?.total_after_discount.toFixed(3),
+      //   },
+      //   { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
+      //   {
+      //     title: 'REFUNDABLE SECURITY AMOUNT',
+      //     dataKey: this.sub?.refundable_security_amount,
+      //   },
+      //   { title: 'GRAND TOTAL', dataKey: this.sub?.grand_total },
+      // ];
 
-      // columnStyles:{0: {textColor: [30, 212, 145],fillColor:[3, 146, 48]}},
-      // headStyles :{lineWidth: 1,fillColor: [30, 212, 145],textColor: [232, 252, 245],}
+      let columns: any[] = [];
 
-      autoTable(doc, {
-        body: columns,
-        startY: 215,
-        didParseCell: function (data) {
-          if (data.row.index === 5) {
-            data.cell.styles.textColor = [3, 146, 48];
-          } else if (data.row.index === 1) {
-            data.cell.styles.textColor = [239, 67, 67];
-          }
-        },
-      });
+      if (this.sub.version == 'v4') {
+        columns = [
+          {
+            title: `TOTAL PRICE WITHOUT VAT ${this.sub?.subscriptions_note}`,
+            dataKey: this.sub?.total_price_without_vat.toFixed(3),
+          },
+          {
+            title: `DISCOUNT ${
+              this.sub?.codes?.percentage
+                ? '(' + this.sub?.codes?.percentage + '%)'
+                : ''
+            }`,
+            dataKey: -this.sub?.discount_amount.toFixed(3),
+          },
+          {
+            title: 'NET TOTAL WITHOUT VAT',
+            dataKey: this.sub?.total_after_discount.toFixed(3),
+          },
+          { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
+          {
+            title: 'REFUNDABLE SECURITY AMOUNT',
+            dataKey: this.sub?.refundable_security_amount,
+          },
+          { title: 'GRAND TOTAL', dataKey: this.sub?.grand_total },
+        ];
+        autoTable(doc, {
+          body: columns,
+          startY: 215,
+          didParseCell: function (data) {
+            if (data.row.index === 5) {
+              data.cell.styles.textColor = [3, 146, 48];
+            } else if (data.row.index === 1) {
+              data.cell.styles.textColor = [239, 67, 67];
+            }
+          },
+        });
+      } else {
+        columns = [
+          {
+            title: `TOTAL PRICE WITHOUT VAT ${this.sub?.subscriptions_note}`,
+            dataKey: this.sub?.total_price_without_vat.toFixed(3),
+          },
+          { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
+          {
+            title: 'NET TOTAL WITH VAT',
+            dataKey: this.sub?.total_with_vat.toFixed(3),
+          },
+          {
+            title: `DISCOUNT ${
+              this.sub?.codes?.percentage
+                ? '(' + this.sub?.codes?.percentage + '%)'
+                : ''
+            }`,
+            dataKey: -this.sub?.discount_amount.toFixed(3),
+          },
+          {
+            title: 'NET TOTAL AFTER DISCOUNT',
+            dataKey: this.sub?.total_after_discount.toFixed(3),
+          },
+          {
+            title: 'REFUNDABLE SECURITY AMOUNT',
+            dataKey: this.sub?.refundable_security_amount,
+          },
+          { title: 'GRAND TOTAL', dataKey: this.sub?.grand_total },
+        ];
+        autoTable(doc, {
+          body: columns,
+          startY: 215,
+          didParseCell: function (data) {
+            if (data.row.index === 6) {
+              data.cell.styles.textColor = [3, 146, 48];
+            } else if (data.row.index === 3) {
+              data.cell.styles.textColor = [239, 67, 67];
+            }
+          },
+        });
+      }
+
+
+
 
       doc.save('Subscription.pdf');
     }

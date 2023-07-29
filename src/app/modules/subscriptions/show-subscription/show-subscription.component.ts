@@ -412,6 +412,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   versions: any[] = [
     { label: 'Version 1', value: 'v1' },
     { label: 'Version 3', value: 'v3' },
+    { label: 'Version 4', value: 'v4' },
   ];
   modes: any[] = [
     { label: 'Pending', value: 0 },
