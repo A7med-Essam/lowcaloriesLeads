@@ -597,7 +597,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       key: 'codes',
       sortKey: 'codes[percentage]',
     },
-    { name: 'Version', status: false, key: 'version', sortKey: 'version' },
+    { name: 'Version', status: true, key: 'version', sortKey: 'version' },
     { name: 'Price', status: false, key: 'price', sortKey: 'price' },
     { name: 'Bag', status: false, key: 'bag', sortKey: 'bag' },
   ];
