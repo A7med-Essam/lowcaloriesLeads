@@ -49,15 +49,14 @@ export class AddTargetComponent implements OnInit {
         agent_id: this._LocalService.getJsonValue('userInfo_oldLowCalories').id,
       });
       this._AgentTargetService.addTarget(form.value).subscribe((res) => {
-        // this._Router.navigate(['target'], {
-        //   relativeTo: this._ActivatedRoute.parent?.parent,
-        // });
-        this._MessageService.add({
-          severity: 'success',
-          summary: 'Target',
-          detail: 'Target Added Successfully',
-        });
-        this.insertForm.reset();
+        if (res.status) {
+          this._MessageService.add({
+            severity: 'success',
+            summary: 'Target',
+            detail: 'Target Added Successfully',
+          });
+          this.insertForm.reset();
+        }
       });
     }
   }
@@ -138,7 +137,9 @@ export class AddTargetComponent implements OnInit {
           this.insertForm.patchValue({
             invoice_number: res.data.invoice_no,
             date: new Date(res.data.delivery_starting_day),
-            client_number:res.data.client_number
+            client_number:res.data.client_number,
+            amount_paid:res.data.total_price,
+            client_name:`${res.data.user.first_name} ${res.data.user.last_name}`
           });
           this.getCustomerCID();
         }

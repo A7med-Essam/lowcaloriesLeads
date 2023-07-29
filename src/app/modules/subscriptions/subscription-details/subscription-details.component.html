@@ -1,189 +1,173 @@
-<div class="row animated" *ngIf="sub">
-    <div class="col-md-12 my-2">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-md-12">
-                    <div class="card card-plain">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Client Info</h4>
-                            <div>
-                                <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
-                                    (click)="printInvoice(sub)">Print Invoice</button>
-                                <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
-                                    (click)="print()">Print</button>
-                                <button class="btn btn-dark mx-1" (click)="backDetailsBtn()">Back</button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive overflow-auto">
-                                <table class="table">
-                                    <thead class="text-muted">
-                                        <th class="py-3">Title</th>
-                                        <th class="py-3">Description</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>First Name</td>
-                                            <td>{{ sub.user.first_name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Last Name</td>
-                                            <td>{{ sub.user.last_name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gender</td>
-                                            <td>{{ sub.user.gender }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Birthday</td>
-                                            <td>{{ sub.user.birthday }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Height</td>
-                                            <td>{{ sub.user.height }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Weight</td>
-                                            <td>{{ sub.user.Weight }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Email</td>
-                                            <td>{{ sub.user.email }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Land Line</td>
-                                            <td>{{ sub.user.land_line }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Phone Number</td>
-                                            <td>{{ sub.user.phone_number }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Second Phone Number</td>
-                                            <td>{{ sub.user.second_phone_number }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<section>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Subscription Details</h2>
+        <div>
+            <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
+                (click)="printInvoice(sub)">Print Invoice</button>
+            <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
+                (click)="print()">Print</button>
+            <button class="btn btn-dark mx-1" (click)="backDetailsBtn()">Back</button>
         </div>
     </div>
-
-    <div class="col-md-12 my-2">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-md-12">
-                    <div class="card card-plain">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Subscription Info</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive overflow-auto">
-                                <table class="table">
-                                    <thead class="text-muted">
-                                        <th class="py-3">Title</th>
-                                        <th class="py-3">Description</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Invoice Number</td>
-                                            <td>{{ sub.invoice_no }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Program</td>
-                                            <td>
-                                                {{sub.subscriptions_note.split('-')[1]}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                {{sub.full_plan_name.split('-')[0] + ""}} &#160;&#160;&#160;&#160;&#160;
-                                                {{sub.full_plan_name.split('-')[2] + ""}} &#160;&#160;&#160;&#160;&#160;
-                                                {{sub.full_plan_name.split('-')[3]}}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Plan Title</td>
-                                            <td>{{ sub.subscriptions_note }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Meal Types</td>
-                                            <td>{{ replaceMeals(sub.dislike).join(" - ") }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Need Cutlery?</td>
-                                            <td>{{ sub.cutlery == 'checked' ? "yes" : "no" }}</td>
-                                        </tr>
-                                        <tr *ngIf="sub.program_id == 50 || sub.program_id < 15">
-                                            <td>Confirmed Terms</td>
-                                            <td>yes</td>
-                                        </tr>
-                                        <tr *ngIf="sub.agent">
-                                            <td>Agent</td>
-                                            <td>{{ sub.agent.name }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+    <hr>
+    <div class="row animated" *ngIf="sub">
+        <div class="col-md-12 my-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="card card-plain">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Client Info</h4>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-12 my-2">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-md-12">
-                    <div class="card card-plain">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Payment Info</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive overflow-auto">
-                                <table class="table">
-                                    <thead class="text-muted">
-                                        <th class="py-3">Description</th>
-                                        <th class="py-3">Amount</th>
-                                    </thead>
-                                    <tbody *ngIf="sub.version == 'v4' ; else elseBlock">
-                                        <tr>
-                                            <td>TOTAL PRICE WITHOUT VAT ({{sub.subscriptions_note}})</td>
-                                            <td>{{ sub.total_price_without_vat.toFixed(3) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>DISCOUNT <sup
-                                                    *ngIf="sub?.codes && sub?.codes?.type == 'percentage'">({{sub?.codes?.percentage}}%)</sup>
-                                            </td>
-                                            <td class="text-danger">-{{ sub.discount_amount.toFixed(3) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>NET TOTAL WITHOUT VAT</td>
-                                            <td>{{ sub.total_after_discount.toFixed(3) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>VAT</td>
-                                            <td>{{ sub.vat_amount.toFixed(3) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>NET TOTAL WITH VAT</td>
-                                            <td>{{ sub.total_with_vat.toFixed(3) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>REFUNDABLE SECURITY AMOUNT</td>
-                                            <td>{{ sub.refundable_security_amount }}</td>
-                                        </tr>
-                                        <tr style="border-top:2px solid">
-                                            <td>GRAND TOTAL</td>
-                                            <td class="text-success">{{ sub.grand_total }}</td>
-                                        </tr>
-
-                                    </tbody>
-                                    <ng-template #elseBlock>
+                            <div class="card-body">
+                                <div class="table-responsive overflow-auto">
+                                    <table class="table">
+                                        <thead class="text-muted">
+                                            <th class="py-3">Title</th>
+                                            <th class="py-3">Description</th>
+                                        </thead>
                                         <tbody>
+                                            <tr>
+                                                <td>First Name</td>
+                                                <td>{{ sub.user.first_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Last Name</td>
+                                                <td>{{ sub.user.last_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gender</td>
+                                                <td>{{ sub.user.gender }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Birthday</td>
+                                                <td>{{ sub.user.birthday }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Height</td>
+                                                <td>{{ sub.user.height }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Weight</td>
+                                                <td>{{ sub.user.Weight }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email</td>
+                                                <td>{{ sub.user.email }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Land Line</td>
+                                                <td>{{ sub.user.land_line }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Phone Number</td>
+                                                <td>{{ sub.user.phone_number }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Second Phone Number</td>
+                                                <td>{{ sub.user.second_phone_number }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 my-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="card card-plain">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Subscription Info</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive overflow-auto">
+                                    <table class="table">
+                                        <thead class="text-muted">
+                                            <th class="py-3">Title</th>
+                                            <th class="py-3">Description</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Invoice Number</td>
+                                                <td>{{ sub.invoice_no }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Program</td>
+                                                <td>
+                                                    {{sub.subscriptions_note.split('-')[1]}}
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    {{sub.full_plan_name.split('-')[0] + ""}}
+                                                    &#160;&#160;&#160;&#160;&#160;
+                                                    {{sub.full_plan_name.split('-')[2] + ""}}
+                                                    &#160;&#160;&#160;&#160;&#160;
+                                                    {{sub.full_plan_name.split('-')[3]}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Plan Title</td>
+                                                <td>{{ sub.subscriptions_note }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Meal Types</td>
+                                                <td>{{ replaceMeals(sub.dislike).join(" - ") }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Need Cutlery?</td>
+                                                <td>{{ sub.cutlery == 'checked' ? "yes" : "no" }}</td>
+                                            </tr>
+                                            <tr *ngIf="sub.program_id == 50 || sub.program_id < 15">
+                                                <td>Confirmed Terms</td>
+                                                <td>yes</td>
+                                            </tr>
+                                            <tr *ngIf="sub.agent">
+                                                <td>Agent</td>
+                                                <td>{{ sub.agent.name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 my-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="card card-plain">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Payment Info</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive overflow-auto">
+                                    <table class="table">
+                                        <thead class="text-muted">
+                                            <th class="py-3">Description</th>
+                                            <th class="py-3">Amount</th>
+                                        </thead>
+                                        <tbody *ngIf="sub.version == 'v4' ; else elseBlock">
                                             <tr>
                                                 <td>TOTAL PRICE WITHOUT VAT ({{sub.subscriptions_note}})</td>
                                                 <td>{{ sub.total_price_without_vat.toFixed(3) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>DISCOUNT <sup
+                                                        *ngIf="sub?.codes && sub?.codes?.type == 'percentage'">({{sub?.codes?.percentage}}%)</sup>
+                                                </td>
+                                                <td class="text-danger">-{{ sub.discount_amount.toFixed(3) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>NET TOTAL WITHOUT VAT</td>
+                                                <td>{{ sub.total_after_discount.toFixed(3) }}</td>
                                             </tr>
                                             <tr>
                                                 <td>VAT</td>
@@ -193,18 +177,6 @@
                                                 <td>NET TOTAL WITH VAT</td>
                                                 <td>{{ sub.total_with_vat.toFixed(3) }}</td>
                                             </tr>
-
-                                            <tr>
-                                                <td>DISCOUNT <sup
-                                                        *ngIf="sub?.codes && sub?.codes?.type == 'percentage'">({{sub.codes.percentage}}%)</sup>
-                                                </td>
-                                                <td class="text-danger">-{{ sub.discount_amount.toFixed(3) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>NET TOTAL AFTER DISCOUNT</td>
-                                                <td>{{ sub.total_after_discount.toFixed(3) }}</td>
-                                            </tr>
-
                                             <tr>
                                                 <td>REFUNDABLE SECURITY AMOUNT</td>
                                                 <td>{{ sub.refundable_security_amount }}</td>
@@ -213,103 +185,142 @@
                                                 <td>GRAND TOTAL</td>
                                                 <td class="text-success">{{ sub.grand_total }}</td>
                                             </tr>
+
                                         </tbody>
-                                    </ng-template>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                                        <ng-template #elseBlock>
+                                            <tbody>
+                                                <tr>
+                                                    <td>TOTAL PRICE WITHOUT VAT ({{sub.subscriptions_note}})</td>
+                                                    <td>{{ sub.total_price_without_vat.toFixed(3) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>VAT</td>
+                                                    <td>{{ sub.vat_amount.toFixed(3) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>NET TOTAL WITH VAT</td>
+                                                    <td>{{ sub.total_with_vat.toFixed(3) }}</td>
+                                                </tr>
 
-    <div class="col-md-12 my-2">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-md-12">
-                    <div class="card card-plain">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Delivery Info</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive overflow-auto">
-                                <table class="table">
-                                    <thead class="text-muted">
-                                        <th class="py-3">Title</th>
-                                        <th class="py-3">Description</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Start Date</td>
-                                            <td>{{ sub.delivery_starting_day }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Emirate</td>
-                                            <td>{{ sub.location.emirate.en_name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Land Mark</td>
-                                            <td>{{ sub.location.landmark }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Area</td>
-                                            <td>{{ sub.location.area_id }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Villa/Flat</td>
-                                            <td>{{ sub.location.property_number }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Delivery Days</td>
-                                            <td>{{ sub.days_of_week }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                                                <tr>
+                                                    <td>DISCOUNT <sup
+                                                            *ngIf="sub?.codes && sub?.codes?.type == 'percentage'">({{sub.codes.percentage}}%)</sup>
+                                                    </td>
+                                                    <td class="text-danger">-{{ sub.discount_amount.toFixed(3) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>NET TOTAL AFTER DISCOUNT</td>
+                                                    <td>{{ sub.total_after_discount.toFixed(3) }}</td>
+                                                </tr>
 
-    <div class="col-md-12 my-2" *ngIf="sub.branch_paid_on">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-md-12">
-                    <div class="card card-plain">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Exchange Info</h4>
+                                                <tr>
+                                                    <td>REFUNDABLE SECURITY AMOUNT</td>
+                                                    <td>{{ sub.refundable_security_amount }}</td>
+                                                </tr>
+                                                <tr style="border-top:2px solid">
+                                                    <td>GRAND TOTAL</td>
+                                                    <td class="text-success">{{ sub.grand_total }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </ng-template>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive overflow-auto">
-                                <table class="table">
-                                    <thead class="text-muted">
-                                        <th class="py-3">Title</th>
-                                        <th class="py-3">Description</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>EXCHANGE INVOICE BRANCH</td>
-                                            <td>{{ sub.branch_paid_on }}</td>
-                                        </tr>
-                                        <tr *ngIf="sub?.branch_invoice_image && !endsWithPDF(sub.branch_invoice_image)">
-                                            <td>EXCHANGE INVOICE IMAGE</td>
-                                            <td>
-                                                <p-image [src]="sub.branch_invoice_image" alt="Invoice" width="250"
-                                                    [preview]="true"></p-image>
-                                            </td>
-                                        </tr>
-                                        <tr *ngIf="sub?.branch_invoice_image && endsWithPDF(sub.branch_invoice_image)">
-                                            <td>EXCHANGE INVOICE IMAGE</td>
-                                            <td>
-                                                <a target="_blank" [href]="sub.branch_invoice_image"
-                                                    download>{{sub.branch_invoice_image}}</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 my-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="card card-plain">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Delivery Info</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive overflow-auto">
+                                    <table class="table">
+                                        <thead class="text-muted">
+                                            <th class="py-3">Title</th>
+                                            <th class="py-3">Description</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Start Date</td>
+                                                <td>{{ sub.delivery_starting_day }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Emirate</td>
+                                                <td>{{ sub.location.emirate.en_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Land Mark</td>
+                                                <td>{{ sub.location.landmark }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Area</td>
+                                                <td>{{ sub.location.area_id }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Villa/Flat</td>
+                                                <td>{{ sub.location.property_number }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Delivery Days</td>
+                                                <td>{{ sub.days_of_week }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 my-2" *ngIf="sub.branch_paid_on">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="card card-plain">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Exchange Info</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive overflow-auto">
+                                    <table class="table">
+                                        <thead class="text-muted">
+                                            <th class="py-3">Title</th>
+                                            <th class="py-3">Description</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>EXCHANGE INVOICE BRANCH</td>
+                                                <td>{{ sub.branch_paid_on }}</td>
+                                            </tr>
+                                            <tr
+                                                *ngIf="sub?.branch_invoice_image && !endsWithPDF(sub.branch_invoice_image)">
+                                                <td>EXCHANGE INVOICE IMAGE</td>
+                                                <td>
+                                                    <p-image [src]="sub.branch_invoice_image" alt="Invoice" width="250"
+                                                        [preview]="true"></p-image>
+                                                </td>
+                                            </tr>
+                                            <tr
+                                                *ngIf="sub?.branch_invoice_image && endsWithPDF(sub.branch_invoice_image)">
+                                                <td>EXCHANGE INVOICE IMAGE</td>
+                                                <td>
+                                                    <a target="_blank" [href]="sub.branch_invoice_image"
+                                                        download>{{sub.branch_invoice_image}}</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -317,4 +328,4 @@
             </div>
         </div>
     </div>
-</div>
+</section>
