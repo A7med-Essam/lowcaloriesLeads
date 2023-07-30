@@ -55,9 +55,6 @@ export class FixTargetComponent implements OnInit, OnDestroy {
 
   insertRow(form: FormGroup) {
     if (form.valid) {
-      // form.patchValue({
-      //   date: new Date(form.value.date).toLocaleDateString('en-CA'),
-      // });
       this._AgentTargetService.updateTarget(form.value).subscribe((res) => {
         this._MessageService.add({
           severity: 'success',

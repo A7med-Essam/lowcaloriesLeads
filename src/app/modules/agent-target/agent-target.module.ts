@@ -16,16 +16,12 @@ import { UpdateTargetComponent } from './update-target/update-target.component';
 import { FixTargetComponent } from './fix-target/fix-target.component';
 
 const APP_PRIMENG_MODULE = [
-  // ButtonModule,
   CheckboxModule,
-  // CardModule,
   DropdownModule,
   InputTextModule,
   TableModule,
   DialogModule,
   CalendarModule,
-  // MultiSelectModule,
-  // ChipsModule,
 ];
 
 @NgModule({

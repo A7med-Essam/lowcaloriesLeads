@@ -232,7 +232,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       Mobile_no: new FormControl(null),
       program_id: new FormControl(null),
       discount: new FormControl(null),
-      // code: new FormControl(null),
+      code: new FormControl(null),
       mode: new FormControl(null),
       branch_id: new FormControl(null),
       agent_id: new FormControl(null),
@@ -269,6 +269,12 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         emirate: form.value.emirate.split(" - ")[0]
       });
     }
+    if (form.value.code) {
+      form.patchValue({
+        code: `${form.value.code.code} $-$${form.value.code.version}`
+      });
+    }
+    
     // if (form.value.discount) {
     //   form.patchValue({
     //     discount: form.value.discount.replace(/[^\d.-]/g, '')
@@ -352,16 +358,20 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
             type: c.type,
           };
         });
-        this.giftCodes = res.data.GiftCodes.map((c) => {
+
+        this.giftCodes = res.data.allGiftCodes.map((c) => {
           return {
-            code:
-              c.type == 'percentage'
-                ? `${c.code} (${c.percentage}%)`
-                : `${c.code} (${c.value} AED)`,
-            id: c.id,
-            percentage: c.percentage,
-            value: c.value,
-            type: c.type,
+            label:c.label,
+            items:c.items.map((code:any) => {
+              return {
+                code: code.type == 'value' ? `${code.code} (${code.value} AED)` : `${code.code} (${code.percentage}%)`,
+                id: code.id,
+                percentage: code.percentage,
+                value: code.value,
+                type: code.type,
+                version: code.version,
+              }
+            })
           };
         });
       }

@@ -213,7 +213,7 @@ export class SubscriptionDetailsComponent implements OnInit {
           );
           m.day_meals.forEach((d) => {
             columns5.push(
-              { title: d.meal.type, dataKey: `${d.meal.name} ${d.meal.max_meal} ${d.meal.meal_unit} ${d.meal.max_side?d.meal.max_side:""} ${d.meal.max_side?d.meal.side_unit:""}` },
+              { title: d.type, dataKey: `${d.meal.name} ${d.meal.max_meal} ${d.meal.meal_unit} ${d.meal.max_side?d.meal.max_side:""} ${d.meal.max_side?d.meal.side_unit:""}` },
             );
           });
         });
@@ -316,7 +316,7 @@ export class SubscriptionDetailsComponent implements OnInit {
     const updatedMeals = [];
 
     // Loop through each item in the original array
-    for (let i = 0; i < mealsArray.length; i++) {
+    for (let i = 0; i < mealsArray?.length; i++) {
       // Replace the meal names based on the specified rules
       switch (mealsArray[i]) {
         case 'Meal 1':
@@ -337,6 +337,19 @@ export class SubscriptionDetailsComponent implements OnInit {
 
     // Return the new array with updated meal names
     return updatedMeals;
+  }
+
+  convertMealNames(meal:string):string{
+    switch (meal) {
+      case 'Meal 1':
+        return 'Breakfast'
+      case 'Meal 2':
+        return 'Lunch'
+      case 'Meal 3':
+        return 'Dinner'
+      default:
+        return meal
+    }
   }
 
   printInvoice(sub: SubscriptionDetails) {

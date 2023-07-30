@@ -54,6 +54,7 @@ export interface PaymentDetails {
   disLikes:  Branch[];
   emirates:  Emirate[];
   branches:  Branch[];
+  allGiftCodes: any[]
 }
 
 export interface GiftCode {

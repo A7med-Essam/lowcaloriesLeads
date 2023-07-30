@@ -1,6 +1,6 @@
-import { Location } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { DislikeService } from 'src/app/services/dislike.service';
@@ -15,30 +15,20 @@ import { SurveyService } from 'src/app/services/survey.service';
 export class AddTargetComponent implements OnInit {
   insertForm!: FormGroup;
   constructor(
-    // private _Router: Router,
-    // private _ActivatedRoute: ActivatedRoute,
     private _DislikeService: DislikeService,
     private _LocalService: LocalService,
-    private renderer: Renderer2,
+    private _Router: Router,
     private _AgentTargetService: AgentTargetService,
-    private _Location: Location,
     private _MessageService: MessageService,
     private _SurveyService:SurveyService
   ) {}
 
-  // goBack(): void {
-  //   this._Location.back();
-  // }
 
-  // ngOnDestroy(): void {
-    // this.renderer.removeClass(document.body, 'h-side');
-  // }
 
   ngOnInit(): void {
     this.getAgents()
     this.getInsertForm();
     this.getAgentBranches();
-    // this.renderer.addClass(document.body, 'h-side');
     this.getTargetOptions();
   }
 
@@ -46,7 +36,6 @@ export class AddTargetComponent implements OnInit {
     if (form.valid) {
       form.patchValue({
         date: new Date(form.value.date).toLocaleDateString('en-CA'),
-        agent_id: this._LocalService.getJsonValue('userInfo_oldLowCalories').id,
       });
       this._AgentTargetService.addTarget(form.value).subscribe((res) => {
         if (res.status) {
@@ -78,7 +67,6 @@ export class AddTargetComponent implements OnInit {
       team: new FormControl(null, [Validators.required]),
       amount_paid: new FormControl(null, [Validators.required]),
       client_name: new FormControl(null, [Validators.required]),
-      agent_id: new FormControl(null),
     });
   }
 
@@ -256,5 +244,8 @@ export class AddTargetComponent implements OnInit {
     this.paid_by = this.paid_by_clone;
     let [selectedType] = this.types.filter(item => item.name === e.value)
     this.paid_by = this.paid_by.filter(item => item.type_id === selectedType.id);
+  }
+  goBack(): void {
+    this._Router.navigate(['target']);
   }
 }

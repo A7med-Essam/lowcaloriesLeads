@@ -1,0 +1,12 @@
+:host {
+    ::ng-deep {
+        .p-dropdown-item-group {
+            background-color: #22C55E !important;
+            color: #fff !important;
+        }
+
+        .p-dropdown {
+            width: 100%;
+        }
+    }
+}

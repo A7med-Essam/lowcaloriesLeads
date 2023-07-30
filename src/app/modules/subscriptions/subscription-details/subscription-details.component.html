@@ -334,7 +334,7 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Date / Day</th>
-                            <th  *ngFor="let m of sub.subscription_days[0].day_meals">{{m.type}}</th>
+                            <th  *ngFor="let m of sub.subscription_days[0].day_meals">{{convertMealNames(m.meal.type)}}</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-subDay let-rowgroup="rowgroup" let-rowspan="rowspan">
