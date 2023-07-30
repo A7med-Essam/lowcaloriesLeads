@@ -266,15 +266,22 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     }
     if (form.value.emirate) {
       form.patchValue({
-        emirate: form.value.emirate.split(" - ")[0]
+        emirate: form.value.emirate.split(' - ')[0],
       });
     }
     if (form.value.code) {
       form.patchValue({
-        code: `${form.value.code.code} $-$${form.value.code.version}`
+        code: `${form.value.code.code.replace(/\(\d+\s[A-Z]{3}\)/g, "").replace(/\(\d+%?\)/g, "").trim()} $-$${form.value.code.version}`,
       });
     }
-    
+
+    if (form.value.discount) {
+      let splitedString = form.value.discount.split("% =>");
+      form.patchValue({
+        discount: `${splitedString.length == 1? form.value.discount.split("AED =>")[0]:splitedString[0]} $-$${splitedString.length == 1?form.value.discount.split("AED =>")[1].trim():splitedString[1].trim()}`
+      });
+    }
+
     // if (form.value.discount) {
     //   form.patchValue({
     //     discount: form.value.discount.replace(/[^\d.-]/g, '')
@@ -290,6 +297,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     this._SubscriptionsService
       .filterSubscriptions(1, form.value)
       .subscribe((res) => {
+        this.filterForm.get('code')?.reset();
         this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
       });
@@ -361,17 +369,20 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
 
         this.giftCodes = res.data.allGiftCodes.map((c) => {
           return {
-            label:c.label,
-            items:c.items.map((code:any) => {
+            label: c.label,
+            items: c.items.map((code: any) => {
               return {
-                code: code.type == 'value' ? `${code.code} (${code.value} AED)` : `${code.code} (${code.percentage}%)`,
+                code:
+                  code.type == 'value'
+                    ? `${code.code} (${code.value} AED)`
+                    : `${code.code} (${code.percentage}%)`,
                 id: code.id,
                 percentage: code.percentage,
                 value: code.value,
                 type: code.type,
                 version: code.version,
-              }
-            })
+              };
+            }),
           };
         });
       }
@@ -387,19 +398,47 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     });
   }
 
-  getUniquePercentages(giftcode: GiftCode[]): string[] {
-    const uniquePercentages = [
-      ...new Set(
-        giftcode.map((item) => {
-          if (item.type == 'value') {
-            return item.value + ' AED';
-          } else {
-            return item.percentage + '%';
-          }
-        })
-      ),
-    ];
-    return uniquePercentages;
+  getUniquePercentages(inputArray: any[]) {
+    let outputArray: any[] = [];
+    inputArray.forEach((group) => {
+      const versionItems: any[] = [];
+      const codes: any[] = [];
+
+      group.items.forEach((item: any) => {
+        versionItems.push({
+          type: item.type,
+          version: item.version,
+          code_name:
+            item.type == 'value'
+              ? item.value.toString()
+              : item.percentage.toString(),
+        });
+        codes.push({
+          id: item.id,
+          percentage: item.percentage,
+          value: item.value,
+          type: item.type,
+          version: item.version,
+        });
+      });
+
+      outputArray.push({
+        label: group.label,
+        items: [
+          ...new Set(
+            versionItems.map((item) => {
+              if (item.type == 'value') {
+                return item.code_name + 'AED =>' + ` ${item.version}`;
+              } else {
+                return item.code_name + '% =>' + ` ${item.version}`;
+              }
+            })
+          ),
+        ],
+        codes,
+      });
+    });
+    return outputArray;
   }
   // ****************************************************export************************************************************************
 
@@ -643,5 +682,4 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       });
     }
   }
-
 }

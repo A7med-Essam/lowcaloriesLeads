@@ -388,19 +388,19 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.text('M38, Musaffah, Abu Dhabi - , United Arab Emirates', 46, 40);
       doc.text('TRN100346758400003', 46, 45);
       // =================================END-TEXT=================================
-      doc.setFontSize(13);
+      doc.setFontSize(12);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
-      doc.text('TAX INVOICE', 168, 33);
-      doc.setFontSize(10);
-      doc.text('Invoice# INV-3285', 168, 38);
+      doc.text('TAX INVOICE', 160, 42);
+      doc.setFontSize(8);
+      doc.text('#LC-20230730-141830-78', 158, 45);
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
       doc.text('Invoice Date :', 15, 58);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
-      doc.text('16 Mar 2023', 40, 58);
+      doc.text(sub.created_date, 40, 58);
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal'); // Set font and style to bold
@@ -414,7 +414,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setTextColor('#1f1f1f'); // Set text color to black
       doc.text('Due Date :', 15, 68);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
-      doc.text('15 Apr 2023', 40, 68);
+      doc.text(sub.delivery_starting_day, 40, 68);
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
@@ -424,8 +424,8 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
-      doc.text('BRANDFOLIO ONE RESTAURENT & CAFÉ LLC & WTC MALL', 85, 63);
-      doc.text('BRANCH OF ABU DHABI -1,B2,', 85, 68);
+      doc.text(`${sub.location.area_id != 'null'?sub.location.area_id+' - ':''}${sub.location.emirate.en_name}`, 85, 63);
+      doc.text(`${sub.location.landmark?sub.location.landmark:''} - ${sub.location.property_number != '0'?sub.location.property_number:''}`, 85, 68);
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal'); // Set font and style to bold

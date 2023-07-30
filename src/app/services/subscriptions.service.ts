@@ -233,7 +233,7 @@ export interface SubscriptionDetails {
   branch_invoice_image:              string;
   agent_id:                          number;
   updated_text:                      null;
-  created_date:                      Date;
+  created_date:                      string;
   created_time:                      number;
   total_price_without_vat:           number;
   total_with_vat:                    number;
