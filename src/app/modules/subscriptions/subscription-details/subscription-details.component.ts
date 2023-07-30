@@ -118,7 +118,18 @@ export class SubscriptionDetailsComponent implements OnInit {
 
       let columns2: any[] = [
         { title: 'Invoice', dataKey: this.sub?.invoice_no },
-        { title: 'Program', dataKey: this.sub?.full_plan_name },
+        {
+          title: 'Program',
+          dataKey:
+            this.sub.subscriptions_note.split('-')[1] +
+            '   ' +
+            this.sub.full_plan_name.split('-')[0] +
+            '   ' +
+            this.sub.full_plan_name.split('-')[2] +
+            '   ' +
+            this.sub.full_plan_name.split('-')[3],
+        },
+
         { title: 'Plan Title', dataKey: this.sub?.subscriptions_note },
         {
           title: 'Meal Types',
@@ -194,6 +205,19 @@ export class SubscriptionDetailsComponent implements OnInit {
         ];
       }
 
+      let columns5: any[] = [];
+      if (this.sub.subscription_days.length) {
+        this.sub.subscription_days.forEach((m) => {
+          columns5.push(
+            { title: 'Date/Day', dataKey: `${m.date} / ${m.day}` },
+          );
+          m.day_meals.forEach((d) => {
+            columns5.push(
+              { title: d.meal.type, dataKey: `${d.meal.name} ${d.meal.max_meal} ${d.meal.meal_unit} ${d.meal.max_side?d.meal.max_side:""} ${d.meal.max_side?d.meal.side_unit:""}` },
+            );
+          });
+        });
+      }
       columns1 = columns1.filter(
         (item) => item.dataKey !== null && item.dataKey !== undefined
       );
@@ -206,6 +230,9 @@ export class SubscriptionDetailsComponent implements OnInit {
       columns4 = columns4.filter(
         (item) => item.dataKey !== null && item.dataKey !== undefined
       );
+      columns5 = columns5.filter(
+        (item) => item.dataKey !== null && item.dataKey !== undefined
+      );
 
       if (this.sub.program_id == 50 || this.sub.program_id < 15) {
         columns2.push({ title: 'Confirmed Terms', dataKey: 'yes' });
@@ -213,30 +240,49 @@ export class SubscriptionDetailsComponent implements OnInit {
 
       doc.setFontSize(10);
       doc.setTextColor('#9EA4A9'); // Set text color to black
-      doc.text('Client Info', 10, 60);
-      autoTable(doc, { body: columns1, startY: 65 });
+      doc.text('Client Info', 10, 57);
+      autoTable(doc, { body: columns1, startY: 60 });
       doc.setLineWidth(0.4); // Set the line width
       doc.setDrawColor(187, 187, 187); // RGB color values (black in this case)
-      doc.line(10, 155, 200, 155); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 150, 200, 150); // (x1, y1, x2, y2) Horizontal
       // ======================
       doc.setFontSize(10);
       doc.setTextColor('#9EA4A9'); // Set text color to black
-      doc.text('Subscription Info', 10, 160);
-      autoTable(doc, { body: columns2, startY: 165 });
+      doc.text('Subscription Info', 10, 155);
+      autoTable(doc, { body: columns2, startY: 158 });
       doc.setLineWidth(0.4); // Set the line width
       doc.setDrawColor(187, 187, 187); // RGB color values (black in this case)
-      doc.line(10, 212, 200, 212); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 216, 200, 216); // (x1, y1, x2, y2) Horizontal
       // ======================
       doc.setFontSize(10);
       doc.setTextColor('#9EA4A9'); // Set text color to black
-      doc.text('Payment Info', 10, 220);
-      autoTable(doc, { body: columns4, startY: 225 });
+      doc.text('Payment Info', 10, 221);
+      autoTable(doc, { body: columns4, startY: 223 });
       // ======================
       doc.addPage();
       doc.setFontSize(10);
       doc.setTextColor('#9EA4A9'); // Set text color to black
       doc.text('Delivery Info', 10, 10);
       autoTable(doc, { body: columns3, startY: 15 });
+
+      if (columns5.length) {
+        doc.setLineWidth(0.4); // Set the line width
+        doc.setDrawColor(187, 187, 187); // RGB color values (black in this case)
+        doc.line(10, 75, 200, 75); // (x1, y1, x2, y2) Horizontal
+        doc.setFontSize(10);
+        doc.setTextColor('#9EA4A9'); // Set text color to black
+        doc.text('Meals Info', 10, 82);
+        autoTable(doc, { body: columns5, startY: 85,
+          didParseCell: function (data) {
+            if (data.cell.raw == "Date/Day") {
+              data.row.cells[0].styles.fillColor = [3, 146, 48];
+              data.row.cells[0].styles.textColor = [255,255,255];
+              data.row.cells[1].styles.fillColor = [3, 146, 48];
+              data.row.cells[1].styles.textColor = [255,255,255];
+            } 
+          },
+        });
+      }
 
       // Set the line color and width
       doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
@@ -516,27 +562,6 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setTextColor('#545454'); // Set text color to black
       doc.text('Payment Info', 15, 210);
 
-      // let columns: any[] = [
-      //   {
-      //     title: `TOTAL PRICE WITHOUT VAT (${this.sub?.subscriptions_note})`,
-      //     dataKey: this.sub?.total_price_without_vat.toFixed(3),
-      //   },
-      //   {
-      //     title: `DISCOUNT (${this.sub?.codes.percentage} %)`,
-      //     dataKey: -this.sub?.discount_amount.toFixed(3),
-      //   },
-      //   {
-      //     title: 'NET TOTAL WITHOUT VAT',
-      //     dataKey: this.sub?.total_after_discount.toFixed(3),
-      //   },
-      //   { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
-      //   {
-      //     title: 'REFUNDABLE SECURITY AMOUNT',
-      //     dataKey: this.sub?.refundable_security_amount,
-      //   },
-      //   { title: 'GRAND TOTAL', dataKey: this.sub?.grand_total },
-      // ];
-
       let columns: any[] = [];
 
       if (this.sub.version == 'v4') {
@@ -616,9 +641,6 @@ export class SubscriptionDetailsComponent implements OnInit {
           },
         });
       }
-
-
-
 
       doc.save('Subscription.pdf');
     }

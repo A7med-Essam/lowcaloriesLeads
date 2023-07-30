@@ -327,5 +327,33 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-12 my-2" *ngIf="sub.subscription_days.length">
+            <div class="card">
+                <p-table [value]="sub.subscription_days" rowGroupMode="rowspan" groupRowsBy="date" sortField="date" sortMode="single" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Date / Day</th>
+                            <th  *ngFor="let m of sub.subscription_days[0].day_meals">{{m.type}}</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-subDay let-rowgroup="rowgroup" let-rowspan="rowspan">
+                        <tr>
+                            <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
+                                <span class="font-bold ml-2">{{subDay.date}} <br> {{subDay.day}}</span>
+                            </td>
+                            <td *ngFor="let m of subDay.day_meals">
+                                <img alt="Meal Image" [src]="m.meal.image" width="32" />
+                                 <span class="text-danger mx-1">{{m.meal.name}} </span>
+                                 <br>
+                                 <span>({{m.meal.max_meal}} {{m.meal.meal_unit}})</span>
+                                 <span *ngIf="m.meal.max_side"> / </span>
+                                 <span *ngIf="m.meal.max_side">({{m.meal.max_side}} {{m.meal.side_unit}})</span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
     </div>
 </section>

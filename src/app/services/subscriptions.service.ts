@@ -242,13 +242,60 @@ export interface SubscriptionDetails {
   vat_amount:                        number;
   refundable_security_amount:        number;
   grand_total:                       number;
-  subscription_days:                 any[];
+  subscription_days:                 subscription_days[];
   cids:                              null;
   location:                          Location;
   codes:                             Codes;
   agent:                             Agent;
   user:                              User;
 }
+
+
+export interface subscription_days {
+  id:              number;
+  status:          string;
+  updated:         number;
+  subscription_id: number;
+  day:             string;
+  date:            Date;
+  location_id:     number;
+  day_meals:       subscriptionDayMeal[];
+}
+
+export interface subscriptionDayMeal {
+  id:                  number;
+  subscription_day_id: number;
+  meal_id:             number;
+  meal_name:           string;
+  snack_name:          string;
+  meal_unit:           string;
+  side_unit:           string;
+  max_main:            string;
+  max_side:            string;
+  type:                string;
+  meal:                subscriptionDayMealDetails;
+}
+
+export interface subscriptionDayMealDetails {
+  id:               number;
+  program_id:       number;
+  plan_id:          number;
+  category_meal_id: number;
+  level:            string;
+  name:             string;
+  name_ar:          string;
+  description:      string;
+  description_ar:   string;
+  type:             string;
+  meal_unit:        string;
+  side_unit:        string;
+  max_meal:         number;
+  max_side:         number;
+  image:            string;
+  image_web:        string;
+}
+
+
 
 export interface Agent {
   id:           number;
