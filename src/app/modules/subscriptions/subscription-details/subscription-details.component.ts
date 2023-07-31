@@ -80,7 +80,7 @@ export class SubscriptionDetailsComponent implements OnInit {
 
   // ===============================================================PRINT PDF=====================================================================
 
-  print() {
+  printPage() {
     if (this.printPermission) {
       // Default export is a4 paper, portrait, using millimeters for units
       const doc = new jsPDF();
@@ -352,7 +352,7 @@ export class SubscriptionDetailsComponent implements OnInit {
     }
   }
 
-  printInvoice(sub: SubscriptionDetails) {
+  printTaxInvoice(sub: SubscriptionDetails) {
     if (this.printPermission) {
       const doc = new jsPDF();
       const imageFile = '../../../../assets/images/logo.png';
@@ -425,7 +425,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
       doc.text(`${sub.location.area_id != 'null'?sub.location.area_id+' - ':''}${sub.location.emirate.en_name}`, 85, 63);
-      doc.text(`${sub.location.landmark?sub.location.landmark:''} - ${sub.location.property_number != '0'?sub.location.property_number:''}`, 85, 68);
+      doc.text(`${sub.location.landmark!= '0'?sub.location.landmark+' - ':''}${sub.location.property_number != '0'?sub.location.property_number:''}`, 85, 68);
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal'); // Set font and style to bold
@@ -654,6 +654,89 @@ export class SubscriptionDetailsComponent implements OnInit {
           },
         });
       }
+
+      doc.save('Subscription.pdf');
+    }
+  }
+
+  printAccountantTaxInvoice(sub: SubscriptionDetails) {
+    if (this.printPermission) {
+      const doc = new jsPDF();
+      const imageFile = '../../../../assets/images/logo.png';
+      // =================================LINES=================================
+      doc.setDrawColor(187, 187, 187); // RGB color values (black in this case)
+      doc.setLineWidth(0.4); // Set the line width
+      doc.line(10, 20, 200, 20); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 50, 200, 50); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 75, 200, 75); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 285, 200, 285); // (x1, y1, x2, y2) Horizontal
+      // ======================================================================
+      doc.line(10, 285, 10, 20); // (x1, y1, x2, y2) Vertical
+      doc.line(80, 50, 80, 75); // (x1, y1, x2, y2) Vertical
+      doc.line(200, 285, 200, 20); // (x1, y1, x2, y2) Vertical
+      // =================================END-LINES=================================
+      doc.addImage(imageFile, 'JPEG', 15, 25, 25, 18);
+      // =================================FOOTER=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#9EA4A9'); // Set text color to black
+      doc.text('Lowcalories.ae', 10, 290);
+      // =================================TEXT=================================
+      doc.setFontSize(13);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('LOWCALORIE HOSPITALITY AND CATERING', 46, 28);
+      doc.text('COMPANY SERVICES FOR L.L.C.', 46, 33);
+      // =================================END-TEXT=================================
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('M38, Musaffah, Abu Dhabi - , United Arab Emirates', 46, 40);
+      doc.text('TRN100346758400003', 46, 45);
+      // =================================END-TEXT=================================
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('TAX INVOICE', 160, 42);
+      doc.setFontSize(8);
+      doc.text('#LC-20230730-141830-78', 158, 45);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Invoice Date :', 15, 58);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.text(sub.created_date, 40, 58);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Terms :', 15, 63);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.text('Net 30', 40, 63);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Due Date :', 15, 68);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.text(sub.delivery_starting_day, 40, 68);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Bill To :', 85, 58);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text(`${sub.location.area_id != 'null'?sub.location.area_id+' - ':''}${sub.location.emirate.en_name}`, 85, 63);
+      doc.text(`${sub.location.landmark!= '0'?sub.location.landmark+' - ':''}${sub.location.property_number != '0'?sub.location.property_number:''}`, 85, 68);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('TRN 100244837900003', 85, 73);
 
       doc.save('Subscription.pdf');
     }
