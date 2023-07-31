@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h2>Subscription Details</h2>
         <div>
-            <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
+            <button *ngIf="sub.created_date > '2023-07-29'" [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
                 (click)="printAccountantTaxInvoice(sub)">Print Accountant Tax Invoice</button>
                 <button [disabled]="!printPermission" class="btn text-white mx-1 btn-success"
                 (click)="printTaxInvoice(sub)">Print Tax Invoice</button>

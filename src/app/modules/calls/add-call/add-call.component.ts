@@ -89,15 +89,6 @@ export class AddCallComponent implements OnInit {
   insert(form: FormGroup) {
     if (form.valid) {
         this.uploadingStatus = true;
-        // const formData = new FormData();
-        // for (const key in this.insertForm.getRawValue()) {
-        //   if (this.insertForm.getRawValue().hasOwnProperty(key)) {
-        //     formData.append(key, this.insertForm.getRawValue()[key]);
-        //   }
-        // }
-        // formData.append('voice', this.voiceFile ? this.voiceFile : '');
-
-
         this._CallsService.addCall(this.insertForm.getRawValue()).subscribe((res) => {
           if (res.status == 1) {
             this.uploadingStatus = false;

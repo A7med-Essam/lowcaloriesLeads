@@ -815,20 +815,20 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setTextColor('#1f1f1f'); // Set text color to black
       doc.text('Description', 48, 80);
       doc.setFontSize(9);
-      doc.text(`TOTAL COST OF`, 47, 90);
-      doc.text(`${sub.program_id == 60 ? 'FAST MEASUREMENT':'FOOD SOLD'}`, 47, 95);
-      doc.text(`${sub.program_id == 60 ? 'FOR THE PERIOD':'FOR THE PERIOD'}`, 47, 100);
-      doc.text(
-        `${sub.delivery_starting_day} - ${this.calcSubscriptionEndDate(
-          sub.delivery_starting_day,
-          sub.days_of_week,
-          sub.subscriptions_note,
-          sub.version,
-          sub.program_id
-        )}`,
-        47,
-        105
-      );
+      doc.text(sub.program_id == 60 ? 'FAST MEASUREMENT':sub.subscriptions_note, 47, 90);
+      // doc.text(`${sub.program_id == 60 ? 'FAST MEASUREMENT':'FOOD SOLD'}`, 47, 95);
+      // doc.text(`${sub.program_id == 60 ? 'FOR THE PERIOD':'FOR THE PERIOD'}`, 47, 100);
+      // doc.text(
+      //   `${sub.delivery_starting_day} - ${this.calcSubscriptionEndDate(
+      //     sub.delivery_starting_day,
+      //     sub.days_of_week,
+      //     sub.subscriptions_note,
+      //     sub.version,
+      //     sub.program_id
+      //   )}`,
+      //   47,
+      //   105
+      // );
       // doc.text('MINUS ORIGIN33', 47, 105);
       // doc.text('COMMISSION', 47, 110);
       // doc.text('FOR THE PERIOD', 47, 115);
@@ -951,52 +951,52 @@ export class SubscriptionDetailsComponent implements OnInit {
     }
   }
 
-  calcSubscriptionEndDate(
-    startDate: string,
-    weekDays: string,
-    subscriptionNote: string,
-    version: string,
-    programId: number
-  ) {
-    if (programId == 60) {
-      return new Date(startDate).toLocaleDateString('en-CA')
-    }
-    let subscriptionDaysCount =  Number(subscriptionNote.split('-')[2]);
-    const millisecondsPerDay = 24 * 60 * 60 * 1000;
-    let currentDate = new Date(startDate);
-    const weekdaysMapV1: any = {
-      sun: 0,
-      mon: 1,
-      tue: 2,
-      wed: 3,
-      thu: 4,
-      fri: 5,
-      sat: 6,
-    };
+  // calcSubscriptionEndDate(
+  //   startDate: string,
+  //   weekDays: string,
+  //   subscriptionNote: string,
+  //   version: string,
+  //   programId: number
+  // ) {
+  //   if (programId == 60) {
+  //     return new Date(startDate).toLocaleDateString('en-CA')
+  //   }
+  //   let subscriptionDaysCount =  Number(subscriptionNote.split('-')[2]);
+  //   const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  //   let currentDate = new Date(startDate);
+  //   const weekdaysMapV1: any = {
+  //     sun: 0,
+  //     mon: 1,
+  //     tue: 2,
+  //     wed: 3,
+  //     thu: 4,
+  //     fri: 5,
+  //     sat: 6,
+  //   };
 
-    const weekdaysMapV3: any = {
-      sunday: 0,
-      monday: 1,
-      tuesday: 2,
-      wednesday: 3,
-      thursday: 4,
-      friday: 5,
-      saturday: 6,
-    };
+  //   const weekdaysMapV3: any = {
+  //     sunday: 0,
+  //     monday: 1,
+  //     tuesday: 2,
+  //     wednesday: 3,
+  //     thursday: 4,
+  //     friday: 5,
+  //     saturday: 6,
+  //   };
 
-    const DAYS: Array<string> = weekDays.replace(/\[|\]|"/g, '').split(',');
+  //   const DAYS: Array<string> = weekDays.replace(/\[|\]|"/g, '').split(',');
 
-    const weekdaysArray = DAYS.map((day) =>
-      version == 'v1' ? weekdaysMapV1[day.toLowerCase()] : weekdaysMapV3[day.toLowerCase()]
-    );
+  //   const weekdaysArray = DAYS.map((day) =>
+  //     version == 'v1' ? weekdaysMapV1[day.toLowerCase()] : weekdaysMapV3[day.toLowerCase()]
+  //   );
 
 
-    while (weekdaysArray[0]&&subscriptionDaysCount > 0) {
-      currentDate = new Date(currentDate.getTime() + millisecondsPerDay);
-      if (weekdaysArray.includes(currentDate.getDay())) {
-        subscriptionDaysCount--;
-      }
-    }
-    return new Date(currentDate).toLocaleDateString('en-CA');
-  }
+  //   while (weekdaysArray[0]&&subscriptionDaysCount > 0) {
+  //     currentDate = new Date(currentDate.getTime() + millisecondsPerDay);
+  //     if (weekdaysArray.includes(currentDate.getDay())) {
+  //       subscriptionDaysCount--;
+  //     }
+  //   }
+  //   return new Date(currentDate).toLocaleDateString('en-CA');
+  // }
 }
