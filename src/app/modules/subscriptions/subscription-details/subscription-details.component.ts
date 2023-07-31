@@ -208,13 +208,14 @@ export class SubscriptionDetailsComponent implements OnInit {
       let columns5: any[] = [];
       if (this.sub.subscription_days.length) {
         this.sub.subscription_days.forEach((m) => {
-          columns5.push(
-            { title: 'Date/Day', dataKey: `${m.date} / ${m.day}` },
-          );
+          columns5.push({ title: 'Date/Day', dataKey: `${m.date} / ${m.day}` });
           m.day_meals.forEach((d) => {
-            columns5.push(
-              { title: d.type, dataKey: `${d.meal.name} ${d.meal.max_meal} ${d.meal.meal_unit} ${d.meal.max_side?d.meal.max_side:""} ${d.meal.max_side?d.meal.side_unit:""}` },
-            );
+            columns5.push({
+              title: d.type,
+              dataKey: `${d.meal.name} ${d.meal.max_meal} ${d.meal.meal_unit} ${
+                d.meal.max_side ? d.meal.max_side : ''
+              } ${d.meal.max_side ? d.meal.side_unit : ''}`,
+            });
           });
         });
       }
@@ -272,14 +273,16 @@ export class SubscriptionDetailsComponent implements OnInit {
         doc.setFontSize(10);
         doc.setTextColor('#9EA4A9'); // Set text color to black
         doc.text('Meals Info', 10, 82);
-        autoTable(doc, { body: columns5, startY: 85,
+        autoTable(doc, {
+          body: columns5,
+          startY: 85,
           didParseCell: function (data) {
-            if (data.cell.raw == "Date/Day") {
+            if (data.cell.raw == 'Date/Day') {
               data.row.cells[0].styles.fillColor = [3, 146, 48];
-              data.row.cells[0].styles.textColor = [255,255,255];
+              data.row.cells[0].styles.textColor = [255, 255, 255];
               data.row.cells[1].styles.fillColor = [3, 146, 48];
-              data.row.cells[1].styles.textColor = [255,255,255];
-            } 
+              data.row.cells[1].styles.textColor = [255, 255, 255];
+            }
           },
         });
       }
@@ -339,16 +342,16 @@ export class SubscriptionDetailsComponent implements OnInit {
     return updatedMeals;
   }
 
-  convertMealNames(meal:string):string{
+  convertMealNames(meal: string): string {
     switch (meal) {
       case 'Meal 1':
-        return 'Breakfast'
+        return 'Breakfast';
       case 'Meal 2':
-        return 'Lunch'
+        return 'Lunch';
       case 'Meal 3':
-        return 'Dinner'
+        return 'Dinner';
       default:
-        return meal
+        return meal;
     }
   }
 
@@ -424,8 +427,22 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
-      doc.text(`${sub.location.area_id != 'null'?sub.location.area_id+' - ':''}${sub.location.emirate.en_name}`, 85, 63);
-      doc.text(`${sub.location.landmark!= '0'?sub.location.landmark+' - ':''}${sub.location.property_number != '0'?sub.location.property_number:''}`, 85, 68);
+      doc.text(
+        `${sub.location.area_id != 'null' ? sub.location.area_id + ' - ' : ''}${
+          sub.location.emirate.en_name
+        }`,
+        85,
+        63
+      );
+      doc.text(
+        `${sub.location.landmark != '0' ? sub.location.landmark + ' - ' : ''}${
+          sub.location.property_number != '0'
+            ? sub.location.property_number
+            : ''
+        }`,
+        85,
+        68
+      );
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal'); // Set font and style to bold
@@ -659,10 +676,13 @@ export class SubscriptionDetailsComponent implements OnInit {
     }
   }
 
+  // =====================================================ACCOUNTANT TAX=================================================================
   printAccountantTaxInvoice(sub: SubscriptionDetails) {
     if (this.printPermission) {
       const doc = new jsPDF();
       const imageFile = '../../../../assets/images/logo.png';
+      const SignatureImageFile =
+        '../../../../assets/images/accountant-signature.png';
       // =================================LINES=================================
       doc.setDrawColor(187, 187, 187); // RGB color values (black in this case)
       doc.setLineWidth(0.4); // Set the line width
@@ -676,6 +696,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.line(200, 285, 200, 20); // (x1, y1, x2, y2) Vertical
       // =================================END-LINES=================================
       doc.addImage(imageFile, 'JPEG', 15, 25, 25, 18);
+      doc.addImage(SignatureImageFile, 'PNG', 130, 220, 65, 65);
       // =================================FOOTER=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal'); // Set font and style to bold
@@ -730,15 +751,244 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
-      doc.text(`${sub.location.area_id != 'null'?sub.location.area_id+' - ':''}${sub.location.emirate.en_name}`, 85, 63);
-      doc.text(`${sub.location.landmark!= '0'?sub.location.landmark+' - ':''}${sub.location.property_number != '0'?sub.location.property_number:''}`, 85, 68);
+      doc.text(
+        `${sub.location?.area_id != 'null' ? sub.location?.area_id + ' - ' : ''}${
+          sub.location?.emirate?.en_name
+        }`,
+        85,
+        63
+      );
+      doc.text(
+        `${(sub.location.landmark != '0' &&  sub.location.landmark != 'null') ? sub.location.landmark + ' - ' : ''}${
+          (sub.location.property_number != '0' && sub.location.property_number != 'null') ? sub.location.property_number : ''
+        }`,
+        85,
+        68
+      );
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
       doc.text('TRN 100244837900003', 85, 73);
+      // =================================START-LINE=================================
+      doc.setDrawColor(187, 187, 187); // RGB color values (black in this case)
+      doc.setLineWidth(0.4); // Set the line width
+      doc.line(18, 75, 18, 120); // (x1, y1, x2, y2) Vertical
+      doc.line(45, 75, 45, 120); // (x1, y1, x2, y2) Vertical
+      doc.line(90, 75, 90, 120); // (x1, y1, x2, y2) Vertical
+      doc.line(105, 75, 105, 120); // (x1, y1, x2, y2) Vertical
+      doc.line(120, 75, 120, 120); // (x1, y1, x2, y2) Vertical
+      doc.line(143, 75, 143, 120); // (x1, y1, x2, y2) Vertical
+      doc.line(157, 75, 157, 120); // (x1, y1, x2, y2) Vertical
+      doc.line(175, 75, 175, 120); // (x1, y1, x2, y2) Vertical
+      // =================================END-LINE=================================
+      doc.line(10, 82, 200, 82); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 120, 200, 120); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 165, 200, 165); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 175, 200, 175); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 188, 200, 188); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 198, 200, 198); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 208, 200, 208); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 218, 200, 218); // (x1, y1, x2, y2) Horizontal
+      // =================================END-LINE=================================
+      doc.line(125, 120, 125, 165); // (x1, y1, x2, y2) Vertical
+      doc.line(125, 175, 125, 285); // (x1, y1, x2, y2) Vertical
+      doc.line(163, 175, 163, 218); // (x1, y1, x2, y2) Vertical
+      // =================================END-LINE=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('#', 13, 80);
+      doc.text('1', 13, 90);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Item', 21, 80);
+      doc.setFontSize(9);
+      doc.text(sub.program_id == 60 ? 'Nutrition':'Subscription', 20, 90);
+      doc.text('Fees', 20, 95);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Description', 48, 80);
+      doc.setFontSize(9);
+      doc.text(`TOTAL COST OF`, 47, 90);
+      doc.text(`${sub.program_id == 60 ? 'FAST MEASUREMENT':'FOOD SOLD'}`, 47, 95);
+      doc.text(`${sub.program_id == 60 ? 'FOR THE PERIOD':'FOR THE PERIOD'}`, 47, 100);
+      doc.text(
+        `${sub.delivery_starting_day} - ${this.calcSubscriptionEndDate(
+          sub.delivery_starting_day,
+          sub.days_of_week,
+          sub.subscriptions_note,
+          sub.version,
+          sub.program_id
+        )}`,
+        47,
+        105
+      );
+      // doc.text('MINUS ORIGIN33', 47, 105);
+      // doc.text('COMMISSION', 47, 110);
+      // doc.text('FOR THE PERIOD', 47, 115);
+      // doc.text('(43650.98 - 17363.44)', 47, 120);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Qty', 93, 80);
+      doc.setFontSize(9);
+      doc.text('1.00', 93, 90);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Units', 108, 80);
+      // doc.setFontSize(9);
+      // doc.text('TOTAL COST OF FOOD', 108, 90);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Rate', 123, 80);
+      doc.setFontSize(9);
+      doc.text(sub.total_price_without_vat.toFixed(2), 123, 90);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Tax %', 145, 80);
+      doc.setFontSize(9);
+      doc.text('5.00', 145, 90);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Tax', 160, 80);
+      doc.setFontSize(9);
+      doc.text(sub.vat_amount.toFixed(2), 160, 90);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Amount', 178, 80);
+      doc.setFontSize(9);
+      doc.text(sub.total_price_without_vat.toFixed(2), 178, 90);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Notes : Thanks for your business.', 13, 128);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.text('Sub Total', 127, 128);
+      doc.text(sub.total_after_discount.toFixed(2), 170, 128);
+      doc.text('Standard Rate (5%)', 127, 136);
+      doc.text(sub.vat_amount.toFixed(2), 170, 136);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.text('Total', 127, 144);
+      doc.text(`AED ${sub.total_with_vat.toFixed(2)}`, 170, 144);
+      doc.text('Balance Due', 127, 152);
+      doc.text(`AED ${sub.total_with_vat.toFixed(2)}`, 170, 152);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Tax Summary', 13, 171);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Tax Details', 13, 183);
+      doc.setFontSize(9);
+      doc.text('Taxable Amount (AED)', 127, 183);
+      doc.text('Tax Amount (AED)', 165, 183);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Standard Rate (5%)', 13, 194);
+      doc.text(sub.vat_amount.toFixed(2), 128, 194);
+      doc.text(sub.vat_amount.toFixed(2), 165, 194);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('REFUNDABLE SECURITY AMOUNT', 13, 204);
+      doc.text(sub.refundable_security_amount.toFixed(), 128, 204);
+      doc.text(sub.refundable_security_amount.toFixed(), 165, 204);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('Total', 13, 214);
+      doc.text(`AED ${sub.grand_total}`, 128, 214);
+      doc.text(`AED ${sub.grand_total}`, 165, 214);
+      // =================================END-TEXT=================================
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text(
+        'BANK ACCOUNT DETAILS BANK NAME: ADIB (Abu Dhabi Islamic Bank)',
+        13,
+        225
+      );
+      doc.text('ACCOUNT NAME: LOWCALORIES HOSPITALITY', 13, 230);
+      doc.text('AND CATERING COMPANY SERVICES FOR L L C', 13, 235);
+      doc.text('ACCOUNT NUMBER : 19057777', 13, 240);
+      doc.text('IBAN NUMBER : AE690500000000019057777', 13, 245);
+      // =================================END-TEXT=================================
+      doc.text('Authorized Signature', 150, 280);
 
       doc.save('Subscription.pdf');
     }
+  }
+
+  calcSubscriptionEndDate(
+    startDate: string,
+    weekDays: string,
+    subscriptionNote: string,
+    version: string,
+    programId: number
+  ) {
+    if (programId == 60) {
+      return new Date(startDate).toLocaleDateString('en-CA')
+    }
+    let subscriptionDaysCount =  Number(subscriptionNote.split('-')[2]);
+    const millisecondsPerDay = 24 * 60 * 60 * 1000;
+    let currentDate = new Date(startDate);
+    const weekdaysMapV1: any = {
+      sun: 0,
+      mon: 1,
+      tue: 2,
+      wed: 3,
+      thu: 4,
+      fri: 5,
+      sat: 6,
+    };
+
+    const weekdaysMapV3: any = {
+      sunday: 0,
+      monday: 1,
+      tuesday: 2,
+      wednesday: 3,
+      thursday: 4,
+      friday: 5,
+      saturday: 6,
+    };
+
+    const DAYS: Array<string> = weekDays.replace(/\[|\]|"/g, '').split(',');
+
+    const weekdaysArray = DAYS.map((day) =>
+      version == 'v1' ? weekdaysMapV1[day.toLowerCase()] : weekdaysMapV3[day.toLowerCase()]
+    );
+
+
+    while (weekdaysArray[0]&&subscriptionDaysCount > 0) {
+      currentDate = new Date(currentDate.getTime() + millisecondsPerDay);
+      if (weekdaysArray.includes(currentDate.getDay())) {
+        subscriptionDaysCount--;
+      }
+    }
+    return new Date(currentDate).toLocaleDateString('en-CA');
   }
 }

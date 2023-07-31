@@ -213,7 +213,7 @@ export interface SubscriptionDetails {
   bag:                               number;
   total_price:                       number;
   delivery_starting_day:             string;
-  days_of_week:                      string;
+  days_of_week:                      any;
   dislike:                           string;
   dis_like_user:                     string;
   note:                              null;
