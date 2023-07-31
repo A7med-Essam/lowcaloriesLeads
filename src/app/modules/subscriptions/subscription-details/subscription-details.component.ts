@@ -784,16 +784,17 @@ export class SubscriptionDetailsComponent implements OnInit {
       // =================================END-LINE=================================
       doc.line(10, 82, 200, 82); // (x1, y1, x2, y2) Horizontal
       doc.line(10, 120, 200, 120); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 155, 200, 155); // (x1, y1, x2, y2) Horizontal
       doc.line(10, 165, 200, 165); // (x1, y1, x2, y2) Horizontal
-      doc.line(10, 175, 200, 175); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 178, 200, 178); // (x1, y1, x2, y2) Horizontal
       doc.line(10, 188, 200, 188); // (x1, y1, x2, y2) Horizontal
       doc.line(10, 198, 200, 198); // (x1, y1, x2, y2) Horizontal
       doc.line(10, 208, 200, 208); // (x1, y1, x2, y2) Horizontal
       doc.line(10, 218, 200, 218); // (x1, y1, x2, y2) Horizontal
       // =================================END-LINE=================================
-      doc.line(125, 120, 125, 165); // (x1, y1, x2, y2) Vertical
-      doc.line(125, 175, 125, 285); // (x1, y1, x2, y2) Vertical
-      doc.line(163, 175, 163, 218); // (x1, y1, x2, y2) Vertical
+      doc.line(125, 120, 125, 155); // (x1, y1, x2, y2) Vertical
+      doc.line(125, 165, 125, 285); // (x1, y1, x2, y2) Vertical
+      doc.line(163, 165, 163, 218); // (x1, y1, x2, y2) Vertical
       // =================================END-LINE=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
@@ -882,31 +883,38 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setFont('helvetica', 'normal'); // Set font and style to bold
       doc.text('Sub Total', 127, 128);
       doc.text(sub.total_after_discount.toFixed(2), 170, 128);
-      doc.text('Standard Rate (5%)', 127, 136);
-      doc.text(sub.vat_amount.toFixed(2), 170, 136);
+      doc.text('Standard Rate (5%)', 127, 134);
+      doc.text(sub.vat_amount.toFixed(2), 170, 134);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
-      doc.text('Total', 127, 144);
-      doc.text(`AED ${sub.total_with_vat.toFixed(2)}`, 170, 144);
-      doc.text('Balance Due', 127, 152);
-      doc.text(`AED ${sub.total_with_vat.toFixed(2)}`, 170, 152);
+      doc.text('Total', 127, 140);
+      doc.text(`AED ${sub.total_with_vat.toFixed(2)}`, 170, 140);
+      doc.text('Balance Due', 127, 146);
+      doc.text(`AED ${sub.total_with_vat.toFixed(2)}`, 170, 146);
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
-      doc.text('Tax Summary', 13, 171);
+      doc.text('Tax Summary', 13, 161);
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
-      doc.text('Tax Details', 13, 183);
+      doc.text('Tax Details', 13, 173);
       doc.setFontSize(9);
-      doc.text('Taxable Amount (AED)', 127, 183);
-      doc.text('Tax Amount (AED)', 165, 183);
+      doc.text('Taxable Amount (AED)', 127, 173);
+      doc.text('Tax Amount (AED)', 165, 173);
       // =================================END-TEXT=================================
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
-      doc.text('Standard Rate (5%)', 13, 194);
+      doc.text('DISCOUNT', 13, 184);
+      doc.text(sub.discount_amount.toFixed(2), 128, 184);
+      doc.text(sub.discount_amount.toFixed(2), 165, 184);
+      // =================================END-TEXT=================================
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal'); // Set font and style to bold
+      doc.setTextColor('#1f1f1f'); // Set text color to black
+      doc.text('STANDARD RATE (5%)', 13, 194);
       doc.text(sub.vat_amount.toFixed(2), 128, 194);
       doc.text(sub.vat_amount.toFixed(2), 165, 194);
       // =================================END-TEXT=================================
@@ -920,7 +928,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
-      doc.text('Total', 13, 214);
+      doc.text('TOTAL', 13, 214);
       doc.text(`AED ${sub.grand_total}`, 128, 214);
       doc.text(`AED ${sub.grand_total}`, 165, 214);
       // =================================END-TEXT=================================
