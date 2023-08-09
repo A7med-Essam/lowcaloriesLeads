@@ -24,9 +24,27 @@ export class ShowUsersComponent implements OnInit {
 
   getAgents() {
     this._UsersService.getAgents().subscribe((res) => {
+      res.data.forEach((user: any) => {
+        if (this.RoleToString[user.role]) {
+          user.role = this.RoleToString[user.role];
+        }
+      });
       this.cloneAgents = this.agents = res.data;
     });
   }
+
+  AgentRoleEnum = {
+    HeadOffice: 0,
+    Branches: 1,
+    Accountant: 3,
+  };
+
+  RoleToString = {
+    [this.AgentRoleEnum.HeadOffice]: 'HeadOffice',
+    [this.AgentRoleEnum.Branches]: 'Branches',
+    [this.AgentRoleEnum.Accountant]: 'Accountant',
+  };
+
 
   search(e: HTMLInputElement) {
     setTimeout(() => {
@@ -37,6 +55,8 @@ export class ShowUsersComponent implements OnInit {
             agent.name.toUpperCase().includes(searchValue) ||
             agent.team.toUpperCase().includes(searchValue) ||
             agent.role_name.toUpperCase().includes(searchValue) ||
+            agent.role.toUpperCase().includes(searchValue) ||
+            agent.web_role[0].toUpperCase().includes(searchValue) ||
             (agent.status &&
               agent.status.toUpperCase().includes(searchValue)) ||
             agent.permissions.some((permission: any) =>
@@ -47,6 +67,18 @@ export class ShowUsersComponent implements OnInit {
         this.agents = [...this.cloneAgents];
       }
     }, 1);
+  }
+
+  agentRoles = ['None', 'HeadOffice', 'Branches', 'Accountant'];
+  onAgentRoleSelected(e: Dropdown){
+    this.agents = [...this.cloneAgents];
+    if (this.agentRoles.includes(e.value) && e.value != 'None') {
+      this.agents = this.agents.filter((agent) =>
+        agent.role === e.value
+      );
+    } else {
+      this.agents = [...this.cloneAgents];
+    }
   }
 
   updateAgent(agent: any) {
@@ -71,23 +103,26 @@ export class ShowUsersComponent implements OnInit {
   addRole(input: MultiSelect) {
     let permissions: string[] = [];
     let roles: string[] = [];
-    input.value.forEach((e:any) => {
-        e.role_permissions.forEach((p: any) => {
-          if (p.permission?.name) {
-            permissions.push(p.permission.name);
-            roles.push(e.name);
-          }
-        });
+    input.value.forEach((e: any) => {
+      e.role_permissions.forEach((p: any) => {
+        if (p.permission?.name) {
+          permissions.push(p.permission.name);
+          roles.push(e.name);
+        }
+      });
     });
     const updateData = {
       agent_id: this.currentAgent.id,
-      role_name: roles.filter((value, index, self) => self.indexOf(value) === index),
-      permissions:permissions.filter((value, index, self) => self.indexOf(value) === index),
+      role_name: roles.filter(
+        (value, index, self) => self.indexOf(value) === index
+      ),
+      permissions: permissions.filter(
+        (value, index, self) => self.indexOf(value) === index
+      ),
     };
     this._UsersService.updateAgent(updateData).subscribe((res) => {
       this.getAgents();
       this.addRoleModal = false;
     });
   }
-
 }

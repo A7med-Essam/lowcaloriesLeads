@@ -5,6 +5,9 @@
       <div class="input-group no-border">
         <input type="text" value="" placeholder="Search..." class="form-control" #searchInput
           (keydown)="search(searchInput)">
+          <p-dropdown [options]="agentRoles"
+          (onChange)="onAgentRoleSelected(agentRolesDropDown)"
+          #agentRolesDropDown appendTo="body" styleClass="w-100" placeholder="Select Role"></p-dropdown>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -13,6 +16,7 @@
         <th>Name</th>
         <th>team</th>
         <th>Role</th>
+        <th>Related To</th>
         <th>status</th>
         <th>permissions</th>
         <th>Action</th>
@@ -24,13 +28,16 @@
         <td>{{user.name}}</td>
         <td>{{user.team}}</td>
         <td>
+          {{user.role}}
+        </td>
+        <td>
           <div class="" *ngFor="let role of user.web_role">
             {{role}}
           </div>
         </td>
         <td>{{user.status?user.status:'Offline'}}</td>
         <td [width]="750">
-          <div class="row">
+          <div class="row" *ngIf="user.role_name != 'super_admin'">
             <div class="col-4" *ngFor="let permission of user.permissions">
               {{permission?.permission}}
             </div>
