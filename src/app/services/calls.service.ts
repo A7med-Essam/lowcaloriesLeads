@@ -44,12 +44,11 @@ export class CallsService {
   }
 
   exportAll(): Observable<any>{
-    return this._ApiConfigService.postReq3(`exportCalls`, '');
+    return this._ApiConfigService.postReq3(`calls/exportAll`, '');
   }
 
-  // TODO: check 
   exportByIds(callIds:number[]): Observable<any>{
-    return this._ApiConfigService.postReq3(`callExportByIds`, {callIds});
+    return this._ApiConfigService.postReq3(`calls/exportCallByIds`, {callIds});
   }
 
   filterCalls(page: number,filter:any){

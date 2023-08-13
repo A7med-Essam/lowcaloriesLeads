@@ -12,8 +12,278 @@
         </div>
     </div>
     <hr>
+    <div id="invoice">
+        <div class="invoice overflow-auto" *ngIf="sub">
+            <div>
+                <main class="d-flex flex-wraps">
+                    <table cellspacing="0" cellpadding="0" style="text-align: center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th colspan="6"><i>Subscription Deatils</i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="no">01</td>
+                                <td class="text-center">
+                                    <h3>INVOICE NO</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;">
+                                    <span>{{ sub.invoice_no }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">02</td>
+                                <td class="text-center">
+                                    <h3>PROGRAM</h3>
+                                </td>
+                                <td style="font-size: 14px;">
+                                    <span> {{sub.subscriptions_note.split('-')[1]}}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        {{sub.full_plan_name.split('-')[0] + ""}}
+                                        &#160;&#160;&#160;&#160;&#160;
+                                        {{sub.full_plan_name.split('-')[2] + ""}}
+                                        &#160;&#160;&#160;&#160;&#160;
+                                        {{sub.full_plan_name.split('-')[3]}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">03</td>
+                                <td class="text-center">
+                                    <h3>PLAN TITLE</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                                    <span>{{ sub.subscriptions_note }}</span>                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">04</td>
+                                <td class="text-center">
+                                    <h3>MEAL TYPES</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                                    <span>{{ replaceMeals(sub.dislike).join(" - ") }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">05</td>
+                                <td class="text-center">
+                                    <h3>Need Cutlery?</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                                    <span>{{ sub.cutlery == 'checked' ? "yes" : "no" }}</span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="sub.agent">
+                                <td class="no">06</td>
+                                <td class="text-center">
+                                    <h3>Agent</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                                    <span>{{ sub.agent.name }}</span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="sub.program_id == 50 || sub.program_id < 15">
+                                <td class="no">{{sub.agent? '07': '06'}}</td>
+                                <td class="text-center">
+                                    <h3>Confirmed Terms</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                                    <span>YES</span>
+                                </td>
+                            </tr>
+                            <!-- <tr>
+                                <td class="no">05</td>
+                                <td class="text-center">
+                                    <h3>TOTAL</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;">
+                                    <span>1,200.00 <sub>AED</sub></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">06</td>
+                                <td class="text-center">
+                                    <h3>DISCOUNT</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;">
+                                    <span>0%</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">07</td>
+                                <td class="text-center">
+                                    <h3>GRAND TOTAL</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;">
+                                    <span>1,200.00 <sub>AED</sub></span>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+    
+                    <table cellspacing="0" cellpadding="0" style="text-align: center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th colspan="4"><i>Personal Deatils</i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="no">01</td>
+                                <td class="text-center">
+                                    <h3>First Name</h3>
+                                </td>
+                                <td >
+                                    <span>{{ sub.user.first_name }}</span>
+                                </td>
+                                <td class="text-center">
+                                    <h3>Last Name</h3>
+                                </td>
+                                <td >
+                                    <span>{{ sub.user.last_name }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">02</td>
+                                <td class="text-center">
+                                    <h3>Gender</h3>
+                                </td>
+                                <td>
+                                    <span>{{ sub.user.gender }}</span>
+                                </td>
+                                <td class="text-center">
+                                    <h3>Birth Date</h3>
+                                </td>
+                                <td>
+                                    <span>{{ sub.user.birthday }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">03</td>
+                                <td class="text-center">
+                                    <h3>Height</h3>
+                                </td>
+                                <td>
+                                    <span>{{ sub.user.height }}</span>
+                                </td>
+                                <td class="text-center">
+                                    <h3>Weight</h3>
+                                </td>
+                                <td>
+                                    <span>{{ sub.user.Weight }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">04</td>
+                                <td class="text-center">
+                                    <h3>Email</h3>
+                                </td>
+                                <td style="word-break: break-all;">
+                                    <span>{{ sub.user.email }}</span>
+                                </td>
+                                <td class="text-center">
+                                    <h3>Land Line</h3>
+                                </td>
+                                <td >
+                                    <span>{{ sub.user.land_line }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">05</td>
+                                <td class="text-center">
+                                    <h3>Mobile Number</h3>
+                                </td>
+                                <td >
+                                    <span>{{ sub.user.phone_number }}</span>
+                                </td>
+                                <td class="text-center">
+                                    <h3>Second Mobile Number</h3>
+                                </td>
+                                <td >
+                                    <span>{{ sub.user.second_phone_number }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+    
+                    <table cellspacing="0" cellpadding="0" style="text-align: center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th colspan="4"><i>Delivery Deatils</i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="no">01</td>
+                                <td class="text-center">
+                                    <h3>Start Date</h3>
+                                </td>
+                                <td colspan="3">
+                                    <span>{{ sub.delivery_starting_day }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">02</td>
+                                <td class="text-center">
+                                    <h3>Emirate</h3>
+                                </td>
+                                <td >
+                                    <span>{{ sub.location.emirate.en_name }}</span>
+                                </td>
+                                <td class="text-center">
+                                    <h3>Villa / Flat</h3>
+                                </td>
+                                <td>
+                                    <span>{{ sub.location.property_number }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">03</td>
+                                <td class="text-center">
+                                    <h3>Land mark</h3>
+                                </td>
+                                <td colspan="3">
+                                    <span>{{ sub.location.landmark }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">04</td>
+                                <td class="text-center">
+                                    <h3>Area</h3>
+                                </td>
+                                <td colspan="3">
+                                    <span>{{ sub.location.area_id }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">05</td>
+                                <td class="text-center">
+                                    <h3>Delivery days</h3>
+                                </td>
+                                <td colspan="3" style="line-break: auto;">
+                                    <span>{{ sub.days_of_week }}</span>
+                                    <!-- <span style="margin:0px 5px;">Saturday</span> 
+                                    <span style="margin:0px 5px;">Sunday</span> 
+                                    <span style="margin:0px 5px;">Monday</span> 
+                                    <span style="margin:0px 5px;">Tuesday</span> 
+                                    <span style="margin:0px 5px;">Wednesday</span> 
+                                    <span style="margin:0px 5px;">Thursday</span> 
+                                    <span style="margin:0px 5px;">Friday</span> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </main>
+            </div>
+        </div>
+    </div>
+    
     <div class="row animated" *ngIf="sub">
-        <div class="col-md-12 my-2">
+        <!-- <div class="col-md-12 my-2">
             <div class="card">
                 <div class="card-body">
                     <div class="col-md-12">
@@ -77,9 +347,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="col-md-12 my-2">
+        <!-- <div class="col-md-12 my-2">
             <div class="card">
                 <div class="card-body">
                     <div class="col-md-12">
@@ -139,7 +409,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="col-md-12 my-2">
             <div class="card">
@@ -234,7 +504,7 @@
             </div>
         </div>
 
-        <div class="col-md-12 my-2">
+        <!-- <div class="col-md-12 my-2">
             <div class="card">
                 <div class="card-body">
                     <div class="col-md-12">
@@ -282,7 +552,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="col-md-12 my-2" *ngIf="sub.branch_paid_on">
             <div class="card">
@@ -358,4 +628,5 @@
             </div>
         </div>
     </div>
+
 </section>

@@ -26,12 +26,11 @@ export class ComplaintsService {
   }
 
   exportAll(): Observable<any> {
-    return this._ApiConfigService.postReq3(`exportIssues`, '');
+    return this._ApiConfigService.postReq3(`issue/exportAll`, '');
   }
   
-  // TODO: check complaintsIds
-  exportByIds(complaintsIds:number[]): Observable<any> {
-    return this._ApiConfigService.postReq3(`issueExportByIds`, {complaintsIds});
+  exportByIds(issuesIds:number[]): Observable<any> {
+    return this._ApiConfigService.postReq3(`issue/exportByIds`, {issuesIds});
   }
 
   getAllComplaints(): Observable<{status:number,data:any,message:string}> {

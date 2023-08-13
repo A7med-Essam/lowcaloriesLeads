@@ -1,47 +1,45 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center">
-        <h2>Create Target</h2>
+        <h2>Create Clinic Target</h2>
         <button class="btn btn-outline-primary" (click)="goBack()">Back</button>
     </div>
     <hr>
     <form [formGroup]="insertForm" (ngSubmit)='insertRow(insertForm)'>
         <div class="row mx-0">
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"  *ngIf="customerPhones.length == 0">
-                <label for="">Client Number</label>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Client Number <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='client_number' maxlength="10"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" (blur)="getCustomerCID()"/>
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_number')?.touched &&
                 insertForm.get('client_number')?.hasError('required')">This field is required.</small>
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_number')?.touched &&
                 insertForm.get('client_number')?.hasError('pattern')">Length must be 10</small>
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="customerPhones.length">
-                <label for="">Client Number</label>
-                <p-dropdown [options]="customerPhones" formControlName='client_number' appendTo="body" 
-                 styleClass="w-100" placeholder="Select Number" [filter]="true">
-                </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="insertForm.get('client_number')?.touched &&
-                insertForm.get('client_number')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="cids.length == 0">
-                <label for="">Client CID</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='client_cid' (blur)="getCustomerPhones()" />
-                <small class="text-danger ms-1" *ngIf="insertForm.get('client_cid')?.touched &&
-                insertForm.get('client_cid')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="cids.length">
-                <label for="">Client CID</label>
-                <p-dropdown [options]="cids" formControlName='client_cid' appendTo="body" 
-                    styleClass="w-100" placeholder="Select CID" [filter]="true">
-                </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="insertForm.get('client_cid')?.touched &&
-                insertForm.get('client_cid')?.hasError('required')">This field is required.</small>
-            </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                <label for="">Client Name</label>
+                <label for="">Client Name <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='client_name' />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_name')?.touched &&
                 insertForm.get('client_name')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">date <span class="text-danger">*</span></label>
+                <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='date'></p-calendar>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('date')?.touched &&
+                insertForm.get('date')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Paid By <span class="text-danger">*</span></label>
+                <p-dropdown [options]="paid_by" formControlName='paid_by' styleClass="w-100" placeholder="Select Method" optionLabel="name" optionValue="name"
+                    appendTo="body" [filter]="true" filterValue="Payment Link">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('paid_by')?.touched &&
+                insertForm.get('paid_by')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Client CID</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='client_cid' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('client_cid')?.touched &&
+                insertForm.get('client_cid')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Amount</label>
@@ -51,31 +49,9 @@
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Invoice Number</label>
-                <input #invoice (blur)="getSubDetails(invoice)" type="text" pInputText ngClass="w-100" formControlName='invoice_number' />
+                <input type="text" pInputText ngClass="w-100" formControlName='invoice_number' />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('invoice_number')?.touched &&
                 insertForm.get('invoice_number')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                <label for="">date</label>
-                <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='date'></p-calendar>
-                <small class="text-danger ms-1" *ngIf="insertForm.get('date')?.touched &&
-                insertForm.get('date')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                <label for="">Type</label>
-                <p-dropdown [options]="types" optionLabel="name" formControlName='type' appendTo="body" optionValue="name"
-                    styleClass="w-100" placeholder="Select Type" [filter]="true" (onChange)="onTypeChange($event)">
-                </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="insertForm.get('type')?.touched &&
-                insertForm.get('type')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                <label for="">Paid By</label>
-                <p-dropdown [options]="paid_by" formControlName='paid_by' styleClass="w-100" placeholder="Select Method" optionLabel="name" optionValue="name"
-                    appendTo="body" [filter]="true" filterValue="Payment Link">
-                </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="insertForm.get('paid_by')?.touched &&
-                insertForm.get('paid_by')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Teams</label>
@@ -110,7 +86,7 @@
                 insertForm.get('branch')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3">
-                <button class="btn btn-primary w-100" [disabled]="insertForm.invalid">Add Target</button>
+                <button class="btn btn-primary w-100" [disabled]="insertForm.invalid">Add Clinic Target</button>
             </div>
         </div>
     </form>

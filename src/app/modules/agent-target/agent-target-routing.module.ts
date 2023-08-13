@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PermissionGuard } from 'src/app/core/permission.guard';
+import { AddClinicTargetComponent } from './add-clinic-target/add-clinic-target.component';
 import { AddTargetComponent } from './add-target/add-target.component';
 import { FixTargetComponent } from './fix-target/fix-target.component';
 import { ShowTargetComponent } from './show-target/show-target.component';
@@ -12,6 +13,14 @@ const routes: Routes = [
   {
     path: 'create',
     component: AddTargetComponent,
+    canActivate: [PermissionGuard],
+    data: {
+     permission: ["create_target"],
+   },
+  },
+  {
+    path: 'create-clinic',
+    component: AddClinicTargetComponent,
     canActivate: [PermissionGuard],
     data: {
      permission: ["create_target"],

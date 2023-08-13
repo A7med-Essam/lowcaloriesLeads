@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="m-3">
-        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel"
-            (click)="export()"></p-button>
+        <!-- <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel"
+            (click)="export()"></p-button> -->
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
     </div>
@@ -140,13 +140,13 @@
                     <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)"
                         [pSelectableRow]="subscriptions"></p-tableHeaderCheckbox>
                 </th>
+                <th class="text-center">Actions</th>
                 <ng-container *ngFor="let column of columns; let i = index">
                     <th class="text-center" *ngIf="column.status" [pSortableColumn]="column.sortKey">
                         {{ column.name }}
                         <p-sortIcon [field]="column.sortKey"></p-sortIcon>
                     </th>
                 </ng-container>
-                <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-sub>
@@ -154,6 +154,15 @@
                 <td class="text-center">
                     <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="sub">
                     </p-tableCheckbox>
+                </td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                        class="m-1 p-button-sm"></button>
+                    <button *ngIf="!sub.cids"
+                     [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdateModal(sub)"
+                        class="m-1 p-button-sm p-button-warning"></button>
+                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
+                        [disabled]="!printPermission" (click)="print(sub)"></button>
                 </td>
                 <ng-container *ngFor="let column of columns">
                     <td class="text-center" *ngIf="column.status">
@@ -210,15 +219,6 @@
 
                     </td>
                 </ng-container>
-                <td class="text-center">
-                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
-                        class="m-1 p-button-sm"></button>
-                    <button *ngIf="!sub.cids"
-                     [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdateModal(sub)"
-                        class="m-1 p-button-sm p-button-warning"></button>
-                    <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
-                        [disabled]="!printPermission" (click)="print(sub)"></button>
-                </td>
             </tr>
         </ng-template>
     </p-table>

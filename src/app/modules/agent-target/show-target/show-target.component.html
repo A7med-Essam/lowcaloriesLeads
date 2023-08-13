@@ -1,7 +1,9 @@
 <div class="d-flex justify-content-end align-items-center table-buttons-container">
     <div class="m-3">
+        <button [disabled]="!createPermission" pButton pRipple label="Add Clinic Target" class="p-button-success mx-1" icon="pi pi-plus"
+            routerLink="../create-clinic"></button>
         <button [disabled]="!createPermission" pButton pRipple label="Add Target" class="p-button-success mx-1" icon="pi pi-plus"
-            routerLink="../create"></button>
+        routerLink="../create"></button>
         <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
         <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
@@ -66,9 +68,9 @@
                 <td class="text-center" *ngIf="columns[14].status">{{agent.amount_paid}}</td>
 
                 <td class="text-center">
-                    <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdate(agent)"
+                    <button *ngIf="agent.type.toLowerCase() != 'clinic'"  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdate(agent)"
                     class="m-1 p-button-sm p-button-warning"></button>
-                    <button *ngIf="agent.hasNullValues" [disabled]="!fixPermission" pButton type="button" icon="pi pi-exclamation-triangle" (click)="displayFix(agent)"
+                    <button *ngIf="agent.hasNullValues && agent.type.toLowerCase() != 'clinic'" [disabled]="!fixPermission" pButton type="button" icon="pi pi-exclamation-triangle" (click)="displayFix(agent)"
                     class="m-1 p-button-sm p-button-help"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
                         class="m-1 p-button-sm"></button>

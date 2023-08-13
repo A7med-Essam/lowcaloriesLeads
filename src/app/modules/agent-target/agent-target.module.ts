@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { UpdateTargetComponent } from './update-target/update-target.component';
 import { FixTargetComponent } from './fix-target/fix-target.component';
+import { AddClinicTargetComponent } from './add-clinic-target/add-clinic-target.component';
 
 const APP_PRIMENG_MODULE = [
   CheckboxModule,
@@ -30,7 +31,8 @@ const APP_PRIMENG_MODULE = [
     TargetDetailsComponent,
     AddTargetComponent,
     UpdateTargetComponent,
-    FixTargetComponent
+    FixTargetComponent,
+    AddClinicTargetComponent
   ],
   imports: [
     CommonModule,

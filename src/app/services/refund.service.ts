@@ -37,12 +37,11 @@ export class RefundService  {
   }
 
   exportAll(): Observable<any> {
-    return this._ApiConfigService.postReq3(`RefundExport`, '');
+    return this._ApiConfigService.postReq3(`refund/exportAll`, '');
   }
   
-  // TODO: check refundIds
-  exportByIds(refundIds:number[]): Observable<any> {
-    return this._ApiConfigService.postReq3(`RefundExportByIds`, refundIds);
+  exportByIds(refund_ids:number[]): Observable<any> {
+    return this._ApiConfigService.postReq3(`refund/exportByIds`, {refund_ids});
   }
 
   getAllRefunds(): Observable<{status:number,data:any,message:string}> {

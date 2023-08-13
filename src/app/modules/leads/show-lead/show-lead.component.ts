@@ -151,9 +151,9 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
       let exportObservable;
       if (this.appliedFilters) {
         const ids = this.leads.map((obj: any) => obj.id);
-        exportObservable = this._SurveyService.exportLeads(ids);
+        exportObservable = this._SurveyService.exportByIds(ids);
       } else {
-        exportObservable = this._SurveyService.exportLeads();
+        exportObservable = this._SurveyService.exportAll();
       }
       exportObservable.subscribe({
         next: (res) => {

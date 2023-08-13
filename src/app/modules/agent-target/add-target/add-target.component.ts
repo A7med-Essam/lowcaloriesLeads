@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -57,12 +57,12 @@ export class AddTargetComponent implements OnInit {
         Validators.pattern('^[\\d]{10}$'),
       ]),
       client_cid: new FormControl(null),
-      branch: new FormControl(null),
-      customer_type: new FormControl(null),
-      status: new FormControl(null),
-      invoice_number: new FormControl(null),
-      amount_paid: new FormControl(null),
-      team: new FormControl(null),
+      branch: new FormControl(null, [Validators.required]),
+      customer_type: new FormControl(null, [Validators.required]),
+      status: new FormControl(null, [Validators.required]),
+      invoice_number: new FormControl(null, [Validators.required]),
+      amount_paid: new FormControl(null, [Validators.required]),
+      team: new FormControl(null, [Validators.required]),
       paid_by: new FormControl(null, [Validators.required]),
       type: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),

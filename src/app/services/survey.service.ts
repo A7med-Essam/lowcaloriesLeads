@@ -149,9 +149,12 @@ export class SurveyService {
     return this._ApiConfigService.postReq3(`leads/assign`, lead);
   }
 
-  // TODO: add export All
-  exportLeads(leadIds?: number[]): Observable<any> {
-    return this._ApiConfigService.postReq3(`leads/export`, {leadIds});
+  exportByIds(leadIds: number[]): Observable<any> {
+    return this._ApiConfigService.postReq3(`leads/exportByIds`, {leadIds});
+  }
+
+  exportAll(): Observable<any> {
+    return this._ApiConfigService.postReq3(`leads/exportAll`, '');
   }
   // =========================================================================
 

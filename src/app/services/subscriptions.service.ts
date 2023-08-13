@@ -30,7 +30,6 @@ export class SubscriptionsService {
     return this._ApiConfigService.postReq3(`SubscriptionsExport`, '');
   }
   
-  // TODO: check subscriptionIds
   exportByIds(subscriptionIds:number[]): Observable<any> {
     return this._ApiConfigService.postReq3(`SubscriptionsExportByIds`, {subscriptionIds});
   }
