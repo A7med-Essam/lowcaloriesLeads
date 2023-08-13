@@ -57,15 +57,15 @@ export class AddTargetComponent implements OnInit {
         Validators.pattern('^[\\d]{10}$'),
       ]),
       client_cid: new FormControl(null),
-      branch: new FormControl(null, [Validators.required]),
-      customer_type: new FormControl(null, [Validators.required]),
+      branch: new FormControl(null),
+      customer_type: new FormControl(null),
+      status: new FormControl(null),
+      invoice_number: new FormControl(null),
+      amount_paid: new FormControl(null),
+      team: new FormControl(null),
       paid_by: new FormControl(null, [Validators.required]),
-      status: new FormControl(null, [Validators.required]),
-      invoice_number: new FormControl(null, [Validators.required]),
       type: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),
-      team: new FormControl(null, [Validators.required]),
-      amount_paid: new FormControl(null, [Validators.required]),
       client_name: new FormControl(null, [Validators.required]),
     });
   }
@@ -242,9 +242,9 @@ export class AddTargetComponent implements OnInit {
   paid_by_clone:any;
   onTypeChange(e:any){
     const fieldStatus :boolean = e.value.toLowerCase() == "clinic";
-    this.ToggleValidationsBasedOnType(e.value,fieldStatus);
+    // this.ToggleValidationsBasedOnType(e.value,fieldStatus);
+    this.paid_by = this.paid_by_clone;
     if (!fieldStatus) {
-      this.paid_by = this.paid_by_clone;
       let [selectedType] = this.types.filter(item => item.name === e.value);
       this.paid_by = this.paid_by.filter(item => item.type_id === selectedType.id);
     }
@@ -255,39 +255,39 @@ export class AddTargetComponent implements OnInit {
   }
 
   // Offline Clinic
-  ToggleValidationsBasedOnType(type:string,fieldStatus :boolean){
-    if (fieldStatus) {
-    this.insertForm.get('customer_type')?.disable()
-    this.insertForm.get('invoice_number')?.disable()
-    this.insertForm.get('status')?.disable()
-    this.insertForm.get('branch')?.disable()
-    this.insertForm.get('team')?.disable()
-    this.insertForm.get('amount_paid')?.disable()
-    this.insertForm.get('client_cid')?.disable()
-    this.insertForm.patchValue({
-      customer_type: null,
-      invoice_number: null,
-      status: null,
-      branch: null,
-      team: null,
-      amount_paid: null,
-      client_cid: null,
-    });
-    } else {
-      this.insertForm.reset({
-        client_name: {value: this.insertForm.value.client_name, disabled: fieldStatus},
-        client_number: {value: this.insertForm.value.client_number, disabled: fieldStatus},
-        paid_by: {value: this.insertForm.value.paid_by, disabled: fieldStatus},
-        type: {value: this.insertForm.value.type, disabled: fieldStatus},
-        date: {value: this.insertForm.value.date ? new Date(this.insertForm.value.date):null, disabled: fieldStatus},
-        customer_type: {value: this.insertForm.value.customer_type, disabled: false},
-        invoice_number: {value: this.insertForm.value.invoice_number, disabled: false},
-        status: {value: this.insertForm.value.status, disabled: false},
-        branch: {value: this.insertForm.value.branch, disabled: false},
-        team: {value: this.insertForm.value.team, disabled: false},
-        amount_paid: {value: this.insertForm.value.amount_paid, disabled: false},
-        client_cid: {value: this.insertForm.value.client_cid, disabled: false},
-      });
-    }
-  }
+  // ToggleValidationsBasedOnType(type:string,fieldStatus :boolean){
+  //   if (fieldStatus) {
+  //   this.insertForm.get('customer_type')?.disable()
+  //   this.insertForm.get('invoice_number')?.disable()
+  //   this.insertForm.get('status')?.disable()
+  //   this.insertForm.get('branch')?.disable()
+  //   this.insertForm.get('team')?.disable()
+  //   this.insertForm.get('amount_paid')?.disable()
+  //   this.insertForm.get('client_cid')?.disable()
+  //   this.insertForm.patchValue({
+  //     customer_type: null,
+  //     invoice_number: null,
+  //     status: null,
+  //     branch: null,
+  //     team: null,
+  //     amount_paid: null,
+  //     client_cid: null,
+  //   });
+  //   } else {
+  //     this.insertForm.reset({
+  //       client_name: {value: this.insertForm.value.client_name, disabled: fieldStatus},
+  //       client_number: {value: this.insertForm.value.client_number, disabled: fieldStatus},
+  //       paid_by: {value: this.insertForm.value.paid_by, disabled: fieldStatus},
+  //       type: {value: this.insertForm.value.type, disabled: fieldStatus},
+  //       date: {value: this.insertForm.value.date ? new Date(this.insertForm.value.date):null, disabled: fieldStatus},
+  //       customer_type: {value: this.insertForm.value.customer_type, disabled: false},
+  //       invoice_number: {value: this.insertForm.value.invoice_number, disabled: false},
+  //       status: {value: this.insertForm.value.status, disabled: false},
+  //       branch: {value: this.insertForm.value.branch, disabled: false},
+  //       team: {value: this.insertForm.value.team, disabled: false},
+  //       amount_paid: {value: this.insertForm.value.amount_paid, disabled: false},
+  //       client_cid: {value: this.insertForm.value.client_cid, disabled: false},
+  //     });
+  //   }
+  // }
 }

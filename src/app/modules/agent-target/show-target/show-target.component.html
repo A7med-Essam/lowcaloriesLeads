@@ -66,9 +66,9 @@
                 <td class="text-center" *ngIf="columns[14].status">{{agent.amount_paid}}</td>
 
                 <td class="text-center">
-                    <button *ngIf="agent.type.toLowerCase() != 'clinic'"  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdate(agent)"
+                    <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdate(agent)"
                     class="m-1 p-button-sm p-button-warning"></button>
-                    <button *ngIf="agent.hasNullValues && agent.type.toLowerCase() != 'clinic'" [disabled]="!fixPermission" pButton type="button" icon="pi pi-exclamation-triangle" (click)="displayFix(agent)"
+                    <button *ngIf="agent.hasNullValues" [disabled]="!fixPermission" pButton type="button" icon="pi pi-exclamation-triangle" (click)="displayFix(agent)"
                     class="m-1 p-button-sm p-button-help"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
                         class="m-1 p-button-sm"></button>
