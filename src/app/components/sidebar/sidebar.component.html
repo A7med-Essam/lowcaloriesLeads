@@ -24,7 +24,7 @@
     <hr>
     <!-- ==============================================SuperAdmin==================================================== -->
     <div class="menu-header mt-3 mb-2" *ngIf="isSuperAdmin">
-      Super Admin Components
+       Admin Components
     </div>
     <ul class="menu-items" *ngIf="isSuperAdmin">
       <li>
@@ -43,13 +43,13 @@
     </ul>
     <!-- ================================================SUBSCRIPTIONS================================================== -->
     <div class="menu-header mt-3 mb-2" *ngIf="showSubscriptionPermission">
-      Subscriptions Components
+      Report Components
     </div>
     <ul class="menu-items" *ngIf="showSubscriptionPermission">
       <li>
         <a routerLink="/subscriptions/show" routerLinkActive="active">
-          <i class="fas fa-archive"></i>
-          <span>Subscriptions</span>
+          <i class="fas fa-bookmark"></i>
+          <span>Manager</span>
         </a>
       </li>
       <hr>

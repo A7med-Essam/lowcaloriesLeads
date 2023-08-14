@@ -26,19 +26,25 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     private _MessageService: MessageService,
     private _FormBuilder: FormBuilder,
     private _DislikeService: DislikeService,
-    private _Router:Router,
-    private _GuardService:GuardService
+    private _Router: Router,
+    private _GuardService: GuardService
   ) {}
   printPermission: boolean = false;
   exportPermission: boolean = false;
   getPermission() {
-    this.printPermission = this._GuardService.getPermissionStatus('print_calls');
-    this.exportPermission = this._GuardService.getPermissionStatus('export_calls');
+    this.printPermission =
+      this._GuardService.getPermissionStatus('print_calls');
+    this.exportPermission =
+      this._GuardService.getPermissionStatus('export_calls');
   }
 
   calls: ICalls[] = [];
   PaginationInfo: any;
   interval: any;
+  callStatus: any[] = [
+    { name: 'Uploaded Calls', value: 'true' },
+    { name: 'Not Uploaded Calls', value: 'false' },
+  ];
 
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -49,12 +55,12 @@ export class AssignCallComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._CallsService.call_filter
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res=>{
-      if (res) {
-        this.appliedFilters = res
-      }
-    })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.appliedFilters = res;
+        }
+      });
     this.getPermission();
     this.getAllCalls();
     this.getCalls();
@@ -240,14 +246,14 @@ export class AssignCallComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
+
   private handleExportSuccess(data: any) {
     this._MessageService.add({
       severity: 'success',
       summary: 'Export Excel',
       detail: 'Calls Exported Successfully',
     });
-  
+
     const link = document.createElement('a');
     link.target = '_blank';
     link.href = data;
@@ -320,13 +326,13 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     if (input.checked) {
       this.specificRows = this.calls.map((obj: any) => obj.id);
     } else {
-      this.specificRows = []
+      this.specificRows = [];
     }
   }
 
   // ****************************************************print row************************************************************************
   print(call: any) {
-    if (this.printPermission) {      
+    if (this.printPermission) {
       // Default export is a4 paper, portrait, using millimeters for units
       const doc = new jsPDF();
       const imageFile = '../../../../assets/images/logo.png';
@@ -342,9 +348,9 @@ export class AssignCallComponent implements OnInit, OnDestroy {
       doc.text('Phone: 201116202225', 150, 40);
       doc.text('Email: info@thelowcalories.com', 150, 45);
       doc.text('Website: thelowcalories.com', 150, 50);
-  
+
       autoTable(doc, { startY: 55 });
-  
+
       var columns = [
         { title: 'cid', dataKey: call.cid },
         { title: 'Remaining Days', dataKey: call.subscription_id },
@@ -361,27 +367,31 @@ export class AssignCallComponent implements OnInit, OnDestroy {
         },
         { title: 'agent_uploaded', dataKey: call.agent_uploaded_name },
         { title: 'created_at', dataKey: call.created_at.substring(0, 10) },
-      ].filter((obj:any) => {
+      ].filter((obj: any) => {
         for (const prop in obj) {
-          if (obj[prop] === null || obj[prop] === "" || (Array.isArray(obj[prop]) && obj[prop].length === 0)) {
+          if (
+            obj[prop] === null ||
+            obj[prop] === '' ||
+            (Array.isArray(obj[prop]) && obj[prop].length === 0)
+          ) {
             return false;
           }
         }
         return true;
       });
-  
+
       // doc.text(140, 40, "Report");
       autoTable(doc, { body: columns });
-  
+
       // Set the line color and width
       doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
       doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-  
+
       // Draw a line at the bottom of the page
-  
+
       // Get the total number of pages
       const totalPages = doc.internal.pages;
-  
+
       // Iterate over each page and add the footer
       for (let i = 1; i <= totalPages.length; i++) {
         doc.line(
@@ -401,101 +411,105 @@ export class AssignCallComponent implements OnInit, OnDestroy {
           doc.internal.pageSize.getHeight() - 10
         );
       }
-  
+
       doc.save('calls.pdf');
     }
   }
 
   exportAsPDF() {
-    if (this.printPermission) {      
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
-    doc.internal.pageSize.width = 600;
-    const imageFile = '../../../../assets/images/logo.png';
-    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
-
-    doc.setTextColor(50);
-    doc.setFontSize(14);
-    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Calls Report', 10, 45);
-    doc.text('Prepared By: Low Calories Technical Team', 10, 55);
-    doc.text('Requested By: Mohamed Fawzy', 10, 65);
-    doc.text('Low Calories Restaurant - Egypt', 500, 25);
-    doc.text('3rd Settelment, New Cairo', 500, 35);
-    doc.text('Phone: 201116202225', 500, 45);
-    doc.text('Email: info@thelowcalories.com', 500, 55);
-    doc.text('Website: thelowcalories.com', 500, 65);
-
-    const headers = [
-      'cid',
-      'Remaining Days',
-      'branch',
-      'customer_name',
-      'customer_phone',
-      'customer_mobile',
-      'plan',
-      'date',
-      'note',
-      'assigned_users',
-      'agent_uploaded',
-      'created_at',
-    ];
-    let filteredArray = this.allCalls.filter((item: any) =>
-      this.specificRows.includes(item.id)
-    );
-    (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allCalls);
-    (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.calls);
-    const convertedData = filteredArray.map((obj: any) => [
-      obj.cid,
-      obj.subscription_id,
-      obj.branch,
-      obj.customer_name,
-      obj.customer_mobile,
-      obj.customer_phone,
-      obj.plan,
-      obj.date,
-      obj.note,
-      obj.call_users?.map((obj: any) => obj.user.name),
-      obj.agent_uploaded_name,
-      obj.created_at.substring(0, 10),
-    ]);
-    autoTable(doc, { startY: 65 });
-    autoTable(doc, {
-      head: [headers],
-      body: convertedData,
-    });
-
-    // Set the line color and width
-    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
-    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-
-    // Draw a line at the bottom of the page
-
-    // Get the total number of pages
-    const totalPages = doc.internal.pages;
-
-    // Iterate over each page and add the footer
-    for (let i = 1; i <= totalPages.length; i++) {
+    if (this.printPermission) {
+      // Default export is a4 paper, portrait, using millimeters for units
+      const doc = new jsPDF();
       doc.internal.pageSize.width = 600;
-      doc.line(
-        20,
-        doc.internal.pageSize.height - 20,
-        doc.internal.pageSize.width - 20,
-        doc.internal.pageSize.height - 20
+      const imageFile = '../../../../assets/images/logo.png';
+      doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+
+      doc.setTextColor(50);
+      doc.setFontSize(14);
+      doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+      doc.text('Issue Subject:Calls Report', 10, 45);
+      doc.text('Prepared By: Low Calories Technical Team', 10, 55);
+      doc.text('Requested By: Mohamed Fawzy', 10, 65);
+      doc.text('Low Calories Restaurant - Egypt', 500, 25);
+      doc.text('3rd Settelment, New Cairo', 500, 35);
+      doc.text('Phone: 201116202225', 500, 45);
+      doc.text('Email: info@thelowcalories.com', 500, 55);
+      doc.text('Website: thelowcalories.com', 500, 65);
+
+      const headers = [
+        'cid',
+        'Remaining Days',
+        'branch',
+        'customer_name',
+        'customer_phone',
+        'customer_mobile',
+        'plan',
+        'date',
+        'note',
+        'assigned_users',
+        'agent_uploaded',
+        'created_at',
+      ];
+      let filteredArray = this.allCalls.filter((item: any) =>
+        this.specificRows.includes(item.id)
       );
-      // Set the current page as active
-      doc.setPage(i);
-      // Set the position and alignment of the footer
-      doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(
-        'Thelowcalories.com',
-        20,
-        doc.internal.pageSize.getHeight() - 10
-      );
-    }
-    
-    doc.save('calls.pdf');
+      filteredArray.length == 0 &&
+        this.appliedFilters == null &&
+        (filteredArray = this.allCalls);
+      filteredArray.length == 0 &&
+        this.appliedFilters != null &&
+        (filteredArray = this.calls);
+      const convertedData = filteredArray.map((obj: any) => [
+        obj.cid,
+        obj.subscription_id,
+        obj.branch,
+        obj.customer_name,
+        obj.customer_mobile,
+        obj.customer_phone,
+        obj.plan,
+        obj.date,
+        obj.note,
+        obj.call_users?.map((obj: any) => obj.user.name),
+        obj.agent_uploaded_name,
+        obj.created_at.substring(0, 10),
+      ]);
+      autoTable(doc, { startY: 65 });
+      autoTable(doc, {
+        head: [headers],
+        body: convertedData,
+      });
+
+      // Set the line color and width
+      doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+      doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+      // Draw a line at the bottom of the page
+
+      // Get the total number of pages
+      const totalPages = doc.internal.pages;
+
+      // Iterate over each page and add the footer
+      for (let i = 1; i <= totalPages.length; i++) {
+        doc.internal.pageSize.width = 600;
+        doc.line(
+          20,
+          doc.internal.pageSize.height - 20,
+          doc.internal.pageSize.width - 20,
+          doc.internal.pageSize.height - 20
+        );
+        // Set the current page as active
+        doc.setPage(i);
+        // Set the position and alignment of the footer
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(
+          'Thelowcalories.com',
+          20,
+          doc.internal.pageSize.getHeight() - 10
+        );
+      }
+
+      doc.save('calls.pdf');
     }
   }
 
@@ -517,13 +531,12 @@ export class AssignCallComponent implements OnInit, OnDestroy {
       to: new FormControl(null),
       assigned_id: new FormControl(null),
       plan: new FormControl(null),
+      uploaded: new FormControl(null),
       agent_uploaded_id: new FormControl(null),
     });
   }
 
   insertRow(form: FormGroup) {
-
-
     if (form.value.date) {
       if (form.value.date[1]) {
         form.patchValue({
@@ -545,16 +558,16 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     }
 
     this.appliedFilters = form.value;
-    this._CallsService.call_filter.next(this.appliedFilters)
+    this._CallsService.call_filter.next(this.appliedFilters);
     this._CallsService.filterCalls(1, form.value).subscribe((res) => {
       this.calls = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
       this.filterForm.patchValue({
-        date:null,
-        from:null,
-        to:null
-      })
+        date: null,
+        from: null,
+        to: null,
+      });
     });
   }
 
@@ -573,7 +586,7 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     this.filterModal = false;
     this.filterForm.reset();
     this.getCalls();
-    this._CallsService.call_filter.next(null)
+    this._CallsService.call_filter.next(null);
   }
 
   resetFields() {
@@ -589,33 +602,40 @@ export class AssignCallComponent implements OnInit, OnDestroy {
 
   showRow(call: any) {
     if (call) {
-      localStorage.setItem("prevPage","assign")
+      localStorage.setItem('prevPage', 'assign');
       this._CallsService.call.next(call);
       this._Router.navigate(['calls/details']);
     }
   }
 
-// ========================================================sort========================================================
+  // ========================================================sort========================================================
   sort(event: any) {
     const sortField = event.sortField;
     const sortOrder = event.sortOrder === 1 ? 1 : -1;
     this.calls?.sort((a: any, b: any) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
-      if (typeof aValue === 'string' && Date.parse(aValue) && typeof bValue === 'string' && Date.parse(bValue)) {
+      if (
+        typeof aValue === 'string' &&
+        Date.parse(aValue) &&
+        typeof bValue === 'string' &&
+        Date.parse(bValue)
+      ) {
         const aDate = new Date(aValue);
         const bDate = new Date(bValue);
-        return (aDate.getTime() - bDate.getTime()) * sortOrder; 
-      }
-      else if (!isNaN(parseFloat(aValue)) && typeof parseFloat(aValue) === 'number' && !isNaN(parseFloat(bValue)) && typeof parseFloat(bValue) === 'number') {
+        return (aDate.getTime() - bDate.getTime()) * sortOrder;
+      } else if (
+        !isNaN(parseFloat(aValue)) &&
+        typeof parseFloat(aValue) === 'number' &&
+        !isNaN(parseFloat(bValue)) &&
+        typeof parseFloat(bValue) === 'number'
+      ) {
         return (aValue - bValue) * sortOrder;
       } else if (typeof aValue === 'string' && typeof bValue === 'string') {
         return aValue.localeCompare(bValue) * sortOrder;
-      }
-      else if (Array.isArray(aValue) && Array.isArray(bValue)) {
+      } else if (Array.isArray(aValue) && Array.isArray(bValue)) {
         return (aValue.length - bValue.length) * sortOrder;
-      }
-       else {
+      } else {
         return 0;
       }
     });

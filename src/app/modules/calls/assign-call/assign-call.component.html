@@ -201,6 +201,12 @@
                     </p-dropdown>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
+                    <label for="">Call Status</label>
+                    <p-dropdown [options]="callStatus"  formControlName='uploaded' optionLabel="name" optionValue="value"
+                        appendTo="body" styleClass="w-100" placeholder="Select Call Status">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
                     <label for="range">Date Range</label>
                     <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
                         ngClass="w-100" appendTo="body">

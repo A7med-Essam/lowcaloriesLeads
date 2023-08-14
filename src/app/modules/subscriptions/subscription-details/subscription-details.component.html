@@ -234,12 +234,6 @@
                                 <td >
                                     <span>{{ sub.location.emirate.en_name }}</span>
                                 </td>
-                                <td class="text-center">
-                                    <h3>Villa / Flat</h3>
-                                </td>
-                                <td>
-                                    <span>{{ sub.location.property_number }}</span>
-                                </td>
                             </tr>
                             <tr>
                                 <td class="no">03</td>
@@ -253,6 +247,15 @@
                             <tr>
                                 <td class="no">04</td>
                                 <td class="text-center">
+                                    <h3>Villa / Flat</h3>
+                                </td>
+                                <td colspan="3">
+                                    <span>{{ sub.location.property_number }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no">05</td>
+                                <td class="text-center">
                                     <h3>Area</h3>
                                 </td>
                                 <td colspan="3">
@@ -260,19 +263,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="no">05</td>
+                                <td class="no">06</td>
                                 <td class="text-center">
                                     <h3>Delivery days</h3>
                                 </td>
                                 <td colspan="3" style="line-break: auto;">
-                                    <span>{{ sub.days_of_week }}</span>
-                                    <!-- <span style="margin:0px 5px;">Saturday</span> 
-                                    <span style="margin:0px 5px;">Sunday</span> 
-                                    <span style="margin:0px 5px;">Monday</span> 
-                                    <span style="margin:0px 5px;">Tuesday</span> 
-                                    <span style="margin:0px 5px;">Wednesday</span> 
-                                    <span style="margin:0px 5px;">Thursday</span> 
-                                    <span style="margin:0px 5px;">Friday</span> -->
+                                    <span style="word-break: break-all;">{{ sub.days_of_week }}</span>
                                 </td>
                             </tr>
                         </tbody>

@@ -16,7 +16,7 @@
                 insertForm.get('client_number')?.hasError('pattern')">Length must be 10</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                <label for="">Client Name <span class="text-danger">*</span></label>
+                <label for="">Client Name</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='client_name' />
                 <small class="text-danger ms-1" *ngIf="insertForm.get('client_name')?.touched &&
                 insertForm.get('client_name')?.hasError('required')">This field is required.</small>
@@ -53,7 +53,7 @@
                 <small class="text-danger ms-1" *ngIf="insertForm.get('invoice_number')?.touched &&
                 insertForm.get('invoice_number')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+            <!-- <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Teams</label>
                 <p-dropdown [options]="teams" formControlName='team' styleClass="w-100" placeholder="Select Team" optionLabel="name" optionValue="name"
                     appendTo="body" [filter]="true">
@@ -84,7 +84,7 @@
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="insertForm.get('branch')?.touched &&
                 insertForm.get('branch')?.hasError('required')">This field is required.</small>
-            </div>
+            </div> -->
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100" [disabled]="insertForm.invalid">Add Clinic Target</button>
             </div>

@@ -52,16 +52,16 @@ export class AddClinicTargetComponent implements OnInit {
         Validators.pattern('^[\\d]{10}$'),
       ]),
       client_cid: new FormControl(null),
-      branch: new FormControl(null),
-      customer_type: new FormControl(null),
-      status: new FormControl(null),
+      // branch: new FormControl(null),
+      // customer_type: new FormControl(null),
+      // status: new FormControl(null),
       invoice_number: new FormControl(null),
       amount_paid: new FormControl(null),
-      team: new FormControl(null),
+      // team: new FormControl(null),
       paid_by: new FormControl(null, [Validators.required]),
       type: new FormControl('Clinic', [Validators.required]),
       date: new FormControl(null, [Validators.required]),
-      client_name: new FormControl(null, [Validators.required]),
+      client_name: new FormControl(null),
     });
   }
 

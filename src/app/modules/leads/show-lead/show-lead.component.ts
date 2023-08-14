@@ -301,12 +301,13 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
         // ****************************************************update************************************************************************
         status: string[] = ['open','closed','follow','lost'];
 
-      updateRow(status:string,reason:string){
+      updateRow(status:string,reason:string,notes:HTMLTextAreaElement){
         if (this.updatePermission) {      
           const data = {
            lead_id:this.currentEditRow.id,
            status:status.toLowerCase(),
-           lost_reasons:status == 'lost'? reason:null
+           lost_reasons:status == 'lost'? reason:null,
+           notes:notes.value
           }
           this._SurveyService.updateLeadStatus(data).subscribe(res=>{
             this.currentEditReason = null;

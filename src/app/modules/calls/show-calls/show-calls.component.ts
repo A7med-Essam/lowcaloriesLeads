@@ -27,6 +27,7 @@ export class ShowCallsComponent implements OnInit {
     this.createPermission = this._GuardService.getPermissionStatus('create_calls');
   }
 
+
   calls: ICalls[] = [];
   PaginationInfo: any;
 

@@ -45,6 +45,7 @@ export class AddTargetComponent implements OnInit {
             detail: 'Target Added Successfully',
           });
           this.insertForm.reset();
+          // this.insertForm.reset({ type: 'Subscription' });
         }
       });
     }
@@ -67,6 +68,7 @@ export class AddTargetComponent implements OnInit {
       type: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),
       client_name: new FormControl(null, [Validators.required]),
+      // type: new FormControl('Subscription', [Validators.required]),
     });
   }
 
@@ -93,6 +95,11 @@ export class AddTargetComponent implements OnInit {
         this.teams = res.data.teams;
         this.status = res.data.status;
         this.types = res.data.type;
+        this.types = this.types.filter(t => t.name.toLowerCase() != 'clinic')
+        
+        // this.paid_by = this.paid_by_clone;
+        // let [selectedType] = this.types.filter(item => item.name === "Subscription");
+        // this.paid_by = this.paid_by.filter(item => item.type_id === selectedType.id);
       },
     });
   }
@@ -241,13 +248,13 @@ export class AddTargetComponent implements OnInit {
 
   paid_by_clone:any;
   onTypeChange(e:any){
-    const fieldStatus :boolean = e.value.toLowerCase() == "clinic";
+    // const fieldStatus :boolean = e.value.toLowerCase() == "clinic";
     // this.ToggleValidationsBasedOnType(e.value,fieldStatus);
     this.paid_by = this.paid_by_clone;
-    if (!fieldStatus) {
-      let [selectedType] = this.types.filter(item => item.name === e.value);
-      this.paid_by = this.paid_by.filter(item => item.type_id === selectedType.id);
-    }
+    let [selectedType] = this.types.filter(item => item.name === e.value);
+    this.paid_by = this.paid_by.filter(item => item.type_id === selectedType.id);
+    // if (!fieldStatus) {
+    // }
   }
 
   goBack(): void {
