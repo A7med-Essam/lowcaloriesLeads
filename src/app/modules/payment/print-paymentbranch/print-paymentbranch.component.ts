@@ -179,6 +179,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       bag: new FormControl('no', [Validators.required]),
       cutlery: new FormControl('no', [Validators.required]),
       dislike: new FormArray([]),
+      note: new FormControl(null),
     });
     this.valueChanges();
   }

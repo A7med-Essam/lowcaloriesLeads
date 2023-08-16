@@ -117,6 +117,7 @@ export class SubscriptionDetailsComponent implements OnInit {
           title: 'Second Phone Number',
           dataKey: this.sub?.user?.second_phone_number,
         },
+        { title: 'Note', dataKey: this.sub?.note },
       ];
 
       let columns2: any[] = [
@@ -180,7 +181,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       } else {
         columns4 = [
           {
-            title: `TOTAL PRICE WITHOUT VAT ${this.sub?.subscriptions_note}`,
+            title: `TOTAL PRICE WITHOUT VAT (${this.sub?.subscriptions_note})`,
             dataKey: this.sub?.total_price_without_vat.toFixed(3),
           },
           { title: 'VAT', dataKey: this.sub?.vat_amount.toFixed(3) },
@@ -251,23 +252,23 @@ export class SubscriptionDetailsComponent implements OnInit {
         } });
       doc.setLineWidth(0.4); // Set the line width
       doc.setDrawColor(187, 187, 187); // RGB color values (black in this case)
-      doc.line(10, 150, 200, 150); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 155, 200, 155); // (x1, y1, x2, y2) Horizontal
       // ======================
       doc.setFontSize(10);
       doc.setTextColor('#9EA4A9'); // Set text color to black
-      doc.text('Subscription Info', 10, 155);
-      autoTable(doc, { body: columns2, startY: 158 ,
+      doc.text('Subscription Info', 10, 160);
+      autoTable(doc, { body: columns2, startY: 163 ,
         styles:{
           font:'Cairo-Regular'
         }});
       doc.setLineWidth(0.4); // Set the line width
       doc.setDrawColor(187, 187, 187); // RGB color values (black in this case)
-      doc.line(10, 216, 200, 216); // (x1, y1, x2, y2) Horizontal
+      doc.line(10, 221, 200, 221); // (x1, y1, x2, y2) Horizontal
       // ======================
       doc.setFontSize(10);
       doc.setTextColor('#9EA4A9'); // Set text color to black
-      doc.text('Payment Info', 10, 221);
-      autoTable(doc, { body: columns4, startY: 223 ,
+      doc.text('Payment Info', 10, 226);
+      autoTable(doc, { body: columns4, startY: 228 ,
         styles:{
           font:'Cairo-Regular'
         }});

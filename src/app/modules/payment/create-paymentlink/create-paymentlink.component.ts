@@ -170,6 +170,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       dislike: new FormArray([]),
       branch_paid_on_id: new FormControl(null),
       branch_invoice_image: new FormControl(null),
+      note: new FormControl(null),
     });
     this.valueChanges();
   }

@@ -11,6 +11,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { PrintPaymentbranchComponent } from './print-paymentbranch/print-paymentbranch.component';
 import { DialogModule } from 'primeng/dialog';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [CreatePaymentlinkComponent, PrintPaymentbranchComponent],
@@ -24,6 +25,7 @@ import { DialogModule } from 'primeng/dialog';
     CheckboxModule,
     RadioButtonModule,
     DialogModule,
+    InputTextareaModule
   ],
 })
 export class PaymentModule {}
