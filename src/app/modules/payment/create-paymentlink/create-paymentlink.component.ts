@@ -163,7 +163,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       start_date: new FormControl(null, [Validators.required]),
       emirate_id: new FormControl(null, [Validators.required]),
       address: new FormControl(null, [Validators.required]),
-      code_id: new FormControl(null, [Validators.required]),
+      code_id: new FormControl(null),
       bag: new FormControl('no', [Validators.required]),
       cutlery: new FormControl('no', [Validators.required]),
       exchange_paymentLink: new FormControl('no', [Validators.required]),
