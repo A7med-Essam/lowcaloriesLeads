@@ -199,6 +199,9 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
         birthday: new Date(form.value.birthday).toLocaleDateString('en-CA'),
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
       });
+      if (this.enableEdit) {
+        this.paymentForm.addControl('paid_price', new FormControl(this.currentPrice))
+      }
       const filteredData = Object.keys(form.value)
         .filter(
           (key) =>
@@ -217,6 +220,8 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
           if (res.status == 1) {
             this.print(res.data);
             this.creatingStatus = false;
+            this.enableEdit = false;
+            this.currentPrice = 0;
             this.paymentForm.reset();
             this.createPaymentForm();
             this.uncheckAllCheckboxes();
@@ -517,7 +522,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   giftcodeForm!: FormGroup;
   types: string[] = ['percentage', 'value'];
   giftcodeModal: boolean = false;
-  tomorrow:Date = new Date(new Date().setDate(new Date().getDate() + 1))
+  tomorrow:Date = new Date(new Date().setDate(new Date().getDate() + 2))
 
   displayGiftcodeModal(){
     if (this.createGiftCodePermission) {
@@ -579,4 +584,13 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       expired_at: new FormControl(null, [Validators.required]),
     });
   }
+   // ==================================enableEdit==================================
+   enableEdit:boolean = false;
+   toggleEdit(){
+     this.enableEdit = !this.enableEdit
+   }
+ 
+   editCurrentPrice(newPrice:HTMLInputElement){
+     this.currentPrice = Number(newPrice.value);
+   }
 }

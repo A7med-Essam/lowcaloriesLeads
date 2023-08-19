@@ -190,6 +190,9 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         birthday: new Date(form.value.birthday).toLocaleDateString('en-CA'),
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
       });
+      if (this.enableEdit) {
+        this.paymentForm.addControl('paid_price', new FormControl(this.currentPrice))
+      }
       const filteredData = Object.keys(form.value)
         .filter(
           (key) =>
@@ -212,6 +215,8 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
             this.createPaymentForm();
             this.uncheckAllCheckboxes();
             this.exchangeStatus = false;
+            this.enableEdit = false;
+            this.currentPrice = 0;
             this._MessageService.add({
               severity: 'success',
               summary: 'Payment Created Successfully',
@@ -478,7 +483,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
   giftcodeForm!: FormGroup;
   types: string[] = ['percentage', 'value'];
   giftcodeModal: boolean = false;
-  tomorrow:Date = new Date(new Date().setDate(new Date().getDate() + 1))
+  tomorrow:Date = new Date(new Date().setDate(new Date().getDate() + 2))
 
   displayGiftcodeModal() {
     if (this.createGiftCodePermission) {
@@ -539,5 +544,14 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       value: new FormControl(0, [Validators.required]),
       expired_at: new FormControl(null, [Validators.required]),
     });
+  }
+  // ==================================enableEdit==================================
+  enableEdit:boolean = false;
+  toggleEdit(){
+    this.enableEdit = !this.enableEdit
+  }
+
+  editCurrentPrice(newPrice:HTMLInputElement){
+    this.currentPrice = Number(newPrice.value);
   }
 }

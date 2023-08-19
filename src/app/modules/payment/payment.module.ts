@@ -25,7 +25,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     CheckboxModule,
     RadioButtonModule,
     DialogModule,
-    InputTextareaModule
+    InputTextareaModule,
   ],
 })
 export class PaymentModule {}
