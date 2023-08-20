@@ -224,6 +224,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
             this.currentPrice = 0;
             this.paymentForm.reset();
             this.createPaymentForm();
+            this.selectAllDeliveryDays();
             this.uncheckAllCheckboxes();
             this._MessageService.add({
               severity: 'success',

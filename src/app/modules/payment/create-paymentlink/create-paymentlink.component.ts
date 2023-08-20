@@ -213,6 +213,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
             this.PaymentLink = res.data;
             this.paymentForm.reset();
             this.createPaymentForm();
+            this.selectAllDeliveryDays();
             this.uncheckAllCheckboxes();
             this.exchangeStatus = false;
             this.enableEdit = false;

@@ -75,8 +75,17 @@
                                     <span>{{ sub.cutlery == 'checked' ? "yes" : "no" }}</span>
                                 </td>
                             </tr>
-                            <tr *ngIf="sub.agent">
+                            <tr>
                                 <td class="no">06</td>
+                                <td class="text-center">
+                                    <h3>Dislike Meals</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                                    <span>{{ sub.dis_like_user }}</span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="sub.agent">
+                                <td class="no">07</td>
                                 <td class="text-center">
                                     <h3>Agent</h3>
                                 </td>
@@ -85,7 +94,7 @@
                                 </td>
                             </tr>
                             <tr *ngIf="sub.program_id == 50 || sub.program_id < 15">
-                                <td class="no">{{sub.agent? '07': '06'}}</td>
+                                <td class="no">{{sub.agent? '08': '07'}}</td>
                                 <td class="text-center">
                                     <h3>Confirmed Terms</h3>
                                 </td>
