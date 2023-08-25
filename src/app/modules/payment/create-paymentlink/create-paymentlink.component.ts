@@ -180,7 +180,8 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     for (let i = min; i <= max; i++) {
       result.push(i.toString());
     }
-    return result;
+    // return result;
+    return ['7','14','21','28'];
   }
 
   createPaymentLink(form: FormGroup) {
