@@ -84,8 +84,44 @@
                                     <span>{{ sub.dis_like_user }}</span>
                                 </td>
                             </tr>
-                            <tr *ngIf="sub.agent">
+                            <tr>
                                 <td class="no">07</td>
+                                <td class="text-center">
+                                    <h3>Payment Type</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                                    <div *ngIf="sub.sub_from.toLowerCase() == 'branch'">
+                                        <div [ngSwitch]="sub.program_id">
+                                            <span *ngSwitchCase="51">
+                                                Branch Cash
+                                            </span>
+                                            <span *ngSwitchCase="52">
+                                                Branch Credit Card
+                                            </span>
+                                            <span *ngSwitchCase="53">
+                                                Branch EXCHANGE
+                                            </span>
+                                            <span *ngSwitchDefault>
+                                                {{sub.sub_from}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="sub.sub_from.toLowerCase() == 'web' || sub.sub_from.toLowerCase() == 'mobile'">
+                                        Online
+                                    </div>
+                                    <div *ngIf="sub.sub_from.toLowerCase() == 'payment link'">
+                                        Payment Link
+                                    </div>
+                                    <div *ngIf="sub.sub_from.toLowerCase() == 'exchange'">
+                                        Payment Link Exchange
+                                    </div>
+                                    <div *ngIf="sub.program_id == 60 || sub.program_id == 61">
+                                        NUTRAION ONLINE
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="sub.agent">
+                                <td class="no">08</td>
                                 <td class="text-center">
                                     <h3>Agent</h3>
                                 </td>
@@ -94,7 +130,7 @@
                                 </td>
                             </tr>
                             <tr *ngIf="sub.program_id == 50 || sub.program_id < 15">
-                                <td class="no">{{sub.agent? '08': '07'}}</td>
+                                <td class="no">{{sub.agent? '09': '08'}}</td>
                                 <td class="text-center">
                                     <h3>Confirmed Terms</h3>
                                 </td>
@@ -102,33 +138,6 @@
                                     <span>YES</span>
                                 </td>
                             </tr>
-                            <!-- <tr>
-                                <td class="no">05</td>
-                                <td class="text-center">
-                                    <h3>TOTAL</h3>
-                                </td>
-                                <td colspan="6" class="text-right" style="padding-right: 50px;">
-                                    <span>1,200.00 <sub>AED</sub></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="no">06</td>
-                                <td class="text-center">
-                                    <h3>DISCOUNT</h3>
-                                </td>
-                                <td colspan="6" class="text-right" style="padding-right: 50px;">
-                                    <span>0%</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="no">07</td>
-                                <td class="text-center">
-                                    <h3>GRAND TOTAL</h3>
-                                </td>
-                                <td colspan="6" class="text-right" style="padding-right: 50px;">
-                                    <span>1,200.00 <sub>AED</sub></span>
-                                </td>
-                            </tr> -->
                         </tbody>
                     </table>
     
@@ -614,7 +623,7 @@
             </div>
         </div>
 
-        <div class="col-md-12 my-2" *ngIf="sub.subscription_days.length">
+        <div class="col-md-12 my-2" *ngIf="sub.subscription_days.length && sub.custom == 'yes' ">
             <div class="card">
                 <p-table [value]="sub.subscription_days" rowGroupMode="rowspan" groupRowsBy="date" sortField="date" sortMode="single" styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
