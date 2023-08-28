@@ -8,13 +8,15 @@
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">First Name <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='first_name' />
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('first_name')?.touched &&
+                <small class="text-danger ms-1" 
+                *ngIf="
                 paymentForm.get('first_name')?.hasError('required')">This field is required.</small>
+                <!-- paymentForm.get('first_name')?.touched && -->
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Last Name <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='last_name' />
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('last_name')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('last_name')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
@@ -22,7 +24,7 @@
                 <input type="text" pInputText ngClass="w-100" formControlName='phone_number' maxlength="10"
                     (blur)="getEmailByMobile(paymentForm.get('phone_number')?.value)"
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('phone_number')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('phone_number')?.hasError('required')">This field is required.</small>
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('phone_number')?.touched &&
                 paymentForm.get('phone_number')?.hasError('pattern')">Length must be 10</small>
@@ -30,7 +32,7 @@
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Email <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='email' />
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('email')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('email')?.hasError('required')">This field is required.</small>
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('email')?.touched &&
                 paymentForm.get('email')?.hasError('email')">Email is not valid.</small>
@@ -39,21 +41,21 @@
                 <label for="">Height <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='height'  maxlength="3"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('height')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('height')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Weight <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='Weight'  maxlength="3"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('Weight')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('Weight')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Birthday <span class="text-danger">*</span></label>
                 <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='birthday'>
                 </p-calendar>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('birthday')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('birthday')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
@@ -61,7 +63,7 @@
                 <p-dropdown [options]="gender" formControlName='gender' appendTo="body" styleClass="w-100"
                     placeholder="Select Gender">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('gender')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('gender')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
@@ -74,7 +76,7 @@
                         <label class="mx-1" [for]="obj.key">{{obj.key | titlecase}}</label>
                     </div>
                 </div>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('program_type')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('program_type')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-md-6 col-12 my-3" *ngIf="paymentForm.get('program_type')?.value">
@@ -82,7 +84,7 @@
                 <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name"
                     styleClass="w-100" placeholder="Select Program">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('program_id')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3" *ngIf="isCustom && paymentForm.get('program_id')?.value">
@@ -90,7 +92,7 @@
                 <p-dropdown [options]="numberOfDays" formControlName='subscription_days' appendTo="body"
                     styleClass="w-100" placeholder="Select Number Of Days">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('subscription_days')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
             paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
@@ -104,7 +106,7 @@
                         <label class="mx-1" [for]="meal">{{meal}}</label>
                     </div>
                 </div>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('meal_types')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('meal_types')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3" *ngIf="snackTypes.length">
@@ -145,6 +147,8 @@
                         <label class="mx-1" for="subscription_days_28">28 Days</label>
                     </div>
                 </div>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
             </div>
             <hr *ngIf="!isCustom">
             <div class="col-12 my-3">
@@ -157,7 +161,7 @@
                         <label class="mx-1" [for]="day.name">{{day.name}}</label>
                     </div>
                 </div>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('delivery_days')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('delivery_days')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
@@ -216,13 +220,13 @@
                     formControlName='emirate_id' appendTo="body" styleClass="w-100" placeholder="Select Emirate"
                     optionValue="id" optionLabel="en_name" [filter]="true">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('emirate_id')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('emirate_id')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-md-6 col-12 my-3">
                 <label for="">Address <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='address' />
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('address')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('address')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-md-6 col-12 my-3">
@@ -231,14 +235,14 @@
                     formControlName='code_id' appendTo="body" styleClass="w-100" placeholder="Select Code"
                     optionLabel="code" optionValue="id" [filter]="true">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('code_id')?.touched &&
-                paymentForm.get('code_id')?.hasError('required')">This field is required.</small>
+                <!-- <small class="text-danger ms-1" *ngIf="paymentForm.get('code_id')?.touched &&
+                paymentForm.get('code_id')?.hasError('required')">This field is required.</small> -->
             </div>
             <div class="col-xl-3 col-md-6 col-12 my-3">
                 <label for="">Start Date <span class="text-danger">*</span></label>
                 <p-calendar  [minDate]="tomorrow" [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='start_date'>
                 </p-calendar>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('start_date')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('start_date')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3">
@@ -273,7 +277,7 @@
                     formControlName='branch_paid_on_id' appendTo="body" styleClass="w-100" placeholder="Select Branch"
                     optionLabel="name" optionValue="id" [filter]="true">
                 </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('branch_paid_on_id')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('branch_paid_on_id')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-2" *ngIf="exchangeStatus">
@@ -294,8 +298,8 @@
             <div class="col-12">
                 <div class="mb-2 mt-4 d-flex justify-content-between">
                     <div>
-                        <label>Calc Price / <span (click)="toggleEdit()"
-                             style="text-decoration:underline;color: #0d6efd;cursor: pointer;">{{enableEdit?'Disable':'Enable'}}</span></label>
+                        <label>Calculate Price / <span (click)="toggleEdit()"
+                             style="text-decoration:underline;color: #0d6efd;cursor: pointer;">{{enableEdit?'Disable Edit':'Enable Edit'}}</span></label>
                     </div>
                     <label class="text-primary pointer" (click)="copyMessage(price)"><small>Copy</small></label>
                 </div>
@@ -304,7 +308,7 @@
                      [style]="{'width':'100%'}" class="me-1" [value]="currentPrice"
                      (keyup)="editCurrentPrice(price)"
                      oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" >
-                    <button class="btn btn-success w-25 ms-1" (click)="calculate_payment_link()" type="button">Calc</button>
+                    <button class="btn btn-success w-25 ms-1" (click)="calculate_payment_link()" type="button">Calculate Price</button>
                 </div>
             </div>
             <div class="col-12 my-3">
