@@ -177,7 +177,7 @@
                 paymentForm.get('dislike')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
-            <div class="col-md-6 col-12 my-3">
+            <div class="col-lg-4 col-md-6 col-12 my-3">
                 <label for="">SAFTY BAG?</label>
                 <div class="d-flex flex-wrap">
                     <div class="flex align-items-center m-3">
@@ -194,7 +194,7 @@
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('bag')?.touched &&
                 paymentForm.get('bag')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-md-6 col-12 my-3">
+            <div class="col-lg-4 col-md-6 col-12 my-3">
                 <label for="">NEED CUTLERY?</label>
                 <div class="d-flex flex-wrap">
                     <div class="flex align-items-center m-3">
@@ -210,6 +210,15 @@
                 </div>
                 <small class="text-danger ms-1" *ngIf="paymentForm.get('cutlery')?.touched &&
                 paymentForm.get('cutlery')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Payment Type <span class="text-danger">*</span></label>
+                <p-dropdown [options]="paymentTypes"
+                    formControlName='check_type' appendTo="body" styleClass="w-100" placeholder="Select Payment Type"
+                    optionValue="value" optionLabel="name" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('check_type')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
             <div class="col-xl-3 col-md-6 col-12 my-3">

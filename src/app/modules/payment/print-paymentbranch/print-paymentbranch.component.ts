@@ -32,6 +32,11 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   paymentForm!: FormGroup;
   gender: string[] = ['male', 'female'];
   creatingStatus: boolean = false;
+  paymentTypes:any[] = [
+    {name:"Cash",value:51},
+    {name:"Credit Card",value:52},
+    {name:"Exchange",value:53}
+  ]
   days: { name: string; value: string }[] = [
     { name: 'Saturday', value: 'Sat' },
     { name: 'Sunday', value: 'Sun' },
@@ -180,6 +185,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       cutlery: new FormControl('no', [Validators.required]),
       dislike: new FormArray([]),
       note: new FormControl(null),
+      check_type: new FormControl(null, [Validators.required]),
     });
     this.valueChanges();
   }
@@ -450,7 +456,6 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     doc.text('Website: thelowcalories.com', 150, 50);
 
     autoTable(doc, { startY: 55 });
-
     var columns = [
       { title: 'Subscription from', dataKey: res?.sub_from },
       { title: 'Price', dataKey: res?.price },
@@ -467,8 +472,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       { title: 'Invoice_no', dataKey: res?.invoice_no },
       { title: 'Address', dataKey: res?.location?.area_id },
       { title: 'Emirate', dataKey: res?.location?.emirate?.en_name },
-      { title: 'Giftcode', dataKey: res?.gift_code?.code },
-      { title: 'Giftcode Percentage', dataKey: res?.gift_code?.percentage + '%' },
+
       { title: 'Agent', dataKey: res?.agent?.name },
       {
         title: 'Client Name',
@@ -478,12 +482,30 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       { title: 'Client Email', dataKey: res?.user?.email },
     ];
 
+    if (res?.gift_code) {
+      columns.push(
+        { title: 'Giftcode', dataKey: res?.gift_code?.code },
+        { title: 'Giftcode Percentage', dataKey: res?.gift_code?.percentage + '%' },
+      )
+    }
+
+    if (res.sub_from == "Branch") {
+      const [type] = this.paymentTypes.filter(type => type.value === res.program_id);
+      columns.push(
+        { title: 'Payment Type', dataKey: type.name },
+      )
+    }
+
     if (res?.user?.second_phone_number) {
       columns.push({
         title: 'Client Second Phone',
         dataKey: res.user.second_phone_number,
       });
     }
+
+    columns = columns.filter(
+      (item) => item.dataKey !== null && item.dataKey !== undefined
+    );
 
     // doc.text(140, 40, "Report");
     autoTable(doc, { body: columns });
