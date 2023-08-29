@@ -328,6 +328,11 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         this.paymentForm.get(type)?.setErrors({ required: true });
       }
     }
+    if (type == 'meal_types' && this.paymentForm.value.program_type == 'Chef Gourmet') {
+      if (formArray.length < 2) {
+        this.paymentForm.get(type)?.setErrors({ required: true });
+      }
+    }
   }
 
   @ViewChildren('checkbox') checkboxElements!: QueryList<Checkbox>;
@@ -479,6 +484,11 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     );
     this.paymentForm.removeControl('snack_types');
     this.paymentForm.addControl('snack_types', new FormArray([]));
+    this.checkboxElements.forEach((checkbox: Checkbox) => {
+      if (checkbox.name == "group1") {
+        checkbox.writeValue(false);
+      }
+    });
   }
 
   // ===========================================================GIFTCODE===============================================================
