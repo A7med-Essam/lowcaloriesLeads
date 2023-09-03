@@ -136,6 +136,7 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th>#</th>
                 <th class="text-center">
                     <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)"
                         [pSelectableRow]="subscriptions"></p-tableHeaderCheckbox>
@@ -149,8 +150,9 @@
                 </ng-container>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-sub>
+        <ng-template pTemplate="body" let-sub let-i="rowIndex">
             <tr [pSelectableRow]="sub">
+                <td>{{i+1}}</td>
                 <td class="text-center">
                     <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="sub">
                     </p-tableCheckbox>
