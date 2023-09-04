@@ -1,0 +1,88 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Create Agent</h2>
+    </div>
+    <hr>
+    <form [formGroup]="insertForm" (ngSubmit)='insertRow(insertForm)'>
+        <div class="row mx-0">
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Name</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='name'/>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('name')?.touched &&
+                insertForm.get('name')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Login Email</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='login_email'/>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('login_email')?.touched &&
+                insertForm.get('login_email')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Agent Email</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='agent_email'/>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('agent_email')?.touched &&
+                insertForm.get('agent_email')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">password</label>
+                <input type="password" pInputText ngClass="w-100" formControlName='password'/>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('password')?.touched &&
+                insertForm.get('password')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Branch</label>
+                <p-dropdown [options]="branches" optionLabel="name" optionValue="id" formControlName='branch_id' appendTo="body"
+                    styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('branch_id')?.touched &&
+                insertForm.get('branch_id')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Team</label>
+                <p-dropdown [options]="teams" optionLabel="name" optionValue="name" formControlName='team' appendTo="body"
+                    styleClass="w-100" placeholder="Select Team" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('team')?.touched &&
+                insertForm.get('team')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Agent ID</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='agent_id_on_kot' maxlength="10"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('agent_id_on_kot')?.touched &&
+                insertForm.get('agent_id_on_kot')?.hasError('required')">This field is required.</small>
+            </div>
+         
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Agent Type</label>
+                <p-dropdown [options]="userType" formControlName='role_name' appendTo="body"
+                    styleClass="w-100" placeholder="Select Type" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('role_name')?.touched &&
+                insertForm.get('role_name')?.hasError('required')">This field is required.</small>
+            </div>
+
+            <!-- <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Permissions_Role</label>
+                <p-dropdown [options]="roles_permission" formControlName='web_role' appendTo="body"  optionLabel="name" optionValue="name"
+                    styleClass="w-100" placeholder="Select Permissions Role" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('web_role')?.touched &&
+                insertForm.get('web_role')?.hasError('required')">This field is required.</small>
+            </div> -->
+
+            <div class="col-lg-4 col-md-6 col-12 my-3">
+                <label for="">Role</label>
+                <p-dropdown [options]="roles" formControlName='role' appendTo="body"  optionLabel="name" optionValue="value"
+                    styleClass="w-100" placeholder="Select Role" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('role')?.touched &&
+                insertForm.get('role')?.hasError('required')">This field is required.</small>
+            </div>
+       
+            <div class="col-12 my-3">
+                <button class="btn btn-success w-100">Create Agent</button>
+            </div>
+        </div>
+    </form>
+</div>

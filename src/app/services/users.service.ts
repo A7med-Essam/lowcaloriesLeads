@@ -14,6 +14,10 @@ export class UsersService {
     return this._ApiConfigService.postReq3("getAgents", "");
   }
 
+  addAgent(agent:any): Observable<any> {
+    return this._ApiConfigService.postReq3("addAgent", agent);
+  }
+
   getPermissions(): Observable<any> {
     return this._ApiConfigService.postReq3("permissions", "");
   }

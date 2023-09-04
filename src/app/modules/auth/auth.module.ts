@@ -15,6 +15,7 @@ import { UpdateRoleComponent } from './update-role/update-role.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { AddUserComponent } from './add-user/add-user.component';
 
 const APP_PRIMENG_MODULE = [
   TableModule,
@@ -33,6 +34,7 @@ const APP_PRIMENG_MODULE = [
     UpdateUsersComponent,
     RolesComponent,
     UpdateRoleComponent,
+    AddUserComponent,
   ],
   imports: [
     CommonModule,
