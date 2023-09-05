@@ -11,6 +11,10 @@ export class PaymentlinkService {
     private _ApiConfigService: ApiConfigService
   )  { }
 
+  createGiftCode(code:any): Observable<any> {
+    return this._ApiConfigService.postReq3(`createCodeOnManager`,code);
+  }
+
   getPaymentDetails(): Observable<PaymentDetailsResponse> {
     return this._ApiConfigService.postReq3(`getPaymentDetails`, '');
   }

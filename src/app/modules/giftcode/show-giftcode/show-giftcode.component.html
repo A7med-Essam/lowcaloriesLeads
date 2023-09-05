@@ -1,0 +1,130 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="m-3">
+        <button [disabled]="!createPermission" pButton pRipple label="Add GiftCode" class="p-button-success mx-1"
+            icon="pi pi-plus" routerLink="../create"></button>
+        <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+        </p-button>
+        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
+        </p-button>
+    </div>
+</div>
+
+<div class="card">
+    <p-table [value]="giftCodes" [paginator]="true" [rows]="PaginationInfo?.per_page"
+        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onLazyLoad)="sort($event)" (onPage)="paginate($event)"
+        [showCurrentPageReport]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+        <ng-template pTemplate="header">
+            <tr>
+                <!-- <th class="text-center">
+                    <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)" [pSelectableRow]="giftCodes"></p-tableHeaderCheckbox>
+                </th> -->
+                <th class="text-center" *ngFor="let column of columns; let i = index" [pSortableColumn]="column.name">
+                    <ng-container *ngIf="column.status">
+                        {{ column.name }} <p-sortIcon [field]="column.name"></p-sortIcon>
+                    </ng-container>
+                </th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-code>
+            <tr [pSelectableRow]="code">
+                <!-- <td class="text-center">
+                    <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="code"></p-tableCheckbox>
+                </td> -->
+                <td class="text-center" *ngFor="let column of columns">
+                    <ng-container *ngIf="column.status">
+                        <ng-container [ngSwitch]="column.name">
+                            <ng-container *ngSwitchCase="'created_at'">
+                                {{ code[column.name] | date }}
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'updated_at'">
+                                {{ code[column.name] | date }}
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'expired_at'">
+                                {{ code[column.name] | date }}
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>
+                                {{ code[column.name] }}
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(code)"
+                        class="m-1 p-button-sm"></button>
+                    <button [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil"
+                        (click)="displayUpdate(code)" class="m-1 p-button-sm p-button-warning"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container" #checkboxContainer>
+        <div class="field-checkbox my-3" *ngFor="let obj of columns">
+            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name">
+            </p-checkbox>
+            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
+        </div>
+        <div class="field-checkbox my-3">
+            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+                value="selectAll" inputId="c100"></p-checkbox>
+            <label class="mx-3" for="c100">Select All</label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Filter Targets Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <form [formGroup]="filterForm" #myForm="ngForm">
+            <div class="row mx-0">
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Code</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='code' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Percentage</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='percentage' />
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Flag</label>
+                    <p-dropdown [options]="flag" formControlName='flag'
+                        appendTo="body" styleClass="w-100" placeholder="Select Flag" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">Status</label>
+                    <p-dropdown [options]="status" formControlName='status'
+                        appendTo="body" styleClass="w-100" placeholder="Select Status" [filter]="true">
+                    </p-dropdown>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+            <div>
+                <button class="btn btn-secondary" (click)="resetFields()">
+                    Reset Fields
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="insertRow(filterForm)">
+                    Apply Filter
+                </button>
+                <button class="btn btn-secondary" (click)="resetFilter()">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

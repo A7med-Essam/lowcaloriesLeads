@@ -65,13 +65,12 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   constructor(
     private _PaymentlinkService: PaymentlinkService,
     private _MessageService: MessageService,
-    private _GiftcodeService: GiftcodeService,
     private _GuardService:GuardService
   ) {}
 
   createGiftCodePermission:boolean = false;
   getPermission() {
-    this.createGiftCodePermission = this._GuardService.getPermissionStatus('createGiftcode_Branches');
+    this.createGiftCodePermission = this._GuardService.getPermissionStatus('createCodeValue_Branches');
   }
 
   getEmailByMobile(mobile: string) {
@@ -578,7 +577,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       });
     }
     if (form.valid) {
-      this._GiftcodeService.createGiftCode(form.value).subscribe((res) => {
+      this._PaymentlinkService.createGiftCode(form.value).subscribe((res) => {
         if (res.status) {
           this.giftcodeForm.reset();
           this.giftcodeForm.patchValue({

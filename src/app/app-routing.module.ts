@@ -134,6 +134,15 @@ const routes: Routes = [
       permission: ['show_subscription'],
     },
   },
+  {
+    path: 'giftcode',
+    loadChildren: () =>
+      import('./modules/giftcode/giftcode.module').then((m) => m.GiftcodeModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_giftcode'],
+    },
+  },
   { path: '**', component: Error404Component },
 ];
 

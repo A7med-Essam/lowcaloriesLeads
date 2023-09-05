@@ -60,7 +60,6 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
   constructor(
     private _PaymentlinkService: PaymentlinkService,
     private _MessageService: MessageService,
-    private _GiftcodeService: GiftcodeService,
     private _GuardService: GuardService
   ) {}
 
@@ -77,7 +76,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
   createGiftCodePermission: boolean = false;
   getPermission() {
     this.createGiftCodePermission = this._GuardService.getPermissionStatus(
-      'createGiftcode_paymentlink'
+      'createCodeValue_paymentlink'
     );
   }
 
@@ -517,7 +516,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       });
     }
     if (form.valid) {
-      this._GiftcodeService.createGiftCode(form.value).subscribe((res) => {
+      this._PaymentlinkService.createGiftCode(form.value).subscribe((res) => {
         if (res.status) {
           this.giftcodeForm.reset();
           this.giftcodeForm.patchValue({

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DislikeService } from 'src/app/services/dislike.service';
 import { LocalService } from 'src/app/services/local.service';
 
@@ -10,8 +12,9 @@ import { LocalService } from 'src/app/services/local.service';
   templateUrl: './update-dislike.component.html',
   styleUrls: ['./update-dislike.component.scss'],
 })
-export class UpdateDislikeComponent implements OnInit {
+export class UpdateDislikeComponent implements OnInit, OnDestroy {
   updateForm!: FormGroup;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private _Router: Router,
@@ -41,7 +44,9 @@ export class UpdateDislikeComponent implements OnInit {
   }
 
   showDetails() {
-    this._DislikeService.dislikeDetails.subscribe((dislike) => {
+    this._DislikeService.dislikeDetails
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((dislike) => {
       if (dislike) {
         this.setUpdateForm(dislike);
       } else {
@@ -82,5 +87,10 @@ export class UpdateDislikeComponent implements OnInit {
     this._DislikeService.getMeals().subscribe({
       next: (res) => (this.meals = res.data),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

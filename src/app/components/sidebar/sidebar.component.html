@@ -189,6 +189,19 @@
       </li>
       <hr>
     </ul>
+        <!-- ================================================GIFTCODE================================================== -->
+        <div class="menu-header mt-3 mb-2" *ngIf="showGiftcodePermission">
+          Giftcode Components
+        </div>
+        <ul class="menu-items" *ngIf="showGiftcodePermission">
+          <li>
+            <a routerLink="/giftcode/show" routerLinkActive="active">
+              <i class="fas fa-gift"></i>
+              <span>GiftCode</span>
+            </a>
+          </li>
+          <hr>
+        </ul>
     <!-- ================================================LOGOUT================================================== -->
     <ul class="menu-items">
       <li (click)="logOut()">
