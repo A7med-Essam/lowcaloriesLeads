@@ -73,7 +73,8 @@
                                             <td>assigned_agent</td>
                                             <td>
                                                 <span *ngIf="call?.call_users?.length">
-                                                    <small *ngFor="let user of call?.call_users" style="display: block;">
+                                                    <small *ngFor="let user of call?.call_users"
+                                                        style="display: block;">
                                                         {{user?.user?.name}}
                                                     </small>
                                                 </span>
@@ -85,23 +86,28 @@
                                             <td>
                                                 <span *ngIf="files?.length">
                                                     <small *ngFor="let f of files" style="display: block;" class="my-2">
-                                                        <span class="mx-2" *ngIf="f?.agent?.name">{{f?.agent?.name}} Upload =></span>
+                                                        <span class="mx-2" *ngIf="f?.agent?.name">{{f?.agent?.name}}
+                                                            Upload =></span>
                                                         <span *ngIf="f.type.includes('image')">
-                                                            <p-image [src]="'http://lowcalories.ae/'+f?.file" 
-                                                            alt="Uploaded Image" width="250" [preview]="true"></p-image>
+                                                            <p-image [src]="'http://api.lowcalories.ae/'+f?.file"
+                                                                alt="Uploaded Image" width="250" [preview]="true">
+                                                            </p-image>
                                                         </span>
                                                         <span *ngIf="f.type.includes('audio')">
                                                             <audio controls>
-                                                                <source [src]="'http://lowcalories.ae/'+f.file" type="audio/mpeg">
+                                                                <source [src]="'http://api.lowcalories.ae/'+f.file"
+                                                                    type="audio/mpeg">
                                                             </audio>
                                                         </span>
-                                                        <span *ngIf="!f.type.includes('audio')&&!f.type.includes('image')&&!f.type.includes('video')">
-                                                            <a target="_blank" [href]="'http://lowcalories.ae/'+f.file" download>{{f.type}}</a>
+                                                        <span
+                                                            *ngIf="!f.type.includes('audio')&&!f.type.includes('image')&&!f.type.includes('video')">
+                                                            <a target="_blank"
+                                                                [href]="'http://api.lowcalories.ae/'+f.file"
+                                                                download>{{f.type}}</a>
                                                         </span>
                                                         <span *ngIf="f.type.includes('video')">
                                                             <video width="250" class="m-1" controls>
-                                                                <source
-                                                                    src="http://lowcalories.ae/{{f?.file}}">
+                                                                <source src="http://api.lowcalories.ae/{{f?.file}}">
                                                             </video>
                                                         </span>
                                                     </small>
