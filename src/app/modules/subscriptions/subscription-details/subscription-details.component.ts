@@ -410,7 +410,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       // doc.setFont('helvetica', 'normal'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
       doc.text('M38, Musaffah, Abu Dhabi - , United Arab Emirates', 46, 40);
-      doc.text('TRN100346758400003', 46, 45);
+      doc.text('104092192400003', 46, 45);
       // =================================END-TEXT=================================
       doc.setFontSize(12);
       // doc.setFont('helvetica', 'bold'); // Set font and style to bold
@@ -759,7 +759,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       // doc.setFont('helvetica', 'normal'); // Set font and style to bold
       doc.setTextColor('#1f1f1f'); // Set text color to black
       doc.text('M38, Musaffah, Abu Dhabi - , United Arab Emirates', 46, 40);
-      doc.text('TRN100346758400003', 46, 45);
+      doc.text('104092192400003', 46, 45);
       // =================================END-TEXT=================================
       doc.setFontSize(12);
       // doc.setFont('helvetica', 'bold'); // Set font and style to bold
