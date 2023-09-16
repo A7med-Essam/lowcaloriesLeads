@@ -97,6 +97,9 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     if (this.paymentForm.value.meal_types) {
       data.meal_types=this.paymentForm.value.meal_types
     }
+    if (this.paymentForm.value.snack_types) {
+      data.snack_types=this.paymentForm.value.snack_types
+    }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
       if (res.status == 1) {
         this.currentPrice = res.data.toFixed(2);

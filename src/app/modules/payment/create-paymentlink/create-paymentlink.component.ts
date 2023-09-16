@@ -128,13 +128,15 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     const data:any = {
       program_id: this.paymentForm.value.program_id,
       plan_id: this.paymentForm.value.plan_id,
-      snack_types: this.paymentForm.value.snack_types,
       subscription_days: this.paymentForm.value.subscription_days,
       code_id: this.paymentForm.value.code_id,
       bag: this.paymentForm.value.bag,
     };
     if (this.paymentForm.value.meal_types) {
       data.meal_types=this.paymentForm.value.meal_types
+    }
+    if (this.paymentForm.value.snack_types) {
+      data.snack_types=this.paymentForm.value.snack_types
     }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
       if (res.status == 1) {
