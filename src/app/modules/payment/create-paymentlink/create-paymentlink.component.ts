@@ -136,7 +136,9 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       data.meal_types=this.paymentForm.value.meal_types
     }
     if (this.paymentForm.value.snack_types) {
-      data.snack_types=this.paymentForm.value.snack_types
+      if (this.paymentForm.value.snack_types.length > 0) {
+        data.snack_types=this.paymentForm.value.snack_types
+      }
     }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
       if (res.status == 1) {
@@ -426,6 +428,8 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
           if (value == 'yes') {
             this.paymentForm.removeControl('meal_types');
             this.paymentForm.get('meal_types')?.setErrors(null);
+            this.paymentForm.removeControl('snack_types');
+            this.paymentForm.addControl('snack_types', new FormArray([]));
             this.paymentForm.get('snack_types')?.setErrors({ required: true });
           } else {
               this.paymentForm.addControl('meal_types',new FormArray([], [Validators.required]));
