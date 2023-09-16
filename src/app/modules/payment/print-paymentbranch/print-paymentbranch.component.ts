@@ -48,17 +48,20 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   ];
   valueChangesSubscription1!: Subscription | undefined;
   valueChangesSubscription2!: Subscription | undefined;
-  valueChangesSubscription3!: Subscription | undefined;
+  // valueChangesSubscription3!: Subscription | undefined;
+  valueChangesSubscription4!: Subscription | undefined;
 
   ngOnDestroy() {
     if (
       this.valueChangesSubscription1 &&
       this.valueChangesSubscription2 &&
-      this.valueChangesSubscription3
+      // this.valueChangesSubscription3 &&
+      this.valueChangesSubscription4
     ) {
       this.valueChangesSubscription1.unsubscribe();
       this.valueChangesSubscription2.unsubscribe();
-      this.valueChangesSubscription3.unsubscribe();
+      // this.valueChangesSubscription3.unsubscribe();
+      this.valueChangesSubscription4.unsubscribe();
     }
   }
 
@@ -83,15 +86,17 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
 
   currentPrice: number = 0;
   calculate_payment_link() {
-    const data = {
+    const data:any = {
       program_id: this.paymentForm.value.program_id,
       plan_id: this.paymentForm.value.plan_id,
-      meal_types: this.paymentForm.value.meal_types,
       snack_types: this.paymentForm.value.snack_types,
       subscription_days: this.paymentForm.value.subscription_days,
       code_id: this.paymentForm.value.code_id,
       bag: this.paymentForm.value.bag,
     };
+    if (this.paymentForm.value.meal_types) {
+      data.meal_types=this.paymentForm.value.meal_types
+    }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
       if (res.status == 1) {
         this.currentPrice = res.data.toFixed(2);
@@ -185,6 +190,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       dislike: new FormArray([]),
       note: new FormControl(null),
       check_type: new FormControl(null, [Validators.required]),
+      only_snack: new FormControl('no')
     });
     this.valueChanges();
   }
@@ -315,17 +321,41 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       });
     }
 
-    if (type != 'snack_types' && type != 'dislike') {
-      if (formArray.length > 0) {
-        this.paymentForm.get(type)?.setErrors(null);
-      } else {
-        this.paymentForm.get(type)?.setErrors({ required: true });
-      }
-    }
-    if (type == 'meal_types' && this.paymentForm.value.program_type == 'Chef Gourmet') {
-      if (formArray.length < 2) {
-        this.paymentForm.get(type)?.setErrors({ required: true });
-      }
+    const onlySnack = this.paymentForm.get('only_snack')?.value == 'yes' ? true : false;
+    if (type != 'dislike') {
+      if (onlySnack) {
+        if (type == 'snack_types') {
+          if (formArray.length > 0) {
+            this.paymentForm.get(type)?.setErrors(null);
+          } else {
+            this.paymentForm.get(type)?.setErrors({ required: true });
+          }
+        }else{
+          if (formArray.length > 0) {
+            this.paymentForm.get(type)?.setErrors(null);
+          } else {
+            this.paymentForm.get(type)?.setErrors({ required: true });
+          }
+          if (type == 'meal_types' && this.paymentForm.value.program_type == 'Chef Gourmet') {
+            if (formArray.length < 2) {
+              this.paymentForm.get(type)?.setErrors({ required: true });
+            }
+          }
+        }
+       } else {
+          if (type != 'snack_types') {
+            if (formArray.length > 0) {
+              this.paymentForm.get(type)?.setErrors(null);
+            } else {
+              this.paymentForm.get(type)?.setErrors({ required: true });
+            }
+            if (type == 'meal_types' && this.paymentForm.value.program_type == 'Chef Gourmet') {
+              if (formArray.length < 2) {
+                this.paymentForm.get(type)?.setErrors({ required: true });
+              }
+            }
+          }
+       }
     }
   }
 
@@ -365,6 +395,28 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       ?.valueChanges.subscribe((value) => {
         if (value) {
           this.handleProgramIdChange(value);
+        }
+      });
+
+      this.valueChangesSubscription4 = this.paymentForm
+      .get('only_snack')
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          this.checkboxElements.forEach((checkbox: Checkbox) => {
+            if (checkbox.name == "group1") {
+              checkbox.writeValue(false);
+            }
+          });
+          if (value == 'yes') {
+            this.paymentForm.removeControl('meal_types');
+            this.paymentForm.get('meal_types')?.setErrors(null);
+            this.paymentForm.get('snack_types')?.setErrors({ required: true });
+          } else {
+              this.paymentForm.addControl('meal_types',new FormArray([], [Validators.required]));
+              this.paymentForm.removeControl('snack_types');
+              this.paymentForm.addControl('snack_types', new FormArray([]));
+              this.paymentForm.get('snack_types')?.setErrors(null);
+          }
         }
       });
   }
