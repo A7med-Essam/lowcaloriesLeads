@@ -29,6 +29,7 @@ export class SidebarComponent implements OnInit {
   createPaymentBranchesPermission: boolean = false;
   showSubscriptionPermission: boolean = false;
   showGiftcodePermission: boolean = false;
+  showMailServicePermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -82,6 +83,7 @@ export class SidebarComponent implements OnInit {
     this.createPaymentLinkPermission = this._GuardService.getPermissionStatus('create_paymentlink');
     this.createPaymentBranchesPermission = this._GuardService.getPermissionStatus('createPayment_Branches');
     this.showGiftcodePermission = this._GuardService.getPermissionStatus('show_giftcode');
+    this.showMailServicePermission = this._GuardService.getPermissionStatus('show_mailService');
   }
 
   logOut() {

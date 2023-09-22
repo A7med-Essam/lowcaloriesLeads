@@ -202,6 +202,19 @@
           </li>
           <hr>
         </ul>
+        <!-- ================================================MAIL SERVICE================================================== -->
+            <div class="menu-header mt-3 mb-2" *ngIf="showMailServicePermission">
+              Mail Components
+            </div>
+            <ul class="menu-items" *ngIf="showMailServicePermission">
+              <li>
+                <a routerLink="/mailService/show" routerLinkActive="active">
+                  <i class="fas fa-envelope"></i>
+                  <span>Mail Service</span>
+                </a>
+              </li>
+              <hr>
+            </ul>
     <!-- ================================================LOGOUT================================================== -->
     <ul class="menu-items">
       <li (click)="logOut()">

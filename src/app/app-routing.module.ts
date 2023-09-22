@@ -143,6 +143,15 @@ const routes: Routes = [
       permission: ['show_giftcode'],
     },
   },
+  {
+    path: 'mailService',
+    loadChildren: () =>
+      import('./modules/mail-service/mail-service.module').then((m) => m.MailServiceModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_mailService'],
+    },
+  },
   { path: '**', component: Error404Component },
 ];
 
