@@ -8,6 +8,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     MultiSelectModule,
     ButtonModule,
     DialogModule,
-    FormsModule
+    FormsModule,
+    InputTextModule
   ]
 })
 export class MailServiceModule { }

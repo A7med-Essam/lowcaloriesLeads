@@ -11,8 +11,12 @@ export class ShowHeadMailsComponent implements OnInit {
   users: any[] = [];
   models: string[] = ['leads' , 'targets' , 'refunds', 'complains' , 'calls','daily','monthly'];
   currentModels: string[] = [];
-  updateModal: boolean = false;
   currentEmail: string = '';
+  updateModal: boolean = false;
+  createModal: boolean = false;
+  
+  newModels: string[] = [];
+  newEmail: string = '';
   constructor(
     private _MailService: MailService,
     private _MessageService: MessageService
@@ -29,13 +33,14 @@ export class ShowHeadMailsComponent implements OnInit {
     });
   }
 
-  update(models: string[]) {
+  update(email:string,models: string[]) {
     this._MailService
-      .updateHeadModels({ email: this.currentEmail, models })
+      .updateHeadModels({ email, models })
       .subscribe({
         next: (res) => {
           if (res.status == 1) {
             this.updateModal = false;
+            this.createModal = false;
             this._MessageService.add({
               severity: 'success',
               summary: 'MailService',

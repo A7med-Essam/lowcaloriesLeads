@@ -1,3 +1,8 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Mail Service</h2>
+    <button class="btn btn-success" (click)="createModal = true">Create Mail</button>
+</div>
+<hr>
 <div class="card">
     <p-table [value]="users" [lazy]="true" [showCurrentPageReport]="true" responsiveLayout="scroll">
         <ng-template pTemplate="header">
@@ -24,14 +29,14 @@
                     </div>
                 </td>
                 <td class="text-center">
-                    <button pButton type="button" (click)="displayModal(user.email,user.models)" icon="pi pi-plus" class="m-1 p-button-sm p-button-success"></button>
+                    <button pButton type="button" (click)="displayModal(user.email,user.models)" icon="pi pi-pencil" class="m-1 p-button-sm p-button-warning"></button>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
-<p-dialog header="Mail Models" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
+<p-dialog header="Update Mail Models" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
     [draggable]="false" [resizable]="false">
     <div class="container">
             <label for="">Models</label>
@@ -40,8 +45,31 @@
             </p-multiSelect>
     </div>
     <ng-template pTemplate="footer">
-        <button class="btn btn-secondary" (click)="update(currentModels)">
+        <button class="btn btn-secondary" (click)="update(currentEmail,currentModels)">
             Update
+        </button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Create Mail Models" [(visible)]="createModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-3">
+                <label for="">Email</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="newEmail"/>
+            </div>
+            <div class="col-12 my-3">
+                <label for="">Models</label>
+                <p-multiSelect [options]="models" appendTo="body"
+                    defaultLabel="Select Models" styleClass="w-100" display="chip" [(ngModel)]="newModels">
+                </p-multiSelect>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button class="btn btn-secondary" (click)="update(newEmail,newModels)">
+            Create
         </button>
     </ng-template>
 </p-dialog>
