@@ -1,0 +1,75 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Mail Details</h2>
+    <button class="btn btn-secondary" routerLink="..">Back</button>
+</div>
+<hr>
+<div class="card">
+    <p-table [value]="users" sortField="model" sortMode="single" dataKey="model" rowGroupMode="subheader"
+        groupRowsBy="model">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:20%">Model</th>
+                <th style="width:20%">Branch Name</th>
+                <th style="width:20%">Branch_email</th>
+                <th style="width:20%">Branch_second_email</th>
+                <th style="width:20%">Branch_third_email</th>
+                <th style="width:20%">Accountant_email</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="groupheader" let-user let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr>
+                <td colspan="5" class="d-flex align-items-center">
+                    <button type="button" pButton pRipple [pRowToggler]="user"
+                        class="p-button-text p-button-rounded p-button-plain mr-2"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+
+                    <span class="font-bold mx-4">{{user.model}}</span>
+                </td>
+                <td>
+                    <button pButton pRipple type="button" icon="pi pi-pencil" (click)="displayModal(user.branches)"
+                        class="p-button-rounded p-button-warning"></button>
+
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-user>
+            <tr *ngFor="let branch of user.branches">
+                <td>{{user.model}}</td>
+                <td>
+                    {{branch.branch.name}}
+                </td>
+                <td>
+                    {{branch.branch.branch_email}}
+                </td>
+                <td>
+                    {{branch.branch.branch_second_email}}
+                </td>
+                <td>
+                    {{branch.branch.branch_third_email}}
+                </td>
+                <td>
+                    {{branch.branch.accountant_email}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Update Mail Models" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <label for="">branches</label>
+        <p-multiSelect [options]="branches" appendTo="body" defaultLabel="Select Branches" styleClass="w-100" 
+            display="chip" [(ngModel)]="currentBranches" optionLabel="name" optionValue="id">
+        </p-multiSelect>
+    </div>
+    <ng-template pTemplate="footer">
+        <button class="btn btn-secondary" (click)="update(currentBranches)">
+            Update
+        </button>
+    </ng-template>
+</p-dialog>

@@ -22,14 +22,19 @@
                     {{ user.email }}
                 </td>
                 <td class="text-center">
-                    <div  *ngFor="let model of user.models;let i = index">
+                    <div *ngFor="let model of user.models;let i = index">
                         <div>
-                            {{i+1}}- {{ model }}
+                            {{i+1}}- {{ model.model }}
                         </div>
                     </div>
                 </td>
                 <td class="text-center">
-                    <button pButton type="button" (click)="displayModal(user.email,user.models)" icon="pi pi-pencil" class="m-1 p-button-sm p-button-warning"></button>
+                    <button pButton type="button" (click)="displayModal(user.email,user.models)" icon="pi pi-pencil"
+                      class="m-1 p-button-sm p-button-warning"></button>
+                    <button pButton type="button" icon="pi pi-eye" routerLink="./{{user.id}}"
+                      class="m-1 p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-trash" (click)="confirm(user?.id)"
+                      class="m-1 p-button-danger p-button-sm"></button>
                 </td>
             </tr>
         </ng-template>
@@ -39,10 +44,10 @@
 <p-dialog header="Update Mail Models" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
     [draggable]="false" [resizable]="false">
     <div class="container">
-            <label for="">Models</label>
-            <p-multiSelect [options]="models" appendTo="body"
-                defaultLabel="Select Models" styleClass="w-100" display="chip" [(ngModel)]="currentModels">
-            </p-multiSelect>
+        <label for="">Models</label>
+        <p-multiSelect [options]="models" appendTo="body" defaultLabel="Select Models" styleClass="w-100" display="chip"
+            [(ngModel)]="currentModels">
+        </p-multiSelect>
     </div>
     <ng-template pTemplate="footer">
         <button class="btn btn-secondary" (click)="update(currentEmail,currentModels)">
@@ -57,19 +62,28 @@
         <div class="row">
             <div class="col-12 my-3">
                 <label for="">Email</label>
-                <input type="text" pInputText ngClass="w-100" [(ngModel)]="newEmail"/>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="newEmail" />
             </div>
             <div class="col-12 my-3">
+                <label for="">Manager</label>
+                <p-dropdown [options]="['0','1']" styleClass="w-100" placeholder="Select Manager Type" appendTo="body"
+                    [filter]="true" [(ngModel)]="newManager">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-3" *ngIf="newManager == '0'">
                 <label for="">Models</label>
-                <p-multiSelect [options]="models" appendTo="body"
-                    defaultLabel="Select Models" styleClass="w-100" display="chip" [(ngModel)]="newModels">
+                <p-multiSelect [options]="models" appendTo="body" defaultLabel="Select Models" styleClass="w-100"
+                    display="chip" [(ngModel)]="newModels">
                 </p-multiSelect>
             </div>
         </div>
     </div>
     <ng-template pTemplate="footer">
-        <button class="btn btn-secondary" (click)="update(newEmail,newModels)">
+        <button class="btn btn-secondary" (click)="create(newEmail,newManager,newModels)">
             Create
         </button>
     </ng-template>
 </p-dialog>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

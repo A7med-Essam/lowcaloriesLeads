@@ -9,11 +9,15 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MailDetailsComponent } from './mail-details/mail-details.component';
 
 
 @NgModule({
   declarations: [
-    ShowHeadMailsComponent
+    ShowHeadMailsComponent,
+    MailDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +27,9 @@ import { InputTextModule } from 'primeng/inputtext';
     ButtonModule,
     DialogModule,
     FormsModule,
-    InputTextModule
+    InputTextModule,
+    DropdownModule,
+    ConfirmDialogModule
   ]
 })
 export class MailServiceModule { }
