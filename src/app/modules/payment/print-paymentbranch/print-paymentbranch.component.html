@@ -51,8 +51,12 @@
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Birthday <span class="text-danger">*</span></label>
-                <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='birthday'>
-                </p-calendar>
+                <!-- <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='birthday'>
+                </p-calendar> -->
+                <p-calendar view="year" formControlName='birthday' [defaultDate]="minBirthdate" [minDate]="minBirthdate" [maxDate]="maxBirthdate" 
+                [showIcon]="true" #calendar dateFormat="yy" [showButtonBar]="true"  appendTo="body" 
+                (onClearClick)="onClearClick()"
+                (onSelect)="onDateChange($event)"></p-calendar>
                 <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('birthday')?.hasError('required')">This field is required.</small>
             </div>

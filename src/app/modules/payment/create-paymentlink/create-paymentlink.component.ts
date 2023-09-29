@@ -3,10 +3,12 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { Calendar } from 'primeng/calendar';
 import { Checkbox } from 'primeng/checkbox';
 import { Subscription } from 'rxjs';
 import { GiftcodeService } from 'src/app/services/giftcode.service';
@@ -622,5 +624,36 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
 
   editCurrentPrice(newPrice:HTMLInputElement){
     this.currentPrice = Number(newPrice.value);
+  }
+
+  // ==================================calendar==================================
+
+  maxBirthdate: Date= new Date('2020-12-31');
+  minBirthdate: Date= new Date('1950-01-01');
+
+  @ViewChild('calendar') calendar!: Calendar;
+  onDateChange(e: any) {
+    if (this.calendar.view == 'year') {
+      this.calendar.view = 'month';
+      this.calendar.dateFormat = 'yy/mm';
+      this.showDialog();
+    } else if (this.calendar.view == 'month') {
+      this.calendar.view = 'date';
+      this.calendar.dateFormat = 'yy/mm/dd';
+      this.showDialog();
+    }
+  }
+
+  showDialog() {
+    setTimeout(() => {
+      this.calendar.showOverlay();
+      this.calendar.inputfieldViewChild.nativeElement.dispatchEvent(
+        new Event('click')
+      );
+    }, 200);
+  }
+
+  onClearClick() {
+    this.calendar.view = 'year';
   }
 }
