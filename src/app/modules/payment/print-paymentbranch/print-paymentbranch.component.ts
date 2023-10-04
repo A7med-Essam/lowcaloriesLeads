@@ -34,11 +34,11 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   paymentForm!: FormGroup;
   gender: string[] = ['male', 'female'];
   creatingStatus: boolean = false;
-  paymentTypes:any[] = [
-    {name:"Cash",value:51},
-    {name:"Credit Card",value:52},
-    {name:"Exchange",value:53}
-  ]
+  paymentTypes: any[] = [
+    { name: 'Cash', value: 51 },
+    { name: 'Credit Card', value: 52 },
+    { name: 'Exchange', value: 53 },
+  ];
   days: { name: string; value: string }[] = [
     { name: 'Saturday', value: 'Sat' },
     { name: 'Sunday', value: 'Sun' },
@@ -70,12 +70,14 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   constructor(
     private _PaymentlinkService: PaymentlinkService,
     private _MessageService: MessageService,
-    private _GuardService:GuardService
+    private _GuardService: GuardService
   ) {}
 
-  createGiftCodePermission:boolean = false;
+  createGiftCodePermission: boolean = false;
   getPermission() {
-    this.createGiftCodePermission = this._GuardService.getPermissionStatus('createCodeValue_Branches');
+    this.createGiftCodePermission = this._GuardService.getPermissionStatus(
+      'createCodeValue_Branches'
+    );
   }
 
   getEmailByMobile(mobile: string) {
@@ -88,7 +90,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
 
   currentPrice: number = 0;
   calculate_payment_link() {
-    const data:any = {
+    const data: any = {
       program_id: this.paymentForm.value.program_id,
       plan_id: this.paymentForm.value.plan_id,
       snack_types: this.paymentForm.value.snack_types,
@@ -97,11 +99,11 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       bag: this.paymentForm.value.bag,
     };
     if (this.paymentForm.value.meal_types) {
-      data.meal_types=this.paymentForm.value.meal_types
+      data.meal_types = this.paymentForm.value.meal_types;
     }
     if (this.paymentForm.value.snack_types) {
       if (this.paymentForm.value.snack_types.length > 0) {
-        data.snack_types=this.paymentForm.value.snack_types
+        data.snack_types = this.paymentForm.value.snack_types;
       }
     }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
@@ -152,17 +154,21 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       if (res.status == 1) {
         this.paymentDetails = res.data;
         this.emiratesClone = this.paymentDetails.emirates;
-        this.paymentDetails.GiftCodes = this.paymentDetails.GiftCodes
-        .filter(f=>f.flag == "Branches").map( c => {
+        this.paymentDetails.GiftCodes = this.paymentDetails.GiftCodes.filter(
+          (f) => f.flag == 'Branches'
+        ).map((c) => {
           return {
-            code:c.type == "percentage" ? `${c.code} (${c.percentage}%)` : `${c.code} (${c.value} AED)`,
-            id:c.id,
-            percentage:c.percentage,
-            value:c.value,
+            code:
+              c.type == 'percentage'
+                ? `${c.code} (${c.percentage}%)`
+                : `${c.code} (${c.value} AED)`,
+            id: c.id,
+            percentage: c.percentage,
+            value: c.value,
             type: c.type,
-            flag: c.flag
-          }
-        })
+            flag: c.flag,
+          };
+        });
       }
     });
   }
@@ -197,7 +203,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       dislike: new FormArray([]),
       note: new FormControl(null),
       check_type: new FormControl(null, [Validators.required]),
-      only_snack: new FormControl('no')
+      only_snack: new FormControl('no'),
     });
     this.valueChanges();
   }
@@ -208,7 +214,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       result.push(i.toString());
     }
     // return result;
-    return ['7','14','21','28'];
+    return ['7', '14', '21', '28'];
   }
 
   createPaymentLink(form: FormGroup) {
@@ -219,7 +225,10 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
       });
       if (this.enableEdit) {
-        this.paymentForm.addControl('paid_price', new FormControl(this.currentPrice))
+        this.paymentForm.addControl(
+          'paid_price',
+          new FormControl(this.currentPrice)
+        );
       }
       const filteredData = Object.keys(form.value)
         .filter(
@@ -328,7 +337,8 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       });
     }
 
-    const onlySnack = this.paymentForm.get('only_snack')?.value == 'yes' ? true : false;
+    const onlySnack =
+      this.paymentForm.get('only_snack')?.value == 'yes' ? true : false;
     if (type != 'dislike') {
       if (onlySnack) {
         if (type == 'snack_types') {
@@ -337,32 +347,38 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
           } else {
             this.paymentForm.get(type)?.setErrors({ required: true });
           }
-        }else{
+        } else {
           if (formArray.length > 0) {
             this.paymentForm.get(type)?.setErrors(null);
           } else {
             this.paymentForm.get(type)?.setErrors({ required: true });
           }
-          if (type == 'meal_types' && this.paymentForm.value.program_type == 'Chef Gourmet') {
+          if (
+            type == 'meal_types' &&
+            this.paymentForm.value.program_type == 'Chef Gourmet'
+          ) {
             if (formArray.length < 2) {
               this.paymentForm.get(type)?.setErrors({ required: true });
             }
           }
         }
-       } else {
-          if (type != 'snack_types') {
-            if (formArray.length > 0) {
-              this.paymentForm.get(type)?.setErrors(null);
-            } else {
+      } else {
+        if (type != 'snack_types') {
+          if (formArray.length > 0) {
+            this.paymentForm.get(type)?.setErrors(null);
+          } else {
+            this.paymentForm.get(type)?.setErrors({ required: true });
+          }
+          if (
+            type == 'meal_types' &&
+            this.paymentForm.value.program_type == 'Chef Gourmet'
+          ) {
+            if (formArray.length < 2) {
               this.paymentForm.get(type)?.setErrors({ required: true });
             }
-            if (type == 'meal_types' && this.paymentForm.value.program_type == 'Chef Gourmet') {
-              if (formArray.length < 2) {
-                this.paymentForm.get(type)?.setErrors({ required: true });
-              }
-            }
           }
-       }
+        }
+      }
     }
   }
 
@@ -405,12 +421,12 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.valueChangesSubscription4 = this.paymentForm
+    this.valueChangesSubscription4 = this.paymentForm
       .get('only_snack')
       ?.valueChanges.subscribe((value) => {
         if (value) {
           this.checkboxElements.forEach((checkbox: Checkbox) => {
-            if (checkbox.name == "group1") {
+            if (checkbox.name == 'group1') {
               checkbox.writeValue(false);
             }
           });
@@ -421,10 +437,13 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
             this.paymentForm.addControl('snack_types', new FormArray([]));
             this.paymentForm.get('snack_types')?.setErrors({ required: true });
           } else {
-              this.paymentForm.addControl('meal_types',new FormArray([], [Validators.required]));
-              this.paymentForm.removeControl('snack_types');
-              this.paymentForm.addControl('snack_types', new FormArray([]));
-              this.paymentForm.get('snack_types')?.setErrors(null);
+            this.paymentForm.addControl(
+              'meal_types',
+              new FormArray([], [Validators.required])
+            );
+            this.paymentForm.removeControl('snack_types');
+            this.paymentForm.addControl('snack_types', new FormArray([]));
+            this.paymentForm.get('snack_types')?.setErrors(null);
           }
         }
       });
@@ -502,7 +521,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     this.paymentForm.removeControl('snack_types');
     this.paymentForm.addControl('snack_types', new FormArray([]));
     this.checkboxElements.forEach((checkbox: Checkbox) => {
-      if (checkbox.name == "group1") {
+      if (checkbox.name == 'group1') {
         checkbox.writeValue(false);
       }
     });
@@ -519,9 +538,9 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     doc.text('Issue Subject:Payment Branch Report', 10, 40);
     doc.text('Prepared By: Low Calories Technical Team', 10, 45);
     doc.text('Requested By: Mohamed Fawzy', 10, 50);
-    doc.text('Low Calories Restaurant - Egypt', 150, 30);
+    doc.text('Low Calories Restaurant - UAE', 150, 30);
     doc.text('3rd Settelment, New Cairo', 150, 35);
-    doc.text('Phone: 201116202225', 150, 40);
+    doc.text('Phone: 04-5973939', 150, 40);
     doc.text('Email: info@thelowcalories.com', 150, 45);
     doc.text('Website: thelowcalories.com', 150, 50);
 
@@ -555,15 +574,18 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     if (res?.gift_code) {
       columns.push(
         { title: 'Giftcode', dataKey: res?.gift_code?.code },
-        { title: 'Giftcode Percentage', dataKey: res?.gift_code?.percentage + '%' },
-      )
+        {
+          title: 'Giftcode Percentage',
+          dataKey: res?.gift_code?.percentage + '%',
+        }
+      );
     }
 
-    if (res.sub_from == "Branch") {
-      const [type] = this.paymentTypes.filter(type => type.value === res.program_id);
-      columns.push(
-        { title: 'Payment Type', dataKey: type.name },
-      )
+    if (res.sub_from == 'Branch') {
+      const [type] = this.paymentTypes.filter(
+        (type) => type.value === res.program_id
+      );
+      columns.push({ title: 'Payment Type', dataKey: type.name });
     }
 
     if (res?.user?.second_phone_number) {
@@ -616,11 +638,11 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   giftcodeForm!: FormGroup;
   types: string[] = ['percentage', 'value'];
   giftcodeModal: boolean = false;
-  tomorrow:Date = new Date(new Date().setDate(new Date().getDate() + 2))
+  tomorrow: Date = new Date(new Date().setDate(new Date().getDate() + 2));
 
-  displayGiftcodeModal(){
+  displayGiftcodeModal() {
     if (this.createGiftCodePermission) {
-      this.giftcodeModal = true
+      this.giftcodeModal = true;
     }
   }
 
@@ -678,19 +700,19 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       expired_at: new FormControl(null, [Validators.required]),
     });
   }
-   // ==================================enableEdit==================================
-   enableEdit:boolean = false;
-   toggleEdit(){
-     this.enableEdit = !this.enableEdit
-   }
- 
-   editCurrentPrice(newPrice:HTMLInputElement){
-     this.currentPrice = Number(newPrice.value);
-   }
-     // ==================================calendar==================================
+  // ==================================enableEdit==================================
+  enableEdit: boolean = false;
+  toggleEdit() {
+    this.enableEdit = !this.enableEdit;
+  }
 
-  maxBirthdate: Date= new Date('2020-12-31');
-  minBirthdate: Date= new Date('1950-01-01');
+  editCurrentPrice(newPrice: HTMLInputElement) {
+    this.currentPrice = Number(newPrice.value);
+  }
+  // ==================================calendar==================================
+
+  maxBirthdate: Date = new Date('2020-12-31');
+  minBirthdate: Date = new Date('1950-01-01');
 
   @ViewChild('calendar') calendar!: Calendar;
   onDateChange(e: any) {

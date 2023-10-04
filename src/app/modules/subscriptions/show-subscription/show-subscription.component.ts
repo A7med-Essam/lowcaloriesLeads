@@ -151,9 +151,9 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Subscription Requests Report', 10, 40);
       doc.text('Prepared By: Low Calories Technical Team', 10, 45);
       doc.text('Requested By: Mohamed Fawzy', 10, 50);
-      doc.text('Low Calories Restaurant - Egypt', 150, 30);
+      doc.text('Low Calories Restaurant - UAE', 150, 30);
       doc.text('3rd Settelment, New Cairo', 150, 35);
-      doc.text('Phone: 201116202225', 150, 40);
+      doc.text('Phone: 04-5973939', 150, 40);
       doc.text('Email: info@thelowcalories.com', 150, 45);
       doc.text('Website: thelowcalories.com', 150, 50);
 
@@ -271,14 +271,25 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     }
     if (form.value.code) {
       form.patchValue({
-        code: `${form.value.code.code.replace(/\(\d+\s[A-Z]{3}\)/g, "").replace(/\(\d+%?\)/g, "").trim()} $-$${form.value.code.version}`,
+        code: `${form.value.code.code
+          .replace(/\(\d+\s[A-Z]{3}\)/g, '')
+          .replace(/\(\d+%?\)/g, '')
+          .trim()} $-$${form.value.code.version}`,
       });
     }
 
     if (form.value.discount) {
-      let splitedString = form.value.discount.split("% =>");
+      let splitedString = form.value.discount.split('% =>');
       form.patchValue({
-        discount: `${splitedString.length == 1? form.value.discount.split("AED =>")[0]:splitedString[0]} $-$${splitedString.length == 1?form.value.discount.split("AED =>")[1].trim():splitedString[1].trim()}`
+        discount: `${
+          splitedString.length == 1
+            ? form.value.discount.split('AED =>')[0]
+            : splitedString[0]
+        } $-$${
+          splitedString.length == 1
+            ? form.value.discount.split('AED =>')[1].trim()
+            : splitedString[1].trim()
+        }`,
       });
     }
 
@@ -682,5 +693,4 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       });
     }
   }
-
 }

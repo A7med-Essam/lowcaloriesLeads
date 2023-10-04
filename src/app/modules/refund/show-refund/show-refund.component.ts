@@ -16,19 +16,19 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-show-refund',
   templateUrl: './show-refund.component.html',
-  styleUrls: ['./show-refund.component.scss']
+  styleUrls: ['./show-refund.component.scss'],
 })
 export class ShowRefundComponent implements OnInit, OnDestroy {
-  role:string = ''
+  role: string = '';
   constructor(
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _RefundService: RefundService,
     private _DislikeService: DislikeService,
-    private _GuardService:GuardService,
-    private _MessageService:MessageService
+    private _GuardService: GuardService,
+    private _MessageService: MessageService
   ) {
-    this.role = this._GuardService.getUser().role_name
+    this.role = this._GuardService.getUser().role_name;
   }
 
   printPermission: boolean = false;
@@ -39,124 +39,137 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
   uploadReportPermission: boolean = false;
 
   getPermission() {
-    this.printPermission = this._GuardService.getPermissionStatus('print_refund');
-    this.exportPermission = this._GuardService.getPermissionStatus('export_refund');
-    this.createPermission = this._GuardService.getPermissionStatus('create_refund');
-    this.downloadSamplePermission = this._GuardService.getPermissionStatus('downloadSample_refund');
-    this.uploadFilesPermission = this._GuardService.getPermissionStatus('uploadFiles_refund');
-    this.uploadReportPermission = this._GuardService.getPermissionStatus('uploadReport_refund');
+    this.printPermission =
+      this._GuardService.getPermissionStatus('print_refund');
+    this.exportPermission =
+      this._GuardService.getPermissionStatus('export_refund');
+    this.createPermission =
+      this._GuardService.getPermissionStatus('create_refund');
+    this.downloadSamplePermission = this._GuardService.getPermissionStatus(
+      'downloadSample_refund'
+    );
+    this.uploadFilesPermission =
+      this._GuardService.getPermissionStatus('uploadFiles_refund');
+    this.uploadReportPermission = this._GuardService.getPermissionStatus(
+      'uploadReport_refund'
+    );
   }
 
-  displayUploadModal(){
+  displayUploadModal() {
     if (this.downloadSamplePermission) {
-      this.uploadModal = true
+      this.uploadModal = true;
     }
   }
 
   exportAsPDF() {
     if (this.printPermission) {
-
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
-    doc.internal.pageSize.width = 600;
-    const imageFile = '../../../../assets/images/logo.png';
-    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
-
-    doc.setTextColor(50);
-    doc.setFontSize(14);
-    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Refund Requests Report', 10, 45);
-    doc.text('Prepared By: Low Calories Technical Team', 10, 55);
-    doc.text('Requested By: Mohamed Fawzy', 10, 65);
-    doc.text('Low Calories Restaurant - Egypt', 500, 25);
-    doc.text('3rd Settelment, New Cairo', 500, 35);
-    doc.text('Phone: 201116202225', 500, 45);
-    doc.text('Email: info@thelowcalories.com', 500, 55);
-    doc.text('Website: thelowcalories.com', 500, 65);
-
-    const headers = [
-      'Date',
-      'name',
-      'email',
-      'mobile',
-      'branch',
-      'delivery_branch',
-      'subscription_plan',
-      'remaining_days',
-      'payment_method',
-      'cid',
-      'address',
-      'bank_name',
-      'iban',
-      'account_hold_name',
-      'bank_account_number',
-      // 'original_amount_paid',
-      // 'amount_usd',
-      // 'total_amount_refund',
-      'agent_name',
-      'amount_paid',
-      'reason',
-    ];
-    let filteredArray = this.allRefunds.filter((item:any) => this.specificRows.includes(item.id));
-    (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allRefunds);
-    (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.refunds);
-    const convertedData = filteredArray.map((obj: any) => [
-      obj.created_at.substring(0, 10),
-      obj.name,
-      obj.email,
-      obj.mobile,
-      obj.branch,
-      obj.delivery_branch,
-      obj.subscription_plan,
-      obj.remaining_days,
-      obj.payment_method,
-      obj.cid,
-      obj.address,
-      obj.bank_name,
-      obj.iban,
-      obj.account_hold_name,
-      obj.bank_account_number,
-      obj.agent_name,
-      obj.amount_paid,
-      obj.reason,
-    ]);
-    autoTable(doc, { startY: 70 });
-    autoTable(doc, {
-      head: [headers],
-      body: convertedData,
-    });
-
-    // Set the line color and width
-    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
-    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-
-    // Draw a line at the bottom of the page
-
-    // Get the total number of pages
-    const totalPages = doc.internal.pages;
-
-    // Iterate over each page and add the footer
-    for (let i = 1; i <= totalPages.length; i++) {
+      // Default export is a4 paper, portrait, using millimeters for units
+      const doc = new jsPDF();
       doc.internal.pageSize.width = 600;
-      doc.line(
-        20,
-        doc.internal.pageSize.height - 20,
-        doc.internal.pageSize.width - 20,
-        doc.internal.pageSize.height - 20
-      );
-      // Set the current page as active
-      doc.setPage(i);
-      // Set the position and alignment of the footer
-      doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(
-        'Thelowcalories.com',
-        20,
-        doc.internal.pageSize.getHeight() - 10
-      );
-    }
+      const imageFile = '../../../../assets/images/logo.png';
+      doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
 
-    doc.save('All_Refunds.pdf');
+      doc.setTextColor(50);
+      doc.setFontSize(14);
+      doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+      doc.text('Issue Subject:Refund Requests Report', 10, 45);
+      doc.text('Prepared By: Low Calories Technical Team', 10, 55);
+      doc.text('Requested By: Mohamed Fawzy', 10, 65);
+      doc.text('Low Calories Restaurant - UAE', 500, 25);
+      doc.text('3rd Settelment, New Cairo', 500, 35);
+      doc.text('Phone: 04-5973939', 500, 45);
+      doc.text('Email: info@thelowcalories.com', 500, 55);
+      doc.text('Website: thelowcalories.com', 500, 65);
+
+      const headers = [
+        'Date',
+        'name',
+        'email',
+        'mobile',
+        'branch',
+        'delivery_branch',
+        'subscription_plan',
+        'remaining_days',
+        'payment_method',
+        'cid',
+        'address',
+        'bank_name',
+        'iban',
+        'account_hold_name',
+        'bank_account_number',
+        // 'original_amount_paid',
+        // 'amount_usd',
+        // 'total_amount_refund',
+        'agent_name',
+        'amount_paid',
+        'reason',
+      ];
+      let filteredArray = this.allRefunds.filter((item: any) =>
+        this.specificRows.includes(item.id)
+      );
+      filteredArray.length == 0 &&
+        this.appliedFilters == null &&
+        (filteredArray = this.allRefunds);
+      filteredArray.length == 0 &&
+        this.appliedFilters != null &&
+        (filteredArray = this.refunds);
+      const convertedData = filteredArray.map((obj: any) => [
+        obj.created_at.substring(0, 10),
+        obj.name,
+        obj.email,
+        obj.mobile,
+        obj.branch,
+        obj.delivery_branch,
+        obj.subscription_plan,
+        obj.remaining_days,
+        obj.payment_method,
+        obj.cid,
+        obj.address,
+        obj.bank_name,
+        obj.iban,
+        obj.account_hold_name,
+        obj.bank_account_number,
+        obj.agent_name,
+        obj.amount_paid,
+        obj.reason,
+      ]);
+      autoTable(doc, { startY: 70 });
+      autoTable(doc, {
+        head: [headers],
+        body: convertedData,
+      });
+
+      // Set the line color and width
+      doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+      doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+      // Draw a line at the bottom of the page
+
+      // Get the total number of pages
+      const totalPages = doc.internal.pages;
+
+      // Iterate over each page and add the footer
+      for (let i = 1; i <= totalPages.length; i++) {
+        doc.internal.pageSize.width = 600;
+        doc.line(
+          20,
+          doc.internal.pageSize.height - 20,
+          doc.internal.pageSize.width - 20,
+          doc.internal.pageSize.height - 20
+        );
+        // Set the current page as active
+        doc.setPage(i);
+        // Set the position and alignment of the footer
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(
+          'Thelowcalories.com',
+          20,
+          doc.internal.pageSize.getHeight() - 10
+        );
+      }
+
+      doc.save('All_Refunds.pdf');
     }
   }
 
@@ -169,14 +182,14 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this._RefundService.refund_filter
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res=>{
-      if (res) {
-        this.appliedFilters = res
-      }
-    })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.appliedFilters = res;
+        }
+      });
     this.getPermission();
-    this.createUploadingForm()
+    this.createUploadingForm();
     this.getRefunds();
     this.createFilterForm();
     this.getAgents();
@@ -246,7 +259,7 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     });
   }
 
-  reasons:any[]=[]
+  reasons: any[] = [];
   getReasons() {
     this._DislikeService.getReasons().subscribe({
       next: (res) => (this.reasons = res.data),
@@ -260,7 +273,7 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
       }
     }
     this.appliedFilters = form.value;
-    this._RefundService.refund_filter.next(this.appliedFilters)
+    this._RefundService.refund_filter.next(this.appliedFilters);
     this._RefundService.filterRefund(1, form.value).subscribe((res) => {
       this.refunds = res.data.data;
       this.PaginationInfo = res.data;
@@ -269,7 +282,7 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     });
   }
 
-  getOldFilters(page:number) {
+  getOldFilters(page: number) {
     this._RefundService
       .filterRefund(page, this.appliedFilters)
       .subscribe((res) => {
@@ -284,7 +297,7 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     this.filterModal = false;
     this.filterForm.reset();
     this.getRefunds();
-    this._RefundService.refund_filter.next(null)
+    this._RefundService.refund_filter.next(null);
   }
 
   resetFields() {
@@ -311,14 +324,14 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
+
   private handleExportSuccess(data: any) {
     this._MessageService.add({
       severity: 'success',
       summary: 'Export Excel',
       detail: 'Refund Exported Successfully',
     });
-  
+
     const link = document.createElement('a');
     link.target = '_blank';
     link.href = data;
@@ -368,7 +381,7 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     { name: 'remaining_days', status: false },
     { name: 'subscription_plan', status: false },
   ];
-  
+
   getFilterColumns() {
     this.columns.forEach((element) => {
       element.status = false;
@@ -415,12 +428,12 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     if (input.checked) {
       this.specificRows = this.refunds.map((obj: any) => obj.id);
     } else {
-      this.specificRows = []
+      this.specificRows = [];
     }
   }
 
   // ****************************************************print row************************************************************************
-  print(refund:any){
+  print(refund: any) {
     if (this.printPermission) {
       // Default export is a4 paper, portrait, using millimeters for units
       const doc = new jsPDF();
@@ -432,47 +445,47 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Refund Requests Report', 10, 40);
       doc.text('Prepared By: Low Calories Technical Team', 10, 45);
       doc.text('Requested By: Mohamed Fawzy', 10, 50);
-      doc.text('Low Calories Restaurant - Egypt', 150, 30);
+      doc.text('Low Calories Restaurant - UAE', 150, 30);
       doc.text('3rd Settelment, New Cairo', 150, 35);
-      doc.text('Phone: 201116202225', 150, 40);
+      doc.text('Phone: 04-5973939', 150, 40);
       doc.text('Email: info@thelowcalories.com', 150, 45);
       doc.text('Website: thelowcalories.com', 150, 50);
-  
+
       autoTable(doc, { startY: 55 });
 
       var columns = [
-        {title: "Date", dataKey:refund.created_at.substring(0, 10)},
-        {title: "Name", dataKey:refund.name}, 
-        {title: "Email", dataKey:refund.email},
-        {title: "Mobile", dataKey:refund.mobile},
-        {title: "Branch", dataKey:refund.branch},
-        {title: "delivery_branch", dataKey:refund.delivery_branch},
-        {title: "subscription_plan", dataKey:refund.subscription_plan},
-        {title: "remaining_days", dataKey:refund.remaining_days},
-        {title: "payment_method", dataKey:refund.payment_method},
-        {title: "cid", dataKey:refund.cid},
-        {title: "address", dataKey:refund.address},
-        {title: "bank_name", dataKey:refund.bank_name},          
-        {title: "iban", dataKey:refund.iban},          
-        {title: "account_hold_name", dataKey:refund.account_hold_name},  
-        {title: "bank_account_number", dataKey:refund.bank_account_number},  
-        {title: "amount_paid", dataKey:refund.amount_paid},          
-        {title: "agent_name", dataKey:refund.agent_name},          
-        {title: "reason", dataKey:refund.reason},          
-    ];
+        { title: 'Date', dataKey: refund.created_at.substring(0, 10) },
+        { title: 'Name', dataKey: refund.name },
+        { title: 'Email', dataKey: refund.email },
+        { title: 'Mobile', dataKey: refund.mobile },
+        { title: 'Branch', dataKey: refund.branch },
+        { title: 'delivery_branch', dataKey: refund.delivery_branch },
+        { title: 'subscription_plan', dataKey: refund.subscription_plan },
+        { title: 'remaining_days', dataKey: refund.remaining_days },
+        { title: 'payment_method', dataKey: refund.payment_method },
+        { title: 'cid', dataKey: refund.cid },
+        { title: 'address', dataKey: refund.address },
+        { title: 'bank_name', dataKey: refund.bank_name },
+        { title: 'iban', dataKey: refund.iban },
+        { title: 'account_hold_name', dataKey: refund.account_hold_name },
+        { title: 'bank_account_number', dataKey: refund.bank_account_number },
+        { title: 'amount_paid', dataKey: refund.amount_paid },
+        { title: 'agent_name', dataKey: refund.agent_name },
+        { title: 'reason', dataKey: refund.reason },
+      ];
 
-    // doc.text(140, 40, "Report");
-    autoTable(doc,{body:columns,});
-  
+      // doc.text(140, 40, "Report");
+      autoTable(doc, { body: columns });
+
       // Set the line color and width
       doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
       doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-  
+
       // Draw a line at the bottom of the page
-  
+
       // Get the total number of pages
       const totalPages = doc.internal.pages;
-  
+
       // Iterate over each page and add the footer
       for (let i = 1; i <= totalPages.length; i++) {
         doc.line(
@@ -492,14 +505,14 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
           doc.internal.pageSize.getHeight() - 10
         );
       }
-  
+
       doc.save('refund.pdf');
     }
   }
 
   // ****************************************************Report************************************************************************
 
-  reportModal:boolean = false;
+  reportModal: boolean = false;
   reportForm!: FormGroup;
 
   createReportForm() {
@@ -511,26 +524,28 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     });
   }
 
-  uploadingStatus:boolean = false
-  insertReport(form:FormGroup){
+  uploadingStatus: boolean = false;
+  insertReport(form: FormGroup) {
     if (form.valid && this.uploadReportPermission) {
-      this.uploadingStatus = true
-      this._RefundService.uploadAccountingRefundDetails(form.value).subscribe(res=>{
-        this.refunds = this.refunds.map((e:any)=> {
-          if (e.id == res.data.id) {
-            e = res.data
-          }
-          return e
-        })
-        this.uploadingStatus = false
-        this.getAllRefunds();
-        this.getRefunds();
-        this.reportModal = false
-      })
+      this.uploadingStatus = true;
+      this._RefundService
+        .uploadAccountingRefundDetails(form.value)
+        .subscribe((res) => {
+          this.refunds = this.refunds.map((e: any) => {
+            if (e.id == res.data.id) {
+              e = res.data;
+            }
+            return e;
+          });
+          this.uploadingStatus = false;
+          this.getAllRefunds();
+          this.getRefunds();
+          this.reportModal = false;
+        });
     }
   }
 
-  displayReportModal(id:number){
+  displayReportModal(id: number) {
     this.reportForm.patchValue({
       refund_request_id: id,
     });
@@ -557,7 +572,6 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
           this.reportForm.patchValue({
             file: base64Strings[0],
           });
-
         } catch (error) {
           console.error(error);
         }
@@ -566,125 +580,131 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
       readFiles();
     }
   }
-    // ****************************************************upload Modal************************************************************************
-    uploadModal: boolean = false;
+  // ****************************************************upload Modal************************************************************************
+  uploadModal: boolean = false;
 
-    getSample() {
-      if (this.downloadSamplePermission) {
-        this._RefundService.getSample().subscribe((res) => {
-          const link = document.createElement('a');
-          link.target = '_blank';
-          link.href = res.data;
-          link.click();
-        });
-      }
+  getSample() {
+    if (this.downloadSamplePermission) {
+      this._RefundService.getSample().subscribe((res) => {
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
+      });
     }
-  
-    getFormData(object: any) {
-      const formData = new FormData();
-      Object.keys(object).forEach((key) => formData.append(key, object[key]));
-      return formData;
-    }
-  
-    onFileSelected(event: any) {
-      const file: File = event.target.files[0];
-      if (file && this.downloadSamplePermission) {
-        let f: File = this.getFormData({ file: file }) as any;
-        this._RefundService.uploadFile(f).subscribe({
-          next: (res) => {
-            this.uploadModal = false;
-            this.getRefunds();
-            this.getAllRefunds();
-          },
-        });
-        this.uploadModal = false;
-      }
-    }
+  }
 
-       // ****************************************************upload File Modal************************************************************************
-       uploadFilesModal:boolean = false;
-       uploadForm!: FormGroup;
-       
-       displayUploadFilesModal(id:number){
-         this.uploadForm.patchValue({
-           refund_id: id,
-         });
-         this.uploadFilesModal = true;
-       }
-       
-       getUploadedFile2(event: any) {
-         if (event.target.files && event.target.files.length) {
-           const files = event.target.files;
-           const readFile = (file: any) => {
-             return new Promise((resolve, reject) => {
-               const fileReader = new FileReader();
-               fileReader.onload = (event: any) => resolve(event.target.result);
-               fileReader.onerror = (error) => reject(error);
-               fileReader.readAsDataURL(file);
-             });
-           };
-     
-           const readFiles = async () => {
-             try {
-               const base64Strings = await Promise.all(
-                 Array.from(files).map(readFile)
-               );
-               const fileTypes = base64Strings.map((base64String: any) => {
-                const type = base64String.split(',')[0].split(':')[1].split(';')[0];
-                return { [type]: base64String };
-              });
-               this.uploadForm.patchValue({
-                 files: fileTypes,
-               });
-     
-             } catch (error) {
-               console.error(error);
-             }
-           };
-     
-           readFiles();
-         }
-       }
-   
-       createUploadingForm() {
-         this.uploadForm = new FormGroup({
-           refund_id: new FormControl(null, [Validators.required]),
-           files: new FormControl(null, [Validators.required]),
-         });
-       }
-   
-       insertRefundFiles(form:FormGroup){
-         if (form.valid && this.uploadFilesPermission) {
-           this.uploadingStatus = true
-           this._RefundService.uploadRefundFiles(form.value).subscribe(res=>{
-             this.uploadingStatus = false
-             this.uploadFilesModal = false
-           })
-         }
-       }
-       // ========================================================sort========================================================
-       sort(event: any) {
-        const sortField = event.sortField;
-        const sortOrder = event.sortOrder === 1 ? 1 : -1;
-        this.refunds?.sort((a: any, b: any) => {
-          const aValue = a[sortField];
-          const bValue = b[sortField];
-          if (typeof aValue === 'string' && Date.parse(aValue) && typeof bValue === 'string' && Date.parse(bValue)) {
-            const aDate = new Date(aValue);
-            const bDate = new Date(bValue);
-            return (aDate.getTime() - bDate.getTime()) * sortOrder; 
-          }
-          else if (!isNaN(parseFloat(aValue)) && typeof parseFloat(aValue) === 'number' && !isNaN(parseFloat(bValue)) && typeof parseFloat(bValue) === 'number') {
-            return (aValue - bValue) * sortOrder;
-          } else if (typeof aValue === 'string' && typeof bValue === 'string') {
-            return aValue.localeCompare(bValue) * sortOrder;
-          }
-          else if (Array.isArray(aValue) && Array.isArray(bValue)) {
-            return (aValue.length - bValue.length) * sortOrder;
-          }
-           else {
-            return 0;
-          }
+  getFormData(object: any) {
+    const formData = new FormData();
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
+    return formData;
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file && this.downloadSamplePermission) {
+      let f: File = this.getFormData({ file: file }) as any;
+      this._RefundService.uploadFile(f).subscribe({
+        next: (res) => {
+          this.uploadModal = false;
+          this.getRefunds();
+          this.getAllRefunds();
+        },
+      });
+      this.uploadModal = false;
+    }
+  }
+
+  // ****************************************************upload File Modal************************************************************************
+  uploadFilesModal: boolean = false;
+  uploadForm!: FormGroup;
+
+  displayUploadFilesModal(id: number) {
+    this.uploadForm.patchValue({
+      refund_id: id,
+    });
+    this.uploadFilesModal = true;
+  }
+
+  getUploadedFile2(event: any) {
+    if (event.target.files && event.target.files.length) {
+      const files = event.target.files;
+      const readFile = (file: any) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = (event: any) => resolve(event.target.result);
+          fileReader.onerror = (error) => reject(error);
+          fileReader.readAsDataURL(file);
         });
+      };
+
+      const readFiles = async () => {
+        try {
+          const base64Strings = await Promise.all(
+            Array.from(files).map(readFile)
+          );
+          const fileTypes = base64Strings.map((base64String: any) => {
+            const type = base64String.split(',')[0].split(':')[1].split(';')[0];
+            return { [type]: base64String };
+          });
+          this.uploadForm.patchValue({
+            files: fileTypes,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      readFiles();
+    }
+  }
+
+  createUploadingForm() {
+    this.uploadForm = new FormGroup({
+      refund_id: new FormControl(null, [Validators.required]),
+      files: new FormControl(null, [Validators.required]),
+    });
+  }
+
+  insertRefundFiles(form: FormGroup) {
+    if (form.valid && this.uploadFilesPermission) {
+      this.uploadingStatus = true;
+      this._RefundService.uploadRefundFiles(form.value).subscribe((res) => {
+        this.uploadingStatus = false;
+        this.uploadFilesModal = false;
+      });
+    }
+  }
+  // ========================================================sort========================================================
+  sort(event: any) {
+    const sortField = event.sortField;
+    const sortOrder = event.sortOrder === 1 ? 1 : -1;
+    this.refunds?.sort((a: any, b: any) => {
+      const aValue = a[sortField];
+      const bValue = b[sortField];
+      if (
+        typeof aValue === 'string' &&
+        Date.parse(aValue) &&
+        typeof bValue === 'string' &&
+        Date.parse(bValue)
+      ) {
+        const aDate = new Date(aValue);
+        const bDate = new Date(bValue);
+        return (aDate.getTime() - bDate.getTime()) * sortOrder;
+      } else if (
+        !isNaN(parseFloat(aValue)) &&
+        typeof parseFloat(aValue) === 'number' &&
+        !isNaN(parseFloat(bValue)) &&
+        typeof parseFloat(bValue) === 'number'
+      ) {
+        return (aValue - bValue) * sortOrder;
+      } else if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return aValue.localeCompare(bValue) * sortOrder;
+      } else if (Array.isArray(aValue) && Array.isArray(bValue)) {
+        return (aValue.length - bValue.length) * sortOrder;
+      } else {
+        return 0;
       }
+    });
+  }
 }

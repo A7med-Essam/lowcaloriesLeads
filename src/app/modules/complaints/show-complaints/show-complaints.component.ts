@@ -24,7 +24,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     private _Router: Router,
     private _DislikeService: DislikeService,
     private _ComplaintsService: ComplaintsService,
-    private _GuardService:GuardService,
+    private _GuardService: GuardService,
     private _MessageService: MessageService
   ) {}
   private unsubscribe$ = new Subject<void>();
@@ -41,110 +41,120 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
   updatePermission: boolean = false;
 
   getPermission() {
-    this.printPermission = this._GuardService.getPermissionStatus('print_complaints');
-    this.exportPermission = this._GuardService.getPermissionStatus('export_complaints');
-    this.createPermission = this._GuardService.getPermissionStatus('create_complaints');
-    this.updatePermission = this._GuardService.getPermissionStatus('update_complaints');
-    this.downloadSamplePermission = this._GuardService.getPermissionStatus('downloadSample_complaints');
-    this.uploadFilesPermission = this._GuardService.getPermissionStatus('uploadFiles_complaints');
+    this.printPermission =
+      this._GuardService.getPermissionStatus('print_complaints');
+    this.exportPermission =
+      this._GuardService.getPermissionStatus('export_complaints');
+    this.createPermission =
+      this._GuardService.getPermissionStatus('create_complaints');
+    this.updatePermission =
+      this._GuardService.getPermissionStatus('update_complaints');
+    this.downloadSamplePermission = this._GuardService.getPermissionStatus(
+      'downloadSample_complaints'
+    );
+    this.uploadFilesPermission = this._GuardService.getPermissionStatus(
+      'uploadFiles_complaints'
+    );
   }
 
-  displayUploadModal(){
+  displayUploadModal() {
     if (this.downloadSamplePermission) {
-      this.uploadModal = true
+      this.uploadModal = true;
     }
   }
 
   exportAsPDF() {
     if (this.printPermission) {
-      
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
-    doc.internal.pageSize.width = 420;
+      // Default export is a4 paper, portrait, using millimeters for units
+      const doc = new jsPDF();
+      doc.internal.pageSize.width = 420;
 
-    const imageFile = '../../../../assets/images/logo.png';
-    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+      const imageFile = '../../../../assets/images/logo.png';
+      doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
 
-    doc.setTextColor(50);
-    doc.setFontSize(14);
-    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Customers Complaints Report', 10, 45);
-    doc.text('Prepared By: Low Calories Technical Team', 10, 55);
-    doc.text('Requested By: Mohamed Fawzy', 10, 65);
-    doc.text('Low Calories Restaurant - Egypt', 320, 25);
-    doc.text('3rd Settelment, New Cairo', 320, 35);
-    doc.text('Phone: 201116202225', 320, 45);
-    doc.text('Email: info@thelowcalories.com', 320, 55);
-    doc.text('Website: thelowcalories.com', 320, 65);
+      doc.setTextColor(50);
+      doc.setFontSize(14);
+      doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+      doc.text('Issue Subject:Customers Complaints Report', 10, 45);
+      doc.text('Prepared By: Low Calories Technical Team', 10, 55);
+      doc.text('Requested By: Mohamed Fawzy', 10, 65);
+      doc.text('Low Calories Restaurant - UAE', 320, 25);
+      doc.text('3rd Settelment, New Cairo', 320, 35);
+      doc.text('Phone: 04-5973939', 320, 45);
+      doc.text('Email: info@thelowcalories.com', 320, 55);
+      doc.text('Website: thelowcalories.com', 320, 65);
 
+      const headers = [
+        'Date',
+        'customer_name',
+        'customer_mobile',
+        'CID',
+        'Agent_name',
+        'Status',
+        'Branch',
+        'Action',
+        'issue_details',
+      ];
 
+      let filteredArray = this.allComplaints.filter((item: any) =>
+        this.specificRows.includes(item.id)
+      );
+      filteredArray.length == 0 &&
+        this.appliedFilters == null &&
+        (filteredArray = this.allComplaints);
+      filteredArray.length == 0 &&
+        this.appliedFilters != null &&
+        (filteredArray = this.complaints);
+      const convertedData = filteredArray.map((obj: any) => [
+        obj.date,
+        obj.c_name,
+        obj.c_mobile,
+        obj.cid,
+        obj.agent_name,
+        obj.status,
+        obj.branch,
+        obj.action,
+        obj.issue_details,
+      ]);
 
-    const headers = [
-      'Date',
-      'customer_name',
-      'customer_mobile',
-      'CID',
-      'Agent_name',
-      'Status',
-      'Branch',
-      'Action',
-      'issue_details',
-    ];
+      autoTable(doc, { startY: 70 });
+      autoTable(doc, {
+        head: [headers],
+        body: convertedData,
+      });
 
-    let filteredArray = this.allComplaints.filter((item:any) => this.specificRows.includes(item.id));
-    (filteredArray.length == 0 && this.appliedFilters==null) && (filteredArray = this.allComplaints);
-    (filteredArray.length == 0 && this.appliedFilters!=null) && (filteredArray = this.complaints);
-    const convertedData = filteredArray.map((obj: any) => [
-      obj.date,
-      obj.c_name,
-      obj.c_mobile,
-      obj.cid,
-      obj.agent_name,
-      obj.status,
-      obj.branch,
-      obj.action,
-      obj.issue_details,
-    ]);
+      // Set the line color and width
+      doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+      doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
 
-    autoTable(doc, { startY: 70 });
-    autoTable(doc, {
-      head: [headers],
-      body: convertedData,
-    });
+      // Draw a line at the bottom of the page
 
-    // Set the line color and width
-    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
-    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+      // Get the total number of pages
+      const totalPages = doc.internal.pages;
 
-    // Draw a line at the bottom of the page
-    
-    // Get the total number of pages
-    const totalPages = doc.internal.pages;
-    
-    // Iterate over each page and add the footer
-    for (let i = 1; i <= totalPages.length; i++) {
-    doc.internal.pageSize.width = 420;
+      // Iterate over each page and add the footer
+      for (let i = 1; i <= totalPages.length; i++) {
+        doc.internal.pageSize.width = 420;
 
-          doc.line(
-            20,
-            doc.internal.pageSize.height - 10,
-            doc.internal.pageSize.width - 20,
-            doc.internal.pageSize.height - 10
-          );
-          // Set the current page as active
-          doc.setPage(i);
-          // Set the position and alignment of the footer
-          doc.setFontSize(10);
-          doc.setTextColor(150);
-          doc.text(
-            'Thelowcalories.com',
-            20,
-            doc.internal.pageSize.getHeight() - 5
-          );
-        }
-    doc.save('All_Complaints.pdf');
-  }
-
+        doc.line(
+          20,
+          doc.internal.pageSize.height - 10,
+          doc.internal.pageSize.width - 20,
+          doc.internal.pageSize.height - 10
+        );
+        // Set the current page as active
+        doc.setPage(i);
+        // Set the position and alignment of the footer
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(
+          'Thelowcalories.com',
+          20,
+          doc.internal.pageSize.getHeight() - 5
+        );
+      }
+      doc.save('All_Complaints.pdf');
+    }
   }
 
   complaints: any[] = [];
@@ -152,12 +162,12 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._ComplaintsService.complaints_filter
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res=>{
-      if (res) {
-        this.appliedFilters = res
-      }
-    })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.appliedFilters = res;
+        }
+      });
     this.getPermission();
     this.createUploadingForm();
     this.createFilterForm();
@@ -240,7 +250,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       }
     }
     this.appliedFilters = form.value;
-    this._ComplaintsService.complaints_filter.next(this.appliedFilters)
+    this._ComplaintsService.complaints_filter.next(this.appliedFilters);
     this._ComplaintsService.filterComplaints(1, form.value).subscribe((res) => {
       this.complaints = res.data.data;
       this.PaginationInfo = res.data;
@@ -249,7 +259,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     });
   }
 
-  getOldFilters(page:number) {
+  getOldFilters(page: number) {
     this._ComplaintsService
       .filterComplaints(page, this.appliedFilters)
       .subscribe((res) => {
@@ -264,7 +274,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     this.filterModal = false;
     this.filterForm.reset();
     this.getComplaints();
-    this._ComplaintsService.complaints_filter.next(null)
+    this._ComplaintsService.complaints_filter.next(null);
   }
 
   resetFields() {
@@ -277,7 +287,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     if (this.exportPermission) {
       let exportObservable;
       if (this.specificRows.length > 0) {
-        exportObservable = this._ComplaintsService.exportByIds(this.specificRows);
+        exportObservable = this._ComplaintsService.exportByIds(
+          this.specificRows
+        );
       } else if (this.appliedFilters) {
         const ids = this.complaints.map((obj: any) => obj.id);
         exportObservable = this._ComplaintsService.exportByIds(ids);
@@ -291,14 +303,14 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
+
   private handleExportSuccess(data: any) {
     this._MessageService.add({
       severity: 'success',
       summary: 'Export Excel',
       detail: 'Complaints Exported Successfully',
     });
-  
+
     const link = document.createElement('a');
     link.target = '_blank';
     link.href = data;
@@ -327,31 +339,38 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
 
   // ****************************************************update************************************************************************
 
-  updateRow(status:string,reason:string){
-    if (this.updatePermission) {      
-      this._ComplaintsService.updateIssueStatus({id:this.currentEditRow.id,status:status.toLowerCase(), reason}).subscribe(res=>{
-        this.getAllComplaints();
-        this.currentEditReason = null;
-        this.getComplaints();
-        this.updateModal = false;
-        this.complaints = this.complaints.map(e=> {
-          if (e.id == res.data.id) {
-            e = res.data
-          }
-          return e
+  updateRow(status: string, reason: string) {
+    if (this.updatePermission) {
+      this._ComplaintsService
+        .updateIssueStatus({
+          id: this.currentEditRow.id,
+          status: status.toLowerCase(),
+          reason,
         })
-      })
+        .subscribe((res) => {
+          this.getAllComplaints();
+          this.currentEditReason = null;
+          this.getComplaints();
+          this.updateModal = false;
+          this.complaints = this.complaints.map((e) => {
+            if (e.id == res.data.id) {
+              e = res.data;
+            }
+            return e;
+          });
+        });
     }
   }
 
-  updateModal:boolean = false;
-  currentEditRow:any;
-  currentEditStatus:any;
-  currentEditReason:any;
-  displayUpdateModal(issue:any){
+  updateModal: boolean = false;
+  currentEditRow: any;
+  currentEditStatus: any;
+  currentEditReason: any;
+  displayUpdateModal(issue: any) {
     if (this.updatePermission) {
-      this.currentEditRow = issue
-      this.currentEditStatus = issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
+      this.currentEditRow = issue;
+      this.currentEditStatus =
+        issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
       this.updateModal = true;
     }
   }
@@ -373,7 +392,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     { name: 'issue_details', status: false },
     { name: 'status', status: false },
   ];
-  
+
   getFilterColumns() {
     this.columns.forEach((element) => {
       element.status = false;
@@ -420,85 +439,83 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     if (input.checked) {
       this.specificRows = this.complaints.map((obj: any) => obj.id);
     } else {
-      this.specificRows = []
+      this.specificRows = [];
     }
   }
 
-   // ****************************************************print row************************************************************************
-   print(complaint:any){
+  // ****************************************************print row************************************************************************
+  print(complaint: any) {
     if (this.printPermission) {
-
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
-    const imageFile = '../../../../assets/images/logo.png';
-    doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
-    doc.setTextColor(50);
-    doc.setFontSize(10);
-    doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
-    doc.text('Issue Subject:Customers Complaints Report', 10, 40);
-    doc.text('Prepared By: Low Calories Technical Team', 10, 45);
-    doc.text('Requested By: Mohamed Fawzy', 10, 50);
-    doc.text('Low Calories Restaurant - Egypt', 150, 30);
-    doc.text('3rd Settelment, New Cairo', 150, 35);
-    doc.text('Phone: 201116202225', 150, 40);
-    doc.text('Email: info@thelowcalories.com', 150, 45);
-    doc.text('Website: thelowcalories.com', 150, 50);
-
-    autoTable(doc, { startY: 55 });
- 
-
-    var columns = [
-      {title: "Date", dataKey:complaint.date},
-      {title: "customer_name", dataKey:complaint.c_name}, 
-      {title: "customer_mobile", dataKey:complaint.c_mobile},
-      {title: "cid", dataKey:complaint.cid},
-      {title: "agent_name", dataKey:complaint.agent_name},
-      {title: "status", dataKey:complaint.status},
-      {title: "branch", dataKey:complaint.branch},
-      {title: "action", dataKey:complaint.action},
-      {title: "issue_details", dataKey:complaint.issue_details},
-  ];
-
-  // doc.text(140, 40, "Report");
-  autoTable(doc,{body:columns,});
-
-    // Set the line color and width
-    doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
-    doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-
-    // Draw a line at the bottom of the page
-
-    // Get the total number of pages
-    const totalPages = doc.internal.pages;
-
-    // Iterate over each page and add the footer
-    for (let i = 1; i <= totalPages.length; i++) {
-      doc.line(
-        20,
-        doc.internal.pageSize.height - 20,
-        doc.internal.pageSize.width - 20,
-        doc.internal.pageSize.height - 20
-      );
-      // Set the current page as active
-      doc.setPage(i);
-      // Set the position and alignment of the footer
+      // Default export is a4 paper, portrait, using millimeters for units
+      const doc = new jsPDF();
+      const imageFile = '../../../../assets/images/logo.png';
+      doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+      doc.setTextColor(50);
       doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(
-        'Thelowcalories.com',
-        20,
-        doc.internal.pageSize.getHeight() - 10
-      );
+      doc.text(`Issue Date:${new Date().toLocaleDateString('en-CA')}`, 10, 35);
+      doc.text('Issue Subject:Customers Complaints Report', 10, 40);
+      doc.text('Prepared By: Low Calories Technical Team', 10, 45);
+      doc.text('Requested By: Mohamed Fawzy', 10, 50);
+      doc.text('Low Calories Restaurant - UAE', 150, 30);
+      doc.text('3rd Settelment, New Cairo', 150, 35);
+      doc.text('Phone: 04-5973939', 150, 40);
+      doc.text('Email: info@thelowcalories.com', 150, 45);
+      doc.text('Website: thelowcalories.com', 150, 50);
+
+      autoTable(doc, { startY: 55 });
+
+      var columns = [
+        { title: 'Date', dataKey: complaint.date },
+        { title: 'customer_name', dataKey: complaint.c_name },
+        { title: 'customer_mobile', dataKey: complaint.c_mobile },
+        { title: 'cid', dataKey: complaint.cid },
+        { title: 'agent_name', dataKey: complaint.agent_name },
+        { title: 'status', dataKey: complaint.status },
+        { title: 'branch', dataKey: complaint.branch },
+        { title: 'action', dataKey: complaint.action },
+        { title: 'issue_details', dataKey: complaint.issue_details },
+      ];
+
+      // doc.text(140, 40, "Report");
+      autoTable(doc, { body: columns });
+
+      // Set the line color and width
+      doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+      doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+      // Draw a line at the bottom of the page
+
+      // Get the total number of pages
+      const totalPages = doc.internal.pages;
+
+      // Iterate over each page and add the footer
+      for (let i = 1; i <= totalPages.length; i++) {
+        doc.line(
+          20,
+          doc.internal.pageSize.height - 20,
+          doc.internal.pageSize.width - 20,
+          doc.internal.pageSize.height - 20
+        );
+        // Set the current page as active
+        doc.setPage(i);
+        // Set the position and alignment of the footer
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(
+          'Thelowcalories.com',
+          20,
+          doc.internal.pageSize.getHeight() - 10
+        );
+      }
+
+      doc.save('complaint.pdf');
     }
-
-    doc.save('complaint.pdf');
   }
-}
 
-    // ****************************************************upload Modal************************************************************************
-    uploadModal: boolean = false;
+  // ****************************************************upload Modal************************************************************************
+  uploadModal: boolean = false;
 
-    getSample() {
+  getSample() {
     if (this.downloadSamplePermission) {
       this._ComplaintsService.getSample().subscribe((res) => {
         const link = document.createElement('a');
@@ -507,17 +524,16 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         link.click();
       });
     }
-    }
-  
-    getFormData(object: any) {
-      const formData = new FormData();
-      Object.keys(object).forEach((key) => formData.append(key, object[key]));
-      return formData;
-    }
-  
-    onFileSelected(event: any) {
-    if (this.downloadSamplePermission) {
+  }
 
+  getFormData(object: any) {
+    const formData = new FormData();
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
+    return formData;
+  }
+
+  onFileSelected(event: any) {
+    if (this.downloadSamplePermission) {
       const file: File = event.target.files[0];
       if (file) {
         let f: File = this.getFormData({ file: file }) as any;
@@ -531,94 +547,103 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         this.uploadModal = false;
       }
     }
-    }
+  }
 
-    // ****************************************************upload File Modal************************************************************************
-    uploadFilesModal:boolean = false;
-    uploadingStatus:boolean = false;
-    uploadForm!: FormGroup;
-    
-    displayUploadFilesModal(id:number){
+  // ****************************************************upload File Modal************************************************************************
+  uploadFilesModal: boolean = false;
+  uploadingStatus: boolean = false;
+  uploadForm!: FormGroup;
+
+  displayUploadFilesModal(id: number) {
     if (this.uploadFilesPermission) {
-
       this.uploadForm.patchValue({
         issue_id: id,
       });
       this.uploadFilesModal = true;
     }
-    }
-    
-    getUploadedFile(event: any) {
-      if (event.target.files && event.target.files.length && this.uploadFilesPermission) {
-        const files = event.target.files;
-        const readFile = (file: any) => {
-          return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.onload = (event: any) => resolve(event.target.result);
-            fileReader.onerror = (error) => reject(error);
-            fileReader.readAsDataURL(file);
-          });
-        };
-  
-        const readFiles = async () => {
-          try {
-            const base64Strings = await Promise.all(
-              Array.from(files).map(readFile)
-            );
-            const fileTypes = base64Strings.map((base64String: any) => {
-              const type = base64String.split(',')[0].split(':')[1].split(';')[0];
-              return { [type]: base64String };
-            });
-            this.uploadForm.patchValue({
-              files: fileTypes,
-            });
-  
-          } catch (error) {
-            console.error(error);
-          }
-        };
-  
-        readFiles();
-      }
-    }
+  }
 
-    createUploadingForm() {
-      this.uploadForm = new FormGroup({
-        issue_id: new FormControl(null, [Validators.required]),
-        files: new FormControl(null, [Validators.required]),
+  getUploadedFile(event: any) {
+    if (
+      event.target.files &&
+      event.target.files.length &&
+      this.uploadFilesPermission
+    ) {
+      const files = event.target.files;
+      const readFile = (file: any) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = (event: any) => resolve(event.target.result);
+          fileReader.onerror = (error) => reject(error);
+          fileReader.readAsDataURL(file);
+        });
+      };
+
+      const readFiles = async () => {
+        try {
+          const base64Strings = await Promise.all(
+            Array.from(files).map(readFile)
+          );
+          const fileTypes = base64Strings.map((base64String: any) => {
+            const type = base64String.split(',')[0].split(':')[1].split(';')[0];
+            return { [type]: base64String };
+          });
+          this.uploadForm.patchValue({
+            files: fileTypes,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      readFiles();
+    }
+  }
+
+  createUploadingForm() {
+    this.uploadForm = new FormGroup({
+      issue_id: new FormControl(null, [Validators.required]),
+      files: new FormControl(null, [Validators.required]),
+    });
+  }
+
+  uploadFiles(form: FormGroup) {
+    if (form.valid && this.uploadFilesPermission) {
+      this.uploadingStatus = true;
+      this._ComplaintsService.uploadIssueFiles(form.value).subscribe((res) => {
+        this.uploadingStatus = false;
+        this.uploadFilesModal = false;
       });
     }
-
-    uploadFiles(form:FormGroup){
-      if (form.valid && this.uploadFilesPermission) {
-        this.uploadingStatus = true
-        this._ComplaintsService.uploadIssueFiles(form.value).subscribe(res=>{
-          this.uploadingStatus = false
-          this.uploadFilesModal = false
-        })
-      }
-    }
-    // ========================================================sort========================================================
+  }
+  // ========================================================sort========================================================
   sort(event: any) {
     const sortField = event.sortField;
     const sortOrder = event.sortOrder === 1 ? 1 : -1;
     this.complaints?.sort((a: any, b: any) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
-      if (typeof aValue === 'string' && Date.parse(aValue) && typeof bValue === 'string' && Date.parse(bValue)) {
+      if (
+        typeof aValue === 'string' &&
+        Date.parse(aValue) &&
+        typeof bValue === 'string' &&
+        Date.parse(bValue)
+      ) {
         const aDate = new Date(aValue);
         const bDate = new Date(bValue);
-        return (aDate.getTime() - bDate.getTime()) * sortOrder; 
-      }
-      else if (!isNaN(parseFloat(aValue)) && typeof parseFloat(aValue) === 'number' && !isNaN(parseFloat(bValue)) && typeof parseFloat(bValue) === 'number') {
+        return (aDate.getTime() - bDate.getTime()) * sortOrder;
+      } else if (
+        !isNaN(parseFloat(aValue)) &&
+        typeof parseFloat(aValue) === 'number' &&
+        !isNaN(parseFloat(bValue)) &&
+        typeof parseFloat(bValue) === 'number'
+      ) {
         return (aValue - bValue) * sortOrder;
       } else if (typeof aValue === 'string' && typeof bValue === 'string') {
         return aValue.localeCompare(bValue) * sortOrder;
-      }
-      else if (Array.isArray(aValue) && Array.isArray(bValue)) {
+      } else if (Array.isArray(aValue) && Array.isArray(bValue)) {
         return (aValue.length - bValue.length) * sortOrder;
-      } 
-      else {
+      } else {
         return 0;
       }
     });

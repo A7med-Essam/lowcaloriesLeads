@@ -28,7 +28,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     private _AgentTargetService: AgentTargetService,
     private _DislikeService: DislikeService,
     private _GuardService: GuardService,
-    private _MessageService:MessageService
+    private _MessageService: MessageService
   ) {}
 
   createPermission: boolean = false;
@@ -42,10 +42,9 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       this._GuardService.getPermissionStatus('create_target');
     this.printPermission =
       this._GuardService.getPermissionStatus('print_target');
-      this.updatePermission =
+    this.updatePermission =
       this._GuardService.getPermissionStatus('update_target');
-      this.fixPermission =
-      this._GuardService.getPermissionStatus('fix_target');
+    this.fixPermission = this._GuardService.getPermissionStatus('fix_target');
     this.exportPermission =
       this._GuardService.getPermissionStatus('export_target');
     this.downloadSamplePermission = this._GuardService.getPermissionStatus(
@@ -73,9 +72,9 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Customer Service Target', 10, 45);
       doc.text('Prepared By: Low Calories Technical Team', 10, 55);
       doc.text('Requested By: Mohamed Fawzy', 10, 65);
-      doc.text('Low Calories Restaurant - Egypt', 320, 25);
+      doc.text('Low Calories Restaurant - UAE', 320, 25);
       doc.text('3rd Settelment, New Cairo', 320, 35);
-      doc.text('Phone: 201116202225', 320, 45);
+      doc.text('Phone: 04-5973939', 320, 45);
       doc.text('Email: info@thelowcalories.com', 320, 55);
       doc.text('Website: thelowcalories.com', 320, 65);
 
@@ -94,7 +93,6 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
         'Status',
         'Paid_by',
       ];
-
 
       let filteredArray = this.allTargets.filter((item: any) =>
         this.specificRows.includes(item.id)
@@ -169,12 +167,12 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this._AgentTargetService.target_filter
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res=>{
-      if (res) {
-        this.appliedFilters = res
-      }
-    })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.appliedFilters = res;
+        }
+      });
     this.getPermission();
     this.getTargets();
     this.createFilterForm();
@@ -205,15 +203,15 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkNullValues(){
-    this.targets = this.targets.map(t => {
+  checkNullValues() {
+    this.targets = this.targets.map((t) => {
       if (t.status === null || t.branch === null || t.client_cid === null) {
-        t.hasNullValues = true
-      }else{
-        t.hasNullValues = false
+        t.hasNullValues = true;
+      } else {
+        t.hasNullValues = false;
       }
-      return t
-    })
+      return t;
+    });
   }
 
   showRow(target: ITarget) {
@@ -293,7 +291,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       }
     }
     this.appliedFilters = form.value;
-    this._AgentTargetService.target_filter.next(this.appliedFilters)
+    this._AgentTargetService.target_filter.next(this.appliedFilters);
     this._AgentTargetService.filterTargets(1, form.value).subscribe((res) => {
       this.targets = res.data.data;
       this.checkNullValues();
@@ -324,7 +322,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     this.filterModal = false;
     this.filterForm.reset();
     this.getTargets();
-    this._AgentTargetService.target_filter.next(null)
+    this._AgentTargetService.target_filter.next(null);
   }
 
   resetFields() {
@@ -337,7 +335,9 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     if (this.exportPermission) {
       let exportObservable;
       if (this.specificRows.length > 0) {
-        exportObservable = this._AgentTargetService.exportByIds(this.specificRows);
+        exportObservable = this._AgentTargetService.exportByIds(
+          this.specificRows
+        );
       } else if (this.appliedFilters) {
         const ids = this.targets.map((obj: any) => obj.id);
         exportObservable = this._AgentTargetService.exportByIds(ids);
@@ -351,20 +351,19 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
+
   private handleExportSuccess(data: any) {
     this._MessageService.add({
       severity: 'success',
       summary: 'Export Excel',
       detail: 'Target Exported Successfully',
     });
-  
+
     const link = document.createElement('a');
     link.target = '_blank';
     link.href = data;
     link.click();
   }
-  
 
   // ****************************************************filter options************************************************************************
 
@@ -469,7 +468,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     if (input.checked) {
       this.specificRows = this.targets.map((obj: any) => obj.id);
     } else {
-      this.specificRows = []
+      this.specificRows = [];
     }
   }
 
@@ -486,9 +485,9 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Customer Service Target', 10, 40);
       doc.text('Prepared By: Low Calories Technical Team', 10, 45);
       doc.text('Requested By: Mohamed Fawzy', 10, 50);
-      doc.text('Low Calories Restaurant - Egypt', 150, 30);
+      doc.text('Low Calories Restaurant - UAE', 150, 30);
       doc.text('3rd Settelment, New Cairo', 150, 35);
-      doc.text('Phone: 201116202225', 150, 40);
+      doc.text('Phone: 04-5973939', 150, 40);
       doc.text('Email: info@thelowcalories.com', 150, 45);
       doc.text('Website: thelowcalories.com', 150, 50);
 
@@ -590,20 +589,27 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     this.targets?.sort((a: any, b: any) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
-      if (typeof aValue === 'string' && Date.parse(aValue) && typeof bValue === 'string' && Date.parse(bValue)) {
+      if (
+        typeof aValue === 'string' &&
+        Date.parse(aValue) &&
+        typeof bValue === 'string' &&
+        Date.parse(bValue)
+      ) {
         const aDate = new Date(aValue);
         const bDate = new Date(bValue);
-        return (aDate.getTime() - bDate.getTime()) * sortOrder; 
-      }
-      else if (!isNaN(parseFloat(aValue)) && typeof parseFloat(aValue) === 'number' && !isNaN(parseFloat(bValue)) && typeof parseFloat(bValue) === 'number') {
+        return (aDate.getTime() - bDate.getTime()) * sortOrder;
+      } else if (
+        !isNaN(parseFloat(aValue)) &&
+        typeof parseFloat(aValue) === 'number' &&
+        !isNaN(parseFloat(bValue)) &&
+        typeof parseFloat(bValue) === 'number'
+      ) {
         return (aValue - bValue) * sortOrder;
       } else if (typeof aValue === 'string' && typeof bValue === 'string') {
         return aValue.localeCompare(bValue) * sortOrder;
-      }
-      else if (Array.isArray(aValue) && Array.isArray(bValue)) {
+      } else if (Array.isArray(aValue) && Array.isArray(bValue)) {
         return (aValue.length - bValue.length) * sortOrder;
-      } 
-      else {
+      } else {
         return 0;
       }
     });
