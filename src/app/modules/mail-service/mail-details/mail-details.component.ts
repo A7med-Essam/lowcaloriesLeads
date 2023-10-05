@@ -36,7 +36,7 @@ export class MailDetailsComponent implements OnInit {
   }
 
   update(branches: number[]) {
-    this._MailService.updateHeadDetails({ head_mail_model_id:this.id, branches }).subscribe({
+    this._MailService.updateHeadDetails({ head_mail_model_id:this.current_model_id, branches }).subscribe({
       next: (res) => {
         if (res.status == 1) {
           this.updateModal = false;
@@ -57,7 +57,9 @@ export class MailDetailsComponent implements OnInit {
       .subscribe((res) => (this.branches = res.data));
   }
 
-  displayModal(branches: any[]) {
+  current_model_id:number = 0;
+  displayModal(branches: any[],id:number) {
+    this.current_model_id = id
     this.updateModal = true;
     this.currentBranches = branches.map((item) => item.agent_branch_id);
   }
