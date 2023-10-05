@@ -18,9 +18,10 @@ export class ShowHeadMailsComponent implements OnInit {
     'calls',
     'daily',
     'monthly',
+    'dislikes'
   ];
   currentModels: string[] = [];
-  currentEmail: string = '';
+  currentUserId: string = '';
   updateModal: boolean = false;
   createModal: boolean = false;
 
@@ -44,8 +45,8 @@ export class ShowHeadMailsComponent implements OnInit {
     });
   }
 
-  update(email: string, models: string[]) {
-    this._MailService.updateHeadModels({ head_mail_id:email, models }).subscribe({
+  update(id: string, models: string[]) {
+    this._MailService.updateHeadModels({ head_mail_id:id, models }).subscribe({
       next: (res) => {
         if (res.status == 1) {
           this.updateModal = false;
@@ -82,9 +83,9 @@ export class ShowHeadMailsComponent implements OnInit {
     });
   }
 
-  displayModal(email: string, models: any[]) {
+  displayModal(id: string, models: any[]) {
     this.updateModal = true;
-    this.currentEmail = email;
+    this.currentUserId = id;
     this.currentModels = models.map((item) => item.model);
   }
 
