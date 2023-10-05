@@ -45,7 +45,7 @@ export class ShowHeadMailsComponent implements OnInit {
   }
 
   update(email: string, models: string[]) {
-    this._MailService.updateHeadModels({ email, models }).subscribe({
+    this._MailService.updateHeadModels({ head_mail_id:email, models }).subscribe({
       next: (res) => {
         if (res.status == 1) {
           this.updateModal = false;

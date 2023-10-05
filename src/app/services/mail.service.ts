@@ -19,8 +19,8 @@ export class MailService {
     return this._ApiConfigService.postReq3(`getHeadMailDetails`,{head_mail_id});
   }
 
-  updateHeadModels(data:{email:string, models:string[]}): Observable<{data:null,message:string,status:number}> {
-    return this._ApiConfigService.postReq3(`addOrUpdateEmailModels`,data);
+  updateHeadModels(data:{head_mail_id:string, models:string[]}): Observable<{data:null,message:string,status:number}> {
+    return this._ApiConfigService.postReq3(`addUpdateEmailModels`,data);
   }
 
   addHeadEmail(data:{email:string, manager:string, models?:string[]}): Observable<{data:null,message:string,status:number}> {
