@@ -210,7 +210,7 @@ export class SubscriptionDetailsComponent implements OnInit {
       }
 
       let columns5: any[] = [];
-      if (this.sub.subscription_days.length) {
+      if (this.sub.subscription_days.length && this.sub.custom != 'no') {
         this.sub.subscription_days.forEach((m) => {
           columns5.push({ title: 'Date/Day', dataKey: `${m.date} / ${m.day}` });
           m.day_meals.forEach((d) => {
