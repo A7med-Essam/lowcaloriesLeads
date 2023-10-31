@@ -9,13 +9,15 @@
     <p-table [value]="redirects">
         <ng-template pTemplate="header">
             <tr>
+                <th class="text-center">URL</th>
                 <th class="text-center">Redirect URL</th>
                 <th class="text-center">QR URL</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-url>
-            <tr [pSelectableRow]="url">
+            <tr>
+                <td class="text-center">{{url.url}}</td>
                 <td class="text-center"><a href="{{url.redirect_url}}" target="_blank">{{url.redirect_url}}</a></td>
                 <td class="text-center"><a href="{{url.qr_url}}" target="_blank">{{url.qr_url}}</a></td>
                 <td class="text-center">

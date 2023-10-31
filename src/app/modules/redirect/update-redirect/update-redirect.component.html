@@ -2,7 +2,7 @@
     <form [formGroup]="updateForm" (ngSubmit)='update()'>
         <div class="row mx-0">
             <div class="col-12 my-3">
-                <label for="">URL</label>
+                <label for="">Redirect Url</label>
                 <input type="text" pInputText ngClass="w-100" formControlName='redirect_url' />
                 <small class="text-danger ms-1" *ngIf="updateForm.get('redirect_url')?.touched &&
                 updateForm.get('redirect_url')?.hasError('required')">This field is required.</small>
