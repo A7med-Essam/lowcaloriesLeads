@@ -1,0 +1,32 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="m-3">
+        <button [disabled]="!createPermission" pButton pRipple label="Add URL" class="p-button-success mx-1" icon="pi pi-plus"
+            routerLink="../create"></button>
+    </div>
+</div>
+
+<div class="card">
+    <p-table [value]="redirects">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Redirect URL</th>
+                <th class="text-center">QR URL</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-url>
+            <tr [pSelectableRow]="url">
+                <td class="text-center"><a href="{{url.redirect_url}}" target="_blank">{{url.redirect_url}}</a></td>
+                <td class="text-center"><a href="{{url.qr_url}}" target="_blank">{{url.qr_url}}</a></td>
+                <td class="text-center">
+                    <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="updateRow(url)"
+                        class="m-1 p-button-sm p-button-warning"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+
+
+

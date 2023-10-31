@@ -24,7 +24,7 @@
     <hr>
     <!-- ==============================================SuperAdmin==================================================== -->
     <div class="menu-header mt-3 mb-2" *ngIf="isSuperAdmin">
-       Admin Components
+      Admin Components
     </div>
     <ul class="menu-items" *ngIf="isSuperAdmin">
       <li>
@@ -189,32 +189,45 @@
       </li>
       <hr>
     </ul>
-        <!-- ================================================GIFTCODE================================================== -->
-        <div class="menu-header mt-3 mb-2" *ngIf="showGiftcodePermission">
-          Giftcode Components
-        </div>
-        <ul class="menu-items" *ngIf="showGiftcodePermission">
-          <li>
-            <a routerLink="/giftcode/show" routerLinkActive="active">
-              <i class="fas fa-gift"></i>
-              <span>GiftCode</span>
-            </a>
-          </li>
-          <hr>
-        </ul>
-        <!-- ================================================MAIL SERVICE================================================== -->
-            <div class="menu-header mt-3 mb-2" *ngIf="showMailServicePermission">
-              Mail Components
-            </div>
-            <ul class="menu-items" *ngIf="showMailServicePermission">
-              <li>
-                <a routerLink="/mailService/show" routerLinkActive="active">
-                  <i class="fas fa-envelope"></i>
-                  <span>Mail Service</span>
-                </a>
-              </li>
-              <hr>
-            </ul>
+    <!-- ================================================GIFTCODE================================================== -->
+    <div class="menu-header mt-3 mb-2" *ngIf="showGiftcodePermission">
+      Giftcode Components
+    </div>
+    <ul class="menu-items" *ngIf="showGiftcodePermission">
+      <li>
+        <a routerLink="/giftcode/show" routerLinkActive="active">
+          <i class="fas fa-gift"></i>
+          <span>GiftCode</span>
+        </a>
+      </li>
+      <hr>
+    </ul>
+    <!-- ================================================MAIL SERVICE================================================== -->
+    <div class="menu-header mt-3 mb-2" *ngIf="showMailServicePermission">
+      Mail Components
+    </div>
+    <ul class="menu-items" *ngIf="showMailServicePermission">
+      <li>
+        <a routerLink="/mailService/show" routerLinkActive="active">
+          <i class="fas fa-envelope"></i>
+          <span>Mail Service</span>
+        </a>
+      </li>
+      <hr>
+    </ul>
+    <!-- ================================================REDIRECTS================================================== -->
+    <div class="menu-header mt-3 mb-2" *ngIf="showRedirectPermission">
+      Redirect Components
+    </div>
+    <ul class="menu-items" *ngIf="showRedirectPermission">
+      <li>
+        <a routerLink="/redirect/show" routerLinkActive="active">
+          <i class="fas fa-link"></i>
+          <span>Urls</span>
+        </a>
+      </li>
+      <hr>
+    </ul>
     <!-- ================================================LOGOUT================================================== -->
     <ul class="menu-items">
       <li (click)="logOut()">

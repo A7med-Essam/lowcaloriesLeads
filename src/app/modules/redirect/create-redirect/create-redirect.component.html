@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Create Redirect URL</h2>
+    </div>
+    <hr>
+    <form [formGroup]="insertForm" (ngSubmit)='insertRow(insertForm)'>
+        <div class="row mx-0">
+            <div class="col-md-6 col-12 my-3">
+                <label for="">URL NAME</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='url'/>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('url')?.touched &&
+                insertForm.get('url')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Redirect Url</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='redirect_url'/>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('redirect_url')?.touched &&
+                insertForm.get('redirect_url')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">Add URL</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -152,6 +152,15 @@ const routes: Routes = [
       permission: ['show_mailService'],
     },
   },
+  {
+    path: 'redirect',
+    loadChildren: () =>
+      import('./modules/redirect/redirect.module').then((m) => m.RedirectModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_redirect'],
+    },
+  },
   { path: '**', component: Error404Component },
 ];
 
