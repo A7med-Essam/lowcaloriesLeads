@@ -161,6 +161,15 @@ const routes: Routes = [
       permission: ['show_redirect'],
     },
   },
+  {
+    path: 'upload',
+    loadChildren: () =>
+      import('./modules/upload/upload.module').then((m) => m.UploadModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_docs'],
+    },
+  },
   { path: '**', component: Error404Component },
 ];
 

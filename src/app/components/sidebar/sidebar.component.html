@@ -228,6 +228,19 @@
       </li>
       <hr>
     </ul>
+     <!-- ================================================UPLOADS================================================== -->
+     <div class="menu-header mt-3 mb-2" *ngIf="showUploadPermission">
+      Upload Components
+    </div>
+    <ul class="menu-items" *ngIf="showUploadPermission">
+      <li>
+        <a routerLink="/upload/show" routerLinkActive="active">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <span>Uploads</span>
+        </a>
+      </li>
+      <hr>
+    </ul>
     <!-- ================================================LOGOUT================================================== -->
     <ul class="menu-items">
       <li (click)="logOut()">

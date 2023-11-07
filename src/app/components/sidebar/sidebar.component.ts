@@ -31,6 +31,7 @@ export class SidebarComponent implements OnInit {
   showGiftcodePermission: boolean = false;
   showMailServicePermission: boolean = false;
   showRedirectPermission: boolean = false;
+  showUploadPermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -86,6 +87,7 @@ export class SidebarComponent implements OnInit {
     this.showGiftcodePermission = this._GuardService.getPermissionStatus('show_giftcode');
     this.showMailServicePermission = this._GuardService.getPermissionStatus('show_mailService');
     this.showRedirectPermission = this._GuardService.getPermissionStatus('show_redirect');
+    this.showUploadPermission = this._GuardService.getPermissionStatus('show_docs');
   }
 
   logOut() {

@@ -1,0 +1,32 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="m-3">
+        <button [disabled]="!createPermission" pButton pRipple label="Add File" class="p-button-success mx-1"
+            icon="pi pi-plus" routerLink="../create"></button>
+    </div>
+</div>
+
+<div class="card">
+    <p-table [value]="files">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Name</th>
+                <th class="text-center">Link</th>
+                <th class="text-center">Uploaded at</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-upload>
+            <tr>
+                <td class="text-center">{{upload.name}}</td>
+                <td class="text-center"><a href="{{upload.link}}" target="_blank">{{upload.link}}</a></td>
+                <td class="text-center">{{upload.created_at | date}}</td>
+                <td class="text-center">
+                    <button [disabled]="!deletePermission" pButton type="button" icon="pi pi-trash"
+                        (click)="confirm(upload.id)" class="m-1 p-button-danger p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
