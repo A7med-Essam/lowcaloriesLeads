@@ -1,0 +1,385 @@
+<section>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Agent Report</h2>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-6 col-12 my-2">
+                <div class="form-group">
+                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id" [(ngModel)]="selectedAgent"
+                        appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
+                    </p-dropdown>
+
+                </div>
+            </div>
+            <div class="col-lg-6 col-12 my-2">
+                <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" ngClass="w-100" appendTo="body"
+                    placeholder="Select Date Range" [(ngModel)]="selectedDate">
+                </p-calendar>
+            </div>
+            <div class="col-12">
+                <div class="text-end mt-3">
+                    <div class="container d-flex">
+                        <div class="field-checkbox my-3" *ngFor="let obj of columns">
+                            <div *ngIf="obj.status">
+                                <p-checkbox [value]="obj.name" [(ngModel)]="selectedColumns"
+                                    [inputId]="obj.name"></p-checkbox>
+                                <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-success px-4" (click)="getAgentLog()"
+                        [disabled]="(!selectedAgent || !selectedDate)">
+                        <b>Get Agent Logs <i *ngIf="isLoadingLogs" class="fas fa-circle-notch fa-spin p-0"></i></b>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="logs">
+            <hr *ngIf="logs.leads.data.length  && selectedColumns.includes('leads')"> <!-- leads done -->
+            <div class="card" *ngIf="logs.leads.data.length && selectedColumns.includes('leads')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.leads.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Leads</h5>
+                                    <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.leads.data,'leads')">
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Leads Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Mobile</th>
+                                    <th>Status</th>
+                                    <th>Platform</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.created_at | date}}</td>
+                                    <td>{{log.customer_name}}</td>
+                                    <td>{{log.customer_mobile}}</td>
+                                    <td>{{log.status}}</td>
+                                    <td>{{log.platforms}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="logs.targets.data.length  && selectedColumns.includes('targets')"> <!-- target done -->
+            <div class="card" *ngIf="logs.targets.data.length  && selectedColumns.includes('targets')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.targets.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Targets</h5>
+                                    <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.targets.data,'targets')">
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Target Date</th>
+                                    <th>Invoice</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Mobile</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.created_at | date}}</td>
+                                    <td>{{log.invoice_number}}</td>
+                                    <td>{{log.client_name}}</td>
+                                    <td>{{log.client_number}}</td>
+                                    <td>{{log.amount_paid}}</td>
+                                    <td>{{log.customer_type}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="logs.calls.data.length  && selectedColumns.includes('calls')"> <!-- call done -->
+            <div class="card" *ngIf="logs.calls.data.length  && selectedColumns.includes('calls')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.calls.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Calls</h5>
+                                    <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.calls.data,'calls')">
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Call Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Mobile</th>
+                                    <th>Branch</th>
+                                    <th>plan</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.created_at | date}}</td>
+                                    <td>{{log.customer_name}}</td>
+                                    <td>{{log.customer_phone}}</td>
+                                    <td>{{log.branch}}</td>
+                                    <td>{{log.plan}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="logs.refunds.data.length  && selectedColumns.includes('refunds')"> <!-- refunds done -->
+            <div class="card" *ngIf="logs.refunds.data.length  && selectedColumns.includes('refunds')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.refunds.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Refunds</h5>
+                                    <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.refunds.data,'refunds')">
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Refund Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Mobile</th>
+                                    <th>Status</th>
+                                    <th>Plan</th>
+                                    <th>Amount Paid</th>
+                                    <th>Remaining Days</th>
+                                    <th>Branch</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.created_at | date}}</td>
+                                    <td>{{log.name}}</td>
+                                    <td>{{log.mobile}}</td>
+                                    <td>{{log.status}}</td>
+                                    <td>{{log.subscription_plan}}</td>
+                                    <td>{{log.amount_paid}}</td>
+                                    <td>{{log.remaining_days}}</td>
+                                    <td>{{log.delivery_branch}}</td>
+                                    <td>{{log.reason}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="logs.issues.data.length  && selectedColumns.includes('issues')"> <!-- issues done -->
+            <div class="card" *ngIf="logs.issues.data.length  && selectedColumns.includes('issues')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.issues.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Complaints</h5>
+                                    <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.issues.data,'complaints')">
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Complaint Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Mobile</th>
+                                    <th>Status</th>
+                                    <th>Issue</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.created_at | date}}</td>
+                                    <td>{{log.c_name}}</td>
+                                    <td>{{log.c_mobile}}</td>
+                                    <td>{{log.status}}</td>
+                                    <td>{{log.issue_details}}</td>
+                                    <td>{{log.action}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="logs.Dislikes.data.length  && selectedColumns.includes('Dislikes')"> <!-- Dislikes done -->
+            <div class="card" *ngIf="logs.Dislikes.data.length  && selectedColumns.includes('Dislikes')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.Dislikes.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Dislikes</h5>
+                                    <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.Dislikes.data,'dislikes')">
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Dislike Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Mobile</th>
+                                    <th>Reasons</th>
+                                    <th>Sent By</th>
+                                    <th>Meals</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.created_at | date}}</td>
+                                    <td>{{log.name}}</td>
+                                    <td>{{log.mobile}}</td>
+                                    <td>{{log.reasons}}</td>
+                                    <!-- <td *ngFor="let reason of log.reasons">{{reason}}</td> -->
+                                    <td>{{log.sent_by}}</td>
+                                    <td>{{log.dislike_meals}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="logs.paymentLinks.data.length  && selectedColumns.includes('paymentLinks')"> <!-- paymentLinks done -->
+            <div class="card" *ngIf="logs.paymentLinks.data.length  && selectedColumns.includes('paymentLinks')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.paymentLinks.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Payment Links</h5>
+                                    <!-- <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.paymentLinks.data,'paymentlink')">
+                                        </p-button>
+                                    </div> -->
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Paymentlink Date</th>
+                                    <th>Delivery Date</th>
+                                    <th>Status</th>
+                                    <th>Subscription Plan</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.created_date}}</td>
+                                    <td>{{log.delivery_starting_day}}</td>
+                                    <td>{{log.status}}</td>
+                                    <td>{{log.subscriptions_note}}</td>
+                                    <td>{{log.total_price}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="logs.paymentBranches.data.length  && selectedColumns.includes('paymentBranches')"> <!-- paymentBranches done -->
+            <div class="card" *ngIf="logs.paymentBranches.data.length  && selectedColumns.includes('paymentBranches')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.paymentBranches.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Payment Branch</h5>
+                                    <!-- <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.paymentBranches.data,'paymentbranch')">
+                                        </p-button>
+                                    </div> -->
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Paymentlink Date</th>
+                                    <th>Delivery Date</th>
+                                    <th>Status</th>
+                                    <th>Subscription Plan</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.created_date}}</td>
+                                    <td>{{log.delivery_starting_day}}</td>
+                                    <td>{{log.status}}</td>
+                                    <td>{{log.subscriptions_note}}</td>
+                                    <td>{{log.total_price}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="logs.Clinic.data.length  && selectedColumns.includes('Clinic')">
+            <div class="card" *ngIf="logs.Clinic.data.length  && selectedColumns.includes('Clinic')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.Clinic.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Clinic</h5>
+                                    <!-- <div>
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.Clinic.data,'clinic')">
+                                        </p-button>
+                                    </div> -->
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Price</th>
+                                    <th>Appointment</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.price}}</td>
+                                    <td>{{log.subscriptions_note}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

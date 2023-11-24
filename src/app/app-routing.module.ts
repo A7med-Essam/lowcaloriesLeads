@@ -26,6 +26,15 @@ const routes: Routes = [
     },
   },
   {
+    path: 'reports',
+    loadChildren: () =>
+      import('./modules/reports/reports.module').then((m) => m.ReportsModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: [''],
+    },
+  },
+  {
     path: 'leadControls',
     loadChildren: () =>
       import('./modules/survey/survey.module').then((m) => m.SurveyModule),

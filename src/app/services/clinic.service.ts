@@ -15,6 +15,10 @@ export class ClinicService {
   bookAppointmentInClinic(data: IBookAppointmentInClinicData): Observable<{status:number,data:string,message:string}> {
     return this._ApiConfigService.postReq2(`bookAppointmentInClinic`, data);
   }
+
+  exportByIds(clinicIds:number[]): Observable<any> {
+    return this._ApiConfigService.postReq3(`ClinicExportByIds`, {clinicIds});
+  }
 }
 
 export interface IBookAppointmentInClinicData {
