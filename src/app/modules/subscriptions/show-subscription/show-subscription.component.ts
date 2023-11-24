@@ -460,12 +460,19 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         exportObservable = this._SubscriptionsService.exportByIds(
           this.specificRows
         );
-      } else if (this.appliedFilters) {
+      } 
+      // else if (this.appliedFilters) {
+      //   const ids = this.subscriptions.map((obj: any) => obj.id);
+      //   exportObservable = this._SubscriptionsService.exportByIds(ids);
+      // } 
+      // else {
+      //   exportObservable = this._SubscriptionsService.exportAll();
+      // }
+
+      else {
         const ids = this.subscriptions.map((obj: any) => obj.id);
         exportObservable = this._SubscriptionsService.exportByIds(ids);
-      } else {
-        exportObservable = this._SubscriptionsService.exportAll();
-      }
+      } 
       exportObservable.subscribe({
         next: (res) => {
           this.handleExportSuccess(res.data);
@@ -693,4 +700,6 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+  
 }

@@ -76,7 +76,7 @@ export class CreateClinicLinkComponent implements OnInit {
       date: new FormControl(null),
       day: new FormControl(null),
       agent_id: new FormControl(
-        this._LocalService.getJsonValue('userInfo_oldLowCalories').id,
+        this._LocalService.getJsonValue('userInfo_oldLowCalories').agent_id,
         [Validators.required]
       ),
     });

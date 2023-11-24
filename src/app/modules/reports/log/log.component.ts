@@ -11,6 +11,7 @@ import { DislikeService } from 'src/app/services/dislike.service';
 import { PaymentlinkService } from 'src/app/services/paymentlink.service';
 import { RefundService } from 'src/app/services/refund.service';
 import { ReportsService } from 'src/app/services/reports.service';
+import { SubscriptionsService } from 'src/app/services/subscriptions.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -25,11 +26,10 @@ export class LogComponent implements OnInit {
     private _MessageService: MessageService,
     private _ComplaintsService: ComplaintsService,
     private _AgentTargetService: AgentTargetService,
-    // private _ClinicService: ClinicService,
-    // private _PaymentlinkService: PaymentlinkService,
     private _RefundService: RefundService,
     private _DislikeService: DislikeService,
-    private _CallsService: CallsService
+    private _CallsService: CallsService,
+    private _SubscriptionsService:SubscriptionsService
   ) {}
 
   selectedDate: any;
@@ -122,18 +122,18 @@ export class LogComponent implements OnInit {
         });
         break;
       case 'clinic':
-        // this._ClinicService.exportByIds(ids).subscribe({
-        //   next: (res) => {
-        //     this.handleExportSuccess(res.data);
-        //   },
-        // });
+        this._SubscriptionsService.exportByIds(ids).subscribe({
+          next: (res) => {
+            this.handleExportSuccess(res.data);
+          },
+        });
         break;
       case 'paymentlink':
-        // this._PaymentlinkService.exportByIds(ids).subscribe({
-        //   next: (res) => {
-        //     this.handleExportSuccess(res.data);
-        //   },
-        // });
+        this._SubscriptionsService.exportByIds(ids).subscribe({
+          next: (res) => {
+            this.handleExportSuccess(res.data);
+          },
+        });
         break;
       case 'refunds':
         this._RefundService.exportByIds(ids).subscribe({
@@ -157,11 +157,11 @@ export class LogComponent implements OnInit {
         });
         break;
       case 'paymentbranch':
-        // this._ComplaintsService.exportByIds(ids).subscribe({
-        //   next: (res) => {
-        //     this.handleExportSuccess(res.data);
-        //   },
-        // });
+        this._SubscriptionsService.exportByIds(ids).subscribe({
+          next: (res) => {
+            this.handleExportSuccess(res.data);
+          },
+        });
         break;
         // default:
         //   alert();
