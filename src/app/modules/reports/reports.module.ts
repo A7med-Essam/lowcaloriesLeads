@@ -8,6 +8,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DialogModule } from 'primeng/dialog';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     CalendarModule,
     FormsModule,
     TableModule,
-    CheckboxModule
+    CheckboxModule,
+    DialogModule
   ]
 })
 export class ReportsModule { }
