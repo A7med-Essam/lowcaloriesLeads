@@ -505,6 +505,45 @@
                     <tbody>
                         <tr *ngFor="let item of currentRow | keyvalue">
                             <ng-container [ngSwitch]="item.key">
+                                <ng-container *ngSwitchCase="'file'">
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'voice'">
+                                    <td [width]="200">
+                                        Files
+                                    </td>
+                                    <td class="d-flex justify-content-between align-items-center">
+                                        <button pButton type="button" icon="pi pi-eye" (click)="getCallFiles(currentRow.id)"
+                                        class="m-1 p-button-sm"></button>
+                                        <span *ngIf="files?.length">
+                                            <small *ngFor="let f of files" style="display: block;" class="my-2">
+                                                <span class="mx-2" *ngIf="f?.agent?.name">{{f?.agent?.name}}
+                                                    Upload =></span>
+                                                <span *ngIf="f.type.includes('image')">
+                                                    <p-image [src]="'http://api.lowcalories.ae/'+f?.file"
+                                                        alt="Uploaded Image" width="250" [preview]="true">
+                                                    </p-image>
+                                                </span>
+                                                <span *ngIf="f.type.includes('audio')">
+                                                    <audio controls>
+                                                        <source [src]="'http://api.lowcalories.ae/'+f.file"
+                                                            type="audio/mpeg">
+                                                    </audio>
+                                                </span>
+                                                <span
+                                                    *ngIf="!f.type.includes('audio')&&!f.type.includes('image')&&!f.type.includes('video')">
+                                                    <a target="_blank"
+                                                        [href]="'http://api.lowcalories.ae/'+f.file"
+                                                        download>{{f.type}}</a>
+                                                </span>
+                                                <span *ngIf="f.type.includes('video')">
+                                                    <video width="250" class="m-1" controls>
+                                                        <source src="http://api.lowcalories.ae/{{f?.file}}">
+                                                    </video>
+                                                </span>
+                                            </small>
+                                        </span>
+                                    </td>
+                                </ng-container>
                                 <ng-container *ngSwitchCase="'created_at'">
                                     <td [width]="200">
                                         {{ item.key }}

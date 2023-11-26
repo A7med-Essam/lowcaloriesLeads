@@ -976,6 +976,7 @@ export class LogComponent implements OnInit {
   showRow(log: any) {
     this.currentRow = this.removeObjectValues(log);
     this.detailsModal = true;
+    this.files = [];
   }
 
   removeObjectValues(obj: any) {
@@ -985,5 +986,14 @@ export class LogComponent implements OnInit {
       }
     }
     return obj;
+  }
+
+  // =================================================================== SHOW FILES ===================================================================
+
+  files: any[] = [];
+  getCallFiles(id: number) {
+    this._CallsService.getFiles(id).subscribe((res) => {
+      this.files = res.data.call_files;
+    });
   }
 }
