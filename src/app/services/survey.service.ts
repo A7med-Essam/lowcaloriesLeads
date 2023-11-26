@@ -158,14 +158,24 @@ export class SurveyService {
   }
   // =========================================================================
 
+  // allReminderLeads(): Observable<any> {
+  //   return this._ApiConfigService.postReq3(`leads/allReminderLeads`, {
+  //     withoutPagination: true,
+  //   });
+  // }
+
   allReminderLeads(): Observable<any> {
-    return this._ApiConfigService.postReq3(`leads/allReminderLeads`, {
+    return this._ApiConfigService.postReq3(`allReminderDataRequests`, {
       withoutPagination: true,
     });
   }
 
   addReminderLead(reminder:any): Observable<any> {
     return this._ApiConfigService.postReq3(`leads/addReminderLead`, reminder);
+  }
+
+  updateReminder(remindDataRequest_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`leads/addReminderDataRequests`, {remindDataRequest_id});
   }
 
   // =========================================================================

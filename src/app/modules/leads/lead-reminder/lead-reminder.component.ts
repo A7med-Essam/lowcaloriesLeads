@@ -17,11 +17,20 @@ export class LeadReminderComponent implements OnInit {
   allReminderLeads() {
     this._SurveyService.allReminderLeads().subscribe({
       next: (res) => {
-        res.data.forEach((data:any) => {
-          if (data.reminded == false  && data.remind_data != null) {
-            this.leads.push(data);
-          }
-        });
+        // res.data.forEach((data:any) => {
+        //   if (data.reminded == true  && data.remind_data != null) {
+        //     this.leads.push(data);
+        //   }
+        // });
+        this.leads = res.data
+      },
+    });
+  }
+
+  update(id:number){
+    this._SurveyService.updateReminder(id).subscribe({
+      next: (res) => {
+        this.allReminderLeads();
       },
     });
   }

@@ -56,7 +56,7 @@ export class ShowUsersComponent implements OnInit {
             agent.team.toUpperCase().includes(searchValue) ||
             agent.role_name.toUpperCase().includes(searchValue) ||
             agent.role.toUpperCase().includes(searchValue) ||
-            agent.web_role[0].toUpperCase().includes(searchValue) ||
+            // agent?.web_role[0]?.toUpperCase().includes(searchValue) ||
             (agent.status &&
               agent.status.toUpperCase().includes(searchValue)) ||
             agent.permissions.some((permission: any) =>

@@ -25,6 +25,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { ShowReasonsComponent } from './show-reasons/show-reasons.component';
 import { AddReasonsComponent } from './add-reasons/add-reasons.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TagModule } from 'primeng/tag';
 const APP_PRIMENG_MODULE = [
   ButtonModule,
   CheckboxModule,
@@ -39,7 +40,8 @@ const APP_PRIMENG_MODULE = [
   InputTextareaModule,
   StepsModule,
   RadioButtonModule,
-  ConfirmDialogModule
+  ConfirmDialogModule,
+  TagModule
 ];
 
 @NgModule({
