@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 
@@ -29,7 +29,8 @@ import { DialogModule } from 'primeng/dialog';
     MultiSelectModule,
     ReactiveFormsModule,
     TableModule,
-    DialogModule
+    DialogModule,
+    FormsModule
   ]
 })
 export class AnalysisModule { }

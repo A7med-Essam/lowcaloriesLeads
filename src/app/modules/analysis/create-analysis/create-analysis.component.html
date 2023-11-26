@@ -20,81 +20,90 @@
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Gender</label>
-                <p-dropdown [options]="['male','female']" formControlName='customer_gender' appendTo="body" styleClass="w-100"
-                    placeholder="Select Gender">
+                <p-dropdown [options]="['male','female']" formControlName='customer_gender' appendTo="body"
+                    styleClass="w-100" placeholder="Select Gender">
                 </p-dropdown>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Emirate</label>
-                <p-dropdown [options]="analytics?.emirates" formControlName='emirate_id' appendTo="body" styleClass="w-100" optionValue="id" optionLabel="en_name"
-                    placeholder="Select Emirate" [filter]="true">
+                <p-dropdown [options]="analytics?.emirates" formControlName='emirate_id' appendTo="body"
+                    styleClass="w-100" optionValue="id" optionLabel="en_name" placeholder="Select Emirate"
+                    [filter]="true">
                 </p-dropdown>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Platform <span class="text-danger">*</span></label>
-                <p-dropdown [options]="analytics?.platforms" formControlName='platform' appendTo="body" optionLabel="name" optionValue="name"
-                    styleClass="w-100" placeholder="Select Platform">
+                <p-dropdown [options]="analytics?.platforms" formControlName='platform' appendTo="body"
+                    optionLabel="name" optionValue="name" styleClass="w-100" placeholder="Select Platform">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('platform')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="platformOptions.length">
                 <label for="">Platform Option <span class="text-danger">*</span></label>
-                <p-dropdown [options]="platformOptions" formControlName='platform_option' appendTo="body" optionLabel="option" optionValue="option"
-                    styleClass="w-100" placeholder="Select Option">
+                <p-dropdown [options]="platformOptions" formControlName='platform_option' appendTo="body"
+                    optionLabel="option" optionValue="option" styleClass="w-100" placeholder="Select Option">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('platform_option')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Customer Status <span class="text-danger">*</span></label>
-                <p-dropdown [options]="analytics?.customer_status" formControlName='customer_status' appendTo="body" optionLabel="name" optionValue="name"
-                    styleClass="w-100" placeholder="Select Status">
+                <p-dropdown [options]="analytics?.customer_status" formControlName='customer_status' appendTo="body"
+                    optionLabel="name" optionValue="name" styleClass="w-100" placeholder="Select Status">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('customer_status')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"  *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer' && analysisForm?.get('customer_status')?.value != undefined">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"
+                *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer' && analysisForm?.get('customer_status')?.value != undefined">
                 <label for="">Concern</label>
-                <p-dropdown [options]="analytics?.concerns" formControlName='concern' appendTo="body" optionLabel="name" optionValue="name"
-                    styleClass="w-100" placeholder="Select Status">
+                <p-dropdown [options]="analytics?.concerns" formControlName='concern' appendTo="body" optionLabel="name"
+                    optionValue="name" styleClass="w-100" placeholder="Select Status">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('concern')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"  *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer'&& analysisForm?.get('customer_status')?.value != undefined">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"
+                *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer'&& analysisForm?.get('customer_status')?.value != undefined">
                 <label for="">mode</label>
-                <p-dropdown [options]="analytics?.mode" formControlName='mode' appendTo="body" optionLabel="name" optionValue="name"
-                    styleClass="w-100" placeholder="Select Status">
+                <p-dropdown [options]="analytics?.mode" formControlName='mode' appendTo="body" optionLabel="name"
+                    optionValue="name" styleClass="w-100" placeholder="Select Status">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('mode')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="modeReasons.length && analysisForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer'&& analysisForm?.get('customer_status')?.value != undefined">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"
+                *ngIf="modeReasons.length && analysisForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer'&& analysisForm?.get('customer_status')?.value != undefined">
                 <label for="">Mode Reason</label>
-                <p-dropdown [options]="modeReasons" formControlName='mode_reason' appendTo="body" optionLabel="name" optionValue="name"
-                    styleClass="w-100" placeholder="Select Reason">
+                <p-dropdown [options]="modeReasons" formControlName='mode_reason' appendTo="body" optionLabel="name"
+                    optionValue="name" styleClass="w-100" placeholder="Select Reason">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('mode_reason')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"
+                *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
                 <label for="">Ask For</label>
-                <p-dropdown [options]="['complaint','refund','update']" formControlName='ask_for' appendTo="body" 
+                <p-dropdown [options]="['complaint','refund','update']" formControlName='ask_for' appendTo="body"
                     styleClass="w-100" placeholder="Select Ask">
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('ask_for')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-3" *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-3"
+                *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
                 <label for="">Ask Reasons</label>
-                <p-multiSelect [options]="askReasons" appendTo="body" defaultLabel="Select Ask Reason" styleClass="w-100" display="chip" formControlName='ask_for_options'></p-multiSelect>
+                <p-multiSelect [options]="askReasons" appendTo="body" defaultLabel="Select Ask Reason"
+                    styleClass="w-100" display="chip" formControlName='ask_for_options'></p-multiSelect>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('ask_for')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-3" *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-3"
+                *ngIf="analysisForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
                 <label for="">Ask Actions</label>
-                <p-multiSelect [options]="askActions" appendTo="body" defaultLabel="Select Ask Action" styleClass="w-100" display="chip" formControlName='actions'></p-multiSelect>
+                <p-multiSelect [options]="askActions" appendTo="body" defaultLabel="Select Ask Action"
+                    styleClass="w-100" display="chip" formControlName='actions'></p-multiSelect>
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('ask_for')?.hasError('required')">This field is required.</small>
             </div>
@@ -103,21 +112,31 @@
                 <textarea pInputTextarea ngClass="w-100" formControlName='notes'></textarea>
             </div>
 
-            <!-- <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                <label for="">Birthday <span class="text-danger">*</span></label>
-                <p-calendar view="year" formControlName='birthday' [defaultDate]="minBirthdate" [minDate]="minBirthdate" [maxDate]="maxBirthdate" 
-                [showIcon]="true" #calendar dateFormat="yy" [showButtonBar]="true"  appendTo="body"></p-calendar>
-                <small class="text-danger ms-1" *ngIf="
-                analysisForm.get('birthday')?.hasError('required')">This field is required.</small>
-            </div> -->
-          
-          
-            <div class="col-12 my-3">
-                <button class="btn btn-primary w-100" [disabled]="analysisForm.invalid || creatingStatus">
+
+
+            <div class="col-10 my-3">
+                <button class="btn btn-primary py-2 w-100" [disabled]="analysisForm.invalid || creatingStatus">
                     <span *ngIf="!creatingStatus">Create</span>
                     <span *ngIf="creatingStatus">Creating...<i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+            </div>
+            <div class="col-2 my-3">
+                <button class="btn btn-danger py-2 w-100" (click)="reminderModal = true;">
+                    <span>
+                        <i class="far fa-bell mx-2"></i>
+                        Add Reminder
+                    </span>
                 </button>
             </div>
         </div>
     </form>
 </div>
+
+<p-dialog header="Reminder Date" [(visible)]="reminderModal" position="bottom" [style]="{ width: '50vw' }"
+    [modal]="true" [resizable]="false" [draggable]="false">
+    <p-calendar [showIcon]="true" [defaultDate]="defaultReminder" [(ngModel)]="defaultReminder" [minDate]="minReminder"
+        appendTo="body"></p-calendar>
+    <button class="btn btn-primary mt-2 w-100" (click)="setDefaultReminder()">
+        Add Reminder
+    </button>
+</p-dialog>
