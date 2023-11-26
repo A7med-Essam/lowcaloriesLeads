@@ -32,6 +32,7 @@ export class SidebarComponent implements OnInit {
   showMailServicePermission: boolean = false;
   showRedirectPermission: boolean = false;
   showUploadPermission: boolean = false;
+  showAnalysisPermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -74,20 +75,28 @@ export class SidebarComponent implements OnInit {
       this._GuardService.getPermissionStatus('show_inputs');
     this.assignCallsPermission =
       this._GuardService.getPermissionStatus('assign_calls');
-    this.showDislikeReasonsPermission = this._GuardService.getPermissionStatus(
-      'reasons_dislike'
-    );
-    this.showSubscriptionPermission = this._GuardService.getPermissionStatus(
-      'show_subscription'
-    );
-    this.showRefundReasonsPermission = this._GuardService.getPermissionStatus('reasons_refund');
-    this.showLeadReasonsPermission = this._GuardService.getPermissionStatus('reasons_leads');
-    this.createPaymentLinkPermission = this._GuardService.getPermissionStatus('create_paymentlink');
-    this.createPaymentBranchesPermission = this._GuardService.getPermissionStatus('createPayment_Branches');
-    this.showGiftcodePermission = this._GuardService.getPermissionStatus('show_giftcode');
-    this.showMailServicePermission = this._GuardService.getPermissionStatus('show_mailService');
-    this.showRedirectPermission = this._GuardService.getPermissionStatus('show_redirect');
-    this.showUploadPermission = this._GuardService.getPermissionStatus('show_docs');
+    this.showDislikeReasonsPermission =
+      this._GuardService.getPermissionStatus('reasons_dislike');
+    this.showSubscriptionPermission =
+      this._GuardService.getPermissionStatus('show_subscription');
+    this.showRefundReasonsPermission =
+      this._GuardService.getPermissionStatus('reasons_refund');
+    this.showLeadReasonsPermission =
+      this._GuardService.getPermissionStatus('reasons_leads');
+    this.createPaymentLinkPermission =
+      this._GuardService.getPermissionStatus('create_paymentlink');
+    this.createPaymentBranchesPermission =
+      this._GuardService.getPermissionStatus('createPayment_Branches');
+    this.showGiftcodePermission =
+      this._GuardService.getPermissionStatus('show_giftcode');
+    this.showMailServicePermission =
+      this._GuardService.getPermissionStatus('show_mailService');
+    this.showRedirectPermission =
+      this._GuardService.getPermissionStatus('show_redirect');
+    this.showUploadPermission =
+      this._GuardService.getPermissionStatus('show_docs');
+    this.showAnalysisPermission =
+      this._GuardService.getPermissionStatus('show_analysis');
   }
 
   logOut() {

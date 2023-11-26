@@ -144,6 +144,17 @@ const routes: Routes = [
     },
   },
   {
+    path: 'analysis',
+    loadChildren: () =>
+      import('./modules/analysis/analysis.module').then(
+        (m) => m.AnalysisModule
+      ),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_analysis'],
+    },
+  },
+  {
     path: 'giftcode',
     loadChildren: () =>
       import('./modules/giftcode/giftcode.module').then((m) => m.GiftcodeModule),

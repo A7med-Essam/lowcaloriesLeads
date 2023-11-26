@@ -1,0 +1,249 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="m-3">
+        <button [disabled]="!createPermission" pButton pRipple label="Create" class="p-button-success mx-1"
+            icon="pi pi-plus" routerLink="../create"></button>
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+        </p-button>
+        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
+        </p-button>
+    </div>
+</div>
+
+<div class="card">
+    <p-table [value]="analytics" [paginator]="true" [rows]="PaginationInfo?.per_page"
+        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true"
+        responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Date</th>
+                <th class="text-center">Agent</th>
+                <th class="text-center">Customer Mobile</th>
+                <th class="text-center">Customer Name</th>
+                <th class="text-center">Customer Status</th>
+                <th class="text-center">Platform</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-analysis>
+            <tr>
+                <td class="text-center">{{analysis?.date}}</td>
+                <td class="text-center">{{analysis?.agent?.name}}</td>
+                <td class="text-center">{{analysis?.mobile}}</td>
+                <td class="text-center">{{analysis?.customer_name}}</td>
+                <td class="text-center">{{analysis?.customer_status}}</td>
+                <td class="text-center">{{analysis?.platform}}</td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
+                    class="m-1 p-button-sm"></button>
+                </td>
+
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Filter Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <form [formGroup]="filterForm" #myForm="ngForm">
+            <div class="row mx-0">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Agent</label>
+                    <p-dropdown [options]="agents" formControlName='agent_id' appendTo="body" optionLabel="name" optionValue="id"
+                        styleClass="w-100" placeholder="Select Agent">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Phone Number</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='mobile' maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Customer Name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='customer_name' />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Gender</label>
+                    <p-dropdown [options]="['male','female']" formControlName='customer_gender' appendTo="body"
+                        styleClass="w-100" placeholder="Select Gender">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Emirate</label>
+                    <p-dropdown [options]="analyticOptions?.emirates" formControlName='emirate_id' appendTo="body"
+                        styleClass="w-100" optionValue="id" optionLabel="en_name" placeholder="Select Emirate"
+                        [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Platform</label>
+                    <p-dropdown [options]="analyticOptions?.platforms" formControlName='platform' appendTo="body"
+                        optionLabel="name" optionValue="name" styleClass="w-100" placeholder="Select Platform">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="platformOptions.length">
+                    <label for="">Platform Option</label>
+                    <p-dropdown [options]="platformOptions" formControlName='platform_option' appendTo="body"
+                        optionLabel="option" optionValue="option" styleClass="w-100" placeholder="Select Option">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Customer Status</label>
+                    <p-dropdown [options]="analyticOptions?.customer_status" formControlName='customer_status'
+                        appendTo="body" optionLabel="name" optionValue="name" styleClass="w-100"
+                        placeholder="Select Status">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer' && filterForm?.get('customer_status')?.value != undefined">
+                    <label for="">Concern</label>
+                    <p-dropdown [options]="analyticOptions?.concerns" formControlName='concern' appendTo="body"
+                        optionLabel="name" optionValue="name" styleClass="w-100" placeholder="Select Status">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer'&& filterForm?.get('customer_status')?.value != undefined">
+                    <label for="">mode</label>
+                    <p-dropdown [options]="analyticOptions?.mode" formControlName='mode' appendTo="body"
+                        optionLabel="name" optionValue="name" styleClass="w-100" placeholder="Select Status">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="modeReasons.length && filterForm?.get('customer_status')?.value?.toLowerCase() != 'exist customer'&& filterForm?.get('customer_status')?.value != undefined">
+                    <label for="">Mode Reason</label>
+                    <p-dropdown [options]="modeReasons" formControlName='mode_reason' appendTo="body" optionLabel="name"
+                        optionValue="name" styleClass="w-100" placeholder="Select Reason">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+                    <label for="">Ask For</label>
+                    <p-dropdown [options]="['complaint','refund','update']" formControlName='ask_for' appendTo="body"
+                        styleClass="w-100" placeholder="Select Ask">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+                    <label for="">Ask Reasons</label>
+                    <p-multiSelect [options]="askReasons" appendTo="body" defaultLabel="Select Ask Reason"
+                        styleClass="w-100" display="chip" formControlName='ask_for_options'></p-multiSelect>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+                    <label for="">Ask Actions</label>
+                    <p-multiSelect [options]="askActions" appendTo="body" defaultLabel="Select Ask Action"
+                        styleClass="w-100" display="chip" formControlName='actions'></p-multiSelect>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="range">Date Range</label>
+                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+                        ngClass="w-100" appendTo="body">
+                    </p-calendar>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+            <div>
+                <button class="btn btn-secondary" (click)="resetFields()">
+                    Reset Fields
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="applyFilter(filterForm)">
+                    Apply Filter
+                </button>
+                <button class="btn btn-secondary" (click)="resetFilter()">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+    [resizable]="true">
+    <div class="card">
+        <div class="card-header">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 200px;">Title</h6>
+                <h6 class="m-0">Description</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive overflow-auto">
+                <table class="table">
+                    <tbody>
+                            <tr *ngIf="currentRow?.date">
+                                <td width="200">Date</td>
+                                <td>{{ currentRow?.date }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.agent">
+                                <td width="200">Agent Name</td>
+                                <td>{{ currentRow?.agent.name }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.mobile">
+                                <td width="200">Customer Mobile</td>
+                                <td>{{ currentRow?.mobile }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.customer_name">
+                                <td width="200">Customer Name</td>
+                                <td>{{ currentRow?.customer_name }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.customer_gender">
+                                <td width="200">Customer Gender</td>
+                                <td>{{ currentRow?.customer_gender }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.emirate">
+                                <td width="200">Emirate</td>
+                                <td>{{ currentRow?.emirate?.en_name }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.platform">
+                                <td width="200">Platform</td>
+                                <td>{{ currentRow?.platform }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.platform_option">
+                                <td width="200">Platform Option</td>
+                                <td>{{ currentRow?.platform_option }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.customer_status">
+                                <td width="200">Customer Status</td>
+                                <td>{{ currentRow?.customer_status }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.concern">
+                                <td width="200">Concern</td>
+                                <td>{{ currentRow?.concern }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.mode">
+                                <td width="200">Mode</td>
+                                <td>{{ currentRow?.mode }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.mode_reason">
+                                <td width="200">Mode Reason</td>
+                                <td>{{ currentRow?.mode_reason }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.ask_for">
+                                <td width="200">Ask For</td>
+                                <td>{{ currentRow?.ask_for }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.ask_for_options">
+                                <td width="200">Ask For Options</td>
+                                <td>{{ currentRow?.ask_for_options }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.actions">
+                                <td width="200">Actions</td>
+                                <td>{{ currentRow?.actions }}</td>
+                            </tr>
+                            <tr *ngIf="currentRow?.notes">
+                                <td width="200">Notes</td>
+                                <td>{{ currentRow?.notes }}</td>
+                            </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</p-dialog>

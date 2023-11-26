@@ -127,24 +127,6 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
     this.answers = currentQuestion?.answers;
   }
 // ===============================================================Export======================================================================
-  // export() {
-  //   if (this.exportPermission) {
-  //     const ids = this.leads.map((obj: any) => obj.id);
-  //     this._SurveyService.exportLeads(ids).subscribe({
-  //       next: (res) => {
-  //         this._MessageService.add({
-  //           severity: 'success',
-  //           summary: 'Export Excel',
-  //           detail: 'Leads Exported Successfully',
-  //         });
-  //         const link = document.createElement('a');
-  //         link.target = '_blank';
-  //         link.href = res.data;
-  //         link.click();
-  //       },
-  //     });
-  //   }
-  // }
 
   export() {
     if (this.exportPermission) {
