@@ -23,7 +23,7 @@ export class AnalysisService {
   }
 
   createAnalytics(data:any):Observable<any>{
-    return this._ApiConfigService.postReq3(`dataAnalytics`, data);
+    return this._ApiConfigService.postReq3(`addDataRequest`, data);
   }
 
   exportAll(): Observable<any> {
