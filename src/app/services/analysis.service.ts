@@ -46,7 +46,7 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`addReminderDataRequests`, {remindDataRequest_id});
   }
 
-  getAnalyticsById(reminder_id:number): Observable<any> {
-    return this._ApiConfigService.postReq3(`dataAnalyticRequestsById`, {reminder_id});
+  getAnalyticsById(dataRequest_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`showDataRequests`, {dataRequest_id});
   }
 }

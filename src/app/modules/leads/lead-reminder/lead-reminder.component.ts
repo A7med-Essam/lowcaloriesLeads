@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalysisService } from 'src/app/services/analysis.service';
-import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-lead-reminder',
