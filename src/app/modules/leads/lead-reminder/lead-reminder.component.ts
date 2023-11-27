@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AnalysisService } from 'src/app/services/analysis.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -7,31 +8,40 @@ import { SurveyService } from 'src/app/services/survey.service';
   styleUrls: ['./lead-reminder.component.scss'],
 })
 export class LeadReminderComponent implements OnInit {
-  constructor(private _SurveyService: SurveyService) {}
+  constructor(private _AnalysisService: AnalysisService) {}
 
   ngOnInit(): void {
-    this.allReminderLeads();
+    this.allReminder();
   }
 
-  leads: any[] = [];
-  allReminderLeads() {
-    this._SurveyService.allReminderLeads().subscribe({
+  reminder: any[] = [];
+  allReminder() {
+    this._AnalysisService.allReminder().subscribe({
       next: (res) => {
-        // res.data.forEach((data:any) => {
-        //   if (data.reminded == true  && data.remind_data != null) {
-        //     this.leads.push(data);
-        //   }
-        // });
-        this.leads = res.data
+        this.reminder = res.data
       },
     });
   }
 
   update(id:number){
-    this._SurveyService.updateReminder(id).subscribe({
+    this._AnalysisService.updateReminder(id).subscribe({
       next: (res) => {
-        this.allReminderLeads();
+        this.allReminder();
       },
     });
   }
+
+    // ===============================================================Details======================================================================
+    currentRow: any;
+    detailsModal:boolean = false;
+    showRow(log: any) {
+      this.currentRow = log;
+      this.detailsModal = true;
+    }
+
+    getAnalyticsById(id:number){
+      this._AnalysisService.getAnalyticsById(id).subscribe(res=>{
+        this.showRow(res.data);
+      })
+    }
 }

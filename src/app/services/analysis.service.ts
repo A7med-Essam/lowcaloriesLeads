@@ -33,4 +33,20 @@ export class AnalysisService {
   exportByIds(dataRequestIds:number[]): Observable<any> {
     return this._ApiConfigService.postReq3(`exportDataAnalyticRequestByIds`, {dataRequestIds});
   }
+
+  // =================================================================================================
+
+  allReminder(): Observable<any> {
+    return this._ApiConfigService.postReq3(`allReminderDataRequests`, {
+      withoutPagination: true,
+    });
+  }
+
+  updateReminder(remindDataRequest_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`addReminderDataRequests`, {remindDataRequest_id});
+  }
+
+  getAnalyticsById(reminder_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`dataAnalyticRequestsById`, {reminder_id});
+  }
 }
