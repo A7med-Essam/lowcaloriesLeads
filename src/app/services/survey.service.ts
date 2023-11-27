@@ -175,7 +175,7 @@ export class SurveyService {
   }
 
   updateReminder(remindDataRequest_id:number): Observable<any> {
-    return this._ApiConfigService.postReq3(`leads/addReminderDataRequests`, {remindDataRequest_id});
+    return this._ApiConfigService.postReq3(`addReminderDataRequests`, {remindDataRequest_id});
   }
 
   // =========================================================================
