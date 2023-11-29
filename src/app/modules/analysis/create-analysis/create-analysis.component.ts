@@ -65,7 +65,8 @@ export class CreateAnalysisComponent implements OnInit {
   create(form: FormGroup) {
     if (form.valid) {
       this.analysisForm.patchValue({
-        reminder_date: new Date(form.value.reminder_date).toLocaleDateString('en-CA'),
+        // reminder_date: new Date(form.value.reminder_date).toLocaleDateString('en-CA'),
+        reminder_date: new Date(form.value.reminder_date).toISOString().replace("T", " ").replace("Z", "").split(".")[0]
       });
       this._AnalysisService.createAnalytics(form.value).subscribe({
         next: (res) => {

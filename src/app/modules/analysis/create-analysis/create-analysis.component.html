@@ -134,7 +134,7 @@
 
 <p-dialog header="Reminder Date" [(visible)]="reminderModal" position="bottom" [style]="{ width: '50vw' }"
     [modal]="true" [resizable]="false" [draggable]="false">
-    <p-calendar [showIcon]="true" [defaultDate]="defaultReminder" [(ngModel)]="defaultReminder" [minDate]="minReminder"
+    <p-calendar [showIcon]="true" [defaultDate]="defaultReminder" [(ngModel)]="defaultReminder" [minDate]="minReminder" [showTime]="true"
         appendTo="body"></p-calendar>
     <button class="btn btn-primary mt-2 w-100" (click)="setDefaultReminder()">
         Add Reminder

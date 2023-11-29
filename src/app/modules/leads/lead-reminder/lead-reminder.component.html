@@ -18,7 +18,7 @@
                             <tr *ngFor="let remind of reminder; let i = index"
                                 [style.opacity]="remind.reminded ? '0.3' : '1'">
                                 <td class="py-3">{{i+1}}</td>
-                                <td class="py-3">{{remind.reminder_date}}</td>
+                                <td class="py-3" style="width: 130px;">{{remind.reminder_date | date: 'MMM d, y, h:mm:ss a'}}</td>
                                 <td class="py-3">{{remind.reminder_data}}</td>
                                 <td class="py-3" *ngIf="remind.reminded">
                                     <p-tag severity="danger" value="Reminded"></p-tag>
