@@ -18,7 +18,8 @@ export class ShowAnalysisComponent implements OnInit {
     private _GuardService: GuardService,
     private _MessageService: MessageService,
     private _AnalysisService: AnalysisService,
-    private _SurveyService: SurveyService
+    private _SurveyService: SurveyService,
+    private _Router: Router
   ) {}
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -45,12 +46,15 @@ export class ShowAnalysisComponent implements OnInit {
 
   exportPermission: boolean = false;
   createPermission: boolean = false;
+  updatePermission: boolean = false;
 
   getPermission() {
     this.exportPermission =
       this._GuardService.getPermissionStatus('export_analysis');
     this.createPermission =
       this._GuardService.getPermissionStatus('create_analysis');
+    this.updatePermission =
+      this._GuardService.getPermissionStatus('update_analysis');
   }
 
   analytics: any[] = [];
@@ -93,7 +97,7 @@ export class ShowAnalysisComponent implements OnInit {
           acc[team].push(user);
           return acc;
         }, {});
-         this.agents = Object.keys(groupedUsers).map((team) => {
+        this.agents = Object.keys(groupedUsers).map((team) => {
           return {
             label: team,
             items: groupedUsers[team].map((user: any) => ({
@@ -272,5 +276,10 @@ export class ShowAnalysisComponent implements OnInit {
   showRow(log: any) {
     this.currentRow = log;
     this.detailsModal = true;
+  }
+
+  updateRow(row: any) {
+    this._AnalysisService.analysis.next(row);
+    this._Router.navigate(['analysis/update']);
   }
 }

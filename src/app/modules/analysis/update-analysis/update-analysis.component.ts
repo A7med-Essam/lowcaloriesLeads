@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
 
 @Component({
-  selector: 'app-create-analysis',
-  templateUrl: './create-analysis.component.html',
-  styleUrls: ['./create-analysis.component.scss'],
+  selector: 'app-update-analysis',
+  templateUrl: './update-analysis.component.html',
+  styleUrls: ['./update-analysis.component.scss'],
 })
-export class CreateAnalysisComponent implements OnInit, OnDestroy {
+export class UpdateAnalysisComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   analytics: any;
   analysisForm!: FormGroup;
@@ -24,18 +25,21 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
   reminderModal: boolean = false;
   constructor(
     private _AnalysisService: AnalysisService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _Router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.createAnalysisForm();
-    this.getFormAnalytics();
-  }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-  createAnalysisForm() {
+
+  ngOnInit(): void {
+    this.setAnalysisUpdateForm();
+    this.getFormAnalytics();
+  }
+
+  setAnalysisUpdateForm() {
     this.analysisForm = new FormGroup({
       mobile: new FormControl(null, [
         Validators.required,
@@ -55,6 +59,7 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
       ask_for_options: new FormControl(null),
       actions: new FormControl(null),
       reminder_date: new FormControl(null),
+      dataRequest_id: new FormControl(null),
     });
     this.valueChanges();
   }
@@ -62,28 +67,33 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
   getFormAnalytics() {
     this._AnalysisService.getFormAnalytics().subscribe((res) => {
       this.analytics = res.data;
+      this.showDetails();
     });
   }
 
-  create(form: FormGroup) {
+  update(form: FormGroup) {
     if (form.valid) {
       if (form.value.reminder_date) {
         this.analysisForm.patchValue({
-          // reminder_date: new Date(form.value.reminder_date).toLocaleDateString('en-CA'),
-          reminder_date: new Date(form.value.reminder_date).toISOString().replace("T", " ").replace("Z", "").split(".")[0]
+          reminder_date: new Date(form.value.reminder_date)
+            .toISOString()
+            .replace('T', ' ')
+            .replace('Z', '')
+            .split('.')[0],
         });
       }
-      this._AnalysisService.createAnalytics(form.value).subscribe({
+      this._AnalysisService.updateAnalytics(form.value).subscribe({
         next: (res) => {
           if (res.status == 1) {
             this.creatingStatus = false;
             this.analysisForm.reset();
-            this.createAnalysisForm();
+            this.setAnalysisUpdateForm();
             this._MessageService.add({
               severity: 'success',
               summary: 'Analytics',
               detail: 'Analytics Created Successfully',
             });
+            this._Router.navigate(['analysis/show']);
           } else {
             this.creatingStatus = false;
             if (form.value.reminder_date != null) {
@@ -116,6 +126,15 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
       });
 
     this.analysisForm
+      .get('customer_status')
+      ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
+        if (value) {
+          this.handleCustomerStatus();
+        }
+      });
+
+    this.analysisForm
       .get('mode')
       ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
       .subscribe((value) => {
@@ -138,27 +157,53 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
     this.platformOptions = this.analytics.platforms.find(
       (item: any) => item.name === value
     ).options;
+
+    if (this.platformOptions.length == 0) {
+      this.analysisForm.patchValue({
+        platform_option: null,
+      });
+    }
+  }
+
+  handleCustomerStatus() {
+    this.analysisForm.patchValue({
+      ask_for: null,
+    });
   }
 
   handleMode(value: string) {
     this.modeReasons = this.analytics.mode.find(
       (item: any) => item.name === value
     ).reasons;
+    if (this.modeReasons.length == 0) {
+      this.analysisForm.patchValue({
+        mode_reason: null,
+      });
+    }
   }
 
   handleAskFor(value: string) {
     this.askReasons = this.analytics[value].reasons;
     this.askActions = this.analytics[value].actions;
+
+    this.analysisForm.patchValue({
+      ask_for_options: null,
+      actions: null,
+    });
   }
 
   // ================================== REMINDER ==================================
 
   private calculateDefaultReminder(): Date {
-    const currentDate = new Date();
-    const twoDaysLater = new Date(
-      currentDate.setDate(currentDate.getDate() + 2)
-    );
-    return twoDaysLater;
+    if (this.currentRow?.reminder_date) {
+      return new Date(this.currentRow.reminder_date);
+    } else {
+      const currentDate = new Date();
+      const twoDaysLater = new Date(
+        currentDate.setDate(currentDate.getDate() + 2)
+      );
+      return twoDaysLater;
+    }
   }
 
   setDefaultReminder() {
@@ -169,5 +214,42 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
       summary: 'Reminder',
       detail: 'Reminder has been add successfully',
     });
+  }
+
+  // ================================== Patch Values ==================================
+  currentRow: any;
+  showDetails() {
+    this._AnalysisService.analysis
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((analysis) => {
+        if (analysis) {
+          this.currentRow = analysis;
+          this.patchValues(analysis);
+        } else {
+          this._Router.navigate(['analysis/show']);
+        }
+      });
+  }
+
+  patchValues(value: any) {
+    this.analysisForm.patchValue({
+      mobile: value.mobile,
+      customer_name: value.customer_name,
+      customer_gender: value.customer_gender,
+      emirate_id: value.emirate.id,
+      platform: value.platform,
+      platform_option: value.platform_option,
+      customer_status: value.customer_status,
+      concern: value.concern,
+      mode: value.mode,
+      mode_reason: value.mode_reason,
+      notes: value.notes,
+      ask_for: value.ask_for,
+      ask_for_options: value.ask_for_options,
+      actions: value.actions,
+      reminder_date: value.reminder_date ? new Date(value.reminder_date) : null,
+      dataRequest_id: value.id,
+    });
+    this.defaultReminder = new Date(this.calculateDefaultReminder());
   }
 }

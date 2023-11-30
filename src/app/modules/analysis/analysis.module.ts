@@ -12,12 +12,14 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { UpdateAnalysisComponent } from './update-analysis/update-analysis.component';
 
 
 @NgModule({
   declarations: [
     CreateAnalysisComponent,
-    ShowAnalysisComponent
+    ShowAnalysisComponent,
+    UpdateAnalysisComponent
   ],
   imports: [
     CommonModule,

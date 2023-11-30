@@ -9,6 +9,7 @@ export class AnalysisService {
 
   constructor(private _ApiConfigService: ApiConfigService) {}
   filter: BehaviorSubject<any> = new BehaviorSubject(null);
+  analysis: BehaviorSubject<any> = new BehaviorSubject(null);
 
   getAnalytics(page: number):Observable<any>{
     return this._ApiConfigService.postReq3(`dataAnalyticRequests?page=${page}`, '');
@@ -24,6 +25,10 @@ export class AnalysisService {
 
   createAnalytics(data:any):Observable<any>{
     return this._ApiConfigService.postReq3(`addDataRequest`, data);
+  }
+
+  updateAnalytics(dataRequest_id:any):Observable<any>{
+    return this._ApiConfigService.postReq3(`updateDataRequest`, dataRequest_id);
   }
 
   exportAll(): Observable<any> {

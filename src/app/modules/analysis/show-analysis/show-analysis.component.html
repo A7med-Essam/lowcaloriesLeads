@@ -34,6 +34,8 @@
                 <td class="text-center">{{analysis?.customer_status}}</td>
                 <td class="text-center">{{analysis?.platform}}</td>
                 <td class="text-center">
+                    <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
+                        (click)="updateRow(analysis)" class="m-1 p-button-sm p-button-warning"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
                         class="m-1 p-button-sm"></button>
                 </td>

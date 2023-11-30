@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PermissionGuard } from 'src/app/core/permission.guard';
 import { CreateAnalysisComponent } from './create-analysis/create-analysis.component';
 import { ShowAnalysisComponent } from './show-analysis/show-analysis.component';
+import { UpdateAnalysisComponent } from './update-analysis/update-analysis.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'show', pathMatch: 'full' },
@@ -20,6 +21,14 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       permission: ['show_analysis'],
+    },
+  },
+  {
+    path: 'update',
+    component: UpdateAnalysisComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['update_analysis'],
     },
   },
 ];
