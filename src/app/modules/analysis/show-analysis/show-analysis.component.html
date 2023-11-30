@@ -35,7 +35,7 @@
                 <td class="text-center">{{analysis?.platform}}</td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
-                    class="m-1 p-button-sm"></button>
+                        class="m-1 p-button-sm"></button>
                 </td>
 
             </tr>
@@ -50,8 +50,14 @@
             <div class="row mx-0">
                 <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
                     <label for="">Agent</label>
-                    <p-dropdown [options]="agents" formControlName='agent_id' appendTo="body" optionLabel="name" optionValue="id"
-                        styleClass="w-100" placeholder="Select Agent">
+                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
+                        styleClass="w-100" appendTo="body" optionLabel="label" optionValue="value" [group]="true"
+                        [filter]="true">
+                        <ng-template let-group pTemplate="group">
+                            <div class="flex align-items-center">
+                                <span>{{ group.label }}</span>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
@@ -176,71 +182,71 @@
             <div class="table-responsive overflow-auto">
                 <table class="table">
                     <tbody>
-                            <tr *ngIf="currentRow?.date">
-                                <td width="200">Date</td>
-                                <td>{{ currentRow?.date }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.agent">
-                                <td width="200">Agent Name</td>
-                                <td>{{ currentRow?.agent.name }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.mobile">
-                                <td width="200">Customer Mobile</td>
-                                <td>{{ currentRow?.mobile }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.customer_name">
-                                <td width="200">Customer Name</td>
-                                <td>{{ currentRow?.customer_name }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.customer_gender">
-                                <td width="200">Customer Gender</td>
-                                <td>{{ currentRow?.customer_gender }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.emirate">
-                                <td width="200">Emirate</td>
-                                <td>{{ currentRow?.emirate?.en_name }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.platform">
-                                <td width="200">Platform</td>
-                                <td>{{ currentRow?.platform }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.platform_option">
-                                <td width="200">Platform Option</td>
-                                <td>{{ currentRow?.platform_option }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.customer_status">
-                                <td width="200">Customer Status</td>
-                                <td>{{ currentRow?.customer_status }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.concern">
-                                <td width="200">Concern</td>
-                                <td>{{ currentRow?.concern }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.mode">
-                                <td width="200">Mode</td>
-                                <td>{{ currentRow?.mode }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.mode_reason">
-                                <td width="200">Mode Reason</td>
-                                <td>{{ currentRow?.mode_reason }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.ask_for">
-                                <td width="200">Ask For</td>
-                                <td>{{ currentRow?.ask_for }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.ask_for_options">
-                                <td width="200">Ask For Options</td>
-                                <td>{{ currentRow?.ask_for_options }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.actions">
-                                <td width="200">Actions</td>
-                                <td>{{ currentRow?.actions }}</td>
-                            </tr>
-                            <tr *ngIf="currentRow?.notes">
-                                <td width="200">Notes</td>
-                                <td>{{ currentRow?.notes }}</td>
-                            </tr>
-                        
+                        <tr *ngIf="currentRow?.date">
+                            <td width="200">Date</td>
+                            <td>{{ currentRow?.date }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.agent">
+                            <td width="200">Agent Name</td>
+                            <td>{{ currentRow?.agent.name }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.mobile">
+                            <td width="200">Customer Mobile</td>
+                            <td>{{ currentRow?.mobile }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.customer_name">
+                            <td width="200">Customer Name</td>
+                            <td>{{ currentRow?.customer_name }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.customer_gender">
+                            <td width="200">Customer Gender</td>
+                            <td>{{ currentRow?.customer_gender }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.emirate">
+                            <td width="200">Emirate</td>
+                            <td>{{ currentRow?.emirate?.en_name }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.platform">
+                            <td width="200">Platform</td>
+                            <td>{{ currentRow?.platform }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.platform_option">
+                            <td width="200">Platform Option</td>
+                            <td>{{ currentRow?.platform_option }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.customer_status">
+                            <td width="200">Customer Status</td>
+                            <td>{{ currentRow?.customer_status }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.concern">
+                            <td width="200">Concern</td>
+                            <td>{{ currentRow?.concern }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.mode">
+                            <td width="200">Mode</td>
+                            <td>{{ currentRow?.mode }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.mode_reason">
+                            <td width="200">Mode Reason</td>
+                            <td>{{ currentRow?.mode_reason }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.ask_for">
+                            <td width="200">Ask For</td>
+                            <td>{{ currentRow?.ask_for }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.ask_for_options">
+                            <td width="200">Ask For Options</td>
+                            <td>{{ currentRow?.ask_for_options }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.actions">
+                            <td width="200">Actions</td>
+                            <td>{{ currentRow?.actions }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.notes">
+                            <td width="200">Notes</td>
+                            <td>{{ currentRow?.notes }}</td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>

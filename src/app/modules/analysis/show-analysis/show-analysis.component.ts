@@ -18,7 +18,7 @@ export class ShowAnalysisComponent implements OnInit {
     private _GuardService: GuardService,
     private _MessageService: MessageService,
     private _AnalysisService: AnalysisService,
-    private _SurveyService:SurveyService
+    private _SurveyService: SurveyService
   ) {}
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -81,11 +81,27 @@ export class ShowAnalysisComponent implements OnInit {
   }
 
   // ********************************************************FILTER OPTIONS********************************************************************
-agents:any[]=[]
+  agents: any[] = [];
   getAgents() {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
-        this.agents = res.data;
+        const groupedUsers = res.data.reduce((acc: any, user: any) => {
+          const team = user.team;
+          if (!acc[team]) {
+            acc[team] = [];
+          }
+          acc[team].push(user);
+          return acc;
+        }, {});
+         this.agents = Object.keys(groupedUsers).map((team) => {
+          return {
+            label: team,
+            items: groupedUsers[team].map((user: any) => ({
+              label: user.name,
+              value: user.id,
+            })),
+          };
+        });
       },
     });
   }
@@ -252,11 +268,9 @@ agents:any[]=[]
 
   // ===============================================================Details======================================================================
   currentRow: any;
-  detailsModal:boolean = false;
+  detailsModal: boolean = false;
   showRow(log: any) {
     this.currentRow = log;
     this.detailsModal = true;
   }
-
-
 }
