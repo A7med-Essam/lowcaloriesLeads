@@ -49,6 +49,7 @@ export class ShowAnalysisComponent implements OnInit {
   createPermission: boolean = false;
   updatePermission: boolean = false;
   deletePermission: boolean = false;
+  downloadSamplePermission: boolean = false;
 
   getPermission() {
     this.exportPermission =
@@ -59,6 +60,9 @@ export class ShowAnalysisComponent implements OnInit {
       this._GuardService.getPermissionStatus('update_analysis');
     this.deletePermission =
       this._GuardService.getPermissionStatus('delete_analysis');
+    this.downloadSamplePermission = this._GuardService.getPermissionStatus(
+      'downloadSample_analysis'
+    );
   }
 
   analytics: any[] = [];
@@ -301,5 +305,47 @@ export class ShowAnalysisComponent implements OnInit {
         this.deleteRow(id);
       },
     });
+  }
+  // ===============================================================UPLOAD FILE======================================================================
+
+  displayUploadModal() {
+    if (this.downloadSamplePermission) {
+      this.uploadModal = true;
+    }
+  }
+
+  uploadModal: boolean = false;
+
+  getSample() {
+    if (this.downloadSamplePermission) {
+      this._AnalysisService.getSample().subscribe((res) => {
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
+      });
+    }
+  }
+
+  getFormData(object: any) {
+    const formData = new FormData();
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
+    return formData;
+  }
+
+  onFileSelected(event: any) {
+    if (this.downloadSamplePermission) {
+      const file: File = event.target.files[0];
+      if (file) {
+        let f: File = this.getFormData({ file: file }) as any;
+        this._AnalysisService.uploadFile(f).subscribe({
+          next: (res) => {
+            this.uploadModal = false;
+            this.getAnalytics();
+          },
+        });
+        this.uploadModal = false;
+      }
+    }
   }
 }

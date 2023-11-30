@@ -6,6 +6,8 @@
         </p-button>
         <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
         </p-button>
+        <p-button [disabled]="!downloadSamplePermission" (click)="displayUploadModal()" class="mb-3 mx-1" icon="pi pi-external-link"
+        label="Upload"></p-button>
     </div>
 </div>
 
@@ -260,3 +262,17 @@
 
 <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
 </p-confirmDialog>
+
+<p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
+    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary" (click)="getSample()">Download Sample</button>
+        </div>
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary">Upload a file</button>
+            <input type="file" name="myfile" (change)="onFileSelected($event)" />
+        </div>
+    </ng-template>
+</p-dialog>

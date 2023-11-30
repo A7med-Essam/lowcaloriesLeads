@@ -43,6 +43,14 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`exportDataAnalyticRequestByIds`, {dataRequestIds});
   }
 
+  getSample(): Observable<any>{
+    return this._ApiConfigService.postReq3(`analyticsSample` , '');
+  }
+
+  uploadFile(file:File): Observable<any> {
+    return this._ApiConfigService.postReq3(`analyticsImport` , file);
+  }
+
   // =================================================================================================
 
   allReminder(): Observable<any> {
