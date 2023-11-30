@@ -113,9 +113,7 @@ const routes: Routes = [
   {
     path: 'paymentlink',
     loadChildren: () =>
-      import('./modules/payment/payment.module').then(
-        (m) => m.PaymentModule
-      ),
+      import('./modules/payment/payment.module').then((m) => m.PaymentModule),
     canActivate: [PermissionGuard],
     data: {
       permission: ['create_paymentlink'],
@@ -124,9 +122,7 @@ const routes: Routes = [
   {
     path: 'paymentbranch',
     loadChildren: () =>
-      import('./modules/payment/payment.module').then(
-        (m) => m.PaymentModule
-      ),
+      import('./modules/payment/payment.module').then((m) => m.PaymentModule),
     canActivate: [PermissionGuard],
     data: {
       permission: ['createPayment_Branches'],
@@ -157,7 +153,9 @@ const routes: Routes = [
   {
     path: 'giftcode',
     loadChildren: () =>
-      import('./modules/giftcode/giftcode.module').then((m) => m.GiftcodeModule),
+      import('./modules/giftcode/giftcode.module').then(
+        (m) => m.GiftcodeModule
+      ),
     canActivate: [PermissionGuard],
     data: {
       permission: ['show_giftcode'],
@@ -166,7 +164,9 @@ const routes: Routes = [
   {
     path: 'mailService',
     loadChildren: () =>
-      import('./modules/mail-service/mail-service.module').then((m) => m.MailServiceModule),
+      import('./modules/mail-service/mail-service.module').then(
+        (m) => m.MailServiceModule
+      ),
     canActivate: [PermissionGuard],
     data: {
       permission: ['show_mailService'],
@@ -175,7 +175,9 @@ const routes: Routes = [
   {
     path: 'redirect',
     loadChildren: () =>
-      import('./modules/redirect/redirect.module').then((m) => m.RedirectModule),
+      import('./modules/redirect/redirect.module').then(
+        (m) => m.RedirectModule
+      ),
     canActivate: [PermissionGuard],
     data: {
       permission: ['show_redirect'],
@@ -188,6 +190,15 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       permission: ['show_docs'],
+    },
+  },
+  {
+    path: 'enquiry',
+    loadChildren: () =>
+      import('./modules/enquiry/enquiry.module').then((m) => m.EnquiryModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_enquiry'],
     },
   },
   { path: '**', component: Error404Component },

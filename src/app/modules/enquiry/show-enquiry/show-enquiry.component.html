@@ -1,0 +1,218 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Programs Enquiry</h2>
+    </div>
+    <hr>
+    <form [formGroup]="paymentForm" (ngSubmit)='createPaymentLink(paymentForm)'>
+        <div class="row mx-0">
+            <div class="col-12 my-3" [class.col-md-6]="paymentForm.get('program_type')?.value">
+                <label for="">SELECT YOUR PROGRAM TYPE <span class="text-danger">*</span></label>
+                <div class="d-flex flex-wrap">
+                    <div class="flex align-items-center m-3" *ngFor="let obj of paymentDetails?.Programs | keyvalue">
+                        <p-radioButton formControlName="program_type" [value]="obj.key" [inputId]="obj.key">
+                        </p-radioButton>
+                        <label class="mx-1" [for]="obj.key">{{obj.key | titlecase}}</label>
+                    </div>
+                </div>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('program_type')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3" *ngIf="paymentForm.get('program_type')?.value">
+                <label for="">SELECT YOUR PROGRAM <span class="text-danger">*</span></label>
+                <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name"
+                    styleClass="w-100" placeholder="Select Program">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3" *ngIf="isCustom && paymentForm.get('program_id')?.value">
+                <label for="">SELECT NUMBER OF DAYS <span class="text-danger">*</span></label>
+                <p-dropdown [options]="numberOfDays" formControlName='subscription_days' appendTo="body"
+                    styleClass="w-100" placeholder="Select Number Of Days">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="
+            paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
+            </div>
+            <hr>
+            <div class="col-12 my-3" *ngIf="mealTypes.length && paymentForm.get('only_snack')?.value == 'no'">
+                <label for="">Type Meals <span class="text-danger">*</span></label>
+                <div class="d-flex flex-wrap">
+                    <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
+                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
+                            (onChange)="onCheckboxChange($event,'meal_types',meal)">
+                        </p-checkbox>
+                        <label class="mx-1" [for]="meal">{{meal}}</label>
+                    </div>
+                </div>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('meal_types')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-8 col-12 my-3" *ngIf="snackTypes.length">
+                <label for="">Type Snack</label>
+                <div class="d-flex flex-wrap">
+                    <div class="field-checkbox m-3" *ngFor="let meal of snackTypes">
+                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
+                            (onChange)="onCheckboxChange($event,'snack_types',meal)">
+                        </p-checkbox>
+                        <label class="mx-1" [for]="meal">{{meal}}</label>
+                    </div>
+                </div>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('snack_types')?.hasError('required')">This field is required.</small>
+            </div>
+            <!-- <div class="col-md-4 col-12 my-3" *ngIf="snackTypes.length">
+                <label for="">ONLY SNACK?</label>
+                <div class="d-flex flex-wrap">
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="only_snack" value="yes" inputId="SNACK_YES">
+                        </p-radioButton>
+                        <label class="mx-1" for="SNACK_YES">YES</label>
+                    </div>
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="only_snack" value="no" inputId="SNACK_NO">
+                        </p-radioButton>
+                        <label class="mx-1" for="SNACK_NO">NO</label>
+                    </div>
+                </div>
+            </div> -->
+            <hr *ngIf="mealTypes.length">
+            <div class="col-12 my-3" *ngIf="!isCustom">
+                <label for="">DAYS OF PLAN <span class="text-danger">*</span></label>
+                <div class="d-flex flex-wrap">
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="subscription_days" [value]="7" inputId="subscription_days_7">
+                        </p-radioButton>
+                        <label class="mx-1" for="subscription_days_7">7 Days</label>
+                    </div>
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="subscription_days" [value]="14" inputId="subscription_days_14">
+                        </p-radioButton>
+                        <label class="mx-1" for="subscription_days_14">14 Days</label>
+                    </div>
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="subscription_days" [value]="21" inputId="subscription_days_21">
+                        </p-radioButton>
+                        <label class="mx-1" for="subscription_days_21">21 Days</label>
+                    </div>
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="subscription_days" [value]="28" inputId="subscription_days_28">
+                        </p-radioButton>
+                        <label class="mx-1" for="subscription_days_28">28 Days</label>
+                    </div>
+                </div>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
+            </div>
+            <hr *ngIf="!isCustom">
+            <div class="col-12 my-3">
+                <label for="">Days Of Delivery <span class="text-danger">*</span></label>
+                <div class="d-flex flex-wrap">
+                    <div class="field-checkbox m-3" *ngFor="let day of days">
+                        <p-checkbox [value]="day.value" [inputId]="day.name" #checkbox #deliveryDaysBox
+                            (onChange)="onCheckboxChange($event,'delivery_days',day.value)">
+                        </p-checkbox>
+                        <label class="mx-1" [for]="day.name">{{day.name}}</label>
+                    </div>
+                </div>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('delivery_days')?.hasError('required')">This field is required.</small>
+            </div>
+            <hr>
+            <div class="col-xl-3 col-md-6 col-12 my-3">
+                <label for="">Codes</label>
+                <p-dropdown [options]="paymentDetails?.GiftCodes == undefined ?[]:paymentDetails.GiftCodes"
+                    formControlName='code_id' appendTo="body" styleClass="w-100" placeholder="Select Code"
+                    optionLabel="code" optionValue="id" [filter]="true">
+                </p-dropdown>
+            </div>
+            <div class="col-xl-3 col-md-6 col-12 my-3">
+                <label for="">Start Date <span class="text-danger">*</span></label>
+                <p-calendar [minDate]="tomorrow" [readonlyInput]="true" ngClass="w-100" appendTo="body"
+                    formControlName='start_date'>
+                </p-calendar>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('start_date')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-xl-3 col-md-6 col-12 my-3">
+                <label for="">SAFTY BAG?</label>
+                <div class="d-flex flex-wrap">
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="bag" value="yes" inputId="BAG_YES">
+                        </p-radioButton>
+                        <label class="mx-1" for="BAG_YES">YES</label>
+                    </div>
+                    <div class="flex align-items-center m-3">
+                        <p-radioButton formControlName="bag" value="no" inputId="BAG_NO">
+                        </p-radioButton>
+                        <label class="mx-1" for="BAG_NO">NO</label>
+                    </div>
+                </div>
+                <small class="text-danger ms-1" *ngIf="paymentForm.get('bag')?.touched &&
+                paymentForm.get('bag')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12">
+                <div class="d-flex">
+                    <button class="btn btn-success w-100 ms-1" [disabled]="paymentForm.invalid || creatingStatus"
+                        type="submit">
+                        <span *ngIf="!creatingStatus">Calculate Price</span>
+                        <span *ngIf="creatingStatus">Calculating...<i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<p-dialog header="Plan Details Modal" [(visible)]="planModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="card">
+        <div class="card-header">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 200px;">Title</h6>
+                <h6 class="m-0">Description</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive overflow-auto">
+                <table class="table">
+                    <tbody>
+                        <tr *ngIf="planDetails?.price">
+                            <td width="200">Price</td>
+                            <td>{{ planDetails?.price.toFixed(2) }}</td>
+                        </tr>
+                        <tr *ngIf="planDetails?.price_after_discount">
+                            <td width="200">Price After Discount</td>
+                            <td>{{ planDetails?.price_after_discount.toFixed(2) }}</td>
+                        </tr>
+                        <tr *ngIf="planDetails?.discount">
+                            <td width="200">Discount</td>
+                            <td>{{ planDetails?.discount.toFixed(2) }}</td>
+                        </tr>
+                        <tr *ngIf="planDetails?.grand_total">
+                            <td width="200">Grand Total</td>
+                            <td>{{ planDetails?.grand_total.toFixed(3) }}</td>
+                        </tr>
+                        <tr *ngIf="planDetails?.bag_price">
+                            <td width="200">Bag Price</td>
+                            <td>{{ planDetails?.bag_price }}</td>
+                        </tr>
+                        <tr *ngIf="planDetails?.subscription_DeliveryDates">
+                            <td width="200">DeliveryDates</td>
+                            <td>
+                                <div class="card" style="margin: 5px 70px;" *ngFor="let plan of convertDates(planDetails?.subscription_DeliveryDates)">
+                                    <div class="card-header">
+                                        <div class="text-muted d-flex justify-content-around align-items-center">
+                                            <h6 class="m-0" style="width: 200px;">{{plan.date}}</h6>
+                                            <h6 class="m-0">{{plan.day}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</p-dialog>
