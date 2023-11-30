@@ -19,7 +19,8 @@ export class UpdateAnalysisComponent implements OnInit, OnDestroy {
   askActions: [] = [];
   platformOptions: [] = [];
   modeReasons: [] = [];
-  minReminder: Date = new Date();
+  minReminder: Date = new Date(new Date().setDate(new Date().getDate() + 1));
+  maxReminder: Date = new Date(new Date().setDate(new Date().getDate() + 90));
   defaultReminder: Date = new Date(this.calculateDefaultReminder());
   creatingStatus: boolean = false;
   reminderModal: boolean = false;

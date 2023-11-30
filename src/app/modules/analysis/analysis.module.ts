@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { UpdateAnalysisComponent } from './update-analysis/update-analysis.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { UpdateAnalysisComponent } from './update-analysis/update-analysis.compo
     ReactiveFormsModule,
     TableModule,
     DialogModule,
-    FormsModule
+    FormsModule,
+    ConfirmDialogModule
   ]
 })
 export class AnalysisModule { }

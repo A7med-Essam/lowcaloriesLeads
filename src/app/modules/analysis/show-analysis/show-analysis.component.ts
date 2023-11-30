@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
@@ -19,6 +19,7 @@ export class ShowAnalysisComponent implements OnInit {
     private _MessageService: MessageService,
     private _AnalysisService: AnalysisService,
     private _SurveyService: SurveyService,
+    private _ConfirmationService: ConfirmationService,
     private _Router: Router
   ) {}
   private unsubscribe$ = new Subject<void>();
@@ -47,6 +48,7 @@ export class ShowAnalysisComponent implements OnInit {
   exportPermission: boolean = false;
   createPermission: boolean = false;
   updatePermission: boolean = false;
+  deletePermission: boolean = false;
 
   getPermission() {
     this.exportPermission =
@@ -55,6 +57,8 @@ export class ShowAnalysisComponent implements OnInit {
       this._GuardService.getPermissionStatus('create_analysis');
     this.updatePermission =
       this._GuardService.getPermissionStatus('update_analysis');
+    this.deletePermission =
+      this._GuardService.getPermissionStatus('delete_analysis');
   }
 
   analytics: any[] = [];
@@ -281,5 +285,21 @@ export class ShowAnalysisComponent implements OnInit {
   updateRow(row: any) {
     this._AnalysisService.analysis.next(row);
     this._Router.navigate(['analysis/update']);
+  }
+  // ===============================================================Details======================================================================
+
+  deleteRow(id: number) {
+    this._AnalysisService.deleteAnalytics(id).subscribe((res) => {
+      this.getAnalytics();
+    });
+  }
+
+  confirm(id: any) {
+    this._ConfirmationService.confirm({
+      message: 'Are you sure that you want to perform this action?',
+      accept: () => {
+        this.deleteRow(id);
+      },
+    });
   }
 }

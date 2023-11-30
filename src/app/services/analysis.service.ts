@@ -31,6 +31,10 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`updateDataRequest`, dataRequest_id);
   }
 
+  deleteAnalytics(dataRequest_id:any):Observable<any>{
+    return this._ApiConfigService.postReq3(`deleteDataRequest`, {dataRequest_id});
+  }
+
   exportAll(): Observable<any> {
     return this._ApiConfigService.postReq3(`exportDataAnalyticRequest`,'');
   }
