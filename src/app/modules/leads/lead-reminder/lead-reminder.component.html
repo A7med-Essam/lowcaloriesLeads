@@ -46,9 +46,6 @@
             <div class="text-muted d-flex align-items-center">
                 <h6 class="m-0" style="width: 200px;">Title</h6>
                 <h6 class="m-0">Description</h6>
-                <h6>
-                    <button pButton type="button" icon="pi pi-pencil"  class="m-1 p-button-sm p-button-warning"></button>
-                </h6>
             </div>
         </div>
         <div class="card-body">
@@ -119,10 +116,21 @@
                                 <td width="200">Notes</td>
                                 <td>{{ currentRow?.notes }}</td>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
+                            <tr *ngIf="currentRow?.agent.id == current_user.id || current_user.role_name === 'super_admin' else elseBlock">
+                                <td style="vertical-align:middle">Update</td>
+                                <td>
+                                    <button (click)="updateRow(currentRow)" pButton type="button" icon="pi pi-pencil"  class="m-1 p-button-sm p-button-warning"></button>
+                                </td>
                             </tr>
+                            <ng-template #elseBlock>
+                                <tr>
+                                    <td style="vertical-align:middle">Update Notes</td>
+                                    <td>
+                                        <textarea pInputTextarea ngClass="w-100" [(ngModel)]="updatedNote"></textarea>
+                                        <button (click)="updateRow(currentRow)" pButton type="button" label="Update"  class="m-1 p-button-sm p-button-warning"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
                     </tbody>
                 </table>
             </div>

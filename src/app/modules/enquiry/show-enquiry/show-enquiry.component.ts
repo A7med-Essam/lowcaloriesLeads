@@ -23,12 +23,12 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
   PaymentLink!: string | undefined;
   exchangeStatus: boolean = false;
   planModal: boolean = false;
-  mealTypes: string[] = [];
-  snackTypes: string[] = [];
+  mealTypes: any[] = [];
+  snackTypes: any[] = [];
   plans: any[] = [];
   numberOfDays: any[] = [];
   paymentDetails!: PaymentDetails;
-  paymentForm!: FormGroup;
+  inquiryForm!: FormGroup;
   gender: string[] = ['male', 'female'];
   creatingStatus: boolean = false;
   days: { name: string; value: string }[] = [
@@ -40,7 +40,7 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
     { name: 'Thursday', value: 'THURSDAY' },
     { name: 'Friday', value: 'FRIDAY' },
   ];
-  tomorrow:Date = new Date(new Date().setDate(new Date().getDate() + 2))
+  tomorrow: Date = new Date(new Date().setDate(new Date().getDate() + 2));
 
   valueChangesSubscription1!: Subscription | undefined;
   valueChangesSubscription2!: Subscription | undefined;
@@ -69,7 +69,7 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
   @ViewChildren('deliveryDaysBox')
   DeliveryCheckboxElements!: QueryList<Checkbox>;
   ngOnInit(): void {
-    this.createPaymentForm();
+    this.createInquiryForm();
     this.getPaymentDetails();
     this.selectAllDeliveryDays();
   }
@@ -105,22 +105,25 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
     });
   }
 
-  createPaymentForm() {
-    this.paymentForm = new FormGroup({
+  createInquiryForm() {
+    this.inquiryForm = new FormGroup({
       program_type: new FormControl(null, [Validators.required]),
       program: new FormControl(null, [Validators.required]),
       program_id: new FormControl(null, [Validators.required]),
       plan_id: new FormControl(null),
-      meal_types: new FormArray([], [Validators.required]),
-      snack_types: new FormArray([]),
+      // meal_types: new FormArray([], [Validators.required]),
+      // snack_types: new FormArray([]),
+
+      meal_types: new FormControl(null),
+      snack_types: new FormControl(null),
       subscription_days: new FormControl(null, [Validators.required]),
       delivery_days: new FormArray([], [Validators.required]),
       start_date: new FormControl(null, [Validators.required]),
       code_id: new FormControl(null),
       bag: new FormControl('no', [Validators.required]),
       only_snack: new FormControl('no'),
-      no_meals: new FormControl(null),
-      no_snacks: new FormControl(null),
+      no_meals: new FormControl(null, [Validators.required]),
+      no_snacks: new FormControl(0),
     });
     this.valueChanges();
   }
@@ -135,13 +138,13 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
   }
 
   planDetails: any;
-  createPaymentLink(form: FormGroup) {
+  inquiry(form: FormGroup) {
     if (form.valid) {
       this.creatingStatus = true;
       form.patchValue({
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
-        no_meals: form.value.meal_types.length,
-        no_snacks: form.value.snack_types.length,
+        meal_types:  this.getTypes(form.value.no_meals,'meal'),
+        snack_types: this.getTypes(form.value.no_snacks,'snack'),
       });
 
       const filteredData = Object.keys(form.value)
@@ -159,22 +162,22 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
         next: (res) => {
           if (res.status == 1) {
             this.planDetails = res.data;
-            this.paymentForm.reset();
-            this.createPaymentForm();
+            this.inquiryForm.reset();
+            this.createInquiryForm();
             this.uncheckAllCheckboxes();
             this.selectAllDeliveryDays();
             this.creatingStatus = false;
             this.planModal = true;
           } else {
             this.creatingStatus = false;
-            this.paymentForm.patchValue({
+            this.inquiryForm.patchValue({
               start_date: new Date(filteredData.start_date),
             });
           }
         },
         error: (err) => {
           this.creatingStatus = false;
-          this.paymentForm.patchValue({
+          this.inquiryForm.patchValue({
             start_date: new Date(filteredData.start_date),
           });
         },
@@ -185,6 +188,19 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
   // ====================================================================UPLOAD==========================================================================
 
   getSelectedMealTypes(num: number, type: string) {
+    // let meals = [];
+    // for (let i = 1; i <= num; i++) {
+    //   meals.push(`${type} ${i}`);
+    // }
+    // return meals;
+    let meals = [];
+    for (let i = 1; i <= num; i++) {
+      meals.push({ label: `${type} ${i}`, value: i });
+    }
+    return meals;
+  }
+
+  getTypes(num: number, type: string) {
     let meals = [];
     for (let i = 1; i <= num; i++) {
       meals.push(`${type} ${i}`);
@@ -194,7 +210,7 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
 
   // ====================================================================Checkbox==========================================================================
   onCheckboxChange(event: any, type: string, value: string) {
-    let formArray: FormArray = this.paymentForm.get(type) as FormArray;
+    let formArray: FormArray = this.inquiryForm.get(type) as FormArray;
     if (event.checked.length) {
       formArray.push(new FormControl(event.checked[0]));
     } else {
@@ -209,43 +225,44 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
     }
 
     const onlySnack =
-      this.paymentForm.get('only_snack')?.value == 'yes' ? true : false;
+      this.inquiryForm.get('only_snack')?.value == 'yes' ? true : false;
     if (type != 'dislike') {
       if (onlySnack) {
         if (type == 'snack_types') {
           if (formArray.length > 0) {
-            this.paymentForm.get(type)?.setErrors(null);
+            this.inquiryForm.get(type)?.setErrors(null);
           } else {
-            this.paymentForm.get(type)?.setErrors({ required: true });
+            this.inquiryForm.get(type)?.setErrors({ required: true });
           }
         } else {
           if (formArray.length > 0) {
-            this.paymentForm.get(type)?.setErrors(null);
+            this.inquiryForm.get(type)?.setErrors(null);
           } else {
-            this.paymentForm.get(type)?.setErrors({ required: true });
+            this.inquiryForm.get(type)?.setErrors({ required: true });
           }
           if (
             type == 'meal_types' &&
-            this.paymentForm.value.program_type == 'Chef Gourmet'
+            this.inquiryForm.value.program_type == 'Chef Gourmet'
           ) {
             if (formArray.length < 2) {
-              this.paymentForm.get(type)?.setErrors({ required: true });
+              this.inquiryForm.get(type)?.setErrors({ required: true });
             }
           }
         }
       } else {
         if (type != 'snack_types') {
           if (formArray.length > 0) {
-            this.paymentForm.get(type)?.setErrors(null);
+            this.inquiryForm.get(type)?.setErrors(null);
           } else {
-            this.paymentForm.get(type)?.setErrors({ required: true });
+            this.inquiryForm.get(type)?.setErrors({ required: true });
           }
           if (
             type == 'meal_types' &&
-            this.paymentForm.value.program_type == 'Chef Gourmet'
+            this.inquiryForm.value.program_type == 'Chef Gourmet'
           ) {
             if (formArray.length < 2) {
-              this.paymentForm.get(type)?.setErrors({ required: true });
+              this.inquiryForm.get(type)?.setErrors({ required: false });
+              // this.inquiryForm.get(type)?.setErrors({ required: true });
             }
           }
         }
@@ -264,14 +281,14 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
   isCustom: Boolean = true;
 
   valueChanges() {
-    this.valueChangesSubscription1 = this.paymentForm
+    this.valueChangesSubscription1 = this.inquiryForm
       .get('program_type')
       ?.valueChanges.subscribe((value) => {
         if (value) {
           this.handleProgramTypeChange(value);
         }
       });
-    this.valueChangesSubscription2 = this.paymentForm
+    this.valueChangesSubscription2 = this.inquiryForm
       .get('program')
       ?.valueChanges.subscribe((value) => {
         if (value) {
@@ -279,7 +296,7 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.valueChangesSubscription4 = this.paymentForm
+    this.valueChangesSubscription4 = this.inquiryForm
       .get('only_snack')
       ?.valueChanges.subscribe((value) => {
         if (value) {
@@ -289,19 +306,23 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
             }
           });
           if (value == 'yes') {
-            this.paymentForm.removeControl('meal_types');
-            this.paymentForm.get('meal_types')?.setErrors(null);
-            this.paymentForm.removeControl('snack_types');
-            this.paymentForm.addControl('snack_types', new FormArray([]));
-            this.paymentForm.get('snack_types')?.setErrors({ required: true });
+            this.inquiryForm.removeControl('meal_types');
+            this.inquiryForm.get('meal_types')?.setErrors(null);
+            this.inquiryForm.removeControl('snack_types');
+            // this.inquiryForm.addControl('snack_types', new FormArray([]));
+            this.inquiryForm.addControl('snack_types', new FormControl(null));
+            this.inquiryForm.get('snack_types')?.setErrors({ required: true });
           } else {
-            this.paymentForm.addControl(
+            this.inquiryForm.addControl(
+              // 'meal_types',
+              // new FormArray([], [Validators.required])
               'meal_types',
-              new FormArray([], [Validators.required])
+              new FormControl(null)
             );
-            this.paymentForm.removeControl('snack_types');
-            this.paymentForm.addControl('snack_types', new FormArray([]));
-            this.paymentForm.get('snack_types')?.setErrors(null);
+            this.inquiryForm.removeControl('snack_types');
+            // this.inquiryForm.addControl('snack_types', new FormArray([]));
+            this.inquiryForm.addControl('snack_types', new FormControl(null));
+            this.inquiryForm.get('snack_types')?.setErrors(null);
           }
         }
       });
@@ -336,19 +357,19 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
         value.details.min_days,
         value.details.max_days
       );
-      this.paymentForm.patchValue({
+      this.inquiryForm.patchValue({
         program_id: value.program_id,
         plan_id: value.id,
       });
     } else {
-      this.paymentForm.patchValue({ program_id: value.id });
+      this.inquiryForm.patchValue({ program_id: value.id });
       this.mealTypes = this.getSelectedMealTypes(value.max_meals, 'Meal');
       this.snackTypes = this.getSelectedMealTypes(value.no_snacks, 'Snack');
     }
   }
 
   resetFormFields() {
-    this.paymentForm.patchValue({
+    this.inquiryForm.patchValue({
       program: null,
       program_id: null,
       plan_id: null,
@@ -358,11 +379,11 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
 
   handelPlanId() {
     if (this.isCustom) {
-      this.paymentForm.get('plan_id')?.setValidators([Validators.required]);
+      this.inquiryForm.get('plan_id')?.setValidators([Validators.required]);
     } else {
-      this.paymentForm.patchValue({ plan_id: null });
-      this.paymentForm.get('plan_id')?.clearValidators();
-      this.paymentForm
+      this.inquiryForm.patchValue({ plan_id: null });
+      this.inquiryForm.get('plan_id')?.clearValidators();
+      this.inquiryForm
         .get('plan_id')
         ?.updateValueAndValidity({ emitEvent: false });
     }
@@ -371,13 +392,18 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
   handelMealTypes() {
     this.mealTypes = [];
     this.snackTypes = [];
-    this.paymentForm.removeControl('meal_types');
-    this.paymentForm.addControl(
+    this.inquiryForm.removeControl('meal_types');
+    // this.inquiryForm.addControl(
+    //   'meal_types',
+    //   new FormArray([], [Validators.required])
+    // );
+    this.inquiryForm.addControl(
       'meal_types',
-      new FormArray([], [Validators.required])
+      new FormControl(null)
     );
-    this.paymentForm.removeControl('snack_types');
-    this.paymentForm.addControl('snack_types', new FormArray([]));
+    this.inquiryForm.removeControl('snack_types');
+    // this.inquiryForm.addControl('snack_types', new FormArray([]));
+    this.inquiryForm.addControl('snack_types', new FormControl(null));
     this.checkboxElements.forEach((checkbox: Checkbox) => {
       if (checkbox.name == 'group1') {
         checkbox.writeValue(false);
@@ -385,15 +411,15 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
     });
   }
 
-  convertDates(DeliveryDates:string[]){
-    const resultArray = DeliveryDates.map(dateString => {
+  convertDates(DeliveryDates: string[]) {
+    const resultArray = DeliveryDates.map((dateString) => {
       const dateObject = new Date(dateString);
-      const dayOfWeek = dateObject.toLocaleDateString('en-US', { weekday: 'long' });
-    
+      const dayOfWeek = dateObject.toLocaleDateString('en-US', {
+        weekday: 'long',
+      });
+
       return { date: dateString, day: dayOfWeek };
     });
-    return resultArray
+    return resultArray;
   }
 }
-
-

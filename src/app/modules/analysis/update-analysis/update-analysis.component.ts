@@ -83,6 +83,9 @@ export class UpdateAnalysisComponent implements OnInit, OnDestroy {
             .split('.')[0],
         });
       }
+      this.analysisForm.patchValue({
+        notes:this.currentRow.notes +"\n"+ form.value.notes,
+      });
       this._AnalysisService.updateAnalytics(form.value).subscribe({
         next: (res) => {
           if (res.status == 1) {
