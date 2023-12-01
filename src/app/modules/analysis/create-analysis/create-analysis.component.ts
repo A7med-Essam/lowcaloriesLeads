@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-create-analysis',
@@ -25,12 +26,17 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
   reminderModal: boolean = false;
   constructor(
     private _AnalysisService: AnalysisService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _LocalService: LocalService
   ) {}
 
+  current_user: any;
   ngOnInit(): void {
     this.createAnalysisForm();
     this.getFormAnalytics();
+    this.current_user = this._LocalService.getJsonValue(
+      'userInfo_oldLowCalories'
+    );
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -71,9 +77,16 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
       if (form.value.reminder_date) {
         this.analysisForm.patchValue({
           // reminder_date: new Date(form.value.reminder_date).toLocaleDateString('en-CA'),
-          reminder_date: new Date(form.value.reminder_date).toISOString().replace("T", " ").replace("Z", "").split(".")[0]
+          reminder_date: new Date(form.value.reminder_date)
+            .toISOString()
+            .replace('T', ' ')
+            .replace('Z', '')
+            .split('.')[0],
         });
       }
+      this.analysisForm.patchValue({
+        notes: `${this.current_user.name} => ${form.value.notes}`,
+      });
       this._AnalysisService.createAnalytics(form.value).subscribe({
         next: (res) => {
           if (res.status == 1) {

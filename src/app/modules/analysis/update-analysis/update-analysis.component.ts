@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-update-analysis',
@@ -27,17 +28,21 @@ export class UpdateAnalysisComponent implements OnInit, OnDestroy {
   constructor(
     private _AnalysisService: AnalysisService,
     private _MessageService: MessageService,
-    private _Router: Router
+    private _Router: Router,
+    private _LocalService:LocalService
   ) {}
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
+  current_user: any;
   ngOnInit(): void {
     this.setAnalysisUpdateForm();
     this.getFormAnalytics();
+    this.current_user = this._LocalService.getJsonValue(
+      'userInfo_oldLowCalories'
+    );
   }
 
   setAnalysisUpdateForm() {
@@ -84,7 +89,7 @@ export class UpdateAnalysisComponent implements OnInit, OnDestroy {
         });
       }
       this.analysisForm.patchValue({
-        notes:this.currentRow.notes +"\n"+ form.value.notes,
+        notes:`${this.currentRow.notes} , ${this.current_user.name} => ${form.value.notes}`
       });
       this._AnalysisService.updateAnalytics(form.value).subscribe({
         next: (res) => {

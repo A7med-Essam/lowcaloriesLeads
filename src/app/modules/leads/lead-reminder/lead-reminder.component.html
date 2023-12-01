@@ -116,7 +116,7 @@
                                 <td width="200">Notes</td>
                                 <td>{{ currentRow?.notes }}</td>
                             </tr>
-                            <tr *ngIf="currentRow?.agent.id == current_user.id || current_user.role_name === 'super_admin' else elseBlock">
+                            <tr *ngIf="currentRow?.agent.id == current_user.id || current_user.role_name === 'super_admin'  else elseBlock">
                                 <td style="vertical-align:middle">Update</td>
                                 <td>
                                     <button (click)="updateRow(currentRow)" pButton type="button" icon="pi pi-pencil"  class="m-1 p-button-sm p-button-warning"></button>
@@ -127,7 +127,7 @@
                                     <td style="vertical-align:middle">Update Notes</td>
                                     <td>
                                         <textarea pInputTextarea ngClass="w-100" [(ngModel)]="updatedNote"></textarea>
-                                        <button (click)="updateRow(currentRow)" pButton type="button" label="Update"  class="m-1 p-button-sm p-button-warning"></button>
+                                        <button (click)="updateNote(currentRow)" pButton type="button" label="Update"  class="m-1 p-button-sm p-button-warning"></button>
                                     </td>
                                 </tr>
                             </ng-template>

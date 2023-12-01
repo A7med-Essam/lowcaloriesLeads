@@ -31,6 +31,7 @@ export class LeadReminderComponent implements OnInit {
             new Date(data.reminder_date).toLocaleDateString() ==
             new Date().toLocaleDateString()
           ) {
+            this.reminder = [];
             this.reminder.push(data);
           }
         });
@@ -67,9 +68,12 @@ export class LeadReminderComponent implements OnInit {
   }
 
   updateNote(row: any) {
-    row.note = this.updateNote;
+    row.notes = `${row.notes} , ${this.current_user.name} => ${this.updatedNote}`;
+    row.dataRequest_id = row.id;
     this._AnalysisService.updateAnalytics(row).subscribe((res) => {
       this.allReminder();
+      this.detailsModal = false;
+      this.updatedNote = '';
     });
   }
 
