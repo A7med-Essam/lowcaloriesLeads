@@ -22,6 +22,7 @@ export class UpdateUsersComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   agent: any;
   permissions: any;
+  teams: any[] = [];
   updateForm!: FormGroup;
 
   constructor(
@@ -40,9 +41,11 @@ export class UpdateUsersComponent implements OnInit, OnDestroy {
         } else {
           this.agent = res;
           this.getPermissions();
+          this.getTeams();
           this.updateForm.patchValue({
             email: this.agent.email,
             name: this.agent.name,
+            team: this.agent.team,
             agent_id:this.agent.id
           });
         }
@@ -64,6 +67,7 @@ export class UpdateUsersComponent implements OnInit, OnDestroy {
       agent_id: new FormControl(null),
       email: new FormControl({ value: null, disabled: true }),
       name: new FormControl({ value: null, disabled: true }),
+      team: new FormControl({ value: null }),
       permissions: new FormArray([], [Validators.required]),
     });
   }
@@ -133,5 +137,11 @@ export class UpdateUsersComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  getTeams() {
+    this._UsersService.getTeams().subscribe((res) => {
+      this.teams = res.data;
+    });
   }
 }

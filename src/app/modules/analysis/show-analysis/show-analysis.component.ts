@@ -50,6 +50,7 @@ export class ShowAnalysisComponent implements OnInit {
   updatePermission: boolean = false;
   deletePermission: boolean = false;
   downloadSamplePermission: boolean = false;
+  superAdminPermission: boolean = false;
 
   getPermission() {
     this.exportPermission =
@@ -62,6 +63,9 @@ export class ShowAnalysisComponent implements OnInit {
       this._GuardService.getPermissionStatus('delete_analysis');
     this.downloadSamplePermission = this._GuardService.getPermissionStatus(
       'downloadSample_analysis'
+    );
+    this.superAdminPermission = this._GuardService.getPermissionStatus(
+      'superadmin_analysis'
     );
   }
 
@@ -224,6 +228,7 @@ export class ShowAnalysisComponent implements OnInit {
       ask_for: new FormControl(null),
       ask_for_options: new FormControl(null),
       actions: new FormControl(null),
+      team: new FormControl(null),
     });
     this.valueChanges();
   }

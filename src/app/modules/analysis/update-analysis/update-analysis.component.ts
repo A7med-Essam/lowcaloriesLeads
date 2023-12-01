@@ -237,7 +237,7 @@ export class UpdateAnalysisComponent implements OnInit, OnDestroy {
       mobile: value.mobile,
       customer_name: value.customer_name,
       customer_gender: value.customer_gender,
-      emirate_id: value.emirate.id,
+      emirate_id: value?.emirate?.id,
       platform: value.platform,
       platform_option: value.platform_option,
       customer_status: value.customer_status,

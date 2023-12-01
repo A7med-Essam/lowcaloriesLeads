@@ -46,4 +46,7 @@ export class UsersService {
     return this._ApiConfigService.postReq3("deleteRoles", {role_id});
   }
 
+  getTeams(): Observable<any> {
+    return this._ApiConfigService.postReq3("getAgentTeams", "");
+  }
 }

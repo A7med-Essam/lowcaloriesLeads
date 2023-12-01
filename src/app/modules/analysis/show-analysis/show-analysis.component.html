@@ -54,7 +54,13 @@
     <div class="container">
         <form [formGroup]="filterForm" #myForm="ngForm">
             <div class="row mx-0">
-                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
+                    <label for="">Team</label>
+                    <p-dropdown [options]="analyticOptions?.teams" formControlName="team" placeholder="Select Team"
+                        styleClass="w-100" appendTo="body">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
                     <label for="">Agent</label>
                     <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
                         styleClass="w-100" appendTo="body" optionLabel="label" optionValue="value" [group]="true"
