@@ -14,13 +14,17 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { UpdateAnalysisComponent } from './update-analysis/update-analysis.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ManageAnalysisComponent } from './manage-analysis/manage-analysis.component';
+import { ButtonModule } from 'primeng/button';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 
 @NgModule({
   declarations: [
     CreateAnalysisComponent,
     ShowAnalysisComponent,
-    UpdateAnalysisComponent
+    UpdateAnalysisComponent,
+    ManageAnalysisComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +38,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     TableModule,
     DialogModule,
     FormsModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ButtonModule,
+    BreadcrumbModule
   ]
 })
 export class AnalysisModule { }

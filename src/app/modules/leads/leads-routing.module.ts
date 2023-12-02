@@ -41,7 +41,8 @@ const routes: Routes = [
     component: LeadReminderComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['reminder_leads'],
+      permission: ['show_leads'],
+      // permission: ['reminder_leads'],
     },
   },
   {
