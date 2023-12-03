@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalysisService } from 'src/app/services/analysis.service';
-import { ConfirmationService, MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, SelectItem } from 'primeng/api';
 
 @Component({
   selector: 'app-manage-analysis',
@@ -13,6 +13,7 @@ export class ManageAnalysisComponent implements OnInit {
   createLabelModal: boolean = false;
   selectedText: any[] = [];
   reasons: any[] = [];
+  reasons_clone: any[] = [];
   analytics: any = [];
   analytics_clone: any[] = [];
 
@@ -45,7 +46,7 @@ export class ManageAnalysisComponent implements OnInit {
   getSuggestDataOptions() {
     this._AnalysisService.suggestDataOptions().subscribe({
       next: (res) => {
-        this.reasons = [...new Set(res.data)];
+        this.reasons = this.reasons_clone = [...new Set(res.data)];
       },
     });
   }
@@ -144,5 +145,19 @@ export class ManageAnalysisComponent implements OnInit {
         return a;
       });
     });
+  }
+
+  get itemsAsSelectItems(): SelectItem [] {
+    return this.reasons.map((item) => ({ label: item, value: item } as SelectItem));
+  }
+
+  getCurrentChildren() :string[]{
+    const data = this.analytics.map((a:any)=>a.children.map((a:any)=>a.name));
+    return [].concat(...data)
+  }
+
+  filterSelectedItems(){
+    this.reasons = this.reasons_clone
+    this.reasons = this.reasons.filter((item) => this.getCurrentChildren().includes(item))
   }
 }

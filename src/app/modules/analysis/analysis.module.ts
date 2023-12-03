@@ -20,6 +20,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TreeTableModule } from 'primeng/treetable';
 import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.component';
 import { ShowAnalysis2Component } from './show-analysis2/show-analysis2.component';
+import { UpdateAnalysis2Component } from './update-analysis2/update-analysis2.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { ShowAnalysis2Component } from './show-analysis2/show-analysis2.componen
     UpdateAnalysisComponent,
     ManageAnalysisComponent,
     CreateAnalysis2Component,
-    ShowAnalysis2Component
+    ShowAnalysis2Component,
+    UpdateAnalysis2Component
   ],
   imports: [
     CommonModule,

@@ -4,8 +4,8 @@
             icon="pi pi-plus" routerLink="../createV2"></button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
-        </p-button>
+        <!-- <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
+        </p-button> -->
     </div>
 </div>
 
@@ -32,8 +32,8 @@
                 <td class="text-center">{{analysis?.customer_name}}</td>
                 <td class="text-center">{{analysis?.customer_gender}}</td>
                 <td class="text-center">
-                    <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
-                        (click)="updateRow(analysis)" class="m-1 p-button-sm p-button-warning"></button>
+                    <!-- <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
+                        (click)="updateRow(analysis)" class="m-1 p-button-sm p-button-warning"></button> -->
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
                         class="m-1 p-button-sm"></button>
                     <button pButton type="button" icon="pi pi-trash" [disabled]="!deletePermission"
@@ -61,6 +61,10 @@
                     <p-dropdown [options]="cids" formControlName='cid' appendTo="body" (onChange)="getCustomerInfo($event)"
                         styleClass="w-100" placeholder="Select CID" optionLabel="cid" optionValue="cid">
                     </p-dropdown>
+                </div>
+                <div class="col-md-4 col-12 my-1" *ngIf="cids.length == 0">
+                    <label for="">Customer cid</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='cid' />
                 </div>
                 <div class="col-md-4 col-12 my-1">
                     <label for="">Customer Name</label>
@@ -127,6 +131,48 @@
             <div class="table-responsive overflow-auto">
                 <table class="table">
                     <tbody>
+                        <tr>
+                            <td [width]="200">
+                                Date
+                            </td>
+                            <td>{{ currentRow?.date }}</td>
+                        </tr>
+                        <tr>
+                            <td [width]="200">
+                                Agent
+                            </td>
+                            <td>{{ currentRow?.agent?.name }}</td>
+                        </tr>
+                        <tr>
+                            <td [width]="200">
+                                Customer Mobile
+                            </td>
+                            <td>{{ currentRow?.mobile }}</td>
+                        </tr>
+                        <tr>
+                            <td [width]="200">
+                                Customer cid
+                            </td>
+                            <td>{{ currentRow?.cid }}</td>
+                        </tr>
+                        <tr>
+                            <td [width]="200">
+                                Customer Branch
+                            </td>
+                            <td>{{ currentRow?.customer_branch }}</td>
+                        </tr>
+                        <tr>
+                            <td [width]="200">
+                                Customer Name
+                            </td>
+                            <td>{{ currentRow?.customer_name }}</td>
+                        </tr>
+                        <tr>
+                            <td [width]="200">
+                                Gender
+                            </td>
+                            <td>{{ currentRow?.customer_gender }}</td>
+                        </tr>
                         <tr *ngFor="let item of currentRow?.data_options">
                             <td [width]="200">
                                 {{ item.label }}

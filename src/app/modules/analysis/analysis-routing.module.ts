@@ -7,6 +7,7 @@ import { ManageAnalysisComponent } from './manage-analysis/manage-analysis.compo
 import { ShowAnalysisComponent } from './show-analysis/show-analysis.component';
 import { ShowAnalysis2Component } from './show-analysis2/show-analysis2.component';
 import { UpdateAnalysisComponent } from './update-analysis/update-analysis.component';
+import { UpdateAnalysis2Component } from './update-analysis2/update-analysis2.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'show', pathMatch: 'full' },
@@ -50,14 +51,14 @@ const routes: Routes = [
       permission: ['update_analysis'],
     },
   },
-  {
-    path: 'updateV2',
-    component: UpdateAnalysisComponent,
-    canActivate: [PermissionGuard],
-    data: {
-      permission: ['update_analysis'],
-    },
-  },
+  // {
+  //   path: 'updateV2',
+  //   component: UpdateAnalysis2Component,
+  //   canActivate: [PermissionGuard],
+  //   data: {
+  //     permission: ['update_analysis'],
+  //   },
+  // },
   {
     path: 'manage',
     component: ManageAnalysisComponent,

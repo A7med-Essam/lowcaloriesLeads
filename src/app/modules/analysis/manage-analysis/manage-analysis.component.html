@@ -4,7 +4,7 @@
     </div>
     <div class="m-3">
         <button pButton pRipple label="Create" class="p-button-success mx-1" icon="pi pi-plus"
-            (click)="createModal = true"></button>
+            (click)="createModal = true; filterSelectedItems()"></button>
         <button pButton pRipple label="Update Label" class="p-button-secondary mx-1" icon="pi pi-plus"
             (click)="createLabelModal = true"></button>
     </div>
@@ -43,7 +43,7 @@
     <div class="row mx-0">
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
-            <p-multiSelect [options]="reasons" appendTo="body" defaultLabel="Select Analytics" styleClass="w-100"
+            <p-multiSelect [options]="itemsAsSelectItems" appendTo="body" defaultLabel="Select Analytics" styleClass="w-100"
                 [(ngModel)]="selectedText" display="chip" [filter]="true">
                 <p-header class="w-100 mb-3">
                     <div class="row w-100">

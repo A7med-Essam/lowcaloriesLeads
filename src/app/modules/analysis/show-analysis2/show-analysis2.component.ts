@@ -268,6 +268,8 @@ export class ShowAnalysis2Component implements OnInit {
       this._RefundService.getCIDs(e.value).subscribe((res) => {
         this.cids = res;
       });
+    }else{
+      this.cids = [];
     }
   }
 
