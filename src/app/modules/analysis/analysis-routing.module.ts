@@ -5,6 +5,7 @@ import { CreateAnalysisComponent } from './create-analysis/create-analysis.compo
 import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.component';
 import { ManageAnalysisComponent } from './manage-analysis/manage-analysis.component';
 import { ShowAnalysisComponent } from './show-analysis/show-analysis.component';
+import { ShowAnalysis2Component } from './show-analysis2/show-analysis2.component';
 import { UpdateAnalysisComponent } from './update-analysis/update-analysis.component';
 
 const routes: Routes = [
@@ -35,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: 'showV2',
-    component: ShowAnalysisComponent,
+    component: ShowAnalysis2Component,
     canActivate: [PermissionGuard],
     data: {
       permission: ['show_analysis'],

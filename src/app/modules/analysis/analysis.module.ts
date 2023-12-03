@@ -17,7 +17,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageAnalysisComponent } from './manage-analysis/manage-analysis.component';
 import { ButtonModule } from 'primeng/button';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { TreeTableModule } from 'primeng/treetable';
 import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.component';
+import { ShowAnalysis2Component } from './show-analysis2/show-analysis2.component';
 
 
 @NgModule({
@@ -26,7 +28,8 @@ import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.co
     ShowAnalysisComponent,
     UpdateAnalysisComponent,
     ManageAnalysisComponent,
-    CreateAnalysis2Component
+    CreateAnalysis2Component,
+    ShowAnalysis2Component
   ],
   imports: [
     CommonModule,
@@ -42,7 +45,8 @@ import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.co
     FormsModule,
     ConfirmDialogModule,
     ButtonModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    TreeTableModule
   ]
 })
 export class AnalysisModule { }

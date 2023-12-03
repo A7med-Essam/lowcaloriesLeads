@@ -1,16 +1,12 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="m-3">
-        <button [disabled]="!createPermission" pButton pRipple label="Create V2" class="p-button-success mx-1"
-            icon="pi pi-plus" routerLink="../createV2"></button>
-
-            <button [disabled]="!createPermission" pButton pRipple label="Create" class="p-button-success mx-1"
+        <button [disabled]="!createPermission" pButton pRipple label="Create" class="p-button-success mx-1"
             icon="pi pi-plus" routerLink="../create"></button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
         <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
         </p-button>
-        <p-button [disabled]="!downloadSamplePermission" (click)="displayUploadModal()" class="mb-3 mx-1" icon="pi pi-external-link"
-        label="Upload"></p-button>
+
     </div>
 </div>
 

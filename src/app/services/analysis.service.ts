@@ -9,6 +9,7 @@ export class AnalysisService {
   constructor(private _ApiConfigService: ApiConfigService) {}
   filter: BehaviorSubject<any> = new BehaviorSubject(null);
   analysis: BehaviorSubject<any> = new BehaviorSubject(null);
+  analysisV2: BehaviorSubject<any> = new BehaviorSubject(null);
 
   getAnalytics(page: number): Observable<any> {
     return this._ApiConfigService.postReq3(
@@ -106,9 +107,28 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`suggestDataOptions`, '');
   }
 
+  addLabelForDataOption(data: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`addLabelForDataOption`, data);
+  }
+
   // ================================================V2=================================================
 
   createAnalytics2(data: any): Observable<any> {
     return this._ApiConfigService.postReq3(`addDataRequestV2`, data);
+  }
+
+  getAnalytics2(page: number): Observable<any> {
+    return this._ApiConfigService.postReq3(
+      `dataAnalyticRequests?page=${page}`,
+      { version: 'v2' }
+    );
+  }
+
+  filterAnalyticsV2(page: number, filter: any) {
+    filter.version = 'v2';
+    return this._ApiConfigService.postReq3(
+      `dataAnalyticRequests?page=${page}`,
+      filter
+    );
   }
 }

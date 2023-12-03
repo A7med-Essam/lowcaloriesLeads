@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { AnalysisService } from 'src/app/services/analysis.service';
@@ -28,7 +29,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
   constructor(
     private _AnalysisService: AnalysisService,
     private _RefundService: RefundService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _MessageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -40,11 +42,19 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     if (e.value != '') {
       this._RefundService.getCIDs(e.value).subscribe((res) => {
         this.cids = res;
-        // if (res.length == 0) {
-        //   this.analysisForm.patchValue({
-        //     customer_status: 'New Customer',
-        //   });
-        // }
+        if (res.length == 0) {
+          const data = { value: this.filterCustomerStatus('New Customer').name };
+          this.storeSelectedOptions(data, 0);
+          this.analysisForm.patchValue({
+            customer_status: this.filterCustomerStatus('New Customer').name
+          });
+          this.analysisForm.controls.customer_status.disable();
+          this.analysisForm.controls.customer_name.enable();
+          this.analysisForm.controls.customer_branch.enable();
+        }else{
+          this.analysisForm.controls.customer_name.disable();
+          this.analysisForm.controls.customer_branch.disable();
+        }
       });
     }
   }
@@ -54,19 +64,33 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     this._RefundService.getPlanDetails(selectedCID.cid).subscribe((res) => {
       this.analysisForm.patchValue({
         customer_name: res.customerName,
+        customer_branch: res.deliveryBranch,
       });
     });
-    if (selectedCID.remainingDays > 0) {
-      // this.analysisForm.patchValue({
-      //   customer_status: 'Exist Customer',
-      // });
-      // const data = {value:'Exist Customer'}
-      // this.storeSelectedOptions(data,0);
+    this.setCustomerStatus(selectedCID.remainingDays);
+  }
+
+  setCustomerStatus(remainingDays: number) {
+    if (remainingDays > 0) {
+      const data = { value: this.filterCustomerStatus('Exist Customer').name };
+      this.storeSelectedOptions(data, 0);
+      this.analysisForm.patchValue({
+        customer_status: this.filterCustomerStatus('Exist Customer').name,
+      });
     } else {
-      // this.analysisForm.patchValue({
-      //   customer_status: 'Old Customer',
-      // });
+      const data = { value: this.filterCustomerStatus('Old Customer').name };
+      this.storeSelectedOptions(data, 0);
+      this.analysisForm.patchValue({
+        customer_status: this.filterCustomerStatus('Old Customer').name,
+      });
     }
+    this.analysisForm.controls.customer_status.disable();
+  }
+
+  filterCustomerStatus(status: string) {
+    return this.options[0].filter(
+      (o: any) => o.name.toLowerCase() === status.toLowerCase()
+    )[0];
   }
 
   ngOnDestroy(): void {
@@ -80,7 +104,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       cid: '',
       customer_name: '',
       customer_gender: '',
-      emirate_id: '',
+      customer_branch: '',
+      customer_status: '',
       data_options: '',
     });
   }
@@ -98,9 +123,13 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       this.analysisForm.patchValue({
         data_options: this.buildHierarchy(),
       });
-      this._AnalysisService.createAnalytics2(form.value).subscribe(res=>{
-        console.log(res);
-      })
+      this._AnalysisService.createAnalytics2(form.getRawValue()).subscribe((res) => {
+        this._MessageService.add({
+          severity: 'success',
+          summary: 'Created Successfully',
+          detail: res.message,
+        });
+      });
     }
   }
 
@@ -157,27 +186,34 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         outputArray.push(innerArray[0]);
       }
     });
-    return this.convertHierarchy(outputArray.map((e) => e.name));
-  }
-
-  convertHierarchy(inputArray: string[]) {
-    const hierarchy: any = [];
-
-    let currentNode = { children: hierarchy };
-
-    inputArray.forEach((item) => {
-      const newNode = { name: item, children: [] };
-      currentNode.children.push(newNode);
-      currentNode = newNode;
+    let data: any[] = [];
+    outputArray.map((e) => {
+      return data.push({
+        label: e.label,
+        name: e.name,
+      });
     });
-
-    const data_options = [
-      {
-        name: 'Customer Status',
-        children: hierarchy,
-      },
-    ];
-    return data_options;
+    return data;
+    // return this.convertHierarchy(outputArray.map((e) => e.name));
   }
 
+  // convertHierarchy(inputArray: string[]) {
+  //   const hierarchy: any = [];
+
+  //   let currentNode = { children: hierarchy };
+
+  //   inputArray.forEach((item) => {
+  //     const newNode = { name: item, children: [] };
+  //     currentNode.children.push(newNode);
+  //     currentNode = newNode;
+  //   });
+
+  //   const data_options = [
+  //     {
+  //       name: 'Customer Status',
+  //       children: hierarchy,
+  //     },
+  //   ];
+  //   return data_options;
+  // }
 }

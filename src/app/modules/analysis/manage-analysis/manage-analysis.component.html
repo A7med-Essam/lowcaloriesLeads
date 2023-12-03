@@ -3,7 +3,10 @@
         <h3>Analytics Manager</h3>
     </div>
     <div class="m-3">
-        <button pButton pRipple label="Create" class="p-button-success mx-1" icon="pi pi-plus" (click)="createModal = true"></button>
+        <button pButton pRipple label="Create" class="p-button-success mx-1" icon="pi pi-plus"
+            (click)="createModal = true"></button>
+        <button pButton pRipple label="Update Label" class="p-button-secondary mx-1" icon="pi pi-plus"
+            (click)="createLabelModal = true"></button>
     </div>
 </div>
 
@@ -15,48 +18,61 @@
     <p-table [value]="analytics">
         <ng-template pTemplate="header">
             <tr>
+                <th class="text-center">Label</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-analysis>
             <tr>
+                <td class="text-center">{{analysis?.label}}</td>
                 <td class="text-center">{{analysis?.name}}</td>
                 <td class="text-center">
-                    <button  pButton icon="pi pi-share-alt"
-                        class="m-1 p-button-secondary p-button-sm p-button" (click)="getChildren(analysis)"></button>
+                    <button pButton icon="pi pi-share-alt" class="m-1 p-button-secondary p-button-sm p-button"
+                        (click)="getChildren(analysis)"></button>
                     <button pButton type="button" icon="pi pi-trash" (click)="confirm(analysis)"
                         class="m-1 p-button-danger p-button-sm"></button>
                 </td>
-
             </tr>
         </ng-template>
     </p-table>
 </div>
 
-<p-dialog header="Create Modal" [(visible)]="createModal" [modal]="true"
-    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+<p-dialog header="Create Modal" [(visible)]="createModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
     <div class="row mx-0">
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
             <p-multiSelect [options]="reasons" appendTo="body" defaultLabel="Select Analytics" styleClass="w-100"
-            [(ngModel)]="selectedText" display="chip" [filter]="true">
-            <p-header class="w-100 mb-3">
-                <div class="row w-100">
-                    <div class="col-11">
-                        <input type="text" placeholder="Add another option"
-                            #multieOptionInput pInputText
-                            style="min-height:2em;width: 100%;" />
+                [(ngModel)]="selectedText" display="chip" [filter]="true">
+                <p-header class="w-100 mb-3">
+                    <div class="row w-100">
+                        <div class="col-11">
+                            <input type="text" placeholder="Add another option" #multieOptionInput pInputText
+                                style="min-height:2em;width: 100%;" />
+                        </div>
+                        <div class="col-1">
+                            <p-button (click)="addOption(multieOptionInput)">Add</p-button>
+                        </div>
                     </div>
-                    <div class="col-1">
-                        <p-button (click)="addOption(multieOptionInput)">Add</p-button>
-                    </div>
-                </div>
-            </p-header>
-        </p-multiSelect>
+                </p-header>
+            </p-multiSelect>
         </div>
         <div class="col-12 my-3">
             <button class="btn btn-primary w-100" (click)="create(selectedText)">Create</button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Create Label Modal" [(visible)]="createLabelModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="row mx-0">
+        <div class="col-12 my-3">
+            <label for="">Analytic Label</label>
+            <input type="text" pInputText ngClass="w-100" #label />
+        </div>
+        <div class="col-12 my-3">
+            <button class="btn btn-primary w-100" (click)="createLabel(label.value)">Create Label</button>
         </div>
     </div>
 </p-dialog>

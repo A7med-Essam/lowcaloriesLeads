@@ -10,6 +10,7 @@ import { ConfirmationService, MenuItem } from 'primeng/api';
 export class ManageAnalysisComponent implements OnInit {
   items: MenuItem[] = [];
   createModal: boolean = false;
+  createLabelModal: boolean = false;
   selectedText: any[] = [];
   reasons: any[] = [];
   analytics: any = [];
@@ -93,6 +94,7 @@ export class ManageAnalysisComponent implements OnInit {
       parent_id: this.items.length
         ? this.items[this.items.length - 1].id
         : null,
+      label:this.analytics[0]?.label || "0"
     };
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
       this.createModal = false;
@@ -129,6 +131,18 @@ export class ManageAnalysisComponent implements OnInit {
       accept: () => {
         this.deleteRow(row);
       },
+    });
+  }
+
+  createLabel(label: string) {
+    const ids = this.analytics.map((a: any) => a.id);
+    const data = { ids, label };
+    this._AnalysisService.addLabelForDataOption(data).subscribe((res) => {
+      this.createLabelModal = false;
+      this.analytics = this.analytics.map((a: any) => {
+        a.label = label;
+        return a;
+      });
     });
   }
 }
