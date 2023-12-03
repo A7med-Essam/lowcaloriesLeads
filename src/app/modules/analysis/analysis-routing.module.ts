@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PermissionGuard } from 'src/app/core/permission.guard';
 import { CreateAnalysisComponent } from './create-analysis/create-analysis.component';
+import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.component';
 import { ManageAnalysisComponent } from './manage-analysis/manage-analysis.component';
 import { ShowAnalysisComponent } from './show-analysis/show-analysis.component';
 import { UpdateAnalysisComponent } from './update-analysis/update-analysis.component';
@@ -17,6 +18,14 @@ const routes: Routes = [
     },
   },
   {
+    path: 'createV2',
+    component: CreateAnalysis2Component,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['create_analysis'],
+    },
+  },
+  {
     path: 'show',
     component: ShowAnalysisComponent,
     canActivate: [PermissionGuard],
@@ -25,7 +34,23 @@ const routes: Routes = [
     },
   },
   {
+    path: 'showV2',
+    component: ShowAnalysisComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_analysis'],
+    },
+  },
+  {
     path: 'update',
+    component: UpdateAnalysisComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['update_analysis'],
+    },
+  },
+  {
+    path: 'updateV2',
     component: UpdateAnalysisComponent,
     canActivate: [PermissionGuard],
     data: {

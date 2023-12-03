@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalysisService } from 'src/app/services/analysis.service';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-manage-analysis',
@@ -15,7 +15,10 @@ export class ManageAnalysisComponent implements OnInit {
   analytics: any = [];
   analytics_clone: any[] = [];
 
-  constructor(private _AnalysisService: AnalysisService) {}
+  constructor(
+    private _AnalysisService: AnalysisService,
+    private _ConfirmationService: ConfirmationService
+  ) {}
 
   ngOnInit(): void {
     this.getAnalytics();
@@ -118,5 +121,14 @@ export class ManageAnalysisComponent implements OnInit {
       this.selectedText.push(el.value);
       el.value = '';
     }
+  }
+
+  confirm(row: any) {
+    this._ConfirmationService.confirm({
+      message: 'Are you sure that you want to perform this action?',
+      accept: () => {
+        this.deleteRow(row);
+      },
+    });
   }
 }

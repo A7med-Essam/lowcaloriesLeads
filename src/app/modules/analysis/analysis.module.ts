@@ -17,6 +17,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageAnalysisComponent } from './manage-analysis/manage-analysis.component';
 import { ButtonModule } from 'primeng/button';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
     CreateAnalysisComponent,
     ShowAnalysisComponent,
     UpdateAnalysisComponent,
-    ManageAnalysisComponent
+    ManageAnalysisComponent,
+    CreateAnalysis2Component
   ],
   imports: [
     CommonModule,

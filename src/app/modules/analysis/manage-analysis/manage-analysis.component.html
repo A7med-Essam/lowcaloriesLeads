@@ -25,7 +25,7 @@
                 <td class="text-center">
                     <button  pButton icon="pi pi-share-alt"
                         class="m-1 p-button-secondary p-button-sm p-button" (click)="getChildren(analysis)"></button>
-                    <button pButton type="button" icon="pi pi-trash" (click)="deleteRow(analysis)"
+                    <button pButton type="button" icon="pi pi-trash" (click)="confirm(analysis)"
                         class="m-1 p-button-danger p-button-sm"></button>
                 </td>
 
@@ -60,3 +60,6 @@
         </div>
     </div>
 </p-dialog>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

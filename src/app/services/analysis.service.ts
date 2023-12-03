@@ -82,24 +82,33 @@ export class AnalysisService {
 
   // =================================================================================================
 
-  
   getDataAnalyticOption(): Observable<any> {
     return this._ApiConfigService.postReq3(`getDataAnalyticOption`, '');
   }
-  
-  addNewDataAnalyticOption(data:any): Observable<any> {
+
+  addNewDataAnalyticOption(data: any): Observable<any> {
     return this._ApiConfigService.postReq3(`addNewDataAnalyticOption`, data);
   }
-  
-  deleteDataAnalyticOption(data_analytic_option_id:number): Observable<any> {
-    return this._ApiConfigService.postReq3(`deleteDataAnalyticOption`, {data_analytic_option_id});
+
+  deleteDataAnalyticOption(data_analytic_option_id: number): Observable<any> {
+    return this._ApiConfigService.postReq3(`deleteDataAnalyticOption`, {
+      data_analytic_option_id,
+    });
   }
 
-  showDataAnalyticOption(data_analytic_option_id:number): Observable<any> {
-    return this._ApiConfigService.postReq3(`showDataAnalyticOption`, {data_analytic_option_id});
+  showDataAnalyticOption(data_analytic_option_id: number): Observable<any> {
+    return this._ApiConfigService.postReq3(`showDataAnalyticOption`, {
+      data_analytic_option_id,
+    });
   }
 
   suggestDataOptions(): Observable<any> {
     return this._ApiConfigService.postReq3(`suggestDataOptions`, '');
+  }
+
+  // ================================================V2=================================================
+
+  createAnalytics2(data: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`addDataRequestV2`, data);
   }
 }
