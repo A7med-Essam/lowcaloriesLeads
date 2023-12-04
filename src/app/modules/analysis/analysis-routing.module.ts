@@ -51,14 +51,14 @@ const routes: Routes = [
       permission: ['update_analysis'],
     },
   },
-  // {
-  //   path: 'updateV2',
-  //   component: UpdateAnalysis2Component,
-  //   canActivate: [PermissionGuard],
-  //   data: {
-  //     permission: ['update_analysis'],
-  //   },
-  // },
+  {
+    path: 'updateV2',
+    component: UpdateAnalysis2Component,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['update_analysis'],
+    },
+  },
   {
     path: 'manage',
     component: ManageAnalysisComponent,

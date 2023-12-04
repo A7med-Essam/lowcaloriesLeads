@@ -33,11 +33,11 @@
                 <td class="text-center">{{analysis?.customer_name}}</td>
                 <td class="text-center">{{analysis?.customer_gender}}</td>
                 <td class="text-center">
-                    <p-tag *ngIf="analysis?.reminders_count" severity="success" value="Has Reminder"></p-tag>
+                    <p-tag *ngIf="analysis?.reminders_count" severity="success" [value]="analysis?.reminders_count+' Reminder'"></p-tag>
                 </td>
                 <td class="text-center">
-                    <!-- <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
-                        (click)="updateRow(analysis)" class="m-1 p-button-sm p-button-warning"></button> -->
+                    <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
+                        (click)="updateRow(analysis)" class="m-1 p-button-sm p-button-warning"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
                         class="m-1 p-button-sm"></button>
                     <button pButton type="button" icon="pi pi-trash" [disabled]="!deletePermission"
@@ -107,7 +107,7 @@
                 <ng-container *ngIf="options.length">
                     <ng-container *ngFor="let option of options; let i = index">
                         <div class="col-md-4 col-12 my-1">
-                            <label for="">{{option[0].label}}</label>
+                            <label for="">{{option[0]?.label}}</label>
                             <p-dropdown [options]="option" appendTo="body" (onChange)="storeSelectedOptions($event,i)"
                                 styleClass="w-100" optionValue="name" optionLabel="name" placeholder="Select Option">
                             </p-dropdown>

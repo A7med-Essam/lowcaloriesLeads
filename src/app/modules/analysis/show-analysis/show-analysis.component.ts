@@ -178,7 +178,8 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
     if (this.exportPermission) {
       let exportObservable;
       if (this.appliedFilters) {
-        const ids = this.analytics.map((obj: any) => obj.id);
+        // const ids = this.analytics.map((obj: any) => obj.id);
+        const ids = this.allFilteredAnalytics.map((obj: any) => obj.id);
         exportObservable = this._AnalysisService.exportByIds(ids);
       } else {
         exportObservable = this._AnalysisService.exportAll();
@@ -259,7 +260,12 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
       this.PaginationInfo = res.data;
       this.filterModal = false;
     });
+    this._AnalysisService.filterAnalyticsWithoutPagination(1, form.value).subscribe((res) => {
+      this.allFilteredAnalytics = res.data;
+    });
   }
+
+  allFilteredAnalytics:any[] = [];
 
   getOldFilters(page: number) {
     this._AnalysisService
@@ -268,6 +274,10 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
         this.analytics = res.data.data;
         this.PaginationInfo = res.data;
         this.filterModal = false;
+      });
+
+      this._AnalysisService.filterAnalyticsWithoutPagination(1, this.appliedFilters).subscribe((res) => {
+        this.allFilteredAnalytics = res.data;
       });
   }
 

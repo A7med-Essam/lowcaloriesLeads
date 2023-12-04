@@ -3,12 +3,12 @@
         <h2>Update Analytics</h2>
     </div>
     <hr>
-    <form [formGroup]="analysisForm" (ngSubmit)='create(analysisForm)'>
+    <form [formGroup]="analysisForm" (ngSubmit)='update(analysisForm)'>
         <div class="row mx-0">
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Phone Number <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='mobile' maxlength="10"
-                    (blur)="getCustomerCID(Phone_Input)" #Phone_Input
+                    (blur)="getCustomerCID(Phone_Input.value)" #Phone_Input
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('mobile')?.hasError('required')">This field is required.</small>
@@ -39,7 +39,7 @@
             <ng-container *ngIf="options.length">
                 <ng-container>
                     <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                        <label for="">{{options[0][0].label}}</label>
+                        <label for="">{{options[0][0]?.label}}</label>
                         <p-dropdown [options]="options[0]" appendTo="body" (onChange)="storeSelectedOptions($event,0)"
                             formControlName='customer_status' styleClass="w-100" optionValue="name" optionLabel="name"
                             placeholder="Select Option">
@@ -48,7 +48,7 @@
                 </ng-container>
                 <ng-container *ngFor="let option of options; let i = index">
                     <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="i != 0">
-                        <label for="">{{option[0].label}}</label>
+                        <label for="">{{option[0]?.label}}</label>
                         <p-dropdown [options]="option" appendTo="body" (onChange)="storeSelectedOptions($event,i)"
                             styleClass="w-100" optionValue="name" optionLabel="name" placeholder="Select Option">
                         </p-dropdown>

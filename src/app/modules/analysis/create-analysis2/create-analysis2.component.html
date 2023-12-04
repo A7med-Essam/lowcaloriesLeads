@@ -46,7 +46,7 @@
             <ng-container *ngIf="options.length">
                 <ng-container>
                     <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                        <label for="">{{options[0][0].label}}</label>
+                        <label for="">{{options[0][0]?.label}}</label>
                         <p-dropdown [options]="options[0]" appendTo="body" (onChange)="storeSelectedOptions($event,0)"
                             formControlName='customer_status' styleClass="w-100" optionValue="name" optionLabel="name"
                             placeholder="Select Option">
@@ -55,7 +55,7 @@
                 </ng-container>
                 <ng-container *ngFor="let option of options; let i = index">
                     <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="i != 0">
-                        <label for="">{{option[0].label}}</label>
+                        <label for="">{{option[0]?.label}}</label>
                         <p-dropdown [options]="option" appendTo="body" (onChange)="storeSelectedOptions($event,i)"
                             styleClass="w-100" optionValue="name" optionLabel="name" placeholder="Select Option">
                         </p-dropdown>

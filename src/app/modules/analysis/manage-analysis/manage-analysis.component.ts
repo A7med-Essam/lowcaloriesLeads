@@ -95,7 +95,7 @@ export class ManageAnalysisComponent implements OnInit {
       parent_id: this.items.length
         ? this.items[this.items.length - 1].id
         : null,
-      label: this.analytics.length ? this.analytics[0].label : '0',
+      label: this.analytics&&this.analytics.length ? this.analytics[0].label : '0',
     };
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
       this.getSuggestDataOptions();

@@ -50,21 +50,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       this._RefundService.getCIDs(e.value).subscribe((res) => {
         this.cids = res;
         if (res.length == 0) {
-          const data = {
-            value: this.filterCustomerStatus('New Customer').name,
-          };
-          this.storeSelectedOptions(data, 0);
-          this.analysisForm.patchValue({
-            customer_status: this.filterCustomerStatus('New Customer').name,
-          });
-          this.analysisForm.controls.customer_status.disable();
-          this.analysisForm.controls.customer_name.enable();
-          this.analysisForm.controls.customer_branch.enable();
-          this.analysisForm.addControl('emirate_id', this.fb.control(''));
-          this.analysisForm.get('emirate_id')?.enable();
-          if (this.analysisForm.contains('customer_branch')) {
-            this.analysisForm.get('customer_branch')?.disable();
-          }
+       
+          this.checkCustomerExsist(e.value);
         } else {
           this.analysisForm.controls.customer_name.disable();
           this.analysisForm.controls.customer_branch.disable();
@@ -75,6 +62,30 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  checkCustomerExsist(number:any){
+    this._AnalysisService.checkPhoneNumberExist(number).subscribe(res=>{
+      if (res.status == 1) {
+        // exsist customer
+      } else {
+        const data = {
+          value: this.filterCustomerStatus('New Customer').name,
+        };
+        this.storeSelectedOptions(data, 0);
+        this.analysisForm.patchValue({
+          customer_status: this.filterCustomerStatus('New Customer').name,
+        });
+        this.analysisForm.controls.customer_status.disable();
+        this.analysisForm.controls.customer_name.enable();
+        this.analysisForm.controls.customer_branch.enable();
+        this.analysisForm.addControl('emirate_id', this.fb.control(''));
+        this.analysisForm.get('emirate_id')?.enable();
+        if (this.analysisForm.contains('customer_branch')) {
+          this.analysisForm.get('customer_branch')?.disable();
+        }
+      }
+    })
   }
 
   getCustomerInfo(e: any) {

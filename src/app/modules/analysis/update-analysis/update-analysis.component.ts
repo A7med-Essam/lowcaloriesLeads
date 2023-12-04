@@ -29,7 +29,7 @@ export class UpdateAnalysisComponent implements OnInit, OnDestroy {
     private _AnalysisService: AnalysisService,
     private _MessageService: MessageService,
     private _Router: Router,
-    private _LocalService:LocalService
+    private _LocalService: LocalService
   ) {}
 
   ngOnDestroy(): void {
@@ -88,9 +88,17 @@ export class UpdateAnalysisComponent implements OnInit, OnDestroy {
             .split('.')[0],
         });
       }
-      this.analysisForm.patchValue({
-        notes:`${this.currentRow.notes} , ${this.current_user.name} => ${form.value.notes}`
-      });
+      if (this.analysisForm.value.notes) {
+        if (this.currentRow.notes) {
+          this.analysisForm.patchValue({
+            notes: `${this.currentRow.notes} , ${this.current_user.name} => ${form.value.notes}`,
+          });
+        } else {
+          this.analysisForm.patchValue({
+            notes: `${this.current_user.name} => ${form.value.notes}`,
+          });
+        }
+      }
       this._AnalysisService.updateAnalytics(form.value).subscribe({
         next: (res) => {
           if (res.status == 1) {
@@ -252,7 +260,7 @@ export class UpdateAnalysisComponent implements OnInit, OnDestroy {
       concern: value.concern,
       mode: value.mode,
       mode_reason: value.mode_reason,
-      notes: value.notes,
+      notes: value.notes ? value.notes : null,
       ask_for: value.ask_for,
       ask_for_options: value.ask_for_options,
       actions: value.actions,

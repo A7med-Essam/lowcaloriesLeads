@@ -167,4 +167,12 @@ export class ApiConfigService {
         )
       );
   }
+
+  postReq33(url: string, body: any, params?: HttpParams): Observable<any> {
+    return this.http
+      .post(environment.BaseUrl4 + url, body, { params: params })
+      .pipe(
+        retry(2)
+      );
+  }
 }

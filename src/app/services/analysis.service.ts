@@ -26,6 +26,14 @@ export class AnalysisService {
     );
   }
 
+  filterAnalyticsWithoutPagination(page: number, filter: any) {
+    filter.withoutPagination = true;
+    return this._ApiConfigService.postReq3(
+      `dataAnalyticRequests`,
+      filter
+    );
+  }
+
   getFormAnalytics(): Observable<any> {
     return this._ApiConfigService.postReq3(`dataAnalytics`, '');
   }
@@ -124,6 +132,14 @@ export class AnalysisService {
 
   createAnalytics2(data: any): Observable<any> {
     return this._ApiConfigService.postReq3(`addDataRequestV2`, data);
+  }
+
+  checkPhoneNumberExist(phone_number: any): Observable<any> {
+    return this._ApiConfigService.postReq33(`checkPhoneNumberExist`, {phone_number});
+  }
+
+  updateAnalytics2(data: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`updateDataRequestV2`, data);
   }
 
   getAnalytics2(page: number): Observable<any> {
