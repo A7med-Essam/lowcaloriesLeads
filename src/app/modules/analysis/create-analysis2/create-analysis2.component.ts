@@ -62,14 +62,16 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
           this.analysisForm.controls.customer_branch.enable();
           this.analysisForm.addControl('emirate_id', this.fb.control(''));
           this.analysisForm.get('emirate_id')?.enable();
+          if (this.analysisForm.contains('customer_branch')) {
+            this.analysisForm.get('customer_branch')?.disable();
+          }
         } else {
           this.analysisForm.controls.customer_name.disable();
           this.analysisForm.controls.customer_branch.disable();
           if (this.analysisForm.contains('emirate_id')) {
-            // this.analysisForm.removeControl('emirate_id');
             this.analysisForm.get('emirate_id')?.disable();
           }
-
+          this.analysisForm.get('customer_branch')?.enable();
         }
       });
     }
@@ -150,9 +152,12 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
             .split('.')[0],
         });
       }
-      this.analysisForm.patchValue({
-        notes: `${this.current_user.name} => ${form.value.notes}`,
-      });
+      if (form.value.notes) {
+        this.analysisForm.patchValue({
+          notes: `${this.current_user.name} => ${form.value.notes}`,
+        });
+      }
+   
       this.analysisForm.patchValue({
         data_options: this.buildHierarchy(),
       });
@@ -168,6 +173,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
               summary: 'Analytics',
               detail: 'Analytics Created Successfully',
             });
+            this.analysisForm?.get('notes')?.reset();
           } else {
             this.creatingStatus = false;
             if (form.value.reminder_date != null) {

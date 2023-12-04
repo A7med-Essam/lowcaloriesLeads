@@ -84,9 +84,11 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
             .split('.')[0],
         });
       }
-      this.analysisForm.patchValue({
-        notes: `${this.current_user.name} => ${form.value.notes}`,
-      });
+      if (form.value.notes) {
+        this.analysisForm.patchValue({
+          notes: `${this.current_user.name} => ${form.value.notes}`,
+        });
+      }
       this._AnalysisService.createAnalytics(form.value).subscribe({
         next: (res) => {
           if (res.status == 1) {
