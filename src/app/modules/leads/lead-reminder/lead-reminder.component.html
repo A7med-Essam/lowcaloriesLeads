@@ -1,3 +1,10 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="m-3">
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+        </p-button>
+    </div>
+</div>
+
 <div class="row my-3 animated">
     <div class="col-12">
         <div class="card h-100">
@@ -136,4 +143,55 @@
             </div>
         </div>
     </div>
+</p-dialog>
+
+<p-dialog header="Filter Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <form [formGroup]="filterForm" #myForm="ngForm">
+            <div class="row mx-0">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
+                    <label for="">Team</label>
+                    <p-dropdown [options]="analyticOptions?.teams" formControlName="team" placeholder="Select Team"
+                        styleClass="w-100" appendTo="body">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
+                    <label for="">Agent</label>
+                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
+                        styleClass="w-100" appendTo="body" optionLabel="label" optionValue="value" [group]="true"
+                        [filter]="true">
+                        <ng-template let-group pTemplate="group">
+                            <div class="flex align-items-center">
+                                <span>{{ group.label }}</span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="range">Date Range</label>
+                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+                        ngClass="w-100" appendTo="body">
+                    </p-calendar>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+            <div>
+                <button class="btn btn-secondary" (click)="resetFields()">
+                    Reset Fields
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="applyFilter(filterForm)">
+                    Apply Filter
+                </button>
+                <button class="btn btn-secondary" (click)="resetFilter()">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+    </ng-template>
 </p-dialog>

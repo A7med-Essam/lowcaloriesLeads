@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -13,7 +13,7 @@ import { SurveyService } from 'src/app/services/survey.service';
   templateUrl: './show-analysis.component.html',
   styleUrls: ['./show-analysis.component.scss'],
 })
-export class ShowAnalysisComponent implements OnInit {
+export class ShowAnalysisComponent implements OnInit, OnDestroy {
   constructor(
     private _GuardService: GuardService,
     private _MessageService: MessageService,

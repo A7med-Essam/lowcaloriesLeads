@@ -95,9 +95,10 @@ export class ManageAnalysisComponent implements OnInit {
       parent_id: this.items.length
         ? this.items[this.items.length - 1].id
         : null,
-      label:this.analytics[0]?.label || "0"
+      label: this.analytics.length ? this.analytics[0].label : '0',
     };
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
+      this.getSuggestDataOptions();
       this.createModal = false;
       this.resetClone();
       this.selectedText = [];
@@ -106,9 +107,9 @@ export class ManageAnalysisComponent implements OnInit {
       }
       this.analytics.push(...res.data);
       this.items.map((m) => {
-        if (m.id == res.data[0].parent_id) {
+        if (m.id == res.data[0]?.parent_id) {
           m?.items?.map((i: any) => {
-            if (i.id == res.data[0].parent_id) {
+            if (i.id == res.data[0]?.parent_id) {
               i.has_children = true;
               i.children = res.data;
             }
@@ -147,17 +148,19 @@ export class ManageAnalysisComponent implements OnInit {
     });
   }
 
-  get itemsAsSelectItems(): SelectItem [] {
-    return this.reasons.map((item) => ({ label: item, value: item } as SelectItem));
+  get itemsAsSelectItems(): SelectItem[] {
+    return this.reasons.map(
+      (item) => ({ label: item, value: item } as SelectItem)
+    );
   }
 
-  getCurrentChildren() :string[]{
-    const data = this.analytics.map((a:any)=>a.children.map((a:any)=>a.name));
-    return [].concat(...data)
-  }
+  // getCurrentChildren() :string[]{
+  //   const data = this.analytics.map((a:any)=>a.children.map((a:any)=>a.name));
+  //   return [].concat(...data)
+  // }
 
-  filterSelectedItems(){
-    this.reasons = this.reasons_clone
-    this.reasons = this.reasons.filter((item) => this.getCurrentChildren().includes(item))
-  }
+  // filterSelectedItems(){
+  //   this.reasons = this.reasons_clone
+  //   this.reasons = this.reasons.filter((item) => this.getCurrentChildren().includes(item))
+  // }
 }

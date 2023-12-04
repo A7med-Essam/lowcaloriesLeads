@@ -173,6 +173,8 @@ export class ShowAnalysis2Component implements OnInit {
       customer_name: '',
       customer_gender: '',
       data_options: '',
+      team: '',
+      agent_id: '',
     });
   }
 
@@ -282,9 +284,11 @@ export class ShowAnalysis2Component implements OnInit {
     });
   }
 
+  teams:any[] =[]
   getFormAnalytics() {
     this._AnalysisService.getFormAnalytics().subscribe((res) => {
       this.analyticOptions = res.data.options;
+      this.teams = res.data.teams;
       this.emirates = res.data.emirates;
       this.options = [res.data.options];
     });

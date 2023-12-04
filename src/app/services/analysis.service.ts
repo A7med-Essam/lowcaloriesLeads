@@ -9,6 +9,7 @@ export class AnalysisService {
   constructor(private _ApiConfigService: ApiConfigService) {}
   filter: BehaviorSubject<any> = new BehaviorSubject(null);
   analysis: BehaviorSubject<any> = new BehaviorSubject(null);
+  filtered_Reminder: BehaviorSubject<any> = new BehaviorSubject(null);
   analysisV2: BehaviorSubject<any> = new BehaviorSubject(null);
 
   getAnalytics(page: number): Observable<any> {
@@ -67,6 +68,14 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`allReminderDataRequests`, {
       withoutPagination: true,
     });
+  }
+
+  filterReminder(filter: any) {
+    filter.withoutPagination = true;
+    return this._ApiConfigService.postReq3(
+      `allReminderDataRequests`,
+      filter
+    );
   }
 
   updateReminder(remindDataRequest_id: number): Observable<any> {

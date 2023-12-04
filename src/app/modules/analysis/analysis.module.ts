@@ -21,7 +21,7 @@ import { TreeTableModule } from 'primeng/treetable';
 import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.component';
 import { ShowAnalysis2Component } from './show-analysis2/show-analysis2.component';
 import { UpdateAnalysis2Component } from './update-analysis2/update-analysis2.component';
-
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,7 @@ import { UpdateAnalysis2Component } from './update-analysis2/update-analysis2.co
     ManageAnalysisComponent,
     CreateAnalysis2Component,
     ShowAnalysis2Component,
-    UpdateAnalysis2Component
+    UpdateAnalysis2Component,
   ],
   imports: [
     CommonModule,
@@ -48,7 +48,8 @@ import { UpdateAnalysis2Component } from './update-analysis2/update-analysis2.co
     ConfirmDialogModule,
     ButtonModule,
     BreadcrumbModule,
-    TreeTableModule
-  ]
+    TreeTableModule,
+    TagModule,
+  ],
 })
-export class AnalysisModule { }
+export class AnalysisModule {}

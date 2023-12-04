@@ -21,6 +21,7 @@
                 <th class="text-center">Customer Mobile</th>
                 <th class="text-center">Customer Name</th>
                 <th class="text-center">Customer Gender</th>
+                <th class="text-center">Reminder</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -31,6 +32,9 @@
                 <td class="text-center">{{analysis?.mobile}}</td>
                 <td class="text-center">{{analysis?.customer_name}}</td>
                 <td class="text-center">{{analysis?.customer_gender}}</td>
+                <td class="text-center">
+                    <p-tag *ngIf="analysis?.reminders_count" severity="success" value="Has Reminder"></p-tag>
+                </td>
                 <td class="text-center">
                     <!-- <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
                         (click)="updateRow(analysis)" class="m-1 p-button-sm p-button-warning"></button> -->
@@ -50,6 +54,24 @@
     <div class="container">
         <form [formGroup]="filterForm" #myForm="ngForm">
             <div class="row mx-0">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
+                    <label for="">Team</label>
+                    <p-dropdown [options]="teams" formControlName="team" placeholder="Select Team"
+                        styleClass="w-100" appendTo="body">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
+                    <label for="">Agent</label>
+                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
+                        styleClass="w-100" appendTo="body" optionLabel="label" optionValue="value" [group]="true"
+                        [filter]="true">
+                        <ng-template let-group pTemplate="group">
+                            <div class="flex align-items-center">
+                                <span>{{ group.label }}</span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
                 <div class="col-md-4 col-12 my-1">
                     <label for="">Phone Number <span class="text-danger">*</span></label>
                     <input type="text" pInputText ngClass="w-100" formControlName='mobile' maxlength="10"

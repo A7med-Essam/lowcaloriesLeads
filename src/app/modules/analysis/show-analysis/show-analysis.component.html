@@ -6,7 +6,6 @@
         </p-button>
         <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
         </p-button>
-
     </div>
 </div>
 
@@ -23,6 +22,7 @@
                 <th class="text-center">Customer Name</th>
                 <th class="text-center">Customer Status</th>
                 <th class="text-center">Platform</th>
+                <th class="text-center">Reminder</th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -34,6 +34,9 @@
                 <td class="text-center">{{analysis?.customer_name}}</td>
                 <td class="text-center">{{analysis?.customer_status}}</td>
                 <td class="text-center">{{analysis?.platform}}</td>
+                <td class="text-center">
+                    <p-tag *ngIf="analysis?.reminders_count" severity="success" value="Has Reminder"></p-tag>
+                </td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
                         (click)="updateRow(analysis)" class="m-1 p-button-sm p-button-warning"></button>
