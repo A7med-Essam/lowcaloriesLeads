@@ -70,7 +70,7 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`analyticsImport`, file);
   }
 
-  // =================================================================================================
+  // ===========================================REMINDER======================================================
 
   allReminder(): Observable<any> {
     return this._ApiConfigService.postReq3(`allReminderDataRequests`, {
@@ -98,7 +98,7 @@ export class AnalysisService {
     });
   }
 
-  // =================================================================================================
+  // =============================================MANAGER====================================================
 
   getDataAnalyticOption(): Observable<any> {
     return this._ApiConfigService.postReq3(`getDataAnalyticOption`, '');
@@ -128,6 +128,10 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`addLabelForDataOption`, data);
   }
 
+  updateAnalyticName(data: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`updateDataAnalyticOption`, data);
+  }
+
   // ================================================V2=================================================
 
   createAnalytics2(data: any): Observable<any> {
@@ -155,5 +159,9 @@ export class AnalysisService {
       `dataAnalyticRequests?page=${page}`,
       filter
     );
+  }
+
+  getAllAnalyticOptions(): Observable<any> {
+    return this._ApiConfigService.postReq3(`getAllParentDataAnalyticOption`, '');
   }
 }

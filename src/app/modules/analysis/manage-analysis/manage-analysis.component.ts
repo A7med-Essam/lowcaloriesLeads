@@ -10,10 +10,10 @@ import { ConfirmationService, MenuItem, SelectItem } from 'primeng/api';
 export class ManageAnalysisComponent implements OnInit {
   items: MenuItem[] = [];
   createModal: boolean = false;
+  updateModal: boolean = false;
   createLabelModal: boolean = false;
   selectedText: any[] = [];
   reasons: any[] = [];
-  reasons_clone: any[] = [];
   analytics: any = [];
   analytics_clone: any[] = [];
 
@@ -46,7 +46,12 @@ export class ManageAnalysisComponent implements OnInit {
   getSuggestDataOptions() {
     this._AnalysisService.suggestDataOptions().subscribe({
       next: (res) => {
-        this.reasons = this.reasons_clone = [...new Set(res.data)];
+        // this.reasons = this.reasons_clone = [...new Set(res.data)];
+        const outputArray = Object.entries(res.data).map(([id, name], index) => ({
+          id: index + 1,
+          name
+        }));
+        this.reasons = outputArray;
       },
     });
   }
@@ -90,15 +95,23 @@ export class ManageAnalysisComponent implements OnInit {
   }
   creatingStatus: boolean = false;
   create(selectedAnalytics: any) {
-    this.creatingStatus = true;
-    let data: any = {
-      names: selectedAnalytics,
-      parent_id: this.items.length
-        ? this.items[this.items.length - 1].id
-        : null,
-      label:
-        this.analytics && this.analytics.length ? this.analytics[0].label : '0',
-    };
+    // this.creatingStatus = true;
+
+    console.log(selectedAnalytics);
+
+    // let data: any = {
+    //   names: selectedAnalytics,
+    //   parent_id: this.items.length
+    //     ? this.items[this.items.length - 1].id
+    //     : null,
+    //   label:
+    //     this.analytics && this.analytics.length ? this.analytics[0].label : '0',
+    // };
+
+    // this.addNewDataAnalyticOption(data);
+  }
+
+  addNewDataAnalyticOption(data:any){
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
       this.creatingStatus = false;
       this.getSuggestDataOptions();
@@ -122,9 +135,14 @@ export class ManageAnalysisComponent implements OnInit {
     });
   }
 
+
   addOption(el: HTMLInputElement) {
     if (el.value != '') {
-      this.reasons.push(el.value);
+      const data = {
+        id:el.value,
+        name:el.value
+      }
+      this.reasons.push(data);
       this.selectedText.push(el.value);
       el.value = '';
     }
@@ -153,17 +171,28 @@ export class ManageAnalysisComponent implements OnInit {
 
   get itemsAsSelectItems(): SelectItem[] {
     return this.reasons.map(
-      (item) => ({ label: item, value: item } as SelectItem)
+      (item,id) => ({ label: item.name, value: id } as SelectItem)
     );
   }
 
-  // getCurrentChildren() :string[]{
-  //   const data = this.analytics.map((a:any)=>a.children.map((a:any)=>a.name));
-  //   return [].concat(...data)
-  // }
+  currentRow:any;
+  updateRow(row:any){
+    this.currentRow = row;
+    this.updateModal = true;
+    this.selectedName = row.name;
+  }
 
-  // filterSelectedItems(){
-  //   this.reasons = this.reasons_clone
-  //   this.reasons = this.reasons.filter((item) => this.getCurrentChildren().includes(item))
-  // }
+  selectedName:string = "";
+  UpdateName(){
+    if (this.selectedName != "") {
+      const data = {
+        data_analytic_option_id: this.currentRow.id,
+        name: this.selectedName
+      }
+      this._AnalysisService.updateAnalyticName(data).subscribe(res=>{
+        this.updateModal = false;
+        this.getAnalytics();
+      })
+    }
+  }
 }

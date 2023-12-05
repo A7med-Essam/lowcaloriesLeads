@@ -36,18 +36,23 @@
                 <input type="text" pInputText ngClass="w-100" formControlName='customer_branch' />
             </div>
             <hr>
-            <ng-container *ngIf="options.length">
-                <ng-container>
+
+            <ng-container *ngIf="selectedLabels?.length && allAnalyticOptions">
+                <h6 class="text-secondary"><i class="fas fa-sun mx-2"></i>Customer Current Scenario<i class="fas fa-sun mx-2"></i></h6>
+                <ng-container *ngFor="let option of selectedLabels; let i = index">
                     <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-                        <label for="">{{options[0][0]?.label}}</label>
-                        <p-dropdown [options]="options[0]" appendTo="body" (onChange)="storeSelectedOptions($event,0)"
-                            formControlName='customer_status' styleClass="w-100" optionValue="name" optionLabel="name"
-                            placeholder="Select Option">
+                        <label for="">{{option}}</label>
+                        <p-dropdown [options]="allAnalyticOptions[option]" appendTo="body"
+                            [formControlName]='option' styleClass="w-100" placeholder="Select Option" optionValue="name" optionLabel="name">
                         </p-dropdown>
                     </div>
                 </ng-container>
+            </ng-container>
+            <hr *ngIf="options.length && allAnalyticOptions">
+            <ng-container *ngIf="options.length && allAnalyticOptions">
+                <h6 class="text-secondary"><i class="fas fa-sun mx-2"></i>Start New Scenario<i class="fas fa-sun mx-2"></i></h6>
                 <ng-container *ngFor="let option of options; let i = index">
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="i != 0">
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                         <label for="">{{option[0]?.label}}</label>
                         <p-dropdown [options]="option" appendTo="body" (onChange)="storeSelectedOptions($event,i)"
                             styleClass="w-100" optionValue="name" optionLabel="name" placeholder="Select Option">
@@ -55,7 +60,6 @@
                     </div>
                 </ng-container>
             </ng-container>
-
             <div class="col-12 my-3">
                 <button class="btn btn-primary py-2 w-100" [disabled]="analysisForm.invalid || creatingStatus">
                     <span *ngIf="!creatingStatus">Create</span>
@@ -64,4 +68,13 @@
             </div>
         </div>
     </form>
+</div>
+
+<div class="loader-container" *ngIf="!allAnalyticOptions">
+    <div class="i-loader-inf-horizontal-container">
+        <div class="i-loader-inf-horizontal"></div>
+        <div class="pt-8px">
+            <span>Processing data</span>
+        </div>
+    </div>
 </div>

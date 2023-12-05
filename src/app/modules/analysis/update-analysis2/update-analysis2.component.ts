@@ -55,9 +55,9 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
       customer_name: '',
       customer_gender: '',
       customer_branch: '',
-      customer_status: '',
       data_options: '',
-      emirate_id:''
+      emirate_id: '',
+      dataRequest_id: '',
     });
   }
 
@@ -68,6 +68,8 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
         if (analysis) {
           this.currentRow = analysis;
           this.getAnalyticsOptions();
+          this.getAllAnalyticOptions();
+          this.addControls();
           this.patchValues(analysis);
         } else {
           this._Router.navigate(['analysis/showV2']);
@@ -88,45 +90,29 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
       mobile: value.mobile,
       customer_name: value.customer_name,
       customer_gender: value.customer_gender,
-      customer_branch: value.customer_branch,
+      customer_branch: value?.customer_branch,
       emirate_id: value?.emirate?.id,
       notes: value.notes ? value.notes : null,
       reminder_date: value.reminder_date ? new Date(value.reminder_date) : null,
       dataRequest_id: value.id,
     });
-    this.getCustomerCID(value.mobile,value.cid);
+    this.getCustomerCID(value.mobile, value.cid);
   }
 
-  getCustomerCID(value: string,cid?:number) {
+  getCustomerCID(value: string, cid?: number) {
     if (value != '') {
       this._RefundService.getCIDs(value).subscribe((res) => {
         this.cids = res;
         if (res.length == 0) {
-          this.checkCustomerExsist(value);
+          // this.checkCustomerExsist(value);
         } else {
           if (cid) {
-            this.analysisForm.patchValue({cid});
-            this.getCustomerInfo({value:cid});
+            this.analysisForm.patchValue({ cid });
+            this.getCustomerInfo({ value: cid });
           }
         }
       });
     }
-  }
-
-  checkCustomerExsist(number:any){
-    this._AnalysisService.checkPhoneNumberExist(number).subscribe(res=>{
-      if (res.status == 1) {
-        // exsist customer
-      } else {
-        const data = {
-          value: this.filterCustomerStatus('New Customer').name,
-        };
-        this.storeSelectedOptions(data, 0);
-        this.analysisForm.patchValue({
-          customer_status: this.filterCustomerStatus('New Customer').name,
-        });
-      }
-    })
   }
 
   getCustomerInfo(e: any) {
@@ -137,87 +123,32 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
         customer_branch: res.deliveryBranch,
       });
     });
-    this.setCustomerStatus(selectedCID.remainingDays);
+    // this.setCustomerStatus(selectedCID.remainingDays);
   }
 
-  setCustomerStatus(remainingDays: number) {
-    if (remainingDays > 0) {
-      const data = { value: this.filterCustomerStatus('Exist Customer').name };
-      this.storeSelectedOptions(data, 0);
-      this.analysisForm.patchValue({
-        customer_status: this.filterCustomerStatus('Exist Customer').name,
-      });
-    } else {
-      const data = { value: this.filterCustomerStatus('Old Customer').name };
-      this.storeSelectedOptions(data, 0);
-      this.analysisForm.patchValue({
-        customer_status: this.filterCustomerStatus('Old Customer').name,
-      });
-    }
-    this.analysisForm.controls.customer_status.disable();
+  allAnalyticOptions: any;
+  getAllAnalyticOptions() {
+    this._AnalysisService.getAllAnalyticOptions().subscribe((res) => {
+      this.allAnalyticOptions = res.data[0];
+    });
   }
 
-  filterCustomerStatus(status: string) {
-    return this.options[0].filter(
-      (o: any) => o.name.toLowerCase() === status.toLowerCase()
-    )[0];
+  addControls() {
+    const labels: string[] = this.selectedLabels;
+    const values: string[] = this.selectedValues;
+    labels.forEach((c, index) => {
+      this.analysisForm.addControl(c, this.fb.control(values[index]));
+      this.analysisForm.get(c)?.disable();
+    });
   }
 
+  get selectedLabels(): string[] {
+    return this.currentRow?.data_options.map((item: any) => item.label);
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  get selectedValues(): string[] {
+    return this.currentRow?.data_options.map((item: any) => item.name);
+  }
 
   update(form: FormGroup) {
     if (form.valid) {
@@ -238,11 +169,12 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
 
   storeSelectedOptions(e: any, index: number) {
     const selectedIndex = this.getArrayIndex(e.value, index);
-    this.options.splice(index + 1);
-    if (this.options[index][selectedIndex].has_children) {
-      this.options.push(this.options[index][selectedIndex].children);
+    if (selectedIndex > 0) {
+      this.options.splice(index + 1);
+      if (this.options[index][selectedIndex].has_children) {
+        this.options.push(this.options[index][selectedIndex].children);
+      }
     }
-    console.log(this.options);
   }
 
   getArrayIndex(name: string, index: number) {
