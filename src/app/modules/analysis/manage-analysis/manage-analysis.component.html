@@ -44,7 +44,7 @@
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
             <p-multiSelect [options]="itemsAsSelectItems" appendTo="body" defaultLabel="Select Analytics" styleClass="w-100"
-                [(ngModel)]="selectedText" display="chip" [filter]="true">
+                [(ngModel)]="selectedText" display="chip" [filter]="true" [selectionLimit]="1">
                 <p-header class="w-100 mb-3">
                     <div class="row w-100">
                         <div class="col-11">
@@ -59,7 +59,10 @@
             </p-multiSelect>
         </div>
         <div class="col-12 my-3">
-            <button class="btn btn-primary w-100" (click)="create(selectedText)">Create</button>
+            <button class="btn btn-primary py-2 w-100" *ngIf="creatingStatus">
+                <span>Creating...<i class="fas fa-spinner fa-spin"></i></span>
+            </button>
+            <button class="btn btn-primary w-100"  *ngIf="!creatingStatus" (click)="create(selectedText)">Create</button>
         </div>
     </div>
 </p-dialog>

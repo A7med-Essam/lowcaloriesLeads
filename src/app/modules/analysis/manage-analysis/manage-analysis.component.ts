@@ -88,16 +88,19 @@ export class ManageAnalysisComponent implements OnInit {
       }
     }
   }
-
+  creatingStatus: boolean = false;
   create(selectedAnalytics: any) {
+    this.creatingStatus = true;
     let data: any = {
       names: selectedAnalytics,
       parent_id: this.items.length
         ? this.items[this.items.length - 1].id
         : null,
-      label: this.analytics&&this.analytics.length ? this.analytics[0].label : '0',
+      label:
+        this.analytics && this.analytics.length ? this.analytics[0].label : '0',
     };
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
+      this.creatingStatus = false;
       this.getSuggestDataOptions();
       this.createModal = false;
       this.resetClone();
