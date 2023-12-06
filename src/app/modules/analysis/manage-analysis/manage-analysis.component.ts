@@ -127,6 +127,12 @@ export class ManageAnalysisComponent implements OnInit {
             (al: any) => al.id != analysis.id
           );
           // this.items[this.items.length-1].items = this.analytics
+          this._AnalysisService.getDataAnalyticOption().subscribe({
+            next: (res) => {
+              const deepClone = JSON.parse(JSON.stringify(res.data));
+              this.toggleNameAndLabel(deepClone);
+            },
+          });
         });
     }
   }
@@ -332,8 +338,14 @@ export class ManageAnalysisComponent implements OnInit {
           this.analytics = this.analytics.filter(
             (al: any) => !this.specificRows.includes(al.id)
           );
+          this._AnalysisService.getDataAnalyticOption().subscribe({
+            next: (res) => {
+              const deepClone = JSON.parse(JSON.stringify(res.data));
+              this.toggleNameAndLabel(deepClone);
+              // this.resetClone();
+            },
+          });
           // this.items[this.items.length-1].items = this.analytics
-          this.resetClone();
         });
       },
     });
