@@ -42,6 +42,8 @@ export class ManageAnalysisComponent implements OnInit {
     this._AnalysisService.getDataAnalyticOption().subscribe({
       next: (res) => {
         this.analytics_clone = res.data;
+        const deepClone = JSON.parse(JSON.stringify(this.analytics));
+        this.toggleNameAndLabel(deepClone);
       },
     });
   }
@@ -114,28 +116,28 @@ export class ManageAnalysisComponent implements OnInit {
 
   addNewDataAnalyticOption(data: any) {
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
-      this.creatingStatus = false;
-      // this.getSuggestDataOptions();
-      this.createModal = false;
-      this.resetClone();
-      this.selectedNode = [];
-      if (this.analytics == undefined) {
-        this.analytics = [];
-      }
-      this.analytics.push(...res.data);
-      this.items.map((m) => {
-        if (m.id == res.data[0]?.parent_id) {
-          m?.items?.map((i: any) => {
-            if (i.id == res.data[0]?.parent_id) {
-              i.has_children = true;
-              i.children = res.data;
-            }
-          });
+      if (res.status == 1) {
+        this.creatingStatus = false;
+        // this.getSuggestDataOptions();
+        this.createModal = false;
+        this.resetClone();
+        this.selectedNode = [];
+        if (this.analytics == undefined) {
+          this.analytics = [];
         }
-      });
-
-      const deepClone = JSON.parse(JSON.stringify(this.analytics));
-      this.toggleNameAndLabel(deepClone);
+        this.analytics.push(...res.data);
+        this.items.map((m) => {
+          if (m.id == res.data[0]?.parent_id) {
+            m?.items?.map((i: any) => {
+              if (i.id == res.data[0]?.parent_id) {
+                i.has_children = true;
+                i.children = res.data;
+              }
+            });
+          }
+        });
+        this.resetClone();
+      }
     });
   }
 

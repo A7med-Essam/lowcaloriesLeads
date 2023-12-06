@@ -51,6 +51,7 @@ export class ShowAnalysis2Component implements OnInit {
     this.getAnalytics();
     this.getFormAnalytics();
     this.getAgents();
+    this.getAllAnalyticOptions();
   }
 
   exportPermission: boolean = false;
@@ -91,12 +92,19 @@ export class ShowAnalysis2Component implements OnInit {
     }
   }
 
-  // analyticOptions: any;
-  // getFormAnalytics() {
-  //   this._AnalysisService.getFormAnalytics().subscribe((res) => {
-  //     this.analyticOptions = res.data;
-  //   });
-  // }
+  allAnalyticOptions: any;
+  getAllAnalyticOptions() {
+    this._AnalysisService.getAllAnalyticOptions().subscribe((res) => {
+      this.allAnalyticOptions = res.data[0];
+      Object.keys(this.allAnalyticOptions).forEach((c, index) => {
+        this.filterForm.addControl(c, this.fb.control(''));
+      });
+    });
+  }
+
+  getObjectKeyValues(obj: any): any[] {
+    return this.allAnalyticOptions[obj];
+  }
 
   currentPage: number = 1;
   paginate(e: any) {
@@ -198,8 +206,11 @@ export class ShowAnalysis2Component implements OnInit {
     //   }
     // }
     this.filterForm.patchValue({
-      data_options: this.buildHierarchy(),
+      data_options: this.getFilterOptions(this.filterForm.value),
     });
+    // this.filterForm.patchValue({
+    //   data_options: this.buildHierarchy(),
+    // });
     this.appliedFilters = form.getRawValue();
     this._AnalysisService.filter.next(this.appliedFilters);
     this._AnalysisService
@@ -270,7 +281,7 @@ export class ShowAnalysis2Component implements OnInit {
       this._RefundService.getCIDs(e.value).subscribe((res) => {
         this.cids = res;
       });
-    }else{
+    } else {
       this.cids = [];
     }
   }
@@ -284,7 +295,7 @@ export class ShowAnalysis2Component implements OnInit {
     });
   }
 
-  teams:any[] =[]
+  teams: any[] = [];
   getFormAnalytics() {
     this._AnalysisService.getFormAnalytics().subscribe((res) => {
       this.analyticOptions = res.data.options;
@@ -362,4 +373,14 @@ export class ShowAnalysis2Component implements OnInit {
   options: any[] = [];
   analyticOptions: any;
   emirates: any[] = [];
+  // ===============================================================FILTER 3======================================================================
+  getFilterOptions(values: any) {
+    const data: any[] = [];
+    Object.keys(this.allAnalyticOptions).forEach((e) => {
+      if (values[e] != '') {
+        data.push({ label: e, name: values[e] });
+      }
+    });
+    return data;
+  }
 }

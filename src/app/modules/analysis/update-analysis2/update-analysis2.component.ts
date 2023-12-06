@@ -59,6 +59,7 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
       emirate_id: '',
       dataRequest_id: '',
       reminder_date: '',
+      notes:''
     });
   }
 

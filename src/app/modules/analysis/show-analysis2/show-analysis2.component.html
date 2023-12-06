@@ -4,8 +4,8 @@
             icon="pi pi-plus" routerLink="../createV2"></button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-        <!-- <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
-        </p-button> -->
+        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
+        </p-button>
     </div>
 </div>
 
@@ -104,11 +104,23 @@
                         optionValue="id" optionLabel="en_name" placeholder="Select Emirate" [filter]="true">
                     </p-dropdown>
                 </div> -->
-                <ng-container *ngIf="options.length">
+                <!-- <ng-container *ngIf="options.length">
                     <ng-container *ngFor="let option of options; let i = index">
                         <div class="col-md-4 col-12 my-1">
                             <label for="">{{option[0]?.label}}</label>
                             <p-dropdown [options]="option" appendTo="body" (onChange)="storeSelectedOptions($event,i)"
+                                styleClass="w-100" optionValue="name" optionLabel="name" placeholder="Select Option">
+                            </p-dropdown>
+                        </div>
+                    </ng-container>
+                </ng-container> -->
+
+
+                <ng-container *ngIf="allAnalyticOptions">
+                    <ng-container *ngFor="let keyValuePair of allAnalyticOptions | keyvalue; let i = index">
+                        <div class="col-md-4 col-12 my-1">
+                            <label for="">{{keyValuePair.key}}</label>
+                            <p-dropdown [options]="getObjectKeyValues(keyValuePair.key)" appendTo="body" formControlName='{{keyValuePair.key}}'
                                 styleClass="w-100" optionValue="name" optionLabel="name" placeholder="Select Option">
                             </p-dropdown>
                         </div>
