@@ -25,7 +25,6 @@ export class ManageAnalysisComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAnalytics();
-    // this.getSuggestDataOptions();
   }
 
   getAnalytics() {
@@ -42,7 +41,7 @@ export class ManageAnalysisComponent implements OnInit {
     this._AnalysisService.getDataAnalyticOption().subscribe({
       next: (res) => {
         this.analytics_clone = res.data;
-        const deepClone = JSON.parse(JSON.stringify(this.analytics));
+        const deepClone = JSON.parse(JSON.stringify(this.analytics_clone));
         this.toggleNameAndLabel(deepClone);
       },
     });
@@ -120,7 +119,7 @@ export class ManageAnalysisComponent implements OnInit {
         this.creatingStatus = false;
         // this.getSuggestDataOptions();
         this.createModal = false;
-        this.resetClone();
+        // this.resetClone();
         this.selectedNode = [];
         if (this.analytics == undefined) {
           this.analytics = [];

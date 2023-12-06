@@ -50,7 +50,7 @@
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
             <div class="card flex justify-content-center">
-                <p-treeSelect class="w-full md:w-20rem"  [(ngModel)]="selectedNode" [filter]="true" filterBy="name"
+                <p-treeSelect class="w-full md:w-20rem"  [(ngModel)]="selectedNode" [filter]="true"
                     appendTo="body" styleClass="w-100" [options]="dropDownAnalytics" display="chip" [metaKeySelection]="false"
                     selectionMode="checkbox" placeholder="Select Item" (onNodeSelect)="nodeSelect($event)">
                 </p-treeSelect>
@@ -61,35 +61,6 @@
                 <span>Creating...<i class="fas fa-spinner fa-spin"></i></span>
             </button>
             <button class="btn btn-primary w-100" *ngIf="!creatingStatus" (click)="createNodeChildren()">Create</button>
-        </div>
-    </div>
-</p-dialog>
-
-<p-dialog header="Create Label Modal" [(visible)]="createLabelModal" [modal]="true" [style]="{width: '50vw'}"
-    [draggable]="false" [resizable]="false">
-    <div class="row mx-0">
-        <div class="col-12 my-3">
-            <label for="">Analytic Label</label>
-            <input type="text" pInputText ngClass="w-100" #label />
-        </div>
-        <div class="col-12 my-3">
-            <button class="btn btn-primary w-100" (click)="createLabel(label.value)">Create Label</button>
-        </div>
-    </div>
-</p-dialog>
-
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
-</p-confirmDialog>
-
-<p-dialog header="Update Name Modal" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
-    [draggable]="false" [resizable]="false">
-    <div class="row mx-0">
-        <div class="col-12 my-3">
-            <label for="">Analytic Name</label>
-            <input type="text" pInputText ngClass="w-100" [(ngModel)]="selectedName" />
-        </div>
-        <div class="col-12 my-3">
-            <button class="btn btn-primary w-100" (click)="UpdateName()">Update</button>
         </div>
     </div>
 </p-dialog>
@@ -109,3 +80,34 @@
         </div>
     </div>
 </p-dialog>
+
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+
+<p-dialog header="Update Name Modal" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="row mx-0">
+        <div class="col-12 my-3">
+            <label for="">Analytic Name</label>
+            <input type="text" pInputText ngClass="w-100" [(ngModel)]="selectedName" />
+        </div>
+        <div class="col-12 my-3">
+            <button class="btn btn-primary w-100" (click)="UpdateName()">Update</button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Create Label Modal" [(visible)]="createLabelModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="row mx-0">
+        <div class="col-12 my-3">
+            <label for="">Analytic Label</label>
+            <input type="text" pInputText ngClass="w-100" #label />
+        </div>
+        <div class="col-12 my-3">
+            <button class="btn btn-primary w-100" (click)="createLabel(label.value)">Create Label</button>
+        </div>
+    </div>
+</p-dialog>
+
