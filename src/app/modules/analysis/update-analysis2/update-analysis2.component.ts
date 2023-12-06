@@ -58,6 +58,7 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
       data_options: '',
       emirate_id: '',
       dataRequest_id: '',
+      reminder_date: '',
     });
   }
 
@@ -163,6 +164,7 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
             summary: 'Created Successfully',
             detail: res.message,
           });
+          this._Router.navigate(['analysis/showV2']);
         });
     }
   }
@@ -231,4 +233,28 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
     });
     return data;
   }
+
+    // ================================== REMINDER ==================================
+    minReminder: Date = new Date(new Date().setDate(new Date().getDate() + 1));
+    maxReminder: Date = new Date(new Date().setDate(new Date().getDate() + 90));
+    defaultReminder: Date = new Date(this.calculateDefaultReminder());
+    reminderModal: boolean = false;
+  
+    private calculateDefaultReminder(): Date {
+      const currentDate = new Date();
+      const twoDaysLater = new Date(
+        currentDate.setDate(currentDate.getDate() + 2)
+      );
+      return twoDaysLater;
+    }
+  
+    setDefaultReminder() {
+      this.analysisForm.get('reminder_date')?.setValue(this.defaultReminder);
+      this.reminderModal = false;
+      this._MessageService.add({
+        severity: 'success',
+        summary: 'Reminder',
+        detail: 'Reminder has been add successfully',
+      });
+    }
 }

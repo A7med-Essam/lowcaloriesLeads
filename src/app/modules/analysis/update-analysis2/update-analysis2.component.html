@@ -60,10 +60,24 @@
                     </div>
                 </ng-container>
             </ng-container>
-            <div class="col-12 my-3">
+            <hr>
+            <div class="col-12 my-1">
+                <label for="">Any Notes</label>
+                <textarea pInputTextarea ngClass="w-100" formControlName='notes' (keydown.enter)="$event.preventDefault()"></textarea>
+            </div>
+
+            <div class="col-10 my-3">
                 <button class="btn btn-primary py-2 w-100" [disabled]="analysisForm.invalid || creatingStatus">
                     <span *ngIf="!creatingStatus">Create</span>
                     <span *ngIf="creatingStatus">Creating...<i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+            </div>
+            <div class="col-2 my-3">
+                <button type="button" class="btn btn-danger py-2 w-100" (click)="reminderModal = true;">
+                    <span>
+                        <i class="far fa-bell mx-2"></i>
+                        Add Reminder
+                    </span>
                 </button>
             </div>
         </div>
@@ -78,3 +92,12 @@
         </div>
     </div>
 </div>
+
+<p-dialog header="Reminder Date" [(visible)]="reminderModal" position="bottom" [style]="{ width: '50vw' }"
+    [modal]="true" [resizable]="false" [draggable]="false">
+    <p-calendar [showIcon]="true" [defaultDate]="defaultReminder" [(ngModel)]="defaultReminder" [minDate]="minReminder" [showTime]="true" [maxDate]="maxReminder"
+        appendTo="body"></p-calendar>
+    <button class="btn btn-primary mt-2 w-100" (click)="setDefaultReminder()">
+        Add Reminder
+    </button>
+</p-dialog>

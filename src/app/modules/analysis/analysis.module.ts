@@ -22,7 +22,8 @@ import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.co
 import { ShowAnalysis2Component } from './show-analysis2/show-analysis2.component';
 import { UpdateAnalysis2Component } from './update-analysis2/update-analysis2.component';
 import { TagModule } from 'primeng/tag';
-
+import { TreeSelectModule } from 'primeng/treeselect';
+import { ChipsModule } from 'primeng/chips';
 @NgModule({
   declarations: [
     CreateAnalysisComponent,
@@ -50,6 +51,8 @@ import { TagModule } from 'primeng/tag';
     BreadcrumbModule,
     TreeTableModule,
     TagModule,
+    TreeSelectModule,
+    ChipsModule
   ],
 })
 export class AnalysisModule {}

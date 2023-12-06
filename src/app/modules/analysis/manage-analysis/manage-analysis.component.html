@@ -3,7 +3,9 @@
         <h3>Analytics Manager</h3>
     </div>
     <div class="m-3">
-        <button pButton pRipple label="Create" class="p-button-success mx-1" icon="pi pi-plus"
+        <button pButton pRipple label="Create Node" class="p-button-success mx-1" icon="pi pi-plus"
+            (click)="createNodeModal = true;"></button>
+            <button pButton pRipple label="Create Node Children" class="p-button-success mx-1" icon="pi pi-plus"
             (click)="createModal = true;"></button>
         <button pButton pRipple label="Update Label" class="p-button-secondary mx-1" icon="pi pi-plus"
             (click)="createLabelModal = true"></button>
@@ -42,32 +44,23 @@
     </p-table>
 </div>
 
-<p-dialog header="Create Modal" [(visible)]="createModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
-    [resizable]="false">
+<p-dialog header="Create Modal" [(visible)]="createModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="true"
+    [resizable]="true">
     <div class="row mx-0">
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
-            <p-multiSelect [options]="itemsAsSelectItems" appendTo="body" defaultLabel="Select Analytics"
-                styleClass="w-100" [(ngModel)]="selectedText" display="chip" [filter]="true" [selectionLimit]="1" [virtualScroll]="true" 
-                [attr.virtualScrollItemSize]="43" [showToggleAll]="true" >
-                <p-header class="w-100 mb-3">
-                    <div class="row w-100">
-                        <div class="col-11">
-                            <input type="text" placeholder="Add another option" #multieOptionInput pInputText
-                                style="min-height:2em;width: 100%;" />
-                        </div>
-                        <div class="col-1">
-                            <p-button (click)="addOption(multieOptionInput)">Add</p-button>
-                        </div>
-                    </div>
-                </p-header>
-            </p-multiSelect>
+            <div class="card flex justify-content-center">
+                <p-treeSelect class="w-full md:w-20rem"  [(ngModel)]="selectedNode" [filter]="true" filterBy="name"
+                    appendTo="body" styleClass="w-100" [options]="dropDownAnalytics" display="chip" [metaKeySelection]="false"
+                    selectionMode="checkbox" placeholder="Select Item" (onNodeSelect)="nodeSelect($event)">
+                </p-treeSelect>
+            </div>
         </div>
         <div class="col-12 my-3">
             <button class="btn btn-primary py-2 w-100" *ngIf="creatingStatus">
                 <span>Creating...<i class="fas fa-spinner fa-spin"></i></span>
             </button>
-            <button class="btn btn-primary w-100" *ngIf="!creatingStatus" (click)="create(selectedText)">Create</button>
+            <button class="btn btn-primary w-100" *ngIf="!creatingStatus" (click)="createNodeChildren()">Create</button>
         </div>
     </div>
 </p-dialog>
@@ -97,6 +90,22 @@
         </div>
         <div class="col-12 my-3">
             <button class="btn btn-primary w-100" (click)="UpdateName()">Update</button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Create Node Modal" [(visible)]="createNodeModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+    [resizable]="true">
+    <div class="row mx-0">
+        <div class="col-12 my-3">
+            <label for="">Analytic Name</label>
+            <p-chips [(ngModel)]="selectedNames" ngClass="w-100"></p-chips>
+        </div>
+        <div class="col-12 my-3">
+            <button class="btn btn-primary py-2 w-100" *ngIf="creatingStatus">
+                <span>Creating...<i class="fas fa-spinner fa-spin"></i></span>
+            </button>
+            <button class="btn btn-primary w-100" *ngIf="!creatingStatus" (click)="createNode()">Create</button>
         </div>
     </div>
 </p-dialog>

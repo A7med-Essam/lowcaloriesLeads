@@ -10,9 +10,10 @@ import { ConfirmationService, MenuItem, SelectItem } from 'primeng/api';
 export class ManageAnalysisComponent implements OnInit {
   items: MenuItem[] = [];
   createModal: boolean = false;
+  createNodeModal: boolean = false;
   updateModal: boolean = false;
   createLabelModal: boolean = false;
-  selectedText: any[] = [];
+  selectedNode: any[] = [];
   reasons: any[] = [];
   analytics: any = [];
   analytics_clone: any[] = [];
@@ -24,13 +25,15 @@ export class ManageAnalysisComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAnalytics();
-    this.getSuggestDataOptions();
+    // this.getSuggestDataOptions();
   }
 
   getAnalytics() {
     this._AnalysisService.getDataAnalyticOption().subscribe({
       next: (res) => {
         this.analytics = this.analytics_clone = res.data;
+        const deepClone = JSON.parse(JSON.stringify(this.analytics_clone));
+        this.toggleNameAndLabel(deepClone);
       },
     });
   }
@@ -47,10 +50,12 @@ export class ManageAnalysisComponent implements OnInit {
     this._AnalysisService.suggestDataOptions().subscribe({
       next: (res) => {
         // this.reasons = this.reasons_clone = [...new Set(res.data)];
-        const outputArray = Object.entries(res.data).map(([id, name], index) => ({
-          id: index + 1,
-          name
-        }));
+        const outputArray = Object.entries(res.data).map(
+          ([id, name], index) => ({
+            id: index + 1,
+            name,
+          })
+        );
         this.reasons = outputArray;
       },
     });
@@ -96,9 +101,6 @@ export class ManageAnalysisComponent implements OnInit {
   creatingStatus: boolean = false;
   create(selectedAnalytics: any) {
     // this.creatingStatus = true;
-
-    console.log(selectedAnalytics);
-
     // let data: any = {
     //   names: selectedAnalytics,
     //   parent_id: this.items.length
@@ -107,17 +109,16 @@ export class ManageAnalysisComponent implements OnInit {
     //   label:
     //     this.analytics && this.analytics.length ? this.analytics[0].label : '0',
     // };
-
     // this.addNewDataAnalyticOption(data);
   }
 
-  addNewDataAnalyticOption(data:any){
+  addNewDataAnalyticOption(data: any) {
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
       this.creatingStatus = false;
-      this.getSuggestDataOptions();
+      // this.getSuggestDataOptions();
       this.createModal = false;
       this.resetClone();
-      this.selectedText = [];
+      this.selectedNode = [];
       if (this.analytics == undefined) {
         this.analytics = [];
       }
@@ -132,20 +133,10 @@ export class ManageAnalysisComponent implements OnInit {
           });
         }
       });
+
+      const deepClone = JSON.parse(JSON.stringify(this.analytics));
+      this.toggleNameAndLabel(deepClone);
     });
-  }
-
-
-  addOption(el: HTMLInputElement) {
-    if (el.value != '') {
-      const data = {
-        id:el.value,
-        name:el.value
-      }
-      this.reasons.push(data);
-      this.selectedText.push(el.value);
-      el.value = '';
-    }
   }
 
   confirm(row: any) {
@@ -171,28 +162,77 @@ export class ManageAnalysisComponent implements OnInit {
 
   get itemsAsSelectItems(): SelectItem[] {
     return this.reasons.map(
-      (item,id) => ({ label: item.name, value: id } as SelectItem)
+      (item, id) => ({ label: item.name, value: id } as SelectItem)
     );
   }
 
-  currentRow:any;
-  updateRow(row:any){
+  currentRow: any;
+  updateRow(row: any) {
     this.currentRow = row;
     this.updateModal = true;
     this.selectedName = row.name;
   }
 
-  selectedName:string = "";
-  UpdateName(){
-    if (this.selectedName != "") {
+  selectedName: string = '';
+  UpdateName() {
+    if (this.selectedName != '') {
       const data = {
         data_analytic_option_id: this.currentRow.id,
-        name: this.selectedName
-      }
-      this._AnalysisService.updateAnalyticName(data).subscribe(res=>{
+        name: this.selectedName,
+      };
+      this._AnalysisService.updateAnalyticName(data).subscribe((res) => {
         this.updateModal = false;
         this.getAnalytics();
-      })
+      });
     }
+  }
+
+  dropDownAnalytics: any[] = [];
+  toggleNameAndLabel(node: any[]) {
+    node.forEach((element) => {
+      [element.name, element.label] = [element.label, element.name];
+      if (element.children && element.children.length > 0) {
+        this.toggleNameAndLabel(element.children);
+      }
+    });
+    this.dropDownAnalytics = node;
+  }
+
+  node: any;
+  nodeSelect(e: any) {
+    this.node = e.node;
+  }
+
+  selectedNames: any[] = [];
+  createNode() {
+    if (this.selectedNames.length) {
+      this.creatingStatus = true;
+      let data: any = {
+        names: this.selectedNames,
+        parent_id: this.items.length
+          ? this.items[this.items.length - 1].id
+          : null,
+        label:
+          this.analytics && this.analytics.length
+            ? this.analytics[0].label
+            : '0',
+      };
+      this.addNewDataAnalyticOption(data);
+      this.createNodeModal = false;
+      this.selectedNames = [];
+    }
+  }
+
+  createNodeChildren() {
+    this.creatingStatus = true;
+    let data: any = {
+      parent_id: this.items.length
+      ? this.items[this.items.length - 1].id
+      : null,
+      copy_id: this.node.id,
+      label: 'N/A',
+    };
+    this.addNewDataAnalyticOption(data);
+    this.createModal = false;
   }
 }
