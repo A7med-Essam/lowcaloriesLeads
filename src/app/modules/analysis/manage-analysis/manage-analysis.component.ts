@@ -158,6 +158,7 @@ export class ManageAnalysisComponent implements OnInit {
         a.label = label;
         return a;
       });
+      this.resetClone();
     });
   }
 
@@ -189,7 +190,7 @@ export class ManageAnalysisComponent implements OnInit {
           }
           return al
         });
-
+        this.resetClone();
       });
     }
   }
