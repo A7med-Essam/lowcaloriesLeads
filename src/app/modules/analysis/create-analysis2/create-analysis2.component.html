@@ -8,7 +8,8 @@
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Phone Number <span class="text-danger">*</span></label>
                 <input type="text" pInputText ngClass="w-100" formControlName='mobile' maxlength="10"
-                    (blur)="getCustomerCID(Phone_Input)" #Phone_Input (keydown.enter)="$event.preventDefault()"
+                    (blur)="getCustomerCID(Phone_Input)" #Phone_Input 
+                    (keydown.enter)="onEnterKey($event)"
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 <small class="text-danger ms-1" *ngIf="
                 analysisForm.get('mobile')?.hasError('required')">This field is required.</small>
@@ -23,7 +24,8 @@
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Customer Name</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='customer_name' (keydown.enter)="$event.preventDefault()" />
+                <input type="text" pInputText ngClass="w-100" formControlName='customer_name'
+                    (keydown.enter)="$event.preventDefault()" />
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Gender</label>
@@ -31,15 +33,17 @@
                     styleClass="w-100" placeholder="Select Gender">
                 </p-dropdown>
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="analysisForm.contains('customer_branch') && !this.analysisForm.get('customer_branch')?.disabled">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"
+                *ngIf="analysisForm.contains('customer_branch') && !this.analysisForm.get('customer_branch')?.disabled">
                 <label for="">Customer Branch</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='customer_branch' (keydown.enter)="$event.preventDefault()"/>
+                <input type="text" pInputText ngClass="w-100" formControlName='customer_branch'
+                    (keydown.enter)="$event.preventDefault()" />
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3" *ngIf="analysisForm.contains('emirate_id') && !this.analysisForm.get('emirate_id')?.disabled">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3"
+                *ngIf="analysisForm.contains('emirate_id') && !this.analysisForm.get('emirate_id')?.disabled">
                 <label for="">Emirate</label>
-                <p-dropdown [options]="emirates" formControlName='emirate_id' appendTo="body"
-                    styleClass="w-100" optionValue="id" optionLabel="en_name" placeholder="Select Emirate"
-                    [filter]="true">
+                <p-dropdown [options]="emirates" formControlName='emirate_id' appendTo="body" styleClass="w-100"
+                    optionValue="id" optionLabel="en_name" placeholder="Select Emirate" [filter]="true">
                 </p-dropdown>
             </div>
             <hr>
@@ -65,7 +69,8 @@
             <hr>
             <div class="col-12 my-1">
                 <label for="">Any Notes</label>
-                <textarea pInputTextarea ngClass="w-100" formControlName='notes' (keydown.enter)="$event.preventDefault()"></textarea>
+                <textarea pInputTextarea ngClass="w-100" formControlName='notes'
+                    (keydown.enter)="$event.preventDefault()"></textarea>
             </div>
 
             <div class="col-10 my-3">
@@ -88,8 +93,8 @@
 
 <p-dialog header="Reminder Date" [(visible)]="reminderModal" position="bottom" [style]="{ width: '50vw' }"
     [modal]="true" [resizable]="false" [draggable]="false">
-    <p-calendar [showIcon]="true" [defaultDate]="defaultReminder" [(ngModel)]="defaultReminder" [minDate]="minReminder" [showTime]="true" [maxDate]="maxReminder"
-        appendTo="body"></p-calendar>
+    <p-calendar [showIcon]="true" [defaultDate]="defaultReminder" [(ngModel)]="defaultReminder" [minDate]="minReminder"
+        [showTime]="true" [maxDate]="maxReminder" appendTo="body"></p-calendar>
     <button class="btn btn-primary mt-2 w-100" (click)="setDefaultReminder()">
         Add Reminder
     </button>

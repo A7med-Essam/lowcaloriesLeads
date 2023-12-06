@@ -47,42 +47,79 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
 
   getCustomerCID(e: HTMLInputElement) {
     if (e.value != '') {
-      this._RefundService.getCIDs(e.value).subscribe((res) => {
-        this.cids = res;
-        if (res.length == 0) {
-          this.checkCustomerExsist(e.value);
-        } else {
-          this.analysisForm.controls.customer_name.disable();
-          this.analysisForm.controls.customer_branch.disable();
-          if (this.analysisForm.contains('emirate_id')) {
-            this.analysisForm.get('emirate_id')?.disable();
-          }
-          this.analysisForm.get('customer_branch')?.enable();
-        }
-      });
+      this.getCIDs(e.value);
     }
   }
 
   checkCustomerExsist(number: any) {
     this._AnalysisService.checkPhoneNumberExist(number).subscribe((res) => {
       if (res.status == 1) {
-        // exsist customer
-      } else {
-        const data = {
-          value: this.filterCustomerStatus('New Customer').name,
-        };
-        this.storeSelectedOptions(data, 0);
+        this.analysisForm.addControl('emirate_id', this.fb.control(''));
+        this.analysisForm.get('emirate_id')?.enable();
+        this.analysisForm.get('customer_branch')?.disable();
+        this.cids = res.data.cids;
         this.analysisForm.patchValue({
-          customer_status: this.filterCustomerStatus('New Customer').name,
+          customer_name: `${res.data.first_name} ${res.data.last_name}`,
+          emirate_id: res.data.emirate_id,
+          customer_gender: res.data.gender,
         });
-        this.analysisForm.controls.customer_status.disable();
+        this.analysisForm.controls.customer_name.disable();
+        this.analysisForm.controls.customer_gender.disable();
+        this.changeCustomerStatus('old');
+      } else {
+        // const data = {
+        //   value: this.filterCustomerStatus('New Customer').name,
+        // };
+        // this.storeSelectedOptions(data, 0);
+        // this.analysisForm.patchValue({
+        //   customer_status: this.filterCustomerStatus('New Customer').name,
+        // });
+        // this.analysisForm.controls.customer_status.disable();
+        // this.analysisForm.controls.customer_branch.enable();
         this.analysisForm.controls.customer_name.enable();
-        this.analysisForm.controls.customer_branch.enable();
         this.analysisForm.addControl('emirate_id', this.fb.control(''));
         this.analysisForm.get('emirate_id')?.enable();
         if (this.analysisForm.contains('customer_branch')) {
           this.analysisForm.get('customer_branch')?.disable();
         }
+        this.changeCustomerStatus('new');
+      }
+    });
+  }
+
+  changeCustomerStatus(type :string){
+    this._AnalysisService.getFormAnalytics().subscribe((res) => {
+      this.analyticOptions = res.data.options;
+      this.emirates = res.data.emirates;
+      this.options = [res.data.options];
+      if (type == 'old') {
+        const filteredData = this.analyticOptions.filter((item:any) => item.name === "Old Customer" || item.name === "Exist Customer");
+        this.options = [filteredData]
+      }
+      else{
+        const filteredData = this.analyticOptions.filter((item:any) => item.name === "New Customer" || item.name === "Management");
+        this.options = [filteredData]
+      }
+    });
+  }
+
+  onEnterKey(e:any){
+    e.preventDefault()
+    this.getCIDs(e.target.value);
+  }
+
+  getCIDs(value:string){
+    this._RefundService.getCIDs(value).subscribe((res) => {
+      this.cids = res;
+      if (res.length == 0) {
+        this.checkCustomerExsist(value);
+      } else {
+        this.analysisForm.controls.customer_name.disable();
+        this.analysisForm.controls.customer_branch.disable();
+        if (this.analysisForm.contains('emirate_id')) {
+          this.analysisForm.get('emirate_id')?.disable();
+        }
+        this.analysisForm.get('customer_branch')?.enable();
       }
     });
   }
