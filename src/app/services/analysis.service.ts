@@ -56,6 +56,10 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`exportDataAnalyticRequest`, '');
   }
 
+  exportAllV2(): Observable<any> {
+    return this._ApiConfigService.postReq3(`exportDataAnalyticRequest`, { version: 'v2' });
+  }
+
   exportByIds(dataRequestIds: number[]): Observable<any> {
     return this._ApiConfigService.postReq3(`exportDataAnalyticRequestByIds`, {
       dataRequestIds,

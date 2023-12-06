@@ -172,7 +172,7 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
 
   storeSelectedOptions(e: any, index: number) {
     const selectedIndex = this.getArrayIndex(e.value, index);
-    if (selectedIndex > 0) {
+    if (selectedIndex >= 0) {
       this.options.splice(index + 1);
       if (this.options[index][selectedIndex].has_children) {
         this.options.push(this.options[index][selectedIndex].children);

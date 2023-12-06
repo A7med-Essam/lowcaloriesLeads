@@ -147,7 +147,7 @@ export class ShowAnalysis2Component implements OnInit {
         const ids = this.analytics.map((obj: any) => obj.id);
         exportObservable = this._AnalysisService.exportByIds(ids);
       } else {
-        exportObservable = this._AnalysisService.exportAll();
+        exportObservable = this._AnalysisService.exportAllV2();
       }
       exportObservable.subscribe({
         next: (res) => {

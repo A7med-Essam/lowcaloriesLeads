@@ -33,7 +33,8 @@
                 <td class="text-center">{{analysis?.customer_name}}</td>
                 <td class="text-center">{{analysis?.customer_gender}}</td>
                 <td class="text-center">
-                    <p-tag *ngIf="analysis?.reminders_count" severity="success" [value]="analysis?.reminders_count+' Reminder'"></p-tag>
+                    <p-tag *ngIf="analysis?.reminders_count" severity="success"
+                        [value]="analysis?.reminders_count+' Reminder'"></p-tag>
                 </td>
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
@@ -56,8 +57,8 @@
             <div class="row mx-0">
                 <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
                     <label for="">Team</label>
-                    <p-dropdown [options]="teams" formControlName="team" placeholder="Select Team"
-                        styleClass="w-100" appendTo="body">
+                    <p-dropdown [options]="teams" formControlName="team" placeholder="Select Team" styleClass="w-100"
+                        appendTo="body">
                     </p-dropdown>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
@@ -80,8 +81,9 @@
                 </div>
                 <div class="col-md-4 col-12 my-1" *ngIf="cids.length">
                     <label for="">CID</label>
-                    <p-dropdown [options]="cids" formControlName='cid' appendTo="body" (onChange)="getCustomerInfo($event)"
-                        styleClass="w-100" placeholder="Select CID" optionLabel="cid" optionValue="cid">
+                    <p-dropdown [options]="cids" formControlName='cid' appendTo="body"
+                        (onChange)="getCustomerInfo($event)" styleClass="w-100" placeholder="Select CID"
+                        optionLabel="cid" optionValue="cid">
                     </p-dropdown>
                 </div>
                 <div class="col-md-4 col-12 my-1" *ngIf="cids.length == 0">
@@ -120,8 +122,9 @@
                     <ng-container *ngFor="let keyValuePair of allAnalyticOptions | keyvalue; let i = index">
                         <div class="col-md-4 col-12 my-1">
                             <label for="">{{keyValuePair.key}}</label>
-                            <p-dropdown [options]="getObjectKeyValues(keyValuePair.key)" appendTo="body" formControlName='{{keyValuePair.key}}'
-                                styleClass="w-100" optionValue="name" optionLabel="name" placeholder="Select Option">
+                            <p-dropdown [options]="getObjectKeyValues(keyValuePair.key)" appendTo="body"
+                                formControlName='{{keyValuePair.key}}' styleClass="w-100" optionValue="name"
+                                optionLabel="name" placeholder="Select Option">
                             </p-dropdown>
                         </div>
                     </ng-container>
@@ -206,6 +209,12 @@
                                 Gender
                             </td>
                             <td>{{ currentRow?.customer_gender }}</td>
+                        </tr>
+                        <tr>
+                            <td [width]="200">
+                                Notes
+                            </td>
+                            <td>{{ currentRow?.notes }}</td>
                         </tr>
                         <tr *ngFor="let item of currentRow?.data_options">
                             <td [width]="200">
