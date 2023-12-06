@@ -184,7 +184,13 @@ export class ManageAnalysisComponent implements OnInit {
       };
       this._AnalysisService.updateAnalyticName(data).subscribe((res) => {
         this.updateModal = false;
-        this.getAnalytics();
+        this.analytics = this.analytics.map((al:any) => {
+          if (al.id == this.currentRow.id){
+            al.name = this.selectedName
+          }
+          return al
+        });
+
       });
     }
   }
