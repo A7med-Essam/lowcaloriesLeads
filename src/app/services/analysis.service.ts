@@ -112,9 +112,9 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`addNewDataAnalyticOption`, data);
   }
 
-  deleteDataAnalyticOption(data_analytic_option_id: number): Observable<any> {
+  deleteDataAnalyticOption(id: number): Observable<any> {
     return this._ApiConfigService.postReq3(`deleteDataAnalyticOption`, {
-      data_analytic_option_id,
+      data_analytic_option_ids:[id],
     });
   }
 
@@ -135,6 +135,17 @@ export class AnalysisService {
   updateAnalyticName(data: any): Observable<any> {
     return this._ApiConfigService.postReq3(`updateDataAnalyticOption`, data);
   }
+
+  getAnalyticsChildrenById(data_analytic_option_id: number): Observable<any> {
+    return this._ApiConfigService.postReq3(`showDataAnalyticOption`, {
+      data_analytic_option_id,
+    });
+  }
+
+  getLabels(): Observable<any> {
+    return this._ApiConfigService.postReq3(`getAllLabelDataAnalyticOption`, '');
+  }
+
 
   // ================================================V2=================================================
 
@@ -167,5 +178,9 @@ export class AnalysisService {
 
   getAllAnalyticOptions(): Observable<any> {
     return this._ApiConfigService.postReq3(`getAllParentDataAnalyticOption`, '');
+  }
+
+  deleteBulkData(rows:any){
+    return this._ApiConfigService.postReq3(`deleteDataAnalyticOption`, rows);
   }
 }

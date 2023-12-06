@@ -131,7 +131,7 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
   allAnalyticOptions: any;
   getAllAnalyticOptions() {
     this._AnalysisService.getAllAnalyticOptions().subscribe((res) => {
-      this.allAnalyticOptions = res.data[0];
+      this.allAnalyticOptions = res.data;
     });
   }
 
@@ -154,12 +154,14 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
 
   update(form: FormGroup) {
     if (form.valid) {
+      this.creatingStatus = true;
       this.analysisForm.patchValue({
         data_options: this.buildHierarchy(),
       });
       this._AnalysisService
         .updateAnalytics2(form.getRawValue())
         .subscribe((res) => {
+          this.creatingStatus = false;
           this._MessageService.add({
             severity: 'success',
             summary: 'Created Successfully',
@@ -170,12 +172,29 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
     }
   }
 
+  // storeSelectedOptions(e: any, index: number) {
+  //   const selectedIndex = this.getArrayIndex(e.value, index);
+  //   if (selectedIndex >= 0) {
+  //     this.options.splice(index + 1);
+  //     if (this.options[index][selectedIndex].has_children) {
+  //       this.options.push(this.options[index][selectedIndex].children);
+  //     }
+  //   }
+  // }
+
   storeSelectedOptions(e: any, index: number) {
     const selectedIndex = this.getArrayIndex(e.value, index);
-    if (selectedIndex >= 0) {
-      this.options.splice(index + 1);
-      if (this.options[index][selectedIndex].has_children) {
+    this.options.splice(index + 1);
+    if (this.options[index][selectedIndex].has_children) {
+      if (this.options[index][selectedIndex].children) {
         this.options.push(this.options[index][selectedIndex].children);
+      } else {
+        this._AnalysisService
+          .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
+          .subscribe((res) => {
+            this.options[index][selectedIndex].children = res.data;
+            this.options.push(this.options[index][selectedIndex].children);
+          });
       }
     }
   }

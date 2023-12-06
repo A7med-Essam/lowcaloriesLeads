@@ -50,7 +50,6 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       this._RefundService.getCIDs(e.value).subscribe((res) => {
         this.cids = res;
         if (res.length == 0) {
-       
           this.checkCustomerExsist(e.value);
         } else {
           this.analysisForm.controls.customer_name.disable();
@@ -64,8 +63,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     }
   }
 
-  checkCustomerExsist(number:any){
-    this._AnalysisService.checkPhoneNumberExist(number).subscribe(res=>{
+  checkCustomerExsist(number: any) {
+    this._AnalysisService.checkPhoneNumberExist(number).subscribe((res) => {
       if (res.status == 1) {
         // exsist customer
       } else {
@@ -85,7 +84,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
           this.analysisForm.get('customer_branch')?.disable();
         }
       }
-    })
+    });
   }
 
   getCustomerInfo(e: any) {
@@ -98,7 +97,6 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     });
     this.setCustomerStatus(selectedCID.remainingDays);
   }
-
 
   setCustomerStatus(remainingDays: number) {
     if (remainingDays > 0) {
@@ -118,9 +116,13 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
   }
 
   filterCustomerStatus(status: string) {
-    return this.options[0].filter(
-      (o: any) => o.name.toLowerCase() === status.toLowerCase()
-    )[0];
+    if (this.options && this.options.length) {
+      return this.options[0].filter(
+        (o: any) => o.name.toLowerCase() === status.toLowerCase()
+      )[0];
+    } else {
+      return status;
+    }
   }
 
   ngOnDestroy(): void {
@@ -168,7 +170,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
           notes: `${this.current_user.name} => ${form.value.notes}`,
         });
       }
-   
+
       this.analysisForm.patchValue({
         data_options: this.buildHierarchy(),
       });
@@ -201,7 +203,16 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     const selectedIndex = this.getArrayIndex(e.value, index);
     this.options.splice(index + 1);
     if (this.options[index][selectedIndex].has_children) {
-      this.options.push(this.options[index][selectedIndex].children);
+      if (this.options[index][selectedIndex].children) {
+        this.options.push(this.options[index][selectedIndex].children);
+      } else {
+        this._AnalysisService
+          .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
+          .subscribe((res) => {
+            this.options[index][selectedIndex].children = res.data;
+            this.options.push(this.options[index][selectedIndex].children);
+          });
+      }
     }
   }
 

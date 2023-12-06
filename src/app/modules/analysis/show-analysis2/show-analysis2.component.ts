@@ -95,7 +95,7 @@ export class ShowAnalysis2Component implements OnInit {
   allAnalyticOptions: any;
   getAllAnalyticOptions() {
     this._AnalysisService.getAllAnalyticOptions().subscribe((res) => {
-      this.allAnalyticOptions = res.data[0];
+      this.allAnalyticOptions = res.data;
       Object.keys(this.allAnalyticOptions).forEach((c, index) => {
         this.filterForm.addControl(c, this.fb.control(''));
       });

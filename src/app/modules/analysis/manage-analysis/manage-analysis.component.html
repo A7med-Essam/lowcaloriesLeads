@@ -5,10 +5,12 @@
     <div class="m-3">
         <button pButton pRipple label="Create Node" class="p-button-success mx-1" icon="pi pi-plus"
             (click)="createNodeModal = true;"></button>
-            <button pButton pRipple label="Create Node Children" class="p-button-success mx-1" icon="pi pi-plus"
+        <button pButton pRipple label="Create Node Children" class="p-button-success mx-1" icon="pi pi-plus"
             (click)="createModal = true;"></button>
         <button pButton pRipple label="Update Label" class="p-button-secondary mx-1" icon="pi pi-plus"
             (click)="createLabelModal = true"></button>
+        <button pButton pRipple label="Delete Bulk" class="p-button-danger mx-1" icon="pi pi-trash"
+            (click)="deleteBulk()"></button>
     </div>
 </div>
 
@@ -20,7 +22,11 @@
     <p-table [value]="analytics">
         <ng-template pTemplate="header">
             <tr>
-                <th class="text-center">#</th>
+                <th class="text-center">
+                    <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)"
+                        [pSelectableRow]="analytics"></p-tableHeaderCheckbox>
+                </th>
+                <!-- <th class="text-center">#</th> -->
                 <th class="text-center">Label</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Actions</th>
@@ -28,7 +34,11 @@
         </ng-template>
         <ng-template pTemplate="body" let-analysis>
             <tr>
-                <td class="text-center">{{analysis?.id}}</td>
+                <td class="text-center">
+                    <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="analysis">
+                    </p-tableCheckbox>
+                </td>
+                <!-- <td class="text-center">{{analysis?.id}}</td> -->
                 <td class="text-center">{{analysis?.label}}</td>
                 <td class="text-center">{{analysis?.name}}</td>
                 <td class="text-center">
@@ -50,8 +60,8 @@
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
             <div class="card flex justify-content-center">
-                <p-treeSelect class="w-full md:w-20rem"  [(ngModel)]="selectedNode" [filter]="true"
-                    appendTo="body" styleClass="w-100" [options]="dropDownAnalytics" display="chip" [metaKeySelection]="false"
+                <p-treeSelect class="w-full md:w-20rem" [(ngModel)]="selectedNode" [filter]="true" appendTo="body"
+                    styleClass="w-100" [options]="dropDownAnalytics" display="chip" [metaKeySelection]="false"
                     selectionMode="checkbox" placeholder="Select Item" (onNodeSelect)="nodeSelect($event)">
                 </p-treeSelect>
             </div>
@@ -65,8 +75,8 @@
     </div>
 </p-dialog>
 
-<p-dialog header="Create Node Modal" [(visible)]="createNodeModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
-    [resizable]="true">
+<p-dialog header="Create Node Modal" [(visible)]="createNodeModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="true" [resizable]="true">
     <div class="row mx-0">
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
@@ -103,11 +113,14 @@
     <div class="row mx-0">
         <div class="col-12 my-3">
             <label for="">Analytic Label</label>
-            <input type="text" pInputText ngClass="w-100" #label />
+            <input type="text" pInputText ngClass="w-100" [(ngModel)]="selectedlabelText"/>
+            <hr>
+            <p-dropdown [options]="labelsAsSelectItems" styleClass="w-100" placeholder="Select Label" appendTo="body"
+                [filter]="true" [(ngModel)]="selectedLabel">
+            </p-dropdown>
         </div>
         <div class="col-12 my-3">
-            <button class="btn btn-primary w-100" (click)="createLabel(label.value)">Create Label</button>
+            <button class="btn btn-primary w-100" (click)="createLabel()">Create Label</button>
         </div>
     </div>
 </p-dialog>
-

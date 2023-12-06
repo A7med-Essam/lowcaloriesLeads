@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalysisService } from 'src/app/services/analysis.service';
 import { ConfirmationService, MenuItem, SelectItem } from 'primeng/api';
+import { TableCheckbox } from 'primeng/table';
 
 @Component({
   selector: 'app-manage-analysis',
@@ -17,7 +18,7 @@ export class ManageAnalysisComponent implements OnInit {
   reasons: any[] = [];
   analytics: any = [];
   analytics_clone: any[] = [];
-
+  selectedLabel: any = null;
   constructor(
     private _AnalysisService: AnalysisService,
     private _ConfirmationService: ConfirmationService
@@ -25,6 +26,14 @@ export class ManageAnalysisComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAnalytics();
+    this.getLabels();
+  }
+
+  labels: any[] = [];
+  getLabels() {
+    this._AnalysisService.getLabels().subscribe((res) => {
+      this.labels = res.data;
+    });
   }
 
   getAnalytics() {
@@ -38,13 +47,17 @@ export class ManageAnalysisComponent implements OnInit {
   }
 
   resetClone() {
-    this._AnalysisService.getDataAnalyticOption().subscribe({
-      next: (res) => {
-        this.analytics_clone = res.data;
-        const deepClone = JSON.parse(JSON.stringify(this.analytics_clone));
-        this.toggleNameAndLabel(deepClone);
-      },
-    });
+    if (this.items.length) {
+      const deepClone = JSON.parse(JSON.stringify(this.items[0]?.items));
+      this.toggleNameAndLabel(deepClone);
+    } else {
+      this._AnalysisService.getDataAnalyticOption().subscribe({
+        next: (res) => {
+          const deepClone = JSON.parse(JSON.stringify(res.data));
+          this.toggleNameAndLabel(deepClone);
+        },
+      });
+    }
   }
 
   getSuggestDataOptions() {
@@ -63,13 +76,43 @@ export class ManageAnalysisComponent implements OnInit {
   }
 
   getChildren(analysis: any): void {
-    this.items.push({
-      items: this.analytics,
-      label: analysis.name,
-      id: analysis.id,
+    // if (analysis.children) {
+    //   this.items.push({
+    //     items: this.analytics,
+    //     label: analysis.name,
+    //     id: analysis.id,
+    //   });
+    //   this.analytics = analysis.children;
+    //   this.items = [...this.items];
+    //   this.resetClone();
+    // } else {
+    //   this._AnalysisService
+    //     .getAnalyticsChildrenById(analysis.id)
+    //     .subscribe((res) => {
+    //       this.items.push({
+    //         items: this.analytics,
+    //         label: analysis.name,
+    //         id: analysis.id,
+    //       });
+    //       analysis.children = res.data;
+    //       this.analytics = analysis.children;
+    //       this.items = [...this.items];
+    //       this.resetClone();
+    //     });
+    // }
+    this._AnalysisService
+    .getAnalyticsChildrenById(analysis.id)
+    .subscribe((res) => {
+      this.items.push({
+        items: this.analytics,
+        label: analysis.name,
+        id: analysis.id,
+      });
+      analysis.children = res.data;
+      this.analytics = analysis.children;
+      this.items = [...this.items];
+      this.resetClone();
     });
-    this.analytics = analysis.children;
-    this.items = [...this.items];
   }
 
   deleteRow(analysis: any): void {
@@ -80,6 +123,10 @@ export class ManageAnalysisComponent implements OnInit {
         .deleteDataAnalyticOption(analysis.id)
         .subscribe((res) => {
           this.resetClone();
+          this.analytics = this.analytics.filter(
+            (al: any) => al.id != analysis.id
+          );
+          // this.items[this.items.length-1].items = this.analytics
         });
     }
   }
@@ -96,30 +143,22 @@ export class ManageAnalysisComponent implements OnInit {
       } else {
         this.items = [];
         this.analytics = this.analytics_clone;
+        this._AnalysisService.getDataAnalyticOption().subscribe({
+          next: (res) => {
+            this.analytics = this.analytics_clone = res.data;
+            const deepClone = JSON.parse(JSON.stringify(this.analytics_clone));
+            this.toggleNameAndLabel(deepClone);
+          },
+        });
       }
     }
   }
   creatingStatus: boolean = false;
-  create(selectedAnalytics: any) {
-    // this.creatingStatus = true;
-    // let data: any = {
-    //   names: selectedAnalytics,
-    //   parent_id: this.items.length
-    //     ? this.items[this.items.length - 1].id
-    //     : null,
-    //   label:
-    //     this.analytics && this.analytics.length ? this.analytics[0].label : '0',
-    // };
-    // this.addNewDataAnalyticOption(data);
-  }
-
   addNewDataAnalyticOption(data: any) {
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
       if (res.status == 1) {
         this.creatingStatus = false;
-        // this.getSuggestDataOptions();
         this.createModal = false;
-        // this.resetClone();
         this.selectedNode = [];
         if (this.analytics == undefined) {
           this.analytics = [];
@@ -149,10 +188,15 @@ export class ManageAnalysisComponent implements OnInit {
     });
   }
 
-  createLabel(label: string) {
+  selectedlabelText: any = null;
+  createLabel() {
     const ids = this.analytics.map((a: any) => a.id);
+    const label =
+      this.selectedLabel != null ? this.selectedLabel : this.selectedlabelText;
     const data = { ids, label };
     this._AnalysisService.addLabelForDataOption(data).subscribe((res) => {
+      this.selectedLabel = null;
+      this.selectedlabelText = null;
       this.createLabelModal = false;
       this.analytics = this.analytics.map((a: any) => {
         a.label = label;
@@ -165,6 +209,12 @@ export class ManageAnalysisComponent implements OnInit {
   get itemsAsSelectItems(): SelectItem[] {
     return this.reasons.map(
       (item, id) => ({ label: item.name, value: id } as SelectItem)
+    );
+  }
+
+  get labelsAsSelectItems(): SelectItem[] {
+    return this.labels.map(
+      (item, id) => ({ label: item, value: item } as SelectItem)
     );
   }
 
@@ -184,11 +234,11 @@ export class ManageAnalysisComponent implements OnInit {
       };
       this._AnalysisService.updateAnalyticName(data).subscribe((res) => {
         this.updateModal = false;
-        this.analytics = this.analytics.map((al:any) => {
-          if (al.id == this.currentRow.id){
-            al.name = this.selectedName
+        this.analytics = this.analytics.map((al: any) => {
+          if (al.id == this.currentRow.id) {
+            al.name = this.selectedName;
           }
-          return al
+          return al;
         });
         this.resetClone();
       });
@@ -235,12 +285,57 @@ export class ManageAnalysisComponent implements OnInit {
     this.creatingStatus = true;
     let data: any = {
       parent_id: this.items.length
-      ? this.items[this.items.length - 1].id
-      : null,
+        ? this.items[this.items.length - 1].id
+        : null,
       copy_id: this.node.id,
       label: 'N/A',
     };
     this.addNewDataAnalyticOption(data);
     this.createModal = false;
+  }
+
+  getAnalyticsById(id: number) {
+    this._AnalysisService.getAnalyticsById(id).subscribe((res) => {
+      // this.analytics.push(...res.data)
+      this.analytics = res.data;
+    });
+  }
+  specificRows: number[] = [];
+
+  getSpecificRows(input: TableCheckbox) {
+    if (input.checked) {
+      this.specificRows.push(Number(input.value.id));
+    } else {
+      const index = this.specificRows.indexOf(Number(input.value.id));
+      if (index > -1) {
+        this.specificRows.splice(index, 1);
+      }
+    }
+  }
+
+  selectAllRows(input: any): void {
+    if (input.checked) {
+      this.specificRows = this.analytics.map((obj: any) => obj.id);
+    } else {
+      this.specificRows = [];
+    }
+  }
+
+  deleteBulk() {
+    this._ConfirmationService.confirm({
+      message: 'Are you sure that you want to perform this action?',
+      accept: () => {
+        const data = {
+          data_analytic_option_ids: this.specificRows,
+        };
+        this._AnalysisService.deleteBulkData(data).subscribe((res) => {
+          this.analytics = this.analytics.filter(
+            (al: any) => !this.specificRows.includes(al.id)
+          );
+          // this.items[this.items.length-1].items = this.analytics
+          this.resetClone();
+        });
+      },
+    });
   }
 }
