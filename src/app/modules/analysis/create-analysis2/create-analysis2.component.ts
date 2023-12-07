@@ -26,6 +26,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
   creatingStatus: boolean = false;
   cids: any[] = [];
   options: any[] = [];
+  showBranch:boolean = false;
+  current_user: any;
 
   constructor(
     private _AnalysisService: AnalysisService,
@@ -34,8 +36,6 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     private _MessageService: MessageService,
     private _LocalService: LocalService
   ) {}
-
-  current_user: any;
 
   ngOnInit(): void {
     this.createAnalysisForm();
@@ -46,17 +46,21 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
   }
 
   getCustomerCID(e: HTMLInputElement) {
-    if (e.value != '') {
-      this.getCIDs(e.value);
-    }
+    this._AnalysisService.getFormAnalytics().subscribe((res) => {
+      this.analyticOptions = res.data.options;
+      this.emirates = res.data.emirates;
+      this.options = [res.data.options];
+      if (e.value != '') {
+        this.analysisForm.controls.customer_status.enable();
+        this.analysisForm.patchValue({cid: ''});
+        this.getCIDs(e.value);
+      }
+    })
   }
 
   checkCustomerExsist(number: any) {
     this._AnalysisService.checkPhoneNumberExist(number).subscribe((res) => {
       if (res.status == 1) {
-        this.analysisForm.addControl('emirate_id', this.fb.control(''));
-        this.analysisForm.get('emirate_id')?.enable();
-        this.analysisForm.get('customer_branch')?.disable();
         this.cids = res.data.cids;
         this.analysisForm.patchValue({
           customer_name: `${res.data.first_name} ${res.data.last_name}`,
@@ -67,21 +71,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         this.analysisForm.controls.customer_gender.disable();
         this.changeCustomerStatus('old');
       } else {
-        // const data = {
-        //   value: this.filterCustomerStatus('New Customer').name,
-        // };
-        // this.storeSelectedOptions(data, 0);
-        // this.analysisForm.patchValue({
-        //   customer_status: this.filterCustomerStatus('New Customer').name,
-        // });
-        // this.analysisForm.controls.customer_status.disable();
-        // this.analysisForm.controls.customer_branch.enable();
         this.analysisForm.controls.customer_name.enable();
-        this.analysisForm.addControl('emirate_id', this.fb.control(''));
-        this.analysisForm.get('emirate_id')?.enable();
-        if (this.analysisForm.contains('customer_branch')) {
-          this.analysisForm.get('customer_branch')?.disable();
-        }
         this.changeCustomerStatus('new');
       }
     });
@@ -93,11 +83,11 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       this.emirates = res.data.emirates;
       this.options = [res.data.options];
       if (type == 'old') {
-        const filteredData = this.analyticOptions.filter((item:any) => item.name === "Old Customer" || item.name === "Exist Customer");
+        const filteredData = this.analyticOptions.filter((item:any) => item?.name === "Old Customer" || item?.name === "Exist Customer");
         this.options = [filteredData]
       }
       else{
-        const filteredData = this.analyticOptions.filter((item:any) => item.name === "New Customer" || item.name === "Management");
+        const filteredData = this.analyticOptions.filter((item:any) => item?.name === "New Customer" || item?.name === "Management");
         this.options = [filteredData]
       }
     });
@@ -113,13 +103,11 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       this.cids = res;
       if (res.length == 0) {
         this.checkCustomerExsist(value);
+        this.showBranch = false;
       } else {
+        this.showBranch = true;
         this.analysisForm.controls.customer_name.disable();
         this.analysisForm.controls.customer_branch.disable();
-        if (this.analysisForm.contains('emirate_id')) {
-          this.analysisForm.get('emirate_id')?.disable();
-        }
-        this.analysisForm.get('customer_branch')?.enable();
       }
     });
   }
@@ -137,16 +125,16 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
 
   setCustomerStatus(remainingDays: number) {
     if (remainingDays > 0) {
-      const data = { value: this.filterCustomerStatus('Exist Customer').name };
+      const data = { value: this.filterCustomerStatus('Exist Customer')?.name };
       this.storeSelectedOptions(data, 0);
       this.analysisForm.patchValue({
-        customer_status: this.filterCustomerStatus('Exist Customer').name,
+        customer_status: this.filterCustomerStatus('Exist Customer')?.name,
       });
     } else {
-      const data = { value: this.filterCustomerStatus('Old Customer').name };
+      const data = { value: this.filterCustomerStatus('Old Customer')?.name };
       this.storeSelectedOptions(data, 0);
       this.analysisForm.patchValue({
-        customer_status: this.filterCustomerStatus('Old Customer').name,
+        customer_status: this.filterCustomerStatus('Old Customer')?.name,
       });
     }
     this.analysisForm.controls.customer_status.disable();
@@ -171,14 +159,14 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     this.analysisForm = this.fb.group({
       mobile: ['', [Validators.required, Validators.pattern('^[\\d]{10}$')]],
       cid: '',
+      customer_branch: '',
+      emirate_id: '',
       customer_name: '',
       customer_gender: '',
-      customer_branch: '',
       customer_status: '',
       data_options: '',
       notes: '',
       reminder_date: '',
-      // emirate_id: '',
     });
   }
 
@@ -239,7 +227,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
   storeSelectedOptions(e: any, index: number) {
     const selectedIndex = this.getArrayIndex(e.value, index);
     this.options.splice(index + 1);
-    if (this.options[index][selectedIndex].has_children) {
+    if (this.options[index][selectedIndex]?.has_children) {
       if (this.options[index][selectedIndex].children) {
         this.options.push(this.options[index][selectedIndex].children);
       } else {
@@ -308,26 +296,6 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     return data;
     // return this.convertHierarchy(outputArray.map((e) => e.name));
   }
-
-  // convertHierarchy(inputArray: string[]) {
-  //   const hierarchy: any = [];
-
-  //   let currentNode = { children: hierarchy };
-
-  //   inputArray.forEach((item) => {
-  //     const newNode = { name: item, children: [] };
-  //     currentNode.children.push(newNode);
-  //     currentNode = newNode;
-  //   });
-
-  //   const data_options = [
-  //     {
-  //       name: 'Customer Status',
-  //       children: hierarchy,
-  //     },
-  //   ];
-  //   return data_options;
-  // }
 
   // ================================== REMINDER ==================================
   minReminder: Date = new Date(new Date().setDate(new Date().getDate() + 1));
