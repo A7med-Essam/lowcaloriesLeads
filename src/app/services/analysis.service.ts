@@ -7,6 +7,7 @@ import { ApiConfigService } from '../core/api-config.service';
 })
 export class AnalysisService {
   constructor(private _ApiConfigService: ApiConfigService) {}
+  filterv1: BehaviorSubject<any> = new BehaviorSubject(null);
   filter: BehaviorSubject<any> = new BehaviorSubject(null);
   analysis: BehaviorSubject<any> = new BehaviorSubject(null);
   filtered_Reminder: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -28,6 +29,15 @@ export class AnalysisService {
 
   filterAnalyticsWithoutPagination(page: number, filter: any) {
     filter.withoutPagination = true;
+    return this._ApiConfigService.postReq3(
+      `dataAnalyticRequests`,
+      filter
+    );
+  }
+
+  filterAnalyticsWithoutPaginationV2(page: number, filter: any) {
+    filter.withoutPagination = true;
+    filter.version = 'v2';
     return this._ApiConfigService.postReq3(
       `dataAnalyticRequests`,
       filter

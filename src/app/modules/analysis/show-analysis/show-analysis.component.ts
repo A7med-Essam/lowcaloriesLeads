@@ -32,7 +32,7 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
   PaginationInfo: any;
 
   ngOnInit(): void {
-    this._AnalysisService.filter
+    this._AnalysisService.filterv1
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
         if (res) {
@@ -263,7 +263,7 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
       }
     }
     this.appliedFilters = form.value;
-    this._AnalysisService.filter.next(this.appliedFilters);
+    this._AnalysisService.filterv1.next(this.appliedFilters);
     this._AnalysisService.filterAnalytics(1, form.value).subscribe((res) => {
       this.analytics = res.data.data;
       this.PaginationInfo = res.data;
@@ -301,7 +301,7 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
     this.filterModal = false;
     this.filterForm.reset();
     this.getAnalytics();
-    this._AnalysisService.filter.next(null);
+    this._AnalysisService.filterv1.next(null);
   }
 
   resetFields() {

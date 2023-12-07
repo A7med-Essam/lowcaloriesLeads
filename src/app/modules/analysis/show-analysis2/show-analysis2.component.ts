@@ -161,7 +161,8 @@ export class ShowAnalysis2Component implements OnInit {
 
       let exportObservable;
       if (this.appliedFilters) {
-        const ids = this.analytics.map((obj: any) => obj.id);
+        // const ids = this.analytics.map((obj: any) => obj.id);
+        const ids = this.allFilteredAnalytics2.map((obj: any) => obj.id);
         exportObservable = this._AnalysisService.exportByIds(ids);
       } else {
         exportObservable = this._AnalysisService.exportAllV2();
@@ -242,9 +243,17 @@ export class ShowAnalysis2Component implements OnInit {
         this.isLoading = false;
         this.filterModal = false;
       });
+
+      this._AnalysisService
+      .filterAnalyticsWithoutPaginationV2(1, form.value)
+      .subscribe((res) => {
+        this.allFilteredAnalytics2 = res.data;
+      });
   }
+  allFilteredAnalytics2:any;
 
   getOldFilters(page: number) {
+    delete this.appliedFilters.withoutPagination
     this._AnalysisService
       .filterAnalytics(page, this.appliedFilters)
       .subscribe((res) => {
