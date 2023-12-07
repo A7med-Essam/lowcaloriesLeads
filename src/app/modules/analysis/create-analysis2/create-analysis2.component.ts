@@ -71,6 +71,26 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         this.analysisForm.controls.customer_gender.disable();
         this.changeCustomerStatus('old');
       } else {
+        this.filterByMobile(number);
+      }
+    });
+  }
+
+  filterByMobile(mobile:number){
+    this._AnalysisService
+    .filterAnalyticsByMobile({mobile})
+    .subscribe((res) => {
+      if (res.data.length) {
+        this.analysisForm.patchValue({
+          customer_name: res.data[0].customer_name,
+          emirate_id: res.data[0].emirate_id,
+          customer_gender: res.data[0].customer_gender,
+        });
+        this.analysisForm.controls.customer_name.disable();
+        this.analysisForm.controls.customer_gender.disable();
+      }
+      else{
+        this.analysisForm.controls.customer_gender.enable();
         this.analysisForm.controls.customer_name.enable();
         this.changeCustomerStatus('new');
       }
@@ -83,11 +103,17 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       this.emirates = res.data.emirates;
       this.options = [res.data.options];
       if (type == 'old') {
-        const filteredData = this.analyticOptions.filter((item:any) => item?.name === "Old Customer" || item?.name === "Exist Customer");
+        const keywordsToInclude = ['old', 'exist'];
+        const filteredData = this.analyticOptions.filter((item:any) =>
+          keywordsToInclude.some(keyword => item.name.toLowerCase().includes(keyword))
+        );
         this.options = [filteredData]
       }
       else{
-        const filteredData = this.analyticOptions.filter((item:any) => item?.name === "New Customer" || item?.name === "Management");
+        const keywordsToInclude = ['old', 'exist'];
+        const filteredData = this.analyticOptions.filter((item:any) =>
+          !keywordsToInclude.some(keyword => item.name.toLowerCase().includes(keyword))
+        );
         this.options = [filteredData]
       }
     });

@@ -176,6 +176,15 @@ export class AnalysisService {
     );
   }
 
+  filterAnalyticsByMobile(filter: any) {
+    filter.version = 'v2';
+    filter.withoutPagination = true;
+    return this._ApiConfigService.postReq3(
+      `dataAnalyticRequests`,
+      filter
+    );
+  }
+
   getAllAnalyticOptions(): Observable<any> {
     return this._ApiConfigService.postReq3(`getAllParentDataAnalyticOption`, '');
   }
