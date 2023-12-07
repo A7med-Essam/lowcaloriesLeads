@@ -87,7 +87,7 @@ export class UpdateUsersComponent implements OnInit, OnDestroy {
     }
     else{
       this._MessageService.add({
-        severity: 'success',
+        severity: 'warn',
         summary: 'Can not update agent',
         detail: 'Agent Should have at least one permission',
       });

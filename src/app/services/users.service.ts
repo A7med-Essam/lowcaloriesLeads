@@ -18,6 +18,10 @@ export class UsersService {
     return this._ApiConfigService.postReq3("addAgent", agent);
   }
 
+  deleteAgent(agent_id :number): Observable<any> {
+    return this._ApiConfigService.postReq3("deleteAgent", {agent_id});
+  }
+
   getPermissions(): Observable<any> {
     return this._ApiConfigService.postReq3("permissions", "");
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 import { Dropdown } from 'primeng/dropdown';
 import { MultiSelect } from 'primeng/multiselect';
 import { UsersService } from 'src/app/services/users.service';
@@ -15,7 +16,11 @@ export class ShowUsersComponent implements OnInit {
   roles: any[] = [];
   addRoleModal: boolean = false;
 
-  constructor(private _UsersService: UsersService, private _Router: Router) {}
+  constructor(
+    private _UsersService: UsersService,
+    private _Router: Router,
+    private _ConfirmationService: ConfirmationService
+  ) {}
 
   ngOnInit(): void {
     this.getRoles();
@@ -146,5 +151,20 @@ export class ShowUsersComponent implements OnInit {
     });
 
     this.currentRow = mergedPermissions;
+  }
+
+  deleteRow(id: number) {
+    this._UsersService.deleteAgent(id).subscribe((res) => {
+      this.getAgents();
+    });
+  }
+
+  confirm(id: any) {
+    this._ConfirmationService.confirm({
+      message: 'Are you sure that you want to perform this action?',
+      accept: () => {
+        this.deleteRow(id);
+      },
+    });
   }
 }

@@ -3,14 +3,14 @@
     <ng-template pTemplate="caption">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="m-0">Agent Table</h5>
-        <button pButton type="button" label="Add New Agent" class="m-1 p-button-sm p-button-success" routerLink="../add"></button>
+        <button pButton type="button" label="Add New Agent" class="m-1 p-button-sm p-button-success"
+          routerLink="../add"></button>
       </div>
       <div class="input-group no-border">
         <input type="text" value="" placeholder="Search..." class="form-control" #searchInput
           (keydown)="search(searchInput)">
-          <p-dropdown [options]="agentRoles"
-          (onChange)="onAgentRoleSelected(agentRolesDropDown)"
-          #agentRolesDropDown appendTo="body" styleClass="w-100" placeholder="Select Role"></p-dropdown>
+        <p-dropdown [options]="agentRoles" (onChange)="onAgentRoleSelected(agentRolesDropDown)" #agentRolesDropDown
+          appendTo="body" styleClass="w-100" placeholder="Select Role"></p-dropdown>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -49,10 +49,13 @@
         <td>
           <div *ngIf="user.role_name != 'super_admin'">
             <button pButton type="button" icon="pi pi-eye" (click)="showRow(user.permissions)"
-                        class="m-1 p-button-sm"></button>
-            <button pButton type="button" icon="pi pi-plus" (click)="getCurrentAgent(user)" class="m-1 p-button-sm p-button-success"></button>
+              class="m-1 p-button-sm"></button>
+            <button pButton type="button" icon="pi pi-plus" (click)="getCurrentAgent(user)"
+              class="m-1 p-button-sm p-button-success"></button>
             <button pButton type="button" icon="pi pi-pencil" (click)="updateAgent(user)"
               class="m-1 p-button-sm p-button-warning"></button>
+            <button pButton type="button" icon="pi pi-trash" (click)="confirm(user?.id)"
+              class="m-1 p-button-danger p-button-sm"></button>
           </div>
         </td>
       </tr>
@@ -66,8 +69,8 @@
     <!-- <p-dropdown [options]="roles" optionLabel="name" appendTo="body" #RoleDropDown
       styleClass="w-100" placeholder="Select Role" [filter]="true">
     </p-dropdown> -->
-    <p-multiSelect [options]="roles" appendTo="body" optionLabel="name" #multieSelectRoles
-    defaultLabel="Select Roles" styleClass="w-100" display="chip">
+    <p-multiSelect [options]="roles" appendTo="body" optionLabel="name" #multieSelectRoles defaultLabel="Select Roles"
+      styleClass="w-100" display="chip">
     </p-multiSelect>
   </div>
   <ng-template pTemplate="footer">
@@ -77,22 +80,22 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog header="Permission Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
-    [resizable]="true">
-    <div class="card">
-        <div class="card-header">
-            <div class="text-muted d-flex align-items-center">
-                <h6 class="m-0" style="width: 350px;">Title</h6>
-                <h6 class="m-0" style="width: 300px;">Description</h6>
-                <!-- <h6 class="m-0">Permission Name</h6> -->
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive overflow-auto">
-                <table class="table" *ngIf="currentRow">
-                    <tbody>
-                        <tr  *ngFor="let action of currentRow | keyvalue">
-                            <!-- <td width="400">
+<p-dialog header="Permission Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-muted d-flex align-items-center">
+        <h6 class="m-0" style="width: 350px;">Title</h6>
+        <h6 class="m-0" style="width: 300px;">Description</h6>
+        <!-- <h6 class="m-0">Permission Name</h6> -->
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive overflow-auto">
+        <table class="table" *ngIf="currentRow">
+          <tbody>
+            <tr *ngFor="let action of currentRow | keyvalue">
+              <!-- <td width="400">
                               <span>
                                 {{user?.permission.split("_")[1] | titlecase}}
                               </span>
@@ -104,19 +107,22 @@
                             <td>{{ user?.permission }}</td> -->
 
 
-                            <td width="400">
-                              <span>
-                                {{action.key}}
-                              </span>
-                            </td>
-                            <td>
-                              {{action.value}}
-                            </td>
+              <td width="400">
+                <span>
+                  {{action.key}}
+                </span>
+              </td>
+              <td>
+                {{action.value}}
+              </td>
 
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </p-dialog>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
