@@ -248,7 +248,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         .subscribe((res) => {
           if (res.status == 1) {
             this.creatingStatus = false;
-            this.isSearching = true;
+            this.isSearching = false;
 
             // this.analysisForm.reset();
             // this.createAnalysisForm();
@@ -260,7 +260,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
             this.analysisForm?.get('notes')?.reset();
           } else {
             this.creatingStatus = false;
-            this.isSearching = true;
+            this.isSearching = false;
 
             if (form.value.reminder_date != null) {
               this.analysisForm.patchValue({
