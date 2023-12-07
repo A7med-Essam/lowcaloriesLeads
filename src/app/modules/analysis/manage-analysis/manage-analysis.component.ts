@@ -101,18 +101,18 @@ export class ManageAnalysisComponent implements OnInit {
     //     });
     // }
     this._AnalysisService
-    .getAnalyticsChildrenById(analysis.id)
-    .subscribe((res) => {
-      this.items.push({
-        items: this.analytics,
-        label: analysis.name,
-        id: analysis.id,
+      .getAnalyticsChildrenById(analysis.id)
+      .subscribe((res) => {
+        this.items.push({
+          items: this.analytics,
+          label: analysis.name,
+          id: analysis.id,
+        });
+        analysis.children = res.data;
+        this.analytics = analysis.children;
+        this.items = [...this.items];
+        this.resetClone();
       });
-      analysis.children = res.data;
-      this.analytics = analysis.children;
-      this.items = [...this.items];
-      this.resetClone();
-    });
   }
 
   deleteRow(analysis: any): void {
@@ -163,6 +163,7 @@ export class ManageAnalysisComponent implements OnInit {
   addNewDataAnalyticOption(data: any) {
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
       if (res.status == 1) {
+        this.createNodeModal = false;
         this.creatingStatus = false;
         this.createModal = false;
         this.selectedNode = [];
@@ -264,7 +265,16 @@ export class ManageAnalysisComponent implements OnInit {
 
   node: any;
   nodeSelect(e: any) {
+    const id = e.node.id;
     this.node = e.node;
+    this._AnalysisService.getAnalyticsChildrenById(id).subscribe((res) => {
+      this.dropDownAnalytics=this.dropDownAnalytics.map(e=>{
+        if (e.id == id) {
+          e.children = res.data;
+        }
+        return e
+      })
+    });
   }
 
   selectedNames: any[] = [];
@@ -282,7 +292,6 @@ export class ManageAnalysisComponent implements OnInit {
             : '0',
       };
       this.addNewDataAnalyticOption(data);
-      this.createNodeModal = false;
       this.selectedNames = [];
     }
   }
@@ -297,7 +306,6 @@ export class ManageAnalysisComponent implements OnInit {
       label: 'N/A',
     };
     this.addNewDataAnalyticOption(data);
-    this.createModal = false;
   }
 
   getAnalyticsById(id: number) {
