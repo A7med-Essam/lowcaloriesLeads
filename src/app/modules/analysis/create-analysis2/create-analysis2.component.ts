@@ -26,9 +26,9 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
   creatingStatus: boolean = false;
   cids: any[] = [];
   options: any[] = [];
-  showBranch:boolean = false;
+  showBranch: boolean = false;
   current_user: any;
-
+  isSearching: boolean = false;
   constructor(
     private _AnalysisService: AnalysisService,
     private _RefundService: RefundService,
@@ -45,17 +45,20 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     );
   }
 
+  currentNumber:string = '';
   getCustomerCID(e: HTMLInputElement) {
-    this._AnalysisService.getFormAnalytics().subscribe((res) => {
-      this.analyticOptions = res.data.options;
-      this.emirates = res.data.emirates;
-      this.options = [res.data.options];
-      if (e.value != '') {
+    if (e.value != '' && e.value.length == 10 && e.value != this.currentNumber) {
+      this.currentNumber = e.value;
+      this.isSearching = true;
+      this._AnalysisService.getFormAnalytics().subscribe((res) => {
+        this.analyticOptions = res.data.options;
+        this.emirates = res.data.emirates;
+        this.options = [res.data.options];
         this.analysisForm.controls.customer_status.enable();
-        this.analysisForm.patchValue({cid: ''});
+        this.analysisForm.patchValue({ cid: '', customer_name: '' });
         this.getCIDs(e.value);
-      }
-    })
+      });
+    }
   }
 
   checkCustomerExsist(number: any) {
@@ -76,55 +79,62 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     });
   }
 
-  filterByMobile(mobile:number){
+  filterByMobile(mobile: number) {
     this._AnalysisService
-    .filterAnalyticsByMobile({mobile})
-    .subscribe((res) => {
-      if (res.data.length) {
-        this.analysisForm.patchValue({
-          customer_name: res.data[0].customer_name,
-          emirate_id: res.data[0].emirate_id,
-          customer_gender: res.data[0].customer_gender,
-        });
-        this.analysisForm.controls.customer_name.disable();
-        this.analysisForm.controls.customer_gender.disable();
-      }
-      else{
-        this.analysisForm.controls.customer_gender.enable();
-        this.analysisForm.controls.customer_name.enable();
-        this.changeCustomerStatus('new');
-      }
-    });
+      .filterAnalyticsByMobile({ mobile })
+      .subscribe((res) => {
+        if (res.data.length) {
+          this.analysisForm.patchValue({
+            customer_name: res.data[0].customer_name,
+            emirate_id: res.data[0].emirate_id,
+            customer_gender: res.data[0].customer_gender,
+          });
+          this.analysisForm.controls.customer_name.disable();
+          this.analysisForm.controls.customer_gender.disable();
+          this.isSearching = false;
+        } else {
+          this.analysisForm.controls.customer_gender.enable();
+          this.analysisForm.controls.customer_name.enable();
+          this.changeCustomerStatus('new');
+        }
+      });
   }
 
-  changeCustomerStatus(type :string){
+  changeCustomerStatus(type: string) {
     this._AnalysisService.getFormAnalytics().subscribe((res) => {
       this.analyticOptions = res.data.options;
       this.emirates = res.data.emirates;
       this.options = [res.data.options];
       if (type == 'old') {
         const keywordsToInclude = ['old', 'exist'];
-        const filteredData = this.analyticOptions.filter((item:any) =>
-          keywordsToInclude.some(keyword => item.name.toLowerCase().includes(keyword))
+        const filteredData = this.analyticOptions.filter((item: any) =>
+        keywordsToInclude.some((keyword) =>
+        item.name.toLowerCase().includes(keyword)
+        )
         );
-        this.options = [filteredData]
-      }
-      else{
+        this.options = [filteredData];
+        this.isSearching = false;
+      } else {
         const keywordsToInclude = ['old', 'exist'];
-        const filteredData = this.analyticOptions.filter((item:any) =>
-          !keywordsToInclude.some(keyword => item.name.toLowerCase().includes(keyword))
-        );
-        this.options = [filteredData]
+        const filteredData = this.analyticOptions.filter(
+          (item: any) =>
+          !keywordsToInclude.some((keyword) =>
+          item.name.toLowerCase().includes(keyword)
+          )
+          );
+          this.options = [filteredData];
+          this.isSearching = false;
       }
     });
   }
 
-  onEnterKey(e:any){
-    e.preventDefault()
-    this.getCIDs(e.target.value);
+  onEnterKey(e: any) {
+    e.preventDefault();
+    // this.getCIDs(e.target.value);
+    this.getCustomerCID(e.target)
   }
 
-  getCIDs(value:string){
+  getCIDs(value: string) {
     this._RefundService.getCIDs(value).subscribe((res) => {
       this.cids = res;
       if (res.length == 0) {
@@ -134,13 +144,16 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         this.showBranch = true;
         this.analysisForm.controls.customer_name.disable();
         this.analysisForm.controls.customer_branch.disable();
+        this.isSearching = false;
       }
     });
   }
 
   getCustomerInfo(e: any) {
+    this.isSearching = true;
     const selectedCID = this.cids.find((c) => c.cid == e.value);
     this._RefundService.getPlanDetails(selectedCID.cid).subscribe((res) => {
+      this.isSearching = false;
       this.analysisForm.patchValue({
         customer_name: res.customerName,
         customer_branch: res.deliveryBranch,
