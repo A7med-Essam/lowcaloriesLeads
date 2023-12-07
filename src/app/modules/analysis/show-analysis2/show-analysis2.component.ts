@@ -122,6 +122,7 @@ export class ShowAnalysis2Component implements OnInit {
 
   // ********************************************************FILTER OPTIONS********************************************************************
   agents: any[] = [];
+  agents_clone: any[] = [];
   isLoadingAgent: boolean = false;
   isLoadingFilter: boolean = false;
 
@@ -131,24 +132,24 @@ export class ShowAnalysis2Component implements OnInit {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
         this.isLoadingAgent = false;
-
-        const groupedUsers = res.data.reduce((acc: any, user: any) => {
-          const team = user.team;
-          if (!acc[team]) {
-            acc[team] = [];
-          }
-          acc[team].push(user);
-          return acc;
-        }, {});
-        this.agents = Object.keys(groupedUsers).map((team) => {
-          return {
-            label: team,
-            items: groupedUsers[team].map((user: any) => ({
-              label: user.name,
-              value: user.id,
-            })),
-          };
-        });
+        this.agents = this.agents_clone = res.data;
+        // const groupedUsers = res.data.reduce((acc: any, user: any) => {
+        //   const team = user.team;
+        //   if (!acc[team]) {
+        //     acc[team] = [];
+        //   }
+        //   acc[team].push(user);
+        //   return acc;
+        // }, {});
+        // this.agents = Object.keys(groupedUsers).map((team) => {
+        //   return {
+        //     label: team,
+        //     items: groupedUsers[team].map((user: any) => ({
+        //       label: user.name,
+        //       value: user.id,
+        //     })),
+        //   };
+        // });
       },
     });
   }
@@ -244,16 +245,16 @@ export class ShowAnalysis2Component implements OnInit {
         this.filterModal = false;
       });
 
-      this._AnalysisService
+    this._AnalysisService
       .filterAnalyticsWithoutPaginationV2(1, form.value)
       .subscribe((res) => {
         this.allFilteredAnalytics2 = res.data;
       });
   }
-  allFilteredAnalytics2:any;
+  allFilteredAnalytics2: any;
 
   getOldFilters(page: number) {
-    delete this.appliedFilters.withoutPagination
+    delete this.appliedFilters.withoutPagination;
     this._AnalysisService
       .filterAnalytics(page, this.appliedFilters)
       .subscribe((res) => {
@@ -271,10 +272,13 @@ export class ShowAnalysis2Component implements OnInit {
     this.getAnalytics();
     this._AnalysisService.filter.next(null);
     this.getFormAnalytics();
+    this.agents = this.agents_clone
+
   }
 
   resetFields() {
     this.getFormAnalytics();
+    this.agents = this.agents_clone
     this.filterForm.reset();
   }
 
@@ -525,14 +529,16 @@ export class ShowAnalysis2Component implements OnInit {
 
   resetFilter1() {
     this.appliedFilters = null;
-    this.filterModal = false;
-    this.filterForm.reset();
+    this.filterModal1 = false;
+    this.filterForm1.reset();
+    this.agents = this.agents_clone
     this.getAnalytics();
     this._AnalysisService.filter.next(null);
   }
 
   resetFields1() {
-    this.filterForm.reset();
+    this.filterForm1.reset();
+    this.agents = this.agents_clone
   }
 
   analyticOptions1: any;
@@ -564,6 +570,28 @@ export class ShowAnalysis2Component implements OnInit {
           this.handleAskFor(value);
         }
       });
+
+      this.filterForm
+      .get('team')
+      ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
+        if (value) {
+          this.handleAgent(value);
+        }
+      });
+      this.filterForm1
+      .get('team')
+      ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
+        if (value) {
+          this.handleAgent(value);
+        }
+      });
+  }
+
+  handleAgent(value:string){
+    this.agents = this.agents_clone
+    this.agents=this.agents.filter(agent => agent.team === value)
   }
 
   platformOptions: [] = [];

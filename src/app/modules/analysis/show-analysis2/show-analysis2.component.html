@@ -69,7 +69,7 @@
                         appendTo="body">
                     </p-dropdown>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
+                <!-- <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
                     <label for="">Agent</label>
                     <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
                         styleClass="w-100" appendTo="body" optionLabel="label" optionValue="value" [group]="true"
@@ -79,6 +79,12 @@
                                 <span>{{ group.label }}</span>
                             </div>
                         </ng-template>
+                    </p-dropdown>
+                </div> -->
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
+                    <label for="">Agent</label>
+                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent" styleClass="w-100"
+                        appendTo="body" optionValue="id" optionLabel="name" [filter]="true">
                     </p-dropdown>
                 </div>
                 <div class="col-md-4 col-12 my-1">
@@ -326,7 +332,7 @@
                         styleClass="w-100" appendTo="body">
                     </p-dropdown>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
+                <!-- <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
                     <label for="">Agent</label>
                     <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
                         styleClass="w-100" appendTo="body" optionLabel="label" optionValue="value" [group]="true"
@@ -336,6 +342,12 @@
                                 <span>{{ group.label }}</span>
                             </div>
                         </ng-template>
+                    </p-dropdown>
+                </div> -->
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
+                    <label for="">Agent</label>
+                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent" styleClass="w-100"
+                        appendTo="body" optionValue="id" optionLabel="name" [filter]="true">
                     </p-dropdown>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
