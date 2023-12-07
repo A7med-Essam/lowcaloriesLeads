@@ -27,6 +27,7 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+  isLoading: boolean = false;
 
   PaginationInfo: any;
 
@@ -71,6 +72,7 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
 
   analytics: any[] = [];
   getAnalytics(page: number = 1) {
+    this.isLoading = true;
     if (this.appliedFilters) {
       this.getOldFilters(page);
     } else {
@@ -78,6 +80,7 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
         next: (res) => {
           this.analytics = res?.data?.data;
           this.PaginationInfo = res.data;
+          this.isLoading = false;
         },
       });
     }
@@ -176,6 +179,8 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
 
   export() {
     if (this.exportPermission) {
+      this.isLoading = true;
+
       let exportObservable;
       if (this.appliedFilters) {
         // const ids = this.analytics.map((obj: any) => obj.id);
@@ -193,6 +198,8 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
   }
 
   private handleExportSuccess(data: any) {
+    this.isLoading = false;
+
     this._MessageService.add({
       severity: 'success',
       summary: 'Export Excel',
@@ -235,6 +242,8 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(form: FormGroup) {
+    this.isLoading = true;
+
     if (form.value.date) {
       if (form.value.date[1]) {
         form.patchValue({
@@ -259,13 +268,16 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
       this.analytics = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
+      this.isLoading = false;
     });
-    this._AnalysisService.filterAnalyticsWithoutPagination(1, form.value).subscribe((res) => {
-      this.allFilteredAnalytics = res.data;
-    });
+    this._AnalysisService
+      .filterAnalyticsWithoutPagination(1, form.value)
+      .subscribe((res) => {
+        this.allFilteredAnalytics = res.data;
+      });
   }
 
-  allFilteredAnalytics:any[] = [];
+  allFilteredAnalytics: any[] = [];
 
   getOldFilters(page: number) {
     this._AnalysisService
@@ -274,9 +286,12 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
         this.analytics = res.data.data;
         this.PaginationInfo = res.data;
         this.filterModal = false;
+        this.isLoading = false;
       });
 
-      this._AnalysisService.filterAnalyticsWithoutPagination(1, this.appliedFilters).subscribe((res) => {
+    this._AnalysisService
+      .filterAnalyticsWithoutPagination(1, this.appliedFilters)
+      .subscribe((res) => {
         this.allFilteredAnalytics = res.data;
       });
   }

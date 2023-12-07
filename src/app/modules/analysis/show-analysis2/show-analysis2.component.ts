@@ -30,6 +30,9 @@ export class ShowAnalysis2Component implements OnInit {
     private _RefundService: RefundService,
     private fb: FormBuilder
   ) {}
+
+  isLoading: boolean = false;
+
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -80,6 +83,8 @@ export class ShowAnalysis2Component implements OnInit {
 
   analytics: any[] = [];
   getAnalytics(page: number = 1) {
+    this.isLoading = true;
+
     if (this.appliedFilters) {
       this.getOldFilters(page);
     } else {
@@ -87,6 +92,7 @@ export class ShowAnalysis2Component implements OnInit {
         next: (res) => {
           this.analytics = res?.data?.data;
           this.PaginationInfo = res.data;
+          this.isLoading = false;
         },
       });
     }
@@ -142,6 +148,8 @@ export class ShowAnalysis2Component implements OnInit {
 
   export() {
     if (this.exportPermission) {
+      this.isLoading = true;
+
       let exportObservable;
       if (this.appliedFilters) {
         const ids = this.analytics.map((obj: any) => obj.id);
@@ -158,6 +166,8 @@ export class ShowAnalysis2Component implements OnInit {
   }
 
   private handleExportSuccess(data: any) {
+    this.isLoading = false;
+
     this._MessageService.add({
       severity: 'success',
       summary: 'Export Excel',
@@ -205,6 +215,8 @@ export class ShowAnalysis2Component implements OnInit {
     //     delete form.value[prop];
     //   }
     // }
+    this.isLoading = true;
+
     this.filterForm.patchValue({
       data_options: this.getFilterOptions(this.filterForm.value),
     });
@@ -218,6 +230,7 @@ export class ShowAnalysis2Component implements OnInit {
       .subscribe((res) => {
         this.analytics = res.data.data;
         this.PaginationInfo = res.data;
+        this.isLoading = false;
         this.filterModal = false;
       });
   }
@@ -229,6 +242,7 @@ export class ShowAnalysis2Component implements OnInit {
         this.analytics = res.data.data;
         this.PaginationInfo = res.data;
         this.filterModal = false;
+        this.isLoading = false;
       });
   }
 
