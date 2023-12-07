@@ -45,7 +45,6 @@ export class ShowUsersComponent implements OnInit {
     [this.AgentRoleEnum.Accountant]: 'Accountant',
   };
 
-
   search(e: HTMLInputElement) {
     setTimeout(() => {
       const searchValue = e.value.trim().toUpperCase();
@@ -70,12 +69,10 @@ export class ShowUsersComponent implements OnInit {
   }
 
   agentRoles = ['None', 'HeadOffice', 'Branches', 'Accountant'];
-  onAgentRoleSelected(e: Dropdown){
+  onAgentRoleSelected(e: Dropdown) {
     this.agents = [...this.cloneAgents];
     if (this.agentRoles.includes(e.value) && e.value != 'None') {
-      this.agents = this.agents.filter((agent) =>
-        agent.role === e.value
-      );
+      this.agents = this.agents.filter((agent) => agent.role === e.value);
     } else {
       this.agents = [...this.cloneAgents];
     }
@@ -126,11 +123,28 @@ export class ShowUsersComponent implements OnInit {
     });
   }
 
-
-  currentRow:any[] = [];
-  detailsModal:boolean  = false;
-  showRow(row:any){
+  currentRow: any = [];
+  detailsModal: boolean = false;
+  showRow(row: any) {
     this.detailsModal = true;
-    this.currentRow = row;
+
+    const splitPermissions = row.map((permission: any) => {
+      const [permissionType, action] = permission.permission.split('_');
+      return { ...permission, permissionType, action };
+    });
+
+    // Create a new object to store merged permissions by action
+    const mergedPermissions: any = {};
+
+    // Iterate through split permissions and merge by action
+    splitPermissions.forEach((permission: any) => {
+      const { action } = permission;
+      if (!mergedPermissions[action]) {
+        mergedPermissions[action] = [];
+      }
+      mergedPermissions[action].push(` ${permission.permissionType} `);
+    });
+
+    this.currentRow = mergedPermissions;
   }
 }

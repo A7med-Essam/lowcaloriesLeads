@@ -84,15 +84,15 @@
             <div class="text-muted d-flex align-items-center">
                 <h6 class="m-0" style="width: 350px;">Title</h6>
                 <h6 class="m-0" style="width: 300px;">Description</h6>
-                <h6 class="m-0">Permission Name</h6>
+                <!-- <h6 class="m-0">Permission Name</h6> -->
             </div>
         </div>
         <div class="card-body">
             <div class="table-responsive overflow-auto">
-                <table class="table" *ngIf="currentRow.length">
+                <table class="table" *ngIf="currentRow">
                     <tbody>
-                        <tr  *ngFor="let user of currentRow">
-                            <td width="400">
+                        <tr  *ngFor="let action of currentRow | keyvalue">
+                            <!-- <td width="400">
                               <span>
                                 {{user?.permission.split("_")[1] | titlecase}}
                               </span>
@@ -101,7 +101,18 @@
                               </div>
                             </td>
                             <td width="300">{{ user?.permission.split("_")[0] | titlecase }}</td>
-                            <td>{{ user?.permission }}</td>
+                            <td>{{ user?.permission }}</td> -->
+
+
+                            <td width="400">
+                              <span>
+                                {{action.key}}
+                              </span>
+                            </td>
+                            <td>
+                              {{action.value}}
+                            </td>
+
                         </tr>
                     </tbody>
                 </table>
