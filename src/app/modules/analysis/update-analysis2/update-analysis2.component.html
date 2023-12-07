@@ -37,7 +37,7 @@
             </div>
             <hr>
 
-            <ng-container *ngIf="selectedLabels?.length && allAnalyticOptions">
+            <!-- <ng-container *ngIf="selectedLabels?.length && allAnalyticOptions">
                 <h6 class="text-secondary"><i class="fas fa-sun mx-2"></i>Customer Current Scenario<i class="fas fa-sun mx-2"></i></h6>
                 <ng-container *ngFor="let option of selectedLabels; let i = index">
                     <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
@@ -45,6 +45,19 @@
                         <p-dropdown [options]="allAnalyticOptions[option]" appendTo="body"
                             [formControlName]='option' styleClass="w-100" placeholder="Select Option" optionValue="name" optionLabel="name">
                         </p-dropdown>
+                    </div>
+                </ng-container>
+            </ng-container> -->
+            <ng-container *ngIf="selectedLabels?.length">
+                <h6 class="text-secondary"><i class="fas fa-sun mx-2"></i>Customer Current Scenario<i class="fas fa-sun mx-2"></i></h6>
+                <ng-container *ngFor="let option of selectedLabels; let i = index">
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
+                        <label for="">{{option}}</label>
+                        <!-- <p-dropdown [options]="[option]" appendTo="body"
+                            [formControlName]='option' styleClass="w-100" placeholder="Select Option" optionValue="name" optionLabel="name">
+                        </p-dropdown> -->
+                        <input type="text" pInputText ngClass="w-100" [formControlName]='option' />
+
                     </div>
                 </ng-container>
             </ng-container>

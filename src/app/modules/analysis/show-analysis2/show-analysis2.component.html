@@ -1,10 +1,18 @@
-<div class="d-flex justify-content-end align-items-center">
+<div class="d-flex justify-content-between align-items-center">
+    <div class="m-3">
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter V1" (click)="filterModal1 = true;">
+        </p-button>
+        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export V1"
+            (click)="export1()">
+        </p-button>
+    </div>
     <div class="m-3">
         <button [disabled]="!createPermission" pButton pRipple label="Create" class="p-button-success mx-1"
             icon="pi pi-plus" routerLink="../createV2"></button>
-        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter V2" (click)="filterModal = true;">
         </p-button>
-        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
+        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export V2"
+            (click)="export()">
         </p-button>
     </div>
 </div>
@@ -106,7 +114,7 @@
                         optionValue="id" optionLabel="en_name" placeholder="Select Emirate" [filter]="true">
                     </p-dropdown>
                 </div> -->
-                <!-- <ng-container *ngIf="options.length">
+                <ng-container *ngIf="options.length">
                     <ng-container *ngFor="let option of options; let i = index">
                         <div class="col-md-4 col-12 my-1">
                             <label for="">{{option[0]?.label}}</label>
@@ -115,7 +123,7 @@
                             </p-dropdown>
                         </div>
                     </ng-container>
-                </ng-container> -->
+                </ng-container>
 
 
                 <ng-container *ngIf="allAnalyticOptions">
@@ -229,7 +237,7 @@
     </div>
 </p-dialog>
 
-<div class="loader-container" *ngIf="isLoading">
+<div class="loader-container" *ngIf="isLoading || isLoadingFilter || isLoadingAgent">
     <div class="i-loader-inf-horizontal-container">
         <div class="i-loader-inf-horizontal"></div>
         <div class="pt-8px">
@@ -237,3 +245,135 @@
         </div>
     </div>
 </div>
+
+<p-dialog header="Filter Old Senario Modal" [(visible)]="filterModal1" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <form [formGroup]="filterForm1" #myForm="ngForm">
+            <div class="row mx-0">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
+                    <label for="">Team</label>
+                    <p-dropdown [options]="analyticOptions1?.teams" formControlName="team" placeholder="Select Team"
+                        styleClass="w-100" appendTo="body">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
+                    <label for="">Agent</label>
+                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
+                        styleClass="w-100" appendTo="body" optionLabel="label" optionValue="value" [group]="true"
+                        [filter]="true">
+                        <ng-template let-group pTemplate="group">
+                            <div class="flex align-items-center">
+                                <span>{{ group.label }}</span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Phone Number</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='mobile' maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Customer Name</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='customer_name' />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Gender</label>
+                    <p-dropdown [options]="['male','female']" formControlName='customer_gender' appendTo="body"
+                        styleClass="w-100" placeholder="Select Gender">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Emirate</label>
+                    <p-dropdown [options]="analyticOptions1?.emirates" formControlName='emirate_id' appendTo="body"
+                        styleClass="w-100" optionValue="id" optionLabel="en_name" placeholder="Select Emirate"
+                        [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Platform</label>
+                    <p-dropdown [options]="analyticOptions1?.platforms" formControlName='platform' appendTo="body"
+                        optionLabel="name" optionValue="name" styleClass="w-100" placeholder="Select Platform">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="platformOptions.length">
+                    <label for="">Platform Option</label>
+                    <p-dropdown [options]="platformOptions" formControlName='platform_option' appendTo="body"
+                        optionLabel="option" optionValue="option" styleClass="w-100" placeholder="Select Option">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="">Customer Status</label>
+                    <p-dropdown [options]="analyticOptions1?.customer_status" formControlName='customer_status'
+                        appendTo="body" optionLabel="name" optionValue="name" styleClass="w-100"
+                        placeholder="Select Status">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm1?.get('customer_status')?.value?.toLowerCase() != 'exist customer' && filterForm1?.get('customer_status')?.value != undefined">
+                    <label for="">Concern</label>
+                    <p-dropdown [options]="analyticOptions1?.concerns" formControlName='concern' appendTo="body"
+                        optionLabel="name" optionValue="name" styleClass="w-100" placeholder="Select Status">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm1?.get('customer_status')?.value?.toLowerCase() != 'exist customer'&& filterForm1?.get('customer_status')?.value != undefined">
+                    <label for="">mode</label>
+                    <p-dropdown [options]="analyticOptions1?.mode" formControlName='mode' appendTo="body"
+                        optionLabel="name" optionValue="name" styleClass="w-100" placeholder="Select Status">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="modeReasons.length && filterForm1?.get('customer_status')?.value?.toLowerCase() != 'exist customer'&& filterForm1?.get('customer_status')?.value != undefined">
+                    <label for="">Mode Reason</label>
+                    <p-dropdown [options]="modeReasons" formControlName='mode_reason' appendTo="body" optionLabel="name"
+                        optionValue="name" styleClass="w-100" placeholder="Select Reason">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm1?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+                    <label for="">Ask For</label>
+                    <p-dropdown [options]="['complaint','refund','update']" formControlName='ask_for' appendTo="body"
+                        styleClass="w-100" placeholder="Select Ask">
+                    </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm1?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+                    <label for="">Ask Reasons</label>
+                    <p-multiSelect [options]="askReasons" appendTo="body" defaultLabel="Select Ask Reason"
+                        styleClass="w-100" display="chip" formControlName='ask_for_options'></p-multiSelect>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3"
+                    *ngIf="filterForm1?.get('customer_status')?.value?.toLowerCase() == 'exist customer'">
+                    <label for="">Ask Actions</label>
+                    <p-multiSelect [options]="askActions" appendTo="body" defaultLabel="Select Ask Action"
+                        styleClass="w-100" display="chip" formControlName='actions'></p-multiSelect>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
+                    <label for="range">Date Range</label>
+                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+                        ngClass="w-100" appendTo="body">
+                    </p-calendar>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+            <div>
+                <button class="btn btn-secondary" (click)="resetFields1()">
+                    Reset Fields
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="applyFilter1(filterForm1)">
+                    Apply Filter
+                </button>
+                <button class="btn btn-secondary" (click)="resetFilter1()">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -24,6 +24,7 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
   defaultReminder: Date = new Date(this.calculateDefaultReminder());
   creatingStatus: boolean = false;
   reminderModal: boolean = false;
+  isLoading: boolean = false;
   constructor(
     private _AnalysisService: AnalysisService,
     private _MessageService: MessageService,
@@ -67,13 +68,16 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
   }
 
   getFormAnalytics() {
+    this.isLoading = true;
     this._AnalysisService.getFormAnalytics().subscribe((res) => {
       this.analytics = res.data;
+      this.isLoading = false;
     });
   }
 
   create(form: FormGroup) {
     if (form.valid) {
+      this.isLoading = true;
       if (form.value.reminder_date) {
         this.analysisForm.patchValue({
           // reminder_date: new Date(form.value.reminder_date).toLocaleDateString('en-CA'),
@@ -93,6 +97,7 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
         next: (res) => {
           if (res.status == 1) {
             this.creatingStatus = false;
+            this.isLoading = false;
             this.analysisForm.reset();
             this.createAnalysisForm();
             this._MessageService.add({
@@ -102,6 +107,8 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
             });
           } else {
             this.creatingStatus = false;
+            this.isLoading = false;
+
             if (form.value.reminder_date != null) {
               this.analysisForm.patchValue({
                 reminder_date: new Date(form.value.reminder_date),
@@ -111,6 +118,8 @@ export class CreateAnalysisComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.creatingStatus = false;
+          this.isLoading = false;
+
           if (form.value.reminder_date != null) {
             this.analysisForm.patchValue({
               reminder_date: new Date(form.value.reminder_date),

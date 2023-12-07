@@ -164,7 +164,8 @@ export class AnalysisService {
   getAnalytics2(page: number): Observable<any> {
     return this._ApiConfigService.postReq3(
       `dataAnalyticRequests?page=${page}`,
-      { version: 'v2' }
+      // { version: 'v2' }
+      ''
     );
   }
 

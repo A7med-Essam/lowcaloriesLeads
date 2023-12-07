@@ -51,6 +51,7 @@ export class ShowAnalysis2Component implements OnInit {
       });
     this.getPermission();
     this.createFilterForm();
+    this.createFilterForm1();
     this.getAnalytics();
     this.getFormAnalytics();
     this.getAgents();
@@ -100,12 +101,13 @@ export class ShowAnalysis2Component implements OnInit {
 
   allAnalyticOptions: any;
   getAllAnalyticOptions() {
-    this._AnalysisService.getAllAnalyticOptions().subscribe((res) => {
-      this.allAnalyticOptions = res.data;
-      Object.keys(this.allAnalyticOptions).forEach((c, index) => {
-        this.filterForm.addControl(c, this.fb.control(''));
-      });
-    });
+    // this._AnalysisService.getAllAnalyticOptions().subscribe((res) => {
+    //   this.allAnalyticOptions = res.data;
+    //   Object.keys(this.allAnalyticOptions).forEach((c, index) => {
+    //     this.filterForm.addControl(c, this.fb.control(''));
+    //   });
+    // });
+    this.allAnalyticOptions = [];
   }
 
   getObjectKeyValues(obj: any): any[] {
@@ -120,9 +122,16 @@ export class ShowAnalysis2Component implements OnInit {
 
   // ********************************************************FILTER OPTIONS********************************************************************
   agents: any[] = [];
+  isLoadingAgent: boolean = false;
+  isLoadingFilter: boolean = false;
+
   getAgents() {
+    this.isLoadingAgent = true;
+
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
+        this.isLoadingAgent = false;
+
         const groupedUsers = res.data.reduce((acc: any, user: any) => {
           const team = user.team;
           if (!acc[team]) {
@@ -217,12 +226,12 @@ export class ShowAnalysis2Component implements OnInit {
     // }
     this.isLoading = true;
 
-    this.filterForm.patchValue({
-      data_options: this.getFilterOptions(this.filterForm.value),
-    });
     // this.filterForm.patchValue({
-    //   data_options: this.buildHierarchy(),
+    //   data_options: this.getFilterOptions(this.filterForm.value),
     // });
+    this.filterForm.patchValue({
+      data_options: this.buildHierarchy(),
+    });
     this.appliedFilters = form.getRawValue();
     this._AnalysisService.filter.next(this.appliedFilters);
     this._AnalysisService
@@ -269,8 +278,13 @@ export class ShowAnalysis2Component implements OnInit {
   }
 
   updateRow(row: any) {
-    this._AnalysisService.analysisV2.next(row);
-    this._Router.navigate(['analysis/updateV2']);
+    if (row.version == 'v1') {
+      this._AnalysisService.analysis.next(row);
+      this._Router.navigate(['analysis/update']);
+    } else {
+      this._AnalysisService.analysisV2.next(row);
+      this._Router.navigate(['analysis/updateV2']);
+    }
   }
   // ===============================================================Details======================================================================
 
@@ -311,19 +325,37 @@ export class ShowAnalysis2Component implements OnInit {
 
   teams: any[] = [];
   getFormAnalytics() {
+    this.isLoadingFilter = true;
     this._AnalysisService.getFormAnalytics().subscribe((res) => {
       this.analyticOptions = res.data.options;
+      this.analyticOptions1 = res.data;
       this.teams = res.data.teams;
       this.emirates = res.data.emirates;
       this.options = [res.data.options];
+      this.isLoadingFilter = false;
     });
   }
 
   storeSelectedOptions(e: any, index: number) {
+    // const selectedIndex = this.getArrayIndex(e.value, index);
+    // this.options.splice(index + 1);
+    // if (this.options[index][selectedIndex].has_children) {
+    //   this.options.push(this.options[index][selectedIndex].children);
+    // }
+
     const selectedIndex = this.getArrayIndex(e.value, index);
     this.options.splice(index + 1);
-    if (this.options[index][selectedIndex].has_children) {
-      this.options.push(this.options[index][selectedIndex].children);
+    if (this.options[index][selectedIndex]?.has_children) {
+      if (this.options[index][selectedIndex].children) {
+        this.options.push(this.options[index][selectedIndex].children);
+      } else {
+        this._AnalysisService
+          .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
+          .subscribe((res) => {
+            this.options[index][selectedIndex].children = res.data;
+            this.options.push(this.options[index][selectedIndex].children);
+          });
+      }
     }
   }
 
@@ -396,5 +428,173 @@ export class ShowAnalysis2Component implements OnInit {
       }
     });
     return data;
+  }
+
+  // ===============================================================FILTER V1======================================================================
+  applyFilter1(form: FormGroup) {
+    this.isLoading = true;
+
+    if (form.value.date) {
+      if (form.value.date[1]) {
+        form.patchValue({
+          from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+          to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+          date: null,
+        });
+      } else {
+        form.patchValue({
+          date: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+        });
+      }
+    }
+    for (const prop in form.value) {
+      if (form.value[prop] === null) {
+        delete form.value[prop];
+      }
+    }
+    this.appliedFilters = form.value;
+    this._AnalysisService.filter.next(this.appliedFilters);
+    this._AnalysisService.filterAnalytics(1, form.value).subscribe((res) => {
+      this.analytics = res.data.data;
+      this.PaginationInfo = res.data;
+      this.filterModal1 = false;
+      this.isLoading = false;
+    });
+    this._AnalysisService
+      .filterAnalyticsWithoutPagination(1, form.value)
+      .subscribe((res) => {
+        this.allFilteredAnalytics = res.data;
+      });
+  }
+
+  filterModal1: boolean = false;
+  appliedFilters1: any = null;
+  filterForm1!: FormGroup;
+  createFilterForm1() {
+    this.filterForm1 = new FormGroup({
+      date: new FormControl(null),
+      from: new FormControl(null),
+      to: new FormControl(null),
+      agent_id: new FormControl(null),
+      mobile: new FormControl(null),
+      customer_name: new FormControl(null),
+      customer_gender: new FormControl(null),
+      emirate_id: new FormControl(null),
+      platform: new FormControl(null),
+      platform_option: new FormControl(null),
+      customer_status: new FormControl(null),
+      concern: new FormControl(null),
+      mode: new FormControl(null),
+      mode_reason: new FormControl(null),
+      notes: new FormControl(null),
+      ask_for: new FormControl(null),
+      ask_for_options: new FormControl(null),
+      actions: new FormControl(null),
+      team: new FormControl(null),
+    });
+    this.valueChanges();
+  }
+
+  allFilteredAnalytics: any[] = [];
+
+  getOldFilters1(page: number) {
+    this._AnalysisService
+      .filterAnalytics(page, this.appliedFilters)
+      .subscribe((res) => {
+        this.analytics = res.data.data;
+        this.PaginationInfo = res.data;
+        this.filterModal = false;
+        this.isLoading = false;
+      });
+
+    this._AnalysisService
+      .filterAnalyticsWithoutPagination(1, this.appliedFilters)
+      .subscribe((res) => {
+        this.allFilteredAnalytics = res.data;
+      });
+  }
+
+  resetFilter1() {
+    this.appliedFilters = null;
+    this.filterModal = false;
+    this.filterForm.reset();
+    this.getAnalytics();
+    this._AnalysisService.filter.next(null);
+  }
+
+  resetFields1() {
+    this.filterForm.reset();
+  }
+
+  analyticOptions1: any;
+  // ********************************************************FILTER OPTIONS********************************************************************
+  valueChanges() {
+    this.filterForm
+      .get('platform')
+      ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
+        if (value) {
+          this.handlePlatform(value);
+        }
+      });
+
+    this.filterForm
+      .get('mode')
+      ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
+        if (value) {
+          this.handleMode(value);
+        }
+      });
+
+    this.filterForm
+      .get('ask_for')
+      ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
+        if (value) {
+          this.handleAskFor(value);
+        }
+      });
+  }
+
+  platformOptions: [] = [];
+  handlePlatform(value: string) {
+    this.platformOptions = this.analyticOptions.platforms.find(
+      (item: any) => item.name === value
+    ).options;
+  }
+
+  modeReasons: [] = [];
+  handleMode(value: string) {
+    this.modeReasons = this.analyticOptions.mode.find(
+      (item: any) => item.name === value
+    ).reasons;
+  }
+
+  askReasons: [] = [];
+  askActions: [] = [];
+  handleAskFor(value: string) {
+    this.askReasons = this.analyticOptions[value].reasons;
+    this.askActions = this.analyticOptions[value].actions;
+  }
+
+  export1() {
+    if (this.exportPermission) {
+      this.isLoading = true;
+
+      let exportObservable;
+      if (this.appliedFilters && this.allFilteredAnalytics.length) {
+        // const ids = this.analytics.map((obj: any) => obj.id);
+        const ids = this.allFilteredAnalytics.map((obj: any) => obj.id);
+        exportObservable = this._AnalysisService.exportByIds(ids);
+      } else {
+        exportObservable = this._AnalysisService.exportAll();
+      }
+      exportObservable.subscribe({
+        next: (res) => {
+          this.handleExportSuccess(res.data);
+        },
+      });
+    }
   }
 }

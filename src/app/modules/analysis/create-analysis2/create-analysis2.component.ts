@@ -45,9 +45,13 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     );
   }
 
-  currentNumber:string = '';
+  currentNumber: string = '';
   getCustomerCID(e: HTMLInputElement) {
-    if (e.value != '' && e.value.length == 10 && e.value != this.currentNumber) {
+    if (
+      e.value != '' &&
+      e.value.length == 10 &&
+      e.value != this.currentNumber
+    ) {
       this.currentNumber = e.value;
       this.isSearching = true;
       this._AnalysisService.getFormAnalytics().subscribe((res) => {
@@ -108,9 +112,9 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       if (type == 'old') {
         const keywordsToInclude = ['old', 'exist'];
         const filteredData = this.analyticOptions.filter((item: any) =>
-        keywordsToInclude.some((keyword) =>
-        item.name.toLowerCase().includes(keyword)
-        )
+          keywordsToInclude.some((keyword) =>
+            item.name.toLowerCase().includes(keyword)
+          )
         );
         this.options = [filteredData];
         this.isSearching = false;
@@ -118,12 +122,12 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         const keywordsToInclude = ['old', 'exist'];
         const filteredData = this.analyticOptions.filter(
           (item: any) =>
-          !keywordsToInclude.some((keyword) =>
-          item.name.toLowerCase().includes(keyword)
-          )
-          );
-          this.options = [filteredData];
-          this.isSearching = false;
+            !keywordsToInclude.some((keyword) =>
+              item.name.toLowerCase().includes(keyword)
+            )
+        );
+        this.options = [filteredData];
+        this.isSearching = false;
       }
     });
   }
@@ -131,7 +135,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
   onEnterKey(e: any) {
     e.preventDefault();
     // this.getCIDs(e.target.value);
-    this.getCustomerCID(e.target)
+    this.getCustomerCID(e.target);
   }
 
   getCIDs(value: string) {
@@ -219,6 +223,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
 
   create(form: FormGroup) {
     if (form.valid) {
+      this.isSearching = true;
       this.creatingStatus = true;
       if (form.value.reminder_date) {
         this.analysisForm.patchValue({
@@ -243,6 +248,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         .subscribe((res) => {
           if (res.status == 1) {
             this.creatingStatus = false;
+            this.isSearching = true;
+
             // this.analysisForm.reset();
             // this.createAnalysisForm();
             this._MessageService.add({
@@ -253,6 +260,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
             this.analysisForm?.get('notes')?.reset();
           } else {
             this.creatingStatus = false;
+            this.isSearching = true;
+
             if (form.value.reminder_date != null) {
               this.analysisForm.patchValue({
                 reminder_date: new Date(form.value.reminder_date),

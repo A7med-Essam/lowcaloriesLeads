@@ -130,9 +130,10 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
 
   allAnalyticOptions: any;
   getAllAnalyticOptions() {
-    this._AnalysisService.getAllAnalyticOptions().subscribe((res) => {
-      this.allAnalyticOptions = res.data;
-    });
+    // this._AnalysisService.getAllAnalyticOptions().subscribe((res) => {
+    //   this.allAnalyticOptions = res.data;
+    // });
+    this.allAnalyticOptions = []
   }
 
   addControls() {
