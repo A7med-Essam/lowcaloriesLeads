@@ -125,4 +125,12 @@ export class ShowUsersComponent implements OnInit {
       this.addRoleModal = false;
     });
   }
+
+
+  currentRow:any[] = [];
+  detailsModal:boolean  = false;
+  showRow(row:any){
+    this.detailsModal = true;
+    this.currentRow = row;
+  }
 }

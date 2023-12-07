@@ -21,7 +21,7 @@
         <th>Role</th>
         <th>Type</th>
         <th>status</th>
-        <th>permissions</th>
+        <!-- <th>permissions</th> -->
         <th>Action</th>
       </tr>
     </ng-template>
@@ -39,15 +39,17 @@
           </div>
         </td>
         <td>{{user.status?user.status:'Offline'}}</td>
-        <td [width]="750">
+        <!-- <td [width]="750">
           <div class="row" *ngIf="user.role_name != 'super_admin'">
             <div class="col-4" *ngFor="let permission of user.permissions">
               {{permission?.permission}}
             </div>
           </div>
-        </td>
+        </td> -->
         <td>
           <div *ngIf="user.role_name != 'super_admin'">
+            <button pButton type="button" icon="pi pi-eye" (click)="showRow(user.permissions)"
+                        class="m-1 p-button-sm"></button>
             <button pButton type="button" icon="pi pi-plus" (click)="getCurrentAgent(user)" class="m-1 p-button-sm p-button-success"></button>
             <button pButton type="button" icon="pi pi-pencil" (click)="updateAgent(user)"
               class="m-1 p-button-sm p-button-warning"></button>
@@ -73,4 +75,37 @@
       <button class="btn btn-primary" (click)="addRole(multieSelectRoles)">Add Role</button>
     </div>
   </ng-template>
+</p-dialog>
+
+<p-dialog header="Permission Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+    [resizable]="true">
+    <div class="card">
+        <div class="card-header">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 350px;">Title</h6>
+                <h6 class="m-0" style="width: 300px;">Description</h6>
+                <h6 class="m-0">Permission Name</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive overflow-auto">
+                <table class="table" *ngIf="currentRow.length">
+                    <tbody>
+                        <tr  *ngFor="let user of currentRow">
+                            <td width="400">
+                              <span>
+                                {{user?.permission.split("_")[1] | titlecase}}
+                              </span>
+                              <div class="text-muted">
+                                Updated at => {{user?.updated_at | date}}
+                              </div>
+                            </td>
+                            <td width="300">{{ user?.permission.split("_")[0] | titlecase }}</td>
+                            <td>{{ user?.permission }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </p-dialog>
