@@ -293,6 +293,9 @@ export class ShowAnalysis2Component implements OnInit {
   showRow(log: any) {
     this.currentRow = log;
     this.detailsModal = true;
+    this._AnalysisService.getFiles(log.id).subscribe(res=>{
+      this.currentRow = res.data;
+    })
   }
 
   updateRow(row: any) {
@@ -648,7 +651,7 @@ export class ShowAnalysis2Component implements OnInit {
     displayUploadFilesModal(id: number) {
       if (this.uploadFilesPermission) {
         this.uploadForm.patchValue({
-          data_analytic_id: id,
+          data_analytic_request_id: id,
         });
         this.uploadFilesModal = true;
       }
@@ -692,7 +695,7 @@ export class ShowAnalysis2Component implements OnInit {
   
     createUploadingForm() {
       this.uploadForm = new FormGroup({
-        data_analytic_id: new FormControl(null, [Validators.required]),
+        data_analytic_request_id: new FormControl(null, [Validators.required]),
         files: new FormControl(null, [Validators.required]),
       });
     }

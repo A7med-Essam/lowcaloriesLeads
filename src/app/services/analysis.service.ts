@@ -205,6 +205,10 @@ export class AnalysisService {
   }
 
   uploadFiles(files:any): Observable<any> {
-    return this._ApiConfigService.postReq3(`uploadDataAnalyticFiles` , files);
+    return this._ApiConfigService.postReq3(`uploadDataFiles` , files);
+  }
+
+  getFiles(data_analytic_request_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`getDataFiles` , {data_analytic_request_id});
   }
 }

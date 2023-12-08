@@ -45,8 +45,9 @@
                         [value]="analysis?.reminders_count+' Reminder'"></p-tag>
                 </td>
                 <td class="text-center">
-                    <button  [disabled]="!uploadFilesPermission" pButton type="button" icon="pi pi-upload" class="m-1 p-button-sm p-button-success"
-                    (click)="displayUploadFilesModal(analysis.id)"></button>
+                    <button [disabled]="!uploadFilesPermission" pButton type="button" icon="pi pi-upload"
+                        class="m-1 p-button-sm p-button-success"
+                        (click)="displayUploadFilesModal(analysis.id)"></button>
                     <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
                         (click)="updateRow(analysis)" class="m-1 p-button-sm p-button-warning"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
@@ -85,8 +86,8 @@
                 </div> -->
                 <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
                     <label for="">Agent</label>
-                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent" styleClass="w-100"
-                        appendTo="body" optionValue="id" optionLabel="name" [filter]="true">
+                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
+                        styleClass="w-100" appendTo="body" optionValue="id" optionLabel="name" [filter]="true">
                     </p-dropdown>
                 </div>
                 <div class="col-md-4 col-12 my-1">
@@ -281,8 +282,8 @@
                             </td>
                             <td>{{ currentRow?.mobile }}</td>
                         </tr> -->
-                  
-                       
+
+
                         <!-- <tr>
                             <td [width]="200">
                                 Customer Name
@@ -307,6 +308,35 @@
                             </td>
                             <td>{{ item.name }}</td>
                         </tr>
+                        <ng-container *ngIf="currentRow?.files&&currentRow?.files.length">
+                            <tr *ngFor="let item of currentRow?.files">
+                                <td [width]="200">
+                                    Files
+                                </td>
+                                <td class="d-flex justify-content-between align-items-center">
+                                    <span *ngIf="item.type.includes('image')">
+                                        <p-image [src]="'http://api.lowcalories.ae/'+item?.file" alt="Uploaded Image"
+                                            width="50" [preview]="true">
+                                        </p-image>
+                                    </span>
+                                    <span *ngIf="item.type.includes('audio')">
+                                        <audio controls>
+                                            <source [src]="'http://api.lowcalories.ae/'+item.file" type="audio/mpeg">
+                                        </audio>
+                                    </span>
+                                    <span
+                                        *ngIf="!item.type.includes('audio')&&!item.type.includes('image')&&!item.type.includes('video')">
+                                        <a target="_blank" [href]="'http://api.lowcalories.ae/'+item.file"
+                                            download>{{item.type}}</a>
+                                    </span>
+                                    <span *ngIf="item.type.includes('video')">
+                                        <video width="250" class="m-1" controls>
+                                            <source src="http://api.lowcalories.ae/{{item?.file}}">
+                                        </video>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
             </div>
@@ -348,8 +378,8 @@
                 </div> -->
                 <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3" *ngIf="superAdminPermission">
                     <label for="">Agent</label>
-                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent" styleClass="w-100"
-                        appendTo="body" optionValue="id" optionLabel="name" [filter]="true">
+                    <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
+                        styleClass="w-100" appendTo="body" optionValue="id" optionLabel="name" [filter]="true">
                     </p-dropdown>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-3">
@@ -461,8 +491,8 @@
     </ng-template>
 </p-dialog>
 
-<p-dialog header="Upload Files" [(visible)]="uploadFilesModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
-    [resizable]="false">
+<p-dialog header="Upload Files" [(visible)]="uploadFilesModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
     <form [formGroup]="uploadForm" (ngSubmit)='uploadFiles(uploadForm)'>
         <div class="row mx-0">
             <div class="col-12 my-2">
