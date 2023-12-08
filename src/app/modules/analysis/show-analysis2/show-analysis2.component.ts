@@ -56,6 +56,7 @@ export class ShowAnalysis2Component implements OnInit {
     this.getFormAnalytics();
     this.getAgents();
     this.getAllAnalyticOptions();
+    this.createUploadingForm();
   }
 
   exportPermission: boolean = false;
@@ -64,6 +65,7 @@ export class ShowAnalysis2Component implements OnInit {
   deletePermission: boolean = false;
   downloadSamplePermission: boolean = false;
   superAdminPermission: boolean = false;
+  uploadFilesPermission: boolean = false;
 
   getPermission() {
     this.exportPermission =
@@ -79,6 +81,9 @@ export class ShowAnalysis2Component implements OnInit {
     );
     this.superAdminPermission = this._GuardService.getPermissionStatus(
       'superadmin_analysis'
+    );
+    this.uploadFilesPermission = this._GuardService.getPermissionStatus(
+      'uploadFiles_analysis'
     );
   }
 
@@ -634,4 +639,71 @@ export class ShowAnalysis2Component implements OnInit {
       });
     }
   }
+
+    // ****************************************************upload File Modal************************************************************************
+    uploadFilesModal: boolean = false;
+    uploadingStatus: boolean = false;
+    uploadForm!: FormGroup;
+  
+    displayUploadFilesModal(id: number) {
+      if (this.uploadFilesPermission) {
+        this.uploadForm.patchValue({
+          data_analytic_id: id,
+        });
+        this.uploadFilesModal = true;
+      }
+    }
+  
+    getUploadedFile(event: any) {
+      if (
+        event.target.files &&
+        event.target.files.length &&
+        this.uploadFilesPermission
+        ) {
+        const files = event.target.files;
+        const readFile = (file: any) => {
+          return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.onload = (event: any) => resolve(event.target.result);
+            fileReader.onerror = (error) => reject(error);
+            fileReader.readAsDataURL(file);
+          });
+        };
+  
+        const readFiles = async () => {
+          try {
+            const base64Strings = await Promise.all(
+              Array.from(files).map(readFile)
+            );
+            const fileTypes = base64Strings.map((base64String: any) => {
+              const type = base64String.split(',')[0].split(':')[1].split(';')[0];
+              return { [type]: base64String };
+            });
+            this.uploadForm.patchValue({
+              files: fileTypes,
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        };
+        readFiles();
+      }
+    }
+  
+    createUploadingForm() {
+      this.uploadForm = new FormGroup({
+        data_analytic_id: new FormControl(null, [Validators.required]),
+        files: new FormControl(null, [Validators.required]),
+      });
+    }
+  
+    uploadFiles(form: FormGroup) {
+      if (form.valid && this.uploadFilesPermission) {
+        this.uploadingStatus = true;
+        this._AnalysisService.uploadFiles(form.value).subscribe((res) => {
+          this.uploadingStatus = false;
+          this.uploadFilesModal = false;
+        });
+      }
+    }
 }

@@ -364,18 +364,18 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
   }
 
   onFileSelected(event: any) {
-    if (this.downloadSamplePermission) {
-      const file: File = event.target.files[0];
-      if (file) {
-        let f: File = this.getFormData({ file: file }) as any;
-        this._AnalysisService.uploadFile(f).subscribe({
-          next: (res) => {
-            this.uploadModal = false;
-            this.getAnalytics();
-          },
-        });
-        this.uploadModal = false;
-      }
-    }
+    // if (this.downloadSamplePermission) {
+    //   const file: File = event.target.files[0];
+    //   if (file) {
+    //     let f: File = this.getFormData({ file: file }) as any;
+    //     this._AnalysisService.uploadFile(f).subscribe({
+    //       next: (res) => {
+    //         this.uploadModal = false;
+    //         this.getAnalytics();
+    //       },
+    //     });
+    //     this.uploadModal = false;
+    //   }
+    // }
   }
 }

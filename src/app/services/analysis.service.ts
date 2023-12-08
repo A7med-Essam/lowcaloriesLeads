@@ -80,9 +80,9 @@ export class AnalysisService {
     return this._ApiConfigService.postReq3(`analyticsSample`, '');
   }
 
-  uploadFile(file: File): Observable<any> {
-    return this._ApiConfigService.postReq3(`analyticsImport`, file);
-  }
+  // uploadFile(file: File): Observable<any> {
+  //   return this._ApiConfigService.postReq3(`analyticsImport`, file);
+  // }
 
   // ===========================================REMINDER======================================================
 
@@ -202,5 +202,9 @@ export class AnalysisService {
 
   deleteBulkData(rows:any){
     return this._ApiConfigService.postReq3(`deleteDataAnalyticOption`, rows);
+  }
+
+  uploadFiles(files:any): Observable<any> {
+    return this._ApiConfigService.postReq3(`uploadDataAnalyticFiles` , files);
   }
 }
