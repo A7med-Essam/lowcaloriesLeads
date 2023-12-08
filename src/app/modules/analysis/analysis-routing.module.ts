@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PermissionGuard } from 'src/app/core/permission.guard';
+import { AnalysisReminderComponent } from './analysis-reminder/analysis-reminder.component';
 import { CreateAnalysisComponent } from './create-analysis/create-analysis.component';
 import { CreateAnalysis2Component } from './create-analysis2/create-analysis2.component';
 import { ManageAnalysisComponent } from './manage-analysis/manage-analysis.component';
@@ -65,6 +66,14 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       permission: ['manage_analysis'],
+    },
+  },
+  {
+    path: 'reminder',
+    component: AnalysisReminderComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['reminder_analysis'],
     },
   },
 ];

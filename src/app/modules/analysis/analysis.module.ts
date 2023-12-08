@@ -24,6 +24,7 @@ import { UpdateAnalysis2Component } from './update-analysis2/update-analysis2.co
 import { TagModule } from 'primeng/tag';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { ChipsModule } from 'primeng/chips';
+import { AnalysisReminderComponent } from './analysis-reminder/analysis-reminder.component';
 @NgModule({
   declarations: [
     CreateAnalysisComponent,
@@ -33,6 +34,7 @@ import { ChipsModule } from 'primeng/chips';
     CreateAnalysis2Component,
     ShowAnalysis2Component,
     UpdateAnalysis2Component,
+    AnalysisReminderComponent,
   ],
   imports: [
     CommonModule,
