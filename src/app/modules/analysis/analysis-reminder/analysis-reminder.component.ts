@@ -65,23 +65,24 @@ export class AnalysisReminderComponent implements OnInit, OnDestroy {
   getAgents() {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
-        const groupedUsers = res.data.reduce((acc: any, user: any) => {
-          const team = user.team;
-          if (!acc[team]) {
-            acc[team] = [];
-          }
-          acc[team].push(user);
-          return acc;
-        }, {});
-        this.agents = Object.keys(groupedUsers).map((team) => {
-          return {
-            label: team,
-            items: groupedUsers[team].map((user: any) => ({
-              label: user.name,
-              value: user.id,
-            })),
-          };
-        });
+        this.agents = this.agents_clone = res.data;
+        // const groupedUsers = res.data.reduce((acc: any, user: any) => {
+        //   const team = user.team;
+        //   if (!acc[team]) {
+        //     acc[team] = [];
+        //   }
+        //   acc[team].push(user);
+        //   return acc;
+        // }, {});
+        // this.agents = Object.keys(groupedUsers).map((team) => {
+        //   return {
+        //     label: team,
+        //     items: groupedUsers[team].map((user: any) => ({
+        //       label: user.name,
+        //       value: user.id,
+        //     })),
+        //   };
+        // });
       },
     });
   }
@@ -167,6 +168,7 @@ export class AnalysisReminderComponent implements OnInit, OnDestroy {
       agent_id: new FormControl(null),
       team: new FormControl(null),
     });
+    this.valueChanges();
   }
 
   applyFilter(form: FormGroup) {
@@ -215,5 +217,23 @@ export class AnalysisReminderComponent implements OnInit, OnDestroy {
 
   resetFields() {
     this.filterForm.reset();
+  }
+
+  // ======================================================= filter by team =================================================
+
+  valueChanges() {
+      this.filterForm.get('team')
+      ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
+        if (value) {
+          this.handleAgent(value);
+        }
+      });
+  }
+  agents_clone: any[] = [];
+
+  handleAgent(value:string){
+    this.agents = this.agents_clone
+    this.agents=this.agents.filter(agent => agent.team === value)
   }
 }

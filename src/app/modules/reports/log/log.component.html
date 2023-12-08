@@ -5,15 +5,21 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-lg-6 col-12 my-2">
+            <div class="col-lg-4 col-md-6 col-12 my-2">
+                <div class="form-group">
+                    <p-dropdown [options]="analyticOptions?.teams" [(ngModel)]="selectedTeam" (onChange)="handleAgent(selectedTeam)"
+                        appendTo="body" styleClass="w-100" placeholder="Select Team" [filter]="true">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-2">
                 <div class="form-group">
                     <p-dropdown [options]="agents" optionLabel="name" optionValue="id" [(ngModel)]="selectedAgent"
                         appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
                     </p-dropdown>
-
                 </div>
             </div>
-            <div class="col-lg-6 col-12 my-2">
+            <div class="col-lg-4 col-md-6 col-12 my-2">
                 <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" ngClass="w-100" appendTo="body"
                     placeholder="Select Date Range" [(ngModel)]="selectedDate">
                 </p-calendar>
@@ -194,7 +200,7 @@
                                     <h5 class="mb-0">Refunds</h5>
                                     <div>
                                         <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllRefunds(logs.targets.data)">
+                                            (click)="printAllRefunds(logs.refunds.data)">
                                         </p-button>
                                         <p-button class="mx-1" icon="pi pi-upload" label="Export"
                                             (click)="export(logs.refunds.data,'refunds')">
@@ -250,7 +256,7 @@
                                     <h5 class="mb-0">Complaints</h5>
                                     <div>
                                         <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllComplaint(logs.targets.data)">
+                                            (click)="printAllComplaint(logs.issues.data)">
                                         </p-button>
                                         <p-button class="mx-1" icon="pi pi-upload" label="Export"
                                             (click)="export(logs.issues.data,'complaints')">
@@ -300,7 +306,7 @@
                                     <h5 class="mb-0">Dislikes</h5>
                                     <div>
                                         <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllDislikes(logs.targets.data)">
+                                            (click)="printAllDislikes(logs.Dislikes.data)">
                                         </p-button>
                                         <p-button class="mx-1" icon="pi pi-upload" label="Export"
                                             (click)="export(logs.Dislikes.data,'dislikes')">
@@ -351,9 +357,9 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Payment Links</h5>
                                     <div>
-                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllTargets(logs.targets.data)">
-                                        </p-button>
+                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                            (click)="printAllTargets(logs.paymentLinks.data)">
+                                        </p-button> -->
                                         <p-button class="mx-1" icon="pi pi-upload" label="Export"
                                             (click)="export(logs.paymentLinks.data,'paymentlink')">
                                         </p-button>
@@ -402,9 +408,9 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Payment Branch</h5>
                                     <div>
-                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllTargets(logs.targets.data)">
-                                        </p-button>
+                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                            (click)="printAllTargets(logs.paymentBranches.data)">
+                                        </p-button> -->
                                         <p-button class="mx-1" icon="pi pi-upload" label="Export"
                                             (click)="export(logs.paymentBranches.data,'paymentbranch')">
                                         </p-button>
@@ -451,9 +457,9 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Clinic</h5>
                                     <div>
-                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllTargets(logs.targets.data)">
-                                        </p-button>
+                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                            (click)="printAllTargets(logs.Clinic.data)">
+                                        </p-button> -->
                                         <p-button class="mx-1" icon="pi pi-upload" label="Export"
                                             (click)="export(logs.Clinic.data,'clinic')">
                                         </p-button>
@@ -486,6 +492,53 @@
                     </div>
                 </div>
             </div>
+            <hr *ngIf="logs?.dataAnalytics?.data.length  && selectedColumns.includes('dataAnalytics')">
+            <div class="card" *ngIf="logs?.dataAnalytics?.data.length  && selectedColumns.includes('dataAnalytics')">
+                <div class="card-body">
+                    <div class="table-responsive overflow-auto">
+                        <p-table [value]="logs.dataAnalytics.data" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                    <h5 class="mb-0">Analytics</h5>
+                                    <div>
+                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                            (click)="printAllTargets(logs.targets.data)">
+                                        </p-button> -->
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                            (click)="export(logs.dataAnalytics.data,'dataAnalytics')">
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Mobile</th>
+                                    <th>Customer Gender</th>
+                                    <th>Emirate</th>
+                                    <th>Customer Branch</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{log.date}}</td>
+                                    <td>{{log.customer_name}}</td>
+                                    <td>{{log.mobile}}</td>
+                                    <td>{{log.customer_gender}}</td>
+                                    <td>{{log?.emirate?.en_name}}</td>
+                                    <td>{{log?.customer_branch}}</td>
+                                    <td class="text-center">
+                                        <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
+                                            class="m-1 p-button-sm"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -505,6 +558,14 @@
                     <tbody>
                         <tr *ngFor="let item of currentRow | keyvalue">
                             <ng-container [ngSwitch]="item.key">
+                                <ng-container *ngSwitchCase="'data_options'">
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'emirate'">
+                                    <td [width]="200">
+                                        {{ item.key }}
+                                    </td>
+                                    <td>{{ currentRow.emirate.en_name }}</td>
+                                </ng-container>
                                 <ng-container *ngSwitchCase="'file'">
                                 </ng-container>
                                 <ng-container *ngSwitchCase="'voice'">
@@ -512,8 +573,8 @@
                                         Files
                                     </td>
                                     <td class="d-flex justify-content-between align-items-center">
-                                        <button pButton type="button" icon="pi pi-eye" (click)="getCallFiles(currentRow.id)"
-                                        class="m-1 p-button-sm"></button>
+                                        <button pButton type="button" icon="pi pi-eye"
+                                            (click)="getCallFiles(currentRow.id)" class="m-1 p-button-sm"></button>
                                         <span *ngIf="files?.length">
                                             <small *ngFor="let f of files" style="display: block;" class="my-2">
                                                 <span class="mx-2" *ngIf="f?.agent?.name">{{f?.agent?.name}}
@@ -531,8 +592,7 @@
                                                 </span>
                                                 <span
                                                     *ngIf="!f.type.includes('audio')&&!f.type.includes('image')&&!f.type.includes('video')">
-                                                    <a target="_blank"
-                                                        [href]="'http://api.lowcalories.ae/'+f.file"
+                                                    <a target="_blank" [href]="'http://api.lowcalories.ae/'+f.file"
                                                         download>{{f.type}}</a>
                                                 </span>
                                                 <span *ngIf="f.type.includes('video')">
@@ -570,6 +630,16 @@
                                 </ng-container>
                             </ng-container>
                         </tr>
+                        <ng-container *ngFor="let item of currentRow | keyvalue">
+                            <ng-container *ngIf="item.key == 'data_options'">
+                                <tr *ngFor="let option of currentRow?.data_options">
+                                    <td [width]="200">
+                                        {{ option.label }}
+                                    </td>
+                                    <td>{{ option.name }}</td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
                     </tbody>
                 </table>
             </div>

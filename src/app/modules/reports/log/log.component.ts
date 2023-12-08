@@ -10,6 +10,7 @@ import { SubscriptionsService } from 'src/app/services/subscriptions.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { AnalysisService } from 'src/app/services/analysis.service';
 
 @Component({
   selector: 'app-log',
@@ -26,49 +27,61 @@ export class LogComponent implements OnInit {
     private _RefundService: RefundService,
     private _DislikeService: DislikeService,
     private _CallsService: CallsService,
-    private _SubscriptionsService: SubscriptionsService
+    private _SubscriptionsService: SubscriptionsService,
+    private _AnalysisService: AnalysisService
   ) {}
 
   selectedDate: any;
   selectedAgent: any;
+  selectedTeam: any;
   detailsModal: boolean = false;
 
   ngOnInit(): void {
     this.getAgents();
+    this.getFormAnalytics();
+  }
+
+  analyticOptions: any;
+  getFormAnalytics() {
+    this._AnalysisService.getFormAnalytics().subscribe((res) => {
+      this.analyticOptions = res.data;
+    });
   }
 
   logs: any;
   isLoadingLogs: boolean = false;
   getAgentLog() {
-    if (this.selectedDate || this.selectedAgent) {
-      this.isLoadingLogs = true;
-      this.selectedDate[1] ?? (this.selectedDate[1] = new Date());
-      let data = {
-        agent_id: this.selectedAgent,
-        from: this.selectedDate[0],
-        to: this.selectedDate[1],
-      };
-      this._ReportsService.getAgentLogs(data).subscribe((res) => {
-        this.isLoadingLogs = false;
-        this.logs = res.data;
-        this.columns.forEach((e) => {
-          if (res.data[e.name].data.length) {
-            Object.keys(res.data).forEach((key) => {
-              if (e.name == key) {
-                this.selectedColumns.push(e.name);
-              }
-            });
-          }
+    if (!this.isLoadingLogs) {
+      if (this.selectedDate || this.selectedAgent) {
+        this.isLoadingLogs = true;
+        this.selectedDate[1] ?? (this.selectedDate[1] = new Date());
+        let data = {
+          agent_id: this.selectedAgent,
+          from: this.selectedDate[0],
+          to: this.selectedDate[1],
+        };
+        this._ReportsService.getAgentLogs(data).subscribe((res) => {
+          this.isLoadingLogs = false;
+          this.logs = res.data;
+          this.columns.forEach((e) => {
+            if (res.data[e.name].data.length) {
+              Object.keys(res.data).forEach((key) => {
+                if (e.name == key) {
+                  this.selectedColumns.push(e.name);
+                }
+              });
+            }
+          });
+          this.columns = this.columns.map((m) => {
+            if (res.data[m.name].data.length) {
+              m.status = true;
+            } else {
+              m.status = false;
+            }
+            return m;
+          });
         });
-        this.columns = this.columns.map((m) => {
-          if (res.data[m.name].data.length) {
-            m.status = true;
-          } else {
-            m.status = false;
-          }
-          return m;
-        });
-      });
+      }
     }
   }
 
@@ -76,7 +89,7 @@ export class LogComponent implements OnInit {
   getAgents() {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
-        this.agents = res.data;
+        this.agents = this.agents_clone = res.data;
       },
     });
   }
@@ -161,6 +174,13 @@ export class LogComponent implements OnInit {
           },
         });
         break;
+      case 'dataanalytics':
+        this._AnalysisService.exportByIds(ids).subscribe({
+          next: (res) => {
+            this.handleExportSuccess(res.data);
+          },
+        });
+        break;
       // default:
       //   alert();
       //   break
@@ -177,6 +197,7 @@ export class LogComponent implements OnInit {
     { name: 'refunds', status: false },
     { name: 'issues', status: false },
     { name: 'Dislikes', status: false },
+    { name: 'dataAnalytics', status: false },
     // { name: 'paymentLinks', status: false },
     // { name: 'paymentBranches', status: false },
     // { name: 'Clinic', status: false },
@@ -981,7 +1002,11 @@ export class LogComponent implements OnInit {
 
   removeObjectValues(obj: any) {
     for (const key in obj) {
-      if (typeof obj[key] === 'object') {
+      if (
+        typeof obj[key] === 'object' &&
+        key != 'emirate' &&
+        key != 'data_options'
+      ) {
         delete obj[key];
       }
     }
@@ -995,5 +1020,12 @@ export class LogComponent implements OnInit {
     this._CallsService.getFiles(id).subscribe((res) => {
       this.files = res.data.call_files;
     });
+  }
+
+  // ======================================================= filter by team =================================================
+  agents_clone: any[] = [];
+  handleAgent(value: string) {
+    this.agents = this.agents_clone;
+    this.agents = this.agents.filter((agent) => agent.team === value);
   }
 }
