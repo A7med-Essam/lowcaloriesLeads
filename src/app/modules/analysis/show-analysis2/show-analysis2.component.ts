@@ -83,7 +83,7 @@ export class ShowAnalysis2Component implements OnInit {
       'superadmin_analysis'
     );
     this.uploadFilesPermission = this._GuardService.getPermissionStatus(
-      'uploadFiles_analysis'
+      'upload_analysis'
     );
   }
 
