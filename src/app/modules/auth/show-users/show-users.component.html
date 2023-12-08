@@ -39,8 +39,8 @@
           </div>
         </td>
         <td>
-          <p-tag *ngIf="user.status" severity="success" value="Online"></p-tag>
-          <p-tag *ngIf="!user.status" severity="danger" value="Offline"></p-tag>
+          <p-tag *ngIf="user.status == 'Online'" severity="success" [value]="user.status"></p-tag>
+          <p-tag *ngIf="user.status != 'Online'" severity="danger" [value]="user.status"></p-tag>
         </td>
         <td>
           <div *ngIf="user.role_name != 'super_admin'">
