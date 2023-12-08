@@ -107,7 +107,7 @@ export class AnalysisService {
   }
 
   getAnalyticsById(dataRequest_id: number): Observable<any> {
-    return this._ApiConfigService.postReq3(`showDataRequests`, {
+    return this._ApiConfigService.postReq33(`showDataRequests`, {
       dataRequest_id,
     });
   }

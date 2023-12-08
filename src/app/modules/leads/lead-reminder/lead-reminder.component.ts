@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
@@ -19,7 +20,8 @@ export class LeadReminderComponent implements OnInit, OnDestroy {
     private _LocalService: LocalService,
     private _Router: Router,
     private _GuardService: GuardService,
-    private _SurveyService: SurveyService
+    private _SurveyService: SurveyService,
+    private _MessageService: MessageService
   ) {}
   current_user: any;
   private unsubscribe$ = new Subject<void>();
@@ -125,7 +127,15 @@ export class LeadReminderComponent implements OnInit, OnDestroy {
 
   getAnalyticsById(id: number) {
     this._AnalysisService.getAnalyticsById(id).subscribe((res) => {
-      this.showRow(res.data);
+      if (res.status == 1) {
+        this.showRow(res.data);
+      }else{
+        this._MessageService.add({
+          severity: 'warn',
+          summary: 'Deleted analytic!',
+          detail: 'Can not find analytics',
+        });
+      }
     });
   }
   // ===============================================================Update======================================================================

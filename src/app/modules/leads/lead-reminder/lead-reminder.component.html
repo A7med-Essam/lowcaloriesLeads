@@ -31,10 +31,10 @@
                                     <p-tag severity="danger" value="Reminded"></p-tag>
                                 </td>
                                 <td class="py-3" *ngIf="!remind.reminded">
-                                    <p-tag class="pointer" severity="success" value="Update Reminder" (click)="update(remind.id)"></p-tag>
+                                    <p-tag class="pointer" severity="success" value="Update Reminder" (click)="update(remind?.id)"></p-tag>
                                 </td>
                                 <td class="text-center">
-                                    <button pButton type="button" icon="pi pi-eye" (click)="getAnalyticsById(remind.dataRequest_id)"
+                                    <button pButton type="button" icon="pi pi-eye" (click)="getAnalyticsById(remind?.dataRequest_id)"
                                     class="m-1 p-button-sm"></button>
                                 </td>
                             </tr>
@@ -123,7 +123,7 @@
                                 <td width="200">Notes</td>
                                 <td>{{ currentRow?.notes }}</td>
                             </tr>
-                            <tr *ngIf="currentRow?.agent.id == current_user.id || current_user.role_name === 'super_admin'  else elseBlock">
+                            <tr *ngIf="currentRow?.agent?.id == current_user.id || current_user.role_name === 'super_admin'  else elseBlock">
                                 <td style="vertical-align:middle">Update</td>
                                 <td>
                                     <button (click)="updateRow(currentRow)" pButton type="button" icon="pi pi-pencil"  class="m-1 p-button-sm p-button-warning"></button>
