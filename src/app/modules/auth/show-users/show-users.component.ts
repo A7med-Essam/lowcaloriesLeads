@@ -58,14 +58,14 @@ export class ShowUsersComponent implements OnInit {
           (agent) =>
             agent.name.toUpperCase().includes(searchValue) ||
             agent.team.toUpperCase().includes(searchValue) ||
-            agent.role_name.toUpperCase().includes(searchValue) ||
-            agent.role.toUpperCase().includes(searchValue) ||
-            // agent?.web_role[0]?.toUpperCase().includes(searchValue) ||
+            // agent.role_name.toUpperCase().includes(searchValue) ||
+            // agent.role.toUpperCase().includes(searchValue) ||
+            agent?.web_role?.[0]?.toUpperCase().includes(searchValue) ||
             (agent.status &&
-              agent.status.toUpperCase().includes(searchValue)) ||
-            agent.permissions.some((permission: any) =>
-              permission.permission.toUpperCase().includes(searchValue)
-            )
+              agent.status.toUpperCase().includes(searchValue)) 
+            // agent.permissions.some((permission: any) =>
+            //   permission.permission.toUpperCase().includes(searchValue)
+            // )
         );
       } else {
         this.agents = [...this.cloneAgents];
@@ -73,11 +73,11 @@ export class ShowUsersComponent implements OnInit {
     }, 1);
   }
 
-  agentRoles = ['None', 'HeadOffice', 'Branches', 'Accountant'];
+  agentRoles: string[] = [];
   onAgentRoleSelected(e: Dropdown) {
     this.agents = [...this.cloneAgents];
     if (this.agentRoles.includes(e.value) && e.value != 'None') {
-      this.agents = this.agents.filter((agent) => agent.role === e.value);
+      this.agents = this.agents.filter((agent) => agent.web_role == e.value);
     } else {
       this.agents = [...this.cloneAgents];
     }
@@ -93,6 +93,8 @@ export class ShowUsersComponent implements OnInit {
   getRoles() {
     this._UsersService.getRoles().subscribe((res) => {
       this.roles = res.data;
+      this.agentRoles = res.data.map((m: any) => m.name)
+      this.agentRoles.unshift("None")
     });
   }
 

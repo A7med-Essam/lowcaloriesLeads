@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { AddUserComponent } from './add-user/add-user.component';
+import { TagModule } from 'primeng/tag';
 
 const APP_PRIMENG_MODULE = [
   TableModule,
@@ -25,7 +26,8 @@ const APP_PRIMENG_MODULE = [
   DropdownModule,
   InputTextModule,
   MultiSelectModule,
-  ConfirmDialogModule
+  ConfirmDialogModule,
+  TagModule
 ];
 
 @NgModule({
