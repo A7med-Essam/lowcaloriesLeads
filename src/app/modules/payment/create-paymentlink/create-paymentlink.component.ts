@@ -305,7 +305,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     //-*-// return meals;
     let meals = [];
     for (let i = 1; i <= num; i++) {
-      meals.push({ label: `${type} ${i}`, value: i });
+      meals.push({ label: `${i} ${type}${i>1?'s':''}`, value: i });
     }
     return meals;
   }
