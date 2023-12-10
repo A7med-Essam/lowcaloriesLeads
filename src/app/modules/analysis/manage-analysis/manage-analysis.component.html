@@ -62,7 +62,7 @@
             <div class="card flex justify-content-center">
                 <p-treeSelect class="w-full md:w-20rem" [(ngModel)]="selectedNode" [filter]="true" appendTo="body"
                     styleClass="w-100" [options]="dropDownAnalytics" display="chip" [metaKeySelection]="false"
-                    selectionMode="checkbox" placeholder="Select Item" (onNodeSelect)="nodeSelect($event)">
+                    selectionMode="checkbox" placeholder="Select Item" (onNodeSelect)="nodeSelect($event)" [showClear]="true">
                 </p-treeSelect>
             </div>
         </div>
@@ -124,3 +124,12 @@
         </div>
     </div>
 </p-dialog>
+
+<div class="loader-container" *ngIf="isLoading">
+    <div class="i-loader-inf-horizontal-container">
+        <div class="i-loader-inf-horizontal"></div>
+        <div class="pt-8px">
+            <span>Processing data</span>
+        </div>
+    </div>
+</div>

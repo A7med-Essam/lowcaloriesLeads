@@ -37,8 +37,10 @@ export class ManageAnalysisComponent implements OnInit {
   }
 
   getAnalytics() {
+    this.isLoading = true;
     this._AnalysisService.getDataAnalyticOption().subscribe({
       next: (res) => {
+        this.isLoading = false;
         this.analytics = this.analytics_clone = res.data;
         const deepClone = JSON.parse(JSON.stringify(this.analytics_clone));
         this.toggleNameAndLabel(deepClone);
@@ -75,34 +77,13 @@ export class ManageAnalysisComponent implements OnInit {
     });
   }
 
+  isLoading: boolean = false;
   getChildren(analysis: any): void {
-    // if (analysis.children) {
-    //   this.items.push({
-    //     items: this.analytics,
-    //     label: analysis.name,
-    //     id: analysis.id,
-    //   });
-    //   this.analytics = analysis.children;
-    //   this.items = [...this.items];
-    //   this.resetClone();
-    // } else {
-    //   this._AnalysisService
-    //     .getAnalyticsChildrenById(analysis.id)
-    //     .subscribe((res) => {
-    //       this.items.push({
-    //         items: this.analytics,
-    //         label: analysis.name,
-    //         id: analysis.id,
-    //       });
-    //       analysis.children = res.data;
-    //       this.analytics = analysis.children;
-    //       this.items = [...this.items];
-    //       this.resetClone();
-    //     });
-    // }
+    this.isLoading = true;
     this._AnalysisService
       .getAnalyticsChildrenById(analysis.id)
       .subscribe((res) => {
+        this.isLoading = false;
         this.items.push({
           items: this.analytics,
           label: analysis.name,
@@ -118,6 +99,7 @@ export class ManageAnalysisComponent implements OnInit {
   deleteRow(analysis: any): void {
     const index = this.analytics.indexOf(analysis);
     if (index !== -1) {
+      this.isLoading = true;
       this.analytics.splice(index, 1);
       this._AnalysisService
         .deleteDataAnalyticOption(analysis.id)
@@ -129,6 +111,7 @@ export class ManageAnalysisComponent implements OnInit {
           // this.items[this.items.length-1].items = this.analytics
           this._AnalysisService.getDataAnalyticOption().subscribe({
             next: (res) => {
+              this.isLoading = false;
               const deepClone = JSON.parse(JSON.stringify(res.data));
               this.toggleNameAndLabel(deepClone);
             },
@@ -148,9 +131,12 @@ export class ManageAnalysisComponent implements OnInit {
         this.items = this.items.slice(0, index);
       } else {
         this.items = [];
+        this.isLoading = true;
         this.analytics = this.analytics_clone;
         this._AnalysisService.getDataAnalyticOption().subscribe({
           next: (res) => {
+            this.isLoading = false;
+
             this.analytics = this.analytics_clone = res.data;
             const deepClone = JSON.parse(JSON.stringify(this.analytics_clone));
             this.toggleNameAndLabel(deepClone);
@@ -161,7 +147,9 @@ export class ManageAnalysisComponent implements OnInit {
   }
   creatingStatus: boolean = false;
   addNewDataAnalyticOption(data: any) {
+    this.isLoading = true;
     this._AnalysisService.addNewDataAnalyticOption(data).subscribe((res) => {
+      this.isLoading = false;
       if (res.status == 1) {
         this.createNodeModal = false;
         this.creatingStatus = false;
@@ -201,7 +189,9 @@ export class ManageAnalysisComponent implements OnInit {
     const label =
       this.selectedLabel != null ? this.selectedLabel : this.selectedlabelText;
     const data = { ids, label };
+    this.isLoading = true;
     this._AnalysisService.addLabelForDataOption(data).subscribe((res) => {
+      this.isLoading = false;
       this.selectedLabel = null;
       this.selectedlabelText = null;
       this.createLabelModal = false;
@@ -239,7 +229,9 @@ export class ManageAnalysisComponent implements OnInit {
         data_analytic_option_id: this.currentRow.id,
         name: this.selectedName,
       };
+      this.isLoading = true;
       this._AnalysisService.updateAnalyticName(data).subscribe((res) => {
+        this.isLoading = false;
         this.updateModal = false;
         this.analytics = this.analytics.map((al: any) => {
           if (al.id == this.currentRow.id) {
@@ -268,12 +260,15 @@ export class ManageAnalysisComponent implements OnInit {
     const id = e.node.id;
     this.node = e.node;
     this._AnalysisService.getAnalyticsChildrenById(id).subscribe((res) => {
-      this.dropDownAnalytics=this.dropDownAnalytics.map(e=>{
+      this.dropDownAnalytics = this.dropDownAnalytics.map((e) => {
         if (e.id == id) {
-          e.children = res.data;
+          e.children = res.data.map((c: any) => {
+            [c.name, c.label] = [c.label, c.name];
+            return c;
+          });
         }
-        return e
-      })
+        return e;
+      });
     });
   }
 
@@ -342,15 +337,18 @@ export class ManageAnalysisComponent implements OnInit {
         const data = {
           data_analytic_option_ids: this.specificRows,
         };
+        this.isLoading = true;
         this._AnalysisService.deleteBulkData(data).subscribe((res) => {
           this.analytics = this.analytics.filter(
             (al: any) => !this.specificRows.includes(al.id)
           );
+
           this._AnalysisService.getDataAnalyticOption().subscribe({
             next: (res) => {
               const deepClone = JSON.parse(JSON.stringify(res.data));
               this.toggleNameAndLabel(deepClone);
               // this.resetClone();
+              this.isLoading = false;
             },
           });
           // this.items[this.items.length-1].items = this.analytics

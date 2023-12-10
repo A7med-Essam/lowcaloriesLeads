@@ -279,9 +279,11 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       if (this.options[index][selectedIndex].children) {
         this.options.push(this.options[index][selectedIndex].children);
       } else {
+        this.isSearching = true;
         this._AnalysisService
-          .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
-          .subscribe((res) => {
+        .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
+        .subscribe((res) => {
+            this.isSearching = false;
             this.options[index][selectedIndex].children = res.data;
             this.options.push(this.options[index][selectedIndex].children);
           });

@@ -182,7 +182,7 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
   //     }
   //   }
   // }
-
+  isLoading: boolean = false;
   storeSelectedOptions(e: any, index: number) {
     const selectedIndex = this.getArrayIndex(e.value, index);
     this.options.splice(index + 1);
@@ -190,9 +190,11 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
       if (this.options[index][selectedIndex].children) {
         this.options.push(this.options[index][selectedIndex].children);
       } else {
+        this.isLoading = true;
         this._AnalysisService
           .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
           .subscribe((res) => {
+            this.isLoading = false;
             this.options[index][selectedIndex].children = res.data;
             this.options.push(this.options[index][selectedIndex].children);
           });

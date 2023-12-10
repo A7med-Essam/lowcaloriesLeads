@@ -106,6 +106,15 @@
     </div>
 </div>
 
+<div class="loader-container" *ngIf="isLoading">
+    <div class="i-loader-inf-horizontal-container">
+        <div class="i-loader-inf-horizontal"></div>
+        <div class="pt-8px">
+            <span>Processing data</span>
+        </div>
+    </div>
+</div>
+
 <p-dialog header="Reminder Date" [(visible)]="reminderModal" position="bottom" [style]="{ width: '50vw' }"
     [modal]="true" [resizable]="false" [draggable]="false">
     <p-calendar [showIcon]="true" [defaultDate]="defaultReminder" [(ngModel)]="defaultReminder" [minDate]="minReminder" [showTime]="true" [maxDate]="maxReminder"

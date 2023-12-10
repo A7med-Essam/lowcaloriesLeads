@@ -370,9 +370,11 @@ export class ShowAnalysis2Component implements OnInit {
       if (this.options[index][selectedIndex].children) {
         this.options.push(this.options[index][selectedIndex].children);
       } else {
+        this.isLoadingFilter = true;
         this._AnalysisService
-          .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
-          .subscribe((res) => {
+        .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
+        .subscribe((res) => {
+            this.isLoadingFilter = false;
             this.options[index][selectedIndex].children = res.data;
             this.options.push(this.options[index][selectedIndex].children);
           });
