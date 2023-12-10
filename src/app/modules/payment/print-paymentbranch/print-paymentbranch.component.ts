@@ -26,8 +26,8 @@ import { Calendar } from 'primeng/calendar';
   styleUrls: ['./print-paymentbranch.component.scss'],
 })
 export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
-  mealTypes: any[] = [];
-  snackTypes: any[] = [];
+  mealTypes: string[] = [];
+  snackTypes: string[] = [];
   plans: any[] = [];
   numberOfDays: any[] = [];
   paymentDetails!: PaymentDetails;
@@ -89,47 +89,22 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   }
 
   currentPrice: number = 0;
-  // calculate_payment_link() {
-  //   const data: any = {
-  //     program_id: this.paymentForm.value.program_id,
-  //     plan_id: this.paymentForm.value.plan_id,
-  //     snack_types: this.paymentForm.value.snack_types,
-  //     subscription_days: this.paymentForm.value.subscription_days,
-  //     code_id: this.paymentForm.value.code_id,
-  //     bag: this.paymentForm.value.bag,
-  //   };
-  //   if (this.paymentForm.value.meal_types) {
-  //     data.meal_types = this.paymentForm.value.meal_types;
-  //   }
-  //   if (this.paymentForm.value.snack_types) {
-  //     if (this.paymentForm.value.snack_types.length > 0) {
-  //       data.snack_types = this.paymentForm.value.snack_types;
-  //     }
-  //   }
-  //   this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
-  //     if (res.status == 1) {
-  //       this.currentPrice = res.data.toFixed(2);
-  //     }
-  //   });
-  // }
-
   calculate_payment_link() {
-    const data:any = {
+    const data: any = {
       program_id: this.paymentForm.value.program_id,
       plan_id: this.paymentForm.value.plan_id,
+      snack_types: this.paymentForm.value.snack_types,
       subscription_days: this.paymentForm.value.subscription_days,
       code_id: this.paymentForm.value.code_id,
       bag: this.paymentForm.value.bag,
     };
-    if (this.paymentForm.value.no_meals) {
-      //-*-// data.meal_types=this.paymentForm.value.meal_types
-      data.meal_types=this.getTypes(this.paymentForm.value.no_meals,'meal')
+    if (this.paymentForm.value.meal_types) {
+      data.meal_types = this.paymentForm.value.meal_types;
     }
-    if (this.paymentForm.value.no_snacks) {
-      // if (this.paymentForm.value.no_snacks.length > 0) {
-        //-*-// data.snack_types=this.paymentForm.value.snack_types
-        data.snack_types=this.getTypes(this.paymentForm.value.no_snacks,'snack')
-      // }
+    if (this.paymentForm.value.snack_types) {
+      if (this.paymentForm.value.snack_types.length > 0) {
+        data.snack_types = this.paymentForm.value.snack_types;
+      }
     }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
       if (res.status == 1) {
@@ -137,6 +112,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   // ====================================================================Copy Message==========================================================================
   copyMessage(Input: HTMLInputElement) {
     const selBox = document.createElement('textarea');
@@ -215,10 +191,8 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       program: new FormControl(null, [Validators.required]),
       program_id: new FormControl(null, [Validators.required]),
       plan_id: new FormControl(null),
-      // meal_types: new FormArray([], [Validators.required]),
-      // snack_types: new FormArray([]),
-      meal_types: new FormControl(null),// -*- //
-      snack_types: new FormControl(null),// -*- //
+      meal_types: new FormArray([], [Validators.required]),
+      snack_types: new FormArray([]),
       subscription_days: new FormControl(null, [Validators.required]),
       delivery_days: new FormArray([], [Validators.required]),
       start_date: new FormControl(null, [Validators.required]),
@@ -231,8 +205,6 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       note: new FormControl(null),
       check_type: new FormControl(null, [Validators.required]),
       only_snack: new FormControl('no'),
-      no_meals: new FormControl(null, [Validators.required]),// -*- //
-      no_snacks: new FormControl(0),// -*- //
     });
     this.valueChanges();
   }
@@ -252,8 +224,6 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       form.patchValue({
         birthday: new Date(form.value.birthday).toLocaleDateString('en-CA'),
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
-        meal_types:  this.getTypes(form.value.no_meals,'meal'),// -*- //
-        snack_types: this.getTypes(form.value.no_snacks,'snack'),// -*- //
       });
       if (this.enableEdit) {
         this.paymentForm.addControl(
@@ -344,30 +314,15 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     }
   }
 
-  // getSelectedMealTypes(num: number, type: string) {
-  //   let meals = [];
-  //   for (let i = 1; i <= num; i++) {
-  //     meals.push(`${type} ${i}`);
-  //   }
-  //   return meals;
-  // }
-  // -*- //
   getSelectedMealTypes(num: number, type: string) {
-    let meals = [];
-    for (let i = 1; i <= num; i++) {
-      meals.push({ label: `${type} ${i}`, value: i });
-    }
-    return meals;
-  }
-
-  // -*- //
-  getTypes(num: number, type: string) {
     let meals = [];
     for (let i = 1; i <= num; i++) {
       meals.push(`${type} ${i}`);
     }
     return meals;
   }
+
+
 
   // ====================================================================Checkbox==========================================================================
   onCheckboxChange(event: any, type: string, value: string) {
@@ -469,80 +424,34 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
         }
       });
 
-    // this.valueChangesSubscription4 = this.paymentForm
-    //   .get('only_snack')
-    //   ?.valueChanges.subscribe((value) => {
-    //     if (value) {
-    //       this.checkboxElements.forEach((checkbox: Checkbox) => {
-    //         if (checkbox.name == 'group1') {
-    //           checkbox.writeValue(false);
-    //         }
-    //       });
-    //       if (value == 'yes') {
-    //         this.paymentForm.removeControl('meal_types');
-    //         this.paymentForm.get('meal_types')?.setErrors(null);
-    //         this.paymentForm.removeControl('snack_types');
-    //         this.paymentForm.addControl('snack_types', new FormArray([]));
-    //         this.paymentForm.get('snack_types')?.setErrors({ required: true });
-    //       } else {
-    //         this.paymentForm.addControl(
-    //           'meal_types',
-    //           new FormArray([], [Validators.required])
-    //         );
-    //         this.paymentForm.removeControl('snack_types');
-    //         this.paymentForm.addControl('snack_types', new FormArray([]));
-    //         this.paymentForm.get('snack_types')?.setErrors(null);
-    //       }
-    //     }
-    //   });
-
     this.valueChangesSubscription4 = this.paymentForm
-    .get('only_snack')
-    ?.valueChanges.subscribe((value) => {
-      if (value) {
-        this.handleOnlySnack(value)
-      }
-    });
+      .get('only_snack')
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          this.checkboxElements.forEach((checkbox: Checkbox) => {
+            if (checkbox.name == 'group1') {
+              checkbox.writeValue(false);
+            }
+          });
+          if (value == 'yes') {
+            this.paymentForm.removeControl('meal_types');
+            this.paymentForm.get('meal_types')?.setErrors(null);
+            this.paymentForm.removeControl('snack_types');
+            this.paymentForm.addControl('snack_types', new FormArray([]));
+            this.paymentForm.get('snack_types')?.setErrors({ required: true });
+          } else {
+              this.paymentForm.addControl('meal_types',new FormArray([], [Validators.required]));
+              this.paymentForm.removeControl('snack_types');
+              this.paymentForm.addControl('snack_types', new FormArray([]));
+              this.paymentForm.get('snack_types')?.setErrors(null);
+          }
+        }
+      });
+
+ 
   }
 
-  handleOnlySnack(value:string){
-    this.checkboxElements.forEach((checkbox: Checkbox) => {
-      if (checkbox.name == "group1") {
-        checkbox.writeValue(false);
-      }
-    });
-    if (value == 'yes') {
-      this.paymentForm.get('meal_types')?.setErrors(null);
-      this.paymentForm.get('no_meals')?.setErrors(null);
-      this.paymentForm.removeControl('meal_types');
-      this.paymentForm.removeControl('snack_types');
-      this.paymentForm.addControl('snack_types', new FormControl(null));
 
-      setTimeout(() => {
-        this.paymentForm.removeControl('no_meals');
-        this.paymentForm.removeControl('no_snacks');
-        this.paymentForm.addControl('no_snacks', new FormControl(0));//-*- //
-        this.paymentForm.get('no_snacks')?.setErrors({ required: true });//-*- //
-      }, 1);
-      // -*- // this.paymentForm.addControl('snack_types', new FormArray([]));
-      //-*- // this.paymentForm.addControl('snack_types', new FormControl(null));
-      //-*- // this.paymentForm.get('snack_types')?.setErrors({ required: true });
-    } else {
-        ////-*- // this.paymentForm.addControl('meal_types',new FormArray([], [Validators.required]));
-        this.paymentForm.removeControl('no_meals');
-        this.paymentForm.removeControl('meal_types');
-        this.paymentForm.addControl('meal_types', new FormControl(null));
-        this.paymentForm.addControl('no_meals', new FormControl(null,[Validators.required]));
-
-        // -*- // this.paymentForm.addControl('snack_types', new FormArray([]));
-        this.paymentForm.removeControl('snack_types');
-        this.paymentForm.addControl('snack_types', new FormControl(null));
-        this.paymentForm.get('snack_types')?.setErrors(null);
-        this.paymentForm.removeControl('no_snacks');
-        this.paymentForm.addControl('no_snacks', new FormControl(null));
-        this.paymentForm.get('no_snacks')?.setErrors(null);
-    }
-  }
 
   handleProgramTypeChange(value: any) {
     this.handelMealTypes();
@@ -605,47 +514,18 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     }
   }
 
-  // handelMealTypes() {
-  //   this.mealTypes = [];
-  //   this.snackTypes = [];
-  //   this.paymentForm.removeControl('meal_types');
-  //   this.paymentForm.addControl(
-  //     'meal_types',
-  //     new FormArray([], [Validators.required])
-  //   );
-  //   this.paymentForm.removeControl('snack_types');
-  //   this.paymentForm.addControl('snack_types', new FormArray([]));
-  //   this.checkboxElements.forEach((checkbox: Checkbox) => {
-  //     if (checkbox.name == 'group1') {
-  //       checkbox.writeValue(false);
-  //     }
-  //   });
-  // }
-
   handelMealTypes() {
     this.mealTypes = [];
     this.snackTypes = [];
     this.paymentForm.removeControl('meal_types');
-    this.paymentForm.removeControl('no_meals');
-    //// -*- // this.paymentForm.addControl(
-    //// -*- //   'meal_types',
-    //// -*- //   new FormArray([], [Validators.required])
-    //// -*- // );
     this.paymentForm.addControl(
       'meal_types',
-      new FormControl(null)
-    );
-    this.paymentForm.addControl(
-      'no_meals',
-      new FormControl(null)
+      new FormArray([], [Validators.required])
     );
     this.paymentForm.removeControl('snack_types');
-    this.paymentForm.removeControl('no_snacks');
-    // -*- // this.paymentForm.addControl('snack_types', new FormArray([]));
-    this.paymentForm.addControl('snack_types', new FormControl(null));
-    this.paymentForm.addControl('no_snacks', new FormControl(0));
+    this.paymentForm.addControl('snack_types', new FormArray([]));
     this.checkboxElements.forEach((checkbox: Checkbox) => {
-      if (checkbox.name == "group1") {
+      if (checkbox.name == 'group1') {
         checkbox.writeValue(false);
       }
     });

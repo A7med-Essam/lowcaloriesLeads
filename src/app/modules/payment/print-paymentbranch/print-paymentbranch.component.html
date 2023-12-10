@@ -98,23 +98,7 @@
             paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
             </div>
             <hr>
-            <div class="col-md-12 col-lg-6 my-3" *ngIf="mealTypes.length && paymentForm.get('only_snack')?.value == 'no'">
-                <label for="">Type Meals <span class="text-danger">*</span></label>
-                <p-dropdown [options]="mealTypes" formControlName='no_meals' appendTo="body" optionLabel="label" optionValue="value"
-                    styleClass="w-100" placeholder="Select Meal Types">
-                </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('no_meals')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-md-12 col-lg-6 my-3" *ngIf="snackTypes.length">
-                <label for="">Snack Meals <span class="text-danger">*</span></label>
-                <p-dropdown [options]="snackTypes" formControlName='no_snacks' appendTo="body" optionLabel="label" optionValue="value"
-                    styleClass="w-100" placeholder="Select Snack Types">
-                </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('no_snacks')?.hasError('required')">This field is required.</small>
-            </div>
-            <!-- <div class="col-12 my-3" *ngIf="mealTypes.length && paymentForm.get('only_snack')?.value == 'no'">
+            <div class="col-12 my-3" *ngIf="mealTypes.length && paymentForm.get('only_snack')?.value == 'no'">
                 <label for="">Type Meals <span class="text-danger">*</span></label>
                 <div class="d-flex flex-wrap">
                     <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
@@ -137,9 +121,9 @@
                         <label class="mx-1" [for]="meal">{{meal}}</label>
                     </div>
                 </div>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('snack_types')?.touched &&
+                <small class="text-danger ms-1" *ngIf="
             paymentForm.get('snack_types')?.hasError('required')">This field is required.</small>
-            </div> -->
+            </div>
             <div class="col-md-4 col-12 my-3" *ngIf="snackTypes.length">
                 <label for="">ONLY SNACK?</label>
                 <div class="d-flex flex-wrap">
