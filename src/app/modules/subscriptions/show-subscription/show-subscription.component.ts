@@ -151,14 +151,13 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Subscription Requests Report', 10, 40);
       doc.text('Prepared By: Low Calories Technical Team', 10, 45);
       doc.text('Requested By: Mohamed Fawzy', 10, 50);
-      doc.text('Low Calories Restaurant - UAE', 150, 30);
-      doc.text('3rd Settelment, New Cairo', 150, 35);
+      doc.text('Low Calories Restaurant - UAE', 150, 35);
+      // doc.text('3rd Settelment, New Cairo', 150, 35);
       doc.text('Phone: 04-5973939', 150, 40);
       doc.text('Email: info@thelowcalories.com', 150, 45);
       doc.text('Website: thelowcalories.com', 150, 50);
 
       autoTable(doc, { startY: 50 });
-
       let columns: any[] = [
         { title: 'invoice_no', dataKey: sub?.invoice_no },
         { title: 'subscribed from', dataKey: sub?.sub_from },
@@ -175,7 +174,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         { title: 'Area', dataKey: sub?.location?.area_id },
         { title: 'Total Price', dataKey: sub?.total_price },
         { title: 'Code', dataKey: sub?.codes?.code },
-        { title: 'Discount', dataKey: sub?.codes?.percentage + '%' },
+        { title: 'Discount', dataKey: sub?.codes ? sub?.codes?.percentage + '%' :'No Discount' },
       ];
 
       columns = columns.filter(

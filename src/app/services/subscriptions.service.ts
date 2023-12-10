@@ -247,6 +247,7 @@ export interface SubscriptionDetails {
   codes:                             Codes;
   agent:                             Agent;
   user:                              User;
+  gift_code:                              any;
 }
 
 

@@ -72,8 +72,8 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Customer Service Target', 10, 45);
       doc.text('Prepared By: Low Calories Technical Team', 10, 55);
       doc.text('Requested By: Mohamed Fawzy', 10, 65);
-      doc.text('Low Calories Restaurant - UAE', 320, 25);
-      doc.text('3rd Settelment, New Cairo', 320, 35);
+      doc.text('Low Calories Restaurant - UAE', 320, 35);
+      // doc.text('3rd Settelment, New Cairo', 320, 35);
       doc.text('Phone: 04-5973939', 320, 45);
       doc.text('Email: info@thelowcalories.com', 320, 55);
       doc.text('Website: thelowcalories.com', 320, 65);
@@ -105,7 +105,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
         (filteredArray = this.targets);
       const convertedData = filteredArray.map((obj: any) => [
         obj.date,
-        obj.agent.name,
+        obj.agent?.name,
         obj.team,
         obj.client_cid,
         obj.client_name,
@@ -115,7 +115,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
         obj.branch,
         obj.invoice_number,
         obj.amount_paid,
-        obj.status.toUpperCase(),
+        obj.status?.toUpperCase(),
         obj.paid_by,
       ]);
       autoTable(doc, { startY: 70 });
@@ -485,8 +485,8 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Customer Service Target', 10, 40);
       doc.text('Prepared By: Low Calories Technical Team', 10, 45);
       doc.text('Requested By: Mohamed Fawzy', 10, 50);
-      doc.text('Low Calories Restaurant - UAE', 150, 30);
-      doc.text('3rd Settelment, New Cairo', 150, 35);
+      doc.text('Low Calories Restaurant - UAE', 150, 35);
+      // doc.text('3rd Settelment, New Cairo', 150, 35);
       doc.text('Phone: 04-5973939', 150, 40);
       doc.text('Email: info@thelowcalories.com', 150, 45);
       doc.text('Website: thelowcalories.com', 150, 50);
@@ -505,7 +505,7 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
         { title: 'Branch', dataKey: target.branch },
         { title: 'invoice_number', dataKey: target.invoice_number },
         { title: 'amount_paid', dataKey: target.amount_paid },
-        { title: 'status', dataKey: target.status.toUpperCase() },
+        { title: 'status', dataKey: target.status?.toUpperCase() },
         { title: 'paid_by', dataKey: target.paid_by },
       ];
 

@@ -78,8 +78,8 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Customers Complaints Report', 10, 45);
       doc.text('Prepared By: Low Calories Technical Team', 10, 55);
       doc.text('Requested By: Mohamed Fawzy', 10, 65);
-      doc.text('Low Calories Restaurant - UAE', 320, 25);
-      doc.text('3rd Settelment, New Cairo', 320, 35);
+      doc.text('Low Calories Restaurant - UAE', 320, 35);
+      // doc.text('3rd Settelment, New Cairo', 320, 35);
       doc.text('Phone: 04-5973939', 320, 45);
       doc.text('Email: info@thelowcalories.com', 320, 55);
       doc.text('Website: thelowcalories.com', 320, 65);
@@ -456,8 +456,8 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       doc.text('Issue Subject:Customers Complaints Report', 10, 40);
       doc.text('Prepared By: Low Calories Technical Team', 10, 45);
       doc.text('Requested By: Mohamed Fawzy', 10, 50);
-      doc.text('Low Calories Restaurant - UAE', 150, 30);
-      doc.text('3rd Settelment, New Cairo', 150, 35);
+      doc.text('Low Calories Restaurant - UAE', 150, 35);
+      // doc.text('3rd Settelment, New Cairo', 150, 35);
       doc.text('Phone: 04-5973939', 150, 40);
       doc.text('Email: info@thelowcalories.com', 150, 45);
       doc.text('Website: thelowcalories.com', 150, 50);

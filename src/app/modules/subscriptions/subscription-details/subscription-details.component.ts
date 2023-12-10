@@ -95,8 +95,8 @@ export class SubscriptionDetailsComponent implements OnInit {
       doc.text('Issue Subject:Subscription Requests Report', 10, 40);
       doc.text('Prepared By: Low Calories Technical Team', 10, 45);
       doc.text('Requested By: Mohamed Fawzy', 10, 50);
-      doc.text('Low Calories Restaurant - UAE', 150, 30);
-      doc.text('3rd Settelment, New Cairo', 150, 35);
+      doc.text('Low Calories Restaurant - UAE', 150, 35);
+      // doc.text('3rd Settelment, New Cairo', 150, 35);
       doc.text('Phone: 04-5973939', 150, 40);
       doc.text('Email: info@thelowcalories.com', 150, 45);
       doc.text('Website: thelowcalories.com', 150, 50);
@@ -161,8 +161,8 @@ export class SubscriptionDetailsComponent implements OnInit {
           },
           {
             title: `DISCOUNT ${
-              this.sub?.codes?.percentage
-                ? '(' + this.sub?.codes?.percentage + '%)'
+              this.sub?.gift_code?.percentage
+                ? '(' + this.sub?.gift_code?.percentage + '%)'
                 : ''
             }`,
             dataKey: -this.sub?.discount_amount.toFixed(3),
@@ -191,7 +191,7 @@ export class SubscriptionDetailsComponent implements OnInit {
           },
           {
             title: `DISCOUNT ${
-              this.sub?.codes?.percentage
+              this.sub?.codes
                 ? '(' + this.sub?.codes?.percentage + '%)'
                 : ''
             }`,

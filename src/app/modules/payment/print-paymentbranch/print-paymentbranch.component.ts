@@ -542,8 +542,8 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     doc.text('Issue Subject:Payment Branch Report', 10, 40);
     doc.text('Prepared By: Low Calories Technical Team', 10, 45);
     doc.text('Requested By: Mohamed Fawzy', 10, 50);
-    doc.text('Low Calories Restaurant - UAE', 150, 30);
-    doc.text('3rd Settelment, New Cairo', 150, 35);
+    doc.text('Low Calories Restaurant - UAE', 150, 35);
+    // doc.text('3rd Settelment, New Cairo', 150, 35);
     doc.text('Phone: 04-5973939', 150, 40);
     doc.text('Email: info@thelowcalories.com', 150, 45);
     doc.text('Website: thelowcalories.com', 150, 50);
