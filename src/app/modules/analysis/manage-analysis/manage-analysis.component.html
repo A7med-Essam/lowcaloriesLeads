@@ -3,7 +3,7 @@
         <h3>Analytics Manager</h3>
     </div>
     <div class="m-3">
-        <button pButton pRipple label="Create Node" class="p-button-success mx-1" icon="pi pi-plus"
+        <button pButton pRipple label="Create New Analtic" class="p-button-success mx-1" icon="pi pi-plus"
             (click)="createNodeModal = true;"></button>
         <button pButton pRipple label="Create Node Children" class="p-button-success mx-1" icon="pi pi-plus"
             (click)="createModal = true;"></button>
@@ -54,15 +54,15 @@
     </p-table>
 </div>
 
-<p-dialog header="Create Modal" [(visible)]="createModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="true"
-    [resizable]="true">
+<p-dialog header="Create Children Of Nodes Modal" [(visible)]="createModal" [modal]="true" [style]="{width: '75vw'}"
+    [draggable]="true" [resizable]="true">
     <div class="row mx-0">
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
             <div class="card flex justify-content-center">
-                <p-treeSelect class="w-full md:w-20rem" [(ngModel)]="selectedNode" [filter]="true" appendTo="body"
-                    styleClass="w-100" [options]="dropDownAnalytics" display="chip" [metaKeySelection]="false"
-                    selectionMode="checkbox" placeholder="Select Item" (onNodeSelect)="nodeSelect($event)" [showClear]="true">
+                <p-treeSelect class="w-full md:w-20rem" [(ngModel)]="selectedNode" [filter]="true" appendTo="body" 
+                    styleClass="w-100" [options]="dropDownAnalytics" [metaKeySelection]="false" selectionMode="signle"
+                    placeholder="Select Item" (onNodeSelect)="nodeSelect($event)" [showClear]="true">
                 </p-treeSelect>
             </div>
         </div>
@@ -75,7 +75,7 @@
     </div>
 </p-dialog>
 
-<p-dialog header="Create Node Modal" [(visible)]="createNodeModal" [modal]="true" [style]="{width: '50vw'}"
+<p-dialog header="Create New Analtic Modal" [(visible)]="createNodeModal" [modal]="true" [style]="{width: '50vw'}"
     [draggable]="true" [resizable]="true">
     <div class="row mx-0">
         <div class="col-12 my-3">
@@ -113,7 +113,7 @@
     <div class="row mx-0">
         <div class="col-12 my-3">
             <label for="">Analytic Label</label>
-            <input type="text" pInputText ngClass="w-100" [(ngModel)]="selectedlabelText"/>
+            <input type="text" pInputText ngClass="w-100" [(ngModel)]="selectedlabelText" />
             <hr>
             <p-dropdown [options]="labelsAsSelectItems" styleClass="w-100" placeholder="Select Label" appendTo="body"
                 [filter]="true" [(ngModel)]="selectedLabel">

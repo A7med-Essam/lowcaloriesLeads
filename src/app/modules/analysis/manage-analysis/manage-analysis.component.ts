@@ -254,21 +254,19 @@ export class ManageAnalysisComponent implements OnInit {
     });
     this.dropDownAnalytics = node;
   }
-
   node: any;
   nodeSelect(e: any) {
+    this.isLoading = true;
     const id = e.node.id;
     this.node = e.node;
     this._AnalysisService.getAnalyticsChildrenById(id).subscribe((res) => {
-      this.dropDownAnalytics = this.dropDownAnalytics.map((e) => {
-        if (e.id == id) {
-          e.children = res.data.map((c: any) => {
-            [c.name, c.label] = [c.label, c.name];
-            return c;
-          });
-        }
-        return e;
+      e.node.children = res.data.map((c: any) => {
+        [c.name, c.label] = [c.label, c.name];
+        return c;
       });
+      this.node = e.node;
+      this.selectedNode = [this.node];
+      this.isLoading = false;
     });
   }
 

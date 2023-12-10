@@ -211,4 +211,8 @@ export class AnalysisService {
   getFiles(data_analytic_request_id:number): Observable<any> {
     return this._ApiConfigService.postReq3(`getDataFiles` , {data_analytic_request_id});
   }
+
+  getNodes(data_analytic_option_id:number): Observable<any>{
+    return this._ApiConfigService.postReq3(`getTreeOfNode` , {data_analytic_option_id});
+  }
 }
