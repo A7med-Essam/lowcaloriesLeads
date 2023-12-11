@@ -215,4 +215,17 @@ export class AnalysisService {
   getNodes(data_analytic_option_id:number): Observable<any>{
     return this._ApiConfigService.postReq3(`getTreeOfNode` , {data_analytic_option_id});
   }
+
+  // =======================================================CHART===========================================================
+  getAllLabels(): Observable<any>{
+    return this._ApiConfigService.postReq3(`getAllLabels` , '');
+  }
+
+  getLabelOptions(label:string): Observable<any>{
+    return this._ApiConfigService.postReq3(`getLabelOptions` , {label});
+  }
+
+  getStatics(data:any): Observable<any>{
+    return this._ApiConfigService.postReq3(`getLabelOptionStatics` , data);
+  }
 }

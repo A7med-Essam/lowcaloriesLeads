@@ -1,88 +1,112 @@
-import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js/auto'
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Chart } from 'chart.js/auto';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AnalysisService } from 'src/app/services/analysis.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  isSuperAdmin: boolean = true;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
-    private _SurveyService:SurveyService
-  ) { }
-
+    // private _SurveyService:SurveyService,
+    private _AnalysisService: AnalysisService,
+    private _AuthService: AuthService
+  ) {}
+  staticsForm: FormGroup = new FormGroup({});
   ngOnInit(): void {
-    // this.createChart();
-    // this.createChart2();
-    // this.createChart3();
-    this.allReminderLeads();
+    this._AuthService.currentUser
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data: any) => {
+        this.isSuperAdmin = data.role_name === 'super_admin';
+        if (this.isSuperAdmin) {
+          this.getLabels();
+        }
+      });
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  displayChart: boolean = false;
+  public isLoading: boolean = false;
   public chart: any;
   public chart2: any;
   public chart3: any;
 
-  getDate(day: number) {
-    let date = new Date().setDate(new Date().getDate() - day);
-    let currentDate = new Date(date).toLocaleDateString();
-    return currentDate;
+  generateColorArrays(loopCount: number) {
+    const backgroundColors = [];
+    const borderColors = [];
+
+    for (let i = 0; i < loopCount; i++) {
+      // Generate random RGB values for each color
+      const red = Math.floor(Math.random() * 256);
+      const green = Math.floor(Math.random() * 256);
+      const blue = Math.floor(Math.random() * 256);
+
+      // Add rgba format for backgroundColor
+      backgroundColors.push(`rgba(${red}, ${green}, ${blue}, 0.2)`);
+
+      // Add rgb format for borderColor
+      borderColors.push(`rgb(${red}, ${green}, ${blue})`);
+    }
+
+    return {
+      backgroundColor: backgroundColors,
+      borderColor: borderColors,
+    };
   }
 
-  createChart() {
-    this.chart = new Chart("MyChart", {
-      type: "bar", //this denotes tha type of chart
-      data: {
-        labels: [
-          this.getDate(7),
-          this.getDate(6),
-          this.getDate(5),
-          this.getDate(4),
-          this.getDate(3),
-          this.getDate(2),
-          this.getDate(1),
-          this.getDate(0),
-        ],
-        datasets: [
-          {
-            label: "Sales",
-            data: [467, 576, 772, 279, 92, 74, 273, 376],
-            backgroundColor: "#66C4DE",
-          },
-          {
-            label: "Profit",
-            data: [342, 342, 696, 227, 57, 20, 238, 341],
-            backgroundColor: "#ccc",
-          },
-        ],
-      },
-      options: {
-        aspectRatio: 3.2,
-      },
+  createChart(values: any[]) {
+    const data: any = {
+      labels: values.map((e: any) => e.label),
+      datasets: [
+        {
+          label: '',
+          data: values.map((e: any) => e.count),
+          backgroundColor: this.generateColorArrays(values.length)
+            .backgroundColor,
+          borderWidth: 1,
+        },
+      ],
+    };
+    this.chart = new Chart('MyChart', {
+      type: 'doughnut',
+      data,
+      options: { aspectRatio: 3.2 },
     });
   }
 
   createChart2() {
-    this.chart2 = new Chart("MyChart2", {
-      type: "line", 
+    this.chart2 = new Chart('MyChart2', {
+      type: 'line',
 
       data: {
-        labels: ["January", "February", "March", "April", "May", "June"],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
         datasets: [
           {
-            label: "Facebook",
+            label: 'Facebook',
             data: [10, 10, 20, 80, 5, 16],
-            backgroundColor: "#909090",
-            borderColor: "#51BCDA",
+            backgroundColor: '#909090',
+            borderColor: '#51BCDA',
             fill: false,
             // lineTension: 0.5,
           },
           {
-            label: "Instagram",
+            label: 'Instagram',
             data: [20, 30, 40, 30, 20, 90],
-            backgroundColor: "#909090",
-            borderColor: "#dba291",
+            backgroundColor: '#909090',
+            borderColor: '#dba291',
             fill: false,
             // lineTension: 0.5,
           },
@@ -95,17 +119,17 @@ export class HomeComponent implements OnInit {
   }
 
   createChart3() {
-    this.chart3 = new Chart("MyChart3", {
-      type: "doughnut", //this denotes tha type of chart
+    this.chart3 = new Chart('MyChart3', {
+      type: 'doughnut', //this denotes tha type of chart
 
       data: {
         // values on X-Axis
-        labels: ["Sales", "Marketing", "Customer Service"],
+        labels: ['Sales', 'Marketing', 'Customer Service'],
         datasets: [
           {
-            label: "Most Successfull Department",
+            label: 'Most Successfull Department',
             data: [10, 15, 6],
-            backgroundColor: ["#6BD098", "#51CBCE", "#ccc"],
+            backgroundColor: ['#6BD098', '#51CBCE', '#ccc'],
           },
         ],
       },
@@ -115,40 +139,99 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  totalLeads: number = 0;
+  reminded: number = 0;
+  oldLeads: number = 0;
+  leadsMessages: number = 0;
+  // allReminderLeads(){
+  //   this._SurveyService.allReminderLeads().subscribe({
+  //     next:res=>{
+  //       res.data.forEach((e:any) => {
+  //         if (new Date(e.remind_date) <= new Date() && e.reminded == false) {
+  //           this.updateReminderLead(e.id,e.remind_date)
+  //         }
+  //       });
+  //       this.totalLeads = res.data.length
+  //       this.reminded = res.data.filter((d:any) => d.reminded == false).length
+  //       this.oldLeads = res.data.filter((d:any) => d.reminded == true).length
+  //       this.leadsMessages = res.data.filter((d:any) => d.remind_data != null).length
+  //     }
+  //   })
+  // }
 
-  totalLeads:number = 0
-  reminded:number = 0
-  oldLeads:number = 0
-  leadsMessages:number = 0
-  allReminderLeads(){
-    this._SurveyService.allReminderLeads().subscribe({
-      next:res=>{
-        res.data.forEach((e:any) => {
-          if (new Date(e.remind_date) <= new Date() && e.reminded == false) {
-            this.updateReminderLead(e.id,e.remind_date)
-          }
-        });
-        this.totalLeads = res.data.length
-        this.reminded = res.data.filter((d:any) => d.reminded == false).length
-        this.oldLeads = res.data.filter((d:any) => d.reminded == true).length
-        this.leadsMessages = res.data.filter((d:any) => d.remind_data != null).length
-      }
-    })
-  }
+  // updateReminderLead(id:number,date:string,) {
+  //   const lead = {
+  //     lead_id: id,
+  //     remind_date: new Date(date).toLocaleDateString(
+  //       "en-CA"
+  //     ),
+  //     reminded: true,
+  //   };
+  //   this._SurveyService.addReminderLead(lead).subscribe({
+  //     next: (res) => {
+  //     },
+  //   });
+  // }
 
-
-  updateReminderLead(id:number,date:string,) {
-    const lead = {
-      lead_id: id,
-      remind_date: new Date(date).toLocaleDateString(
-        "en-CA"
-      ),
-      reminded: true,
-    };
-    this._SurveyService.addReminderLead(lead).subscribe({
-      next: (res) => {
-      },
+  labels!: ILabel;
+  getLabels() {
+    this.isLoading = true;
+    this._AnalysisService.getAllLabels().subscribe((res) => {
+      res.data.forEach((e: string) => {
+        this.staticsForm.addControl(e, new FormControl(null));
+      });
+      const arrayOfObjects = res.data.reduce((acc: any, key: any) => {
+        acc[key] = [];
+        return acc;
+      }, {});
+      this.isLoading = false;
+      this.labels = arrayOfObjects;
     });
   }
 
+  loadDropDown(label: any) {
+    if (this.labels[label].length == 0) {
+      this.isLoading = true;
+      this._AnalysisService.getLabelOptions(label).subscribe((res) => {
+        this.labels[label] = res.data;
+        this.isLoading = false;
+      });
+    }
+  }
+
+  getStatics(form: FormGroup) {
+    const filtered: any = {};
+    for (let key in form.value) {
+      if (form.value[key]) {
+        filtered[key] = form.value[key];
+      }
+    }
+    const arrayOfValues = Object.values(filtered).map((item) => item);
+    if (arrayOfValues.length) {
+      this._AnalysisService
+        .getStatics({ statics: arrayOfValues })
+        .subscribe((res) => {
+          if (this.chart) {
+            this.chart.destroy();
+          }
+          this.displayChart = true;
+          setTimeout(() => {
+            this.createChart(res.data);
+          }, 1);
+        });
+    }
+  }
+
+  reset() {
+    this.staticsForm.reset();
+  }
+}
+
+interface ILabel {
+  [key: string]: ILabelOptions[];
+}
+interface ILabelOptions {
+  label: string;
+  name: string;
+  has_children: boolean;
 }
