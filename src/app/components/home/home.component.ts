@@ -199,6 +199,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  statics:any;
   getStatics(form: FormGroup) {
     const filtered: any = {};
     for (let key in form.value) {
@@ -214,6 +215,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           if (this.chart) {
             this.chart.destroy();
           }
+          this.statics = res.data;
           this.displayChart = true;
           setTimeout(() => {
             this.createChart(res.data);
