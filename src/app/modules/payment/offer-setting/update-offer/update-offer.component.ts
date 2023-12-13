@@ -193,13 +193,13 @@ export class UpdateOfferComponent implements OnInit, OnDestroy {
           if (res.status == 1) {
             this.creatingStatus = false;
             this.isLoading = false;
-            // this.paymentForm.reset();
-            // this.createPaymentForm();
-            // this.uncheckAllCheckboxes();
-            this.paymentForm.patchValue({
-              start_date: new Date(filteredData.start_date),
-              end_date: new Date(filteredData.end_date),
-            });
+            this.paymentForm.reset();
+            this.createPaymentForm();
+            this.uncheckAllCheckboxes();
+            // this.paymentForm.patchValue({
+            //   start_date: new Date(filteredData.start_date),
+            //   end_date: new Date(filteredData.end_date),
+            // });
             this._MessageService.add({
               severity: 'success',
               summary: 'Updated Successfully',

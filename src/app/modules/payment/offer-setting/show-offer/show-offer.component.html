@@ -60,6 +60,9 @@
                                 {{ item.key }}
                             </td>
                             <td [ngSwitch]="item.key">
+                                <ng-container *ngSwitchCase="'program'">
+                                    {{ currentRow.program.name }}
+                                </ng-container>
                                 <ng-container *ngSwitchCase="'created_at'">
                                     {{ currentRow.created_at | date }}
                                 </ng-container>

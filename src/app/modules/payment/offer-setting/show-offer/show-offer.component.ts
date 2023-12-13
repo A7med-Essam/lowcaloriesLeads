@@ -66,7 +66,7 @@ export class ShowOfferComponent implements OnInit {
   currentRow: any;
   detailsModal: boolean = false;
   showRow(row: any) {
-    this.currentRow = this.removeObjectValues(row);
+    this.currentRow = row;
     this.detailsModal = true;
   }
 
