@@ -12,9 +12,10 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { PrintPaymentbranchComponent } from './print-paymentbranch/print-paymentbranch.component';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { OfferSettingComponent } from './offer-setting/offer-setting.component';
 
 @NgModule({
-  declarations: [CreatePaymentlinkComponent, PrintPaymentbranchComponent],
+  declarations: [CreatePaymentlinkComponent, PrintPaymentbranchComponent, OfferSettingComponent],
   imports: [
     CommonModule,
     PaymentRoutingModule,

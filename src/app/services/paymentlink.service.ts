@@ -42,6 +42,14 @@ export class PaymentlinkService {
   calculate_payment_link(data:any): Observable<any>{
     return this._ApiConfigService.postReq3(`calculate_payment_link`, data);
   }
+
+  getOfferSettings(): Observable<any> {
+    return this._ApiConfigService.postReq3(`getOfferSettings`,'');
+  }
+
+  updateOfferSettings(offer:any): Observable<any> {
+    return this._ApiConfigService.postReq3(`offerSettings`,offer);
+  }
 }
 
 

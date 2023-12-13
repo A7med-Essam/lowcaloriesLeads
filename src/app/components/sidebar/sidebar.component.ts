@@ -34,6 +34,7 @@ export class SidebarComponent implements OnInit {
   showUploadPermission: boolean = false;
   showAnalysisPermission: boolean = false;
   showEnquiryPermission: boolean = false;
+  updateOfferPermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -100,6 +101,8 @@ export class SidebarComponent implements OnInit {
       this._GuardService.getPermissionStatus('show_analysis');
     this.showEnquiryPermission =
       this._GuardService.getPermissionStatus('show_enquiry');
+    this.updateOfferPermission =
+      this._GuardService.getPermissionStatus('update_offer');
   }
 
   logOut() {

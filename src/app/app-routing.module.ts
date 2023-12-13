@@ -129,6 +129,15 @@ const routes: Routes = [
     },
   },
   {
+    path: 'offer',
+    loadChildren: () =>
+      import('./modules/payment/payment.module').then((m) => m.PaymentModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['update_offer'],
+    },
+  },
+  {
     path: 'subscriptions',
     loadChildren: () =>
       import('./modules/subscriptions/subscriptions.module').then(
