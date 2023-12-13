@@ -56,6 +56,7 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
     this._PaymentlinkService.getPaymentDetails().subscribe((res) => {
       if (res.status == 1) {
         this.paymentDetails = res.data;
+        this.isLoading = false;
       }
     });
   }
@@ -125,6 +126,7 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
             this._Router.navigate(['offer-settings/showOffer']);
           } else {
             this.creatingStatus = false;
+            this.isLoading = false;
             this.paymentForm.patchValue({
               start_date: new Date(filteredData.start_date),
               end_date: new Date(filteredData.end_date),
@@ -133,6 +135,7 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.creatingStatus = false;
+          this.isLoading = false;
           this.paymentForm.patchValue({
             start_date: new Date(filteredData.start_date),
             end_date: new Date(filteredData.end_date),
