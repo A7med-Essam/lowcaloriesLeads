@@ -60,7 +60,7 @@
                 <small class="text-danger ms-1" *ngIf="
             paymentForm.get('snack_types')?.hasError('required')">This field is required.</small>
             </div>
-            <hr *ngIf="mealTypes.length">
+            <hr *ngIf="mealTypes.length && !isCustom">
             <div class="col-12 my-3" *ngIf="!isCustom">
                 <label for="">DAYS OF PLAN <span class="text-danger">*</span></label>
                 <div class="d-flex flex-wrap">
@@ -143,14 +143,14 @@
             <hr>
             <div class="col-xl-3 col-md-6 col-12 my-3">
                 <label for="">Start Date <span class="text-danger">*</span></label>
-                <p-calendar  [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='start_date'>
+                <p-calendar  [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='start_date' [minDate]="tomorrow">
                 </p-calendar>
                 <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('start_date')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-xl-3 col-md-6 col-12 my-3">
                 <label for="">End Date <span class="text-danger">*</span></label>
-                <p-calendar  [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='end_date'>
+                <p-calendar  [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='end_date' [minDate]="tomorrow">
                 </p-calendar>
                 <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('end_date')?.hasError('required')">This field is required.</small>
@@ -165,7 +165,9 @@
             <hr>
             <div class="col-12 my-1">
                 <label for="">Note</label>
-                <textarea pInputTextarea ngClass="w-100" formControlName='note'></textarea>
+                <textarea pInputTextarea ngClass="w-100" formControlName='notes'></textarea>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('notes')?.hasError('required')">This field is required.</small>
             </div>
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
@@ -175,4 +177,13 @@
             </div>
         </div>
     </form>
+</div>
+
+<div class="loader-container" *ngIf="isLoading">
+    <div class="i-loader-inf-horizontal-container">
+        <div class="i-loader-inf-horizontal"></div>
+        <div class="pt-8px">
+            <span>Processing data</span>
+        </div>
+    </div>
 </div>

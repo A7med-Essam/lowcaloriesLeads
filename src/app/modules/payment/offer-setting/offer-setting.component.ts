@@ -27,9 +27,11 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
   paymentDetails!: PaymentDetails;
   paymentForm!: FormGroup;
   creatingStatus: boolean = false;
+  isLoading: boolean = false;
   offer: any;
   valueChangesSubscription1!: Subscription | undefined;
   valueChangesSubscription2!: Subscription | undefined;
+  tomorrow:Date = new Date(new Date().setDate(new Date().getDate()))
 
   ngOnDestroy() {
     if (this.valueChangesSubscription1 && this.valueChangesSubscription2) {
@@ -46,14 +48,14 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createPaymentForm();
     this.getPaymentDetails();
-    this.getOfferSettings();
   }
 
   getPaymentDetails() {
+    this.isLoading = true;
     this._PaymentlinkService.getPaymentDetails().subscribe((res) => {
       if (res.status == 1) {
         this.paymentDetails = res.data;
-        this.patchValues(1);
+        this.getOfferSettings();
       }
     });
   }
@@ -62,34 +64,48 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
     this._PaymentlinkService.getOfferSettings().subscribe((res) => {
       if (res.status == 1) {
         this.offer = res.data;
+        this.patchValues(res.data);
+        this.isLoading = false;
       }
     });
   }
 
   patchValues(data: any) {
-    const program = this.paymentDetails.Programs["Chef Gourmet"].filter(p => p.id == 5)[0];
+    const company =
+      data.program.company == 'CH' ? 'chef' : data.program.type.toLowerCase();
+    const type = Object.keys(this.paymentDetails.Programs).filter((k) =>
+      k.toLowerCase().includes(company)
+    )[0];
+    const program = this.paymentDetails.Programs[type].filter(
+      (p) => p.id == data.program_id
+    )[0];
     this.paymentForm.patchValue({
-      program_type: 'Chef Gourmet',
-      start_date: new Date(),
-      end_date: new Date(),
-      bag_option: 'yes',
-      cutlery_option: 'no',
-      status: 'active',
-      plan_price: 1000,
-      note: 'TEST',
+      program_type: type,
+      start_date: new Date(data.start_date),
+      end_date: new Date(data.end_date),
+      bag_option: data.bag_option,
+      cutlery_option: data.cutlery_option,
+      status: data.status,
+      plan_price: data.plan_price,
+      notes: data.notes,
     });
-    this.handleProgramTypeChange('Chef Gourmet');
-    this.handleProgramIdChange(program)
+    this.handleProgramTypeChange(type);
+    this.handleProgramIdChange(
+      this.isCustom
+        ? program.plans.filter((p) => p.id == data.plan_id)[0]
+        : program
+    );
     this.paymentForm.patchValue({
-      program: program,
-      program_id: program.id,
-      plan_id: 1,
-      meal_types: ['Meal 1'],
-      snack_types: ['Snack 1'],
-      subscription_days: 7,
+      program: this.isCustom
+        ? program.plans.filter((p) => p.id == data.plan_id)[0]
+        : program,
+      program_id: data.program_id,
+      plan_id: data.plan_id,
+      subscription_days: data.subscription_days.toString(),
     });
     this.uncheckAllCheckboxes();
     this.selectAllDeliveryDays();
+    this.valueChanges();
   }
 
   @ViewChildren('mealTypeBoxes')
@@ -97,8 +113,17 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
   selectAllDeliveryDays() {
     setTimeout(() => {
       this.DeliveryCheckboxElements.forEach((checkbox: Checkbox) => {
-        if (checkbox.value == "Meal 1" || checkbox.value == "Meal 2") {
-          checkbox.updateModel(true);
+        Array.from(this.offer.meal_types).forEach((m) => {
+          if (checkbox.value == m) {
+            checkbox.updateModel(true);
+          }
+        });
+        if (this.offer.snack_types) {
+          Array.from(this.offer.snack_types).forEach((s) => {
+            if (checkbox.value == s) {
+              checkbox.updateModel(true);
+            }
+          });
         }
       });
     }, 1);
@@ -119,9 +144,8 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
       cutlery_option: new FormControl('no', [Validators.required]),
       status: new FormControl('active', [Validators.required]),
       plan_price: new FormControl(null, [Validators.required]),
-      note: new FormControl(null),
+      notes: new FormControl(null, [Validators.required]),
     });
-    this.valueChanges();
   }
 
   getNumberOfDays(min: number, max: number): string[] {
@@ -135,29 +159,35 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
 
   updateOffer(form: FormGroup) {
     if (form.valid) {
+      this.isLoading = true;
       this.creatingStatus = true;
       form.patchValue({
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
         end_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
       });
-      // const filteredData = Object.keys(form.value)
-      //   .filter(
-      //     (key) =>
-      //       form.value[key] !== null &&
-      //       !(Array.isArray(form.value[key]) && form.value[key].length === 0)
-      //   )
-      //   .reduce((obj: any, key) => {
-      //     obj[key] = form.value[key];
-      //     return obj;
-      //   }, {});
+      const filteredData = Object.keys(form.value)
+        .filter(
+          (key) =>
+            form.value[key] !== null &&
+            !(Array.isArray(form.value[key]) && form.value[key].length === 0)
+        )
+        .reduce((obj: any, key) => {
+          obj[key] = form.value[key];
+          return obj;
+        }, {});
 
-      this._PaymentlinkService.updateOfferSettings(form.value).subscribe({
+      this._PaymentlinkService.updateOfferSettings(filteredData).subscribe({
         next: (res) => {
           if (res.status == 1) {
             this.creatingStatus = false;
-            this.paymentForm.reset();
-            this.createPaymentForm();
-            this.uncheckAllCheckboxes();
+            this.isLoading = false;
+            // this.paymentForm.reset();
+            // this.createPaymentForm();
+            // this.uncheckAllCheckboxes();
+            this.paymentForm.patchValue({
+              start_date: new Date(filteredData.start_date),
+              end_date: new Date(filteredData.end_date),
+            });
             this._MessageService.add({
               severity: 'success',
               summary: 'Updated Successfully',
@@ -166,16 +196,16 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
           } else {
             this.creatingStatus = false;
             this.paymentForm.patchValue({
-              start_date: new Date(form.value.start_date),
-              end_date: new Date(form.value.end_date),
+              start_date: new Date(filteredData.start_date),
+              end_date: new Date(filteredData.end_date),
             });
           }
         },
         error: (err) => {
           this.creatingStatus = false;
           this.paymentForm.patchValue({
-            start_date: new Date(form.value.start_date),
-            end_date: new Date(form.value.end_date),
+            start_date: new Date(filteredData.start_date),
+            end_date: new Date(filteredData.end_date),
           });
         },
       });
