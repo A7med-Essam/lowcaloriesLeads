@@ -1,0 +1,88 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="m-3">
+        <button [disabled]="!createPermission" pButton pRipple label="Create Offer" class="p-button-success mx-1"
+            icon="pi pi-plus" routerLink="../createOffer"></button>
+    </div>
+</div>
+
+<div class="card">
+    <p-table [value]="offer">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">Name</th>
+                <th class="text-center">Link</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-offer>
+            <tr>
+                <td class="text-center">{{offer.name}}</td>
+                <td class="text-center">
+                    <a href="{{offer.link}}" target="_blank">{{offer.link}}</a>
+                </td>
+                <td class="text-center">
+                    <p-tag [severity]="offer.status =='active'? 'success':'danger'" [value]="offer.status"></p-tag>
+                </td>
+                <td class="text-center">
+                    <!-- <button [disabled]="!deletePermission" pButton type="button" icon="pi pi-trash"
+                        (click)="confirm(offer.id)" class="m-1 p-button-danger p-button-sm"></button> -->
+
+                        <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"  
+                        (click)="updateRow(offer)" class="m-1 p-button-sm p-button-warning"></button>
+
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(offer)"
+                        class="m-1 p-button-sm"></button>
+            
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+
+<p-dialog header="Details Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+    [resizable]="true">
+    <div class="card">
+        <div class="card-header">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 200px;">Title</h6>
+                <h6 class="m-0">Description</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive overflow-auto">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let item of currentRow | keyvalue">
+                            <td [width]="200">
+                                {{ item.key }}
+                            </td>
+                            <td [ngSwitch]="item.key">
+                                <ng-container *ngSwitchCase="'created_at'">
+                                    {{ currentRow.created_at | date }}
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'updated_at'">
+                                    {{ currentRow.updated_at | date }}
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'expired_at'">
+                                    {{ currentRow.expired_at | date }}
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'start_date'">
+                                    {{ currentRow.start_date | date }}
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'end_date'">
+                                    {{ currentRow.end_date | date }}
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    {{ item.value }}
+                                </ng-container>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</p-dialog>

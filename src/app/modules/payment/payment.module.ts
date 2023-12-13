@@ -12,10 +12,15 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { PrintPaymentbranchComponent } from './print-paymentbranch/print-paymentbranch.component';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { OfferSettingComponent } from './offer-setting/offer-setting.component';
+import { UpdateOfferComponent } from './offer-setting/update-offer/update-offer.component';
+import { CreateOfferComponent } from './offer-setting/create-offer/create-offer.component';
+import { ShowOfferComponent } from './offer-setting/show-offer/show-offer.component';
+import { TableModule } from 'primeng/table';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
-  declarations: [CreatePaymentlinkComponent, PrintPaymentbranchComponent, OfferSettingComponent],
+  declarations: [CreatePaymentlinkComponent, PrintPaymentbranchComponent, UpdateOfferComponent, CreateOfferComponent, ShowOfferComponent],
   imports: [
     CommonModule,
     PaymentRoutingModule,
@@ -27,6 +32,9 @@ import { OfferSettingComponent } from './offer-setting/offer-setting.component';
     RadioButtonModule,
     DialogModule,
     InputTextareaModule,
+    TableModule,
+    ConfirmDialogModule,
+    TagModule
   ],
 })
 export class PaymentModule {}

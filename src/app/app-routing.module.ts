@@ -129,12 +129,12 @@ const routes: Routes = [
     },
   },
   {
-    path: 'offer',
+    path: 'offer-settings',
     loadChildren: () =>
       import('./modules/payment/payment.module').then((m) => m.PaymentModule),
     canActivate: [PermissionGuard],
     data: {
-      permission: ['update_offer'],
+      permission: ['show_offer'],
     },
   },
   {

@@ -294,7 +294,7 @@ export class ShowAnalysis2Component implements OnInit {
     this.currentRow = log;
     this.detailsModal = true;
     this._AnalysisService.getFiles(log.id).subscribe(res=>{
-      this.currentRow = res.data;
+      this.currentRow.files = res.data.files;
     })
   }
 

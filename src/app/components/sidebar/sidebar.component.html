@@ -131,11 +131,11 @@
     </ul>
     <!-- ================================================PAYMENTS================================================== -->
     <div class="menu-header mt-3 mb-2"
-      *ngIf="createClinicPermission||createPaymentLinkPermission||createPaymentBranchesPermission||updateOfferPermission">
+      *ngIf="createClinicPermission||createPaymentLinkPermission||createPaymentBranchesPermission||showOfferPermission">
       Payment Components
     </div>
     <ul class="menu-items"
-      *ngIf="createClinicPermission||createPaymentLinkPermission||createPaymentBranchesPermission||updateOfferPermission">
+      *ngIf="createClinicPermission||createPaymentLinkPermission||createPaymentBranchesPermission||showOfferPermission">
       <li *ngIf="createClinicPermission">
         <a routerLink="/clinic" routerLinkActive="active">
           <i class="fas fa-hospital-symbol"></i>
@@ -154,8 +154,8 @@
           <span>Payment Branch</span>
         </a>
       </li>
-      <li *ngIf="updateOfferPermission">
-        <a routerLink="offer/settings" routerLinkActive="active">
+      <li *ngIf="showOfferPermission">
+        <a routerLink="offer-settings/showOffer" routerLinkActive="active">
           <i class="fas fa-cogs"></i>
           <span>Offer Settings</span>
         </a>

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiConfigService } from '../core/api-config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PaymentlinkService {
+  offer: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(
     private _ApiConfigService: ApiConfigService

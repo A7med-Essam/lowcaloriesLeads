@@ -106,9 +106,30 @@
 <div *ngIf="isSuperAdmin">
   <form [formGroup]='staticsForm' (ngSubmit)='getStatics(staticsForm)'>
     <div class="row">
-      <div class="col-md-4 my-2" *ngFor="let label of labels | keyvalue; let i = index">
+      <div class="col-md-3 col-12 my-3">
+        <label for="range">Date Range</label>
+        <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date" ngClass="w-100"
+          appendTo="body">
+        </p-calendar>
+      </div>
+      <div class="col-md-3 col-12 my-3">
+        <label for="">Agent</label>
+        <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
+            styleClass="w-100" appendTo="body" optionValue="id" optionLabel="name" [filter]="true">
+        </p-dropdown>
+    </div>
+    <div class="col-md-3 col-12 my-3">
+        <label for="">Phone Number</label>
+        <input type="text" pInputText ngClass="w-100" formControlName='mobile' maxlength="10"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+    </div>
+    <div class="col-md-3 col-12 my-3">
+        <label for="">Customer Name</label>
+        <input type="text" pInputText ngClass="w-100" formControlName='customer_name' />
+    </div>
+      <div class="col-md-3 my-2" *ngFor="let label of labels | keyvalue; let i = index">
         <label>
-          {{i+1}}-{{label.key}}
+          {{label.key}}
         </label>
         <p-dropdown [options]="label.value" styleClass="w-100" placeholder="Select Filter" optionLabel="name"
           appendTo="body" [filter]="true" (onShow)="loadDropDown(label.key)" [formControlName]="label.key">
@@ -212,11 +233,11 @@
 </div>
 
 
-<div class="loader-container" *ngIf="isLoading">
+<!-- <div class="loader-container" *ngIf="isLoading">
   <div class="i-loader-inf-horizontal-container">
     <div class="i-loader-inf-horizontal"></div>
     <div class="pt-8px">
       <span>Processing data</span>
     </div>
   </div>
-</div>
+</div> -->

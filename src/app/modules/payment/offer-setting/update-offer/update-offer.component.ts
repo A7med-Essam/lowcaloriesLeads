@@ -6,20 +6,22 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Checkbox } from 'primeng/checkbox';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import {
   PaymentDetails,
   PaymentlinkService,
 } from 'src/app/services/paymentlink.service';
-import { GuardService } from 'src/app/services/guard.service';
+
 @Component({
-  selector: 'app-offer-setting',
-  templateUrl: './offer-setting.component.html',
-  styleUrls: ['./offer-setting.component.scss'],
+  selector: 'app-update-offer',
+  templateUrl: './update-offer.component.html',
+  styleUrls: ['./update-offer.component.scss'],
 })
-export class OfferSettingComponent implements OnInit, OnDestroy {
+export class UpdateOfferComponent implements OnInit, OnDestroy {
   mealTypes: string[] = [];
   snackTypes: string[] = [];
   plans: any[] = [];
@@ -28,26 +30,40 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
   paymentForm!: FormGroup;
   creatingStatus: boolean = false;
   isLoading: boolean = false;
-  offer: any;
   valueChangesSubscription1!: Subscription | undefined;
   valueChangesSubscription2!: Subscription | undefined;
-  tomorrow:Date = new Date(new Date().setDate(new Date().getDate()))
+  tomorrow: Date = new Date(new Date().setDate(new Date().getDate()));
+  private unsubscribe$ = new Subject<void>();
 
   ngOnDestroy() {
     if (this.valueChangesSubscription1 && this.valueChangesSubscription2) {
       this.valueChangesSubscription1.unsubscribe();
       this.valueChangesSubscription2.unsubscribe();
     }
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
-
+  currentRow: any;
   constructor(
     private _PaymentlinkService: PaymentlinkService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _Router: Router
   ) {}
 
   ngOnInit(): void {
     this.createPaymentForm();
-    this.getPaymentDetails();
+    this._PaymentlinkService.offer
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (res) => {
+          if (res == null) {
+            this._Router.navigate(['offer-settings/showOffer']);
+          } else {
+            this.currentRow = res;
+            this.getPaymentDetails();
+          }
+        },
+      });
   }
 
   getPaymentDetails() {
@@ -55,22 +71,14 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
     this._PaymentlinkService.getPaymentDetails().subscribe((res) => {
       if (res.status == 1) {
         this.paymentDetails = res.data;
-        this.getOfferSettings();
-      }
-    });
-  }
-
-  getOfferSettings() {
-    this._PaymentlinkService.getOfferSettings().subscribe((res) => {
-      if (res.status == 1) {
-        this.offer = res.data;
-        this.patchValues(res.data);
+        this.patchValues(this.currentRow);
         this.isLoading = false;
       }
     });
   }
 
   patchValues(data: any) {
+    console.log(data);
     const company =
       data.program.company == 'CH' ? 'chef' : data.program.type.toLowerCase();
     const type = Object.keys(this.paymentDetails.Programs).filter((k) =>
@@ -80,6 +88,8 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
       (p) => p.id == data.program_id
     )[0];
     this.paymentForm.patchValue({
+      offer_id: data.id,
+      name: data.name,
       program_type: type,
       start_date: new Date(data.start_date),
       end_date: new Date(data.end_date),
@@ -113,13 +123,13 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
   selectAllDeliveryDays() {
     setTimeout(() => {
       this.DeliveryCheckboxElements.forEach((checkbox: Checkbox) => {
-        Array.from(this.offer.meal_types).forEach((m) => {
+        Array.from(this.currentRow.meal_types).forEach((m) => {
           if (checkbox.value == m) {
             checkbox.updateModel(true);
           }
         });
-        if (this.offer.snack_types) {
-          Array.from(this.offer.snack_types).forEach((s) => {
+        if (this.currentRow.snack_types) {
+          Array.from(this.currentRow.snack_types).forEach((s) => {
             if (checkbox.value == s) {
               checkbox.updateModel(true);
             }
@@ -145,6 +155,8 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
       status: new FormControl('active', [Validators.required]),
       plan_price: new FormControl(null, [Validators.required]),
       notes: new FormControl(null, [Validators.required]),
+      name: new FormControl(null, [Validators.required]),
+      offer_id: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -193,7 +205,9 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
               summary: 'Updated Successfully',
               detail: res.message,
             });
+            this._Router.navigate(['offer-settings/showOffer']);
           } else {
+            this.isLoading = false;
             this.creatingStatus = false;
             this.paymentForm.patchValue({
               start_date: new Date(filteredData.start_date),
@@ -202,6 +216,7 @@ export class OfferSettingComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
+          this.isLoading = false;
           this.creatingStatus = false;
           this.paymentForm.patchValue({
             start_date: new Date(filteredData.start_date),

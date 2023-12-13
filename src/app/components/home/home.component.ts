@@ -19,16 +19,37 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     // private _SurveyService:SurveyService,
     private _AnalysisService: AnalysisService,
-    private _AuthService: AuthService
+    private _AuthService: AuthService,
+    private _SurveyService: SurveyService
   ) {}
-  staticsForm: FormGroup = new FormGroup({});
+  staticsForm: FormGroup = new FormGroup({
+    date: new FormControl(null),
+    from: new FormControl(null),
+    to: new FormControl(null),
+    agent_id: new FormControl(null),
+    mobile: new FormControl(null),
+    customer_name: new FormControl(null),
+  });
   ngOnInit(): void {
     this._AuthService.currentUser
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data: any) => {
         this.isSuperAdmin = data.role_name === 'super_admin';
         if (this.isSuperAdmin) {
+          this.getAgents();
           this.getLabels();
+          this._AnalysisService
+          .getStatics([{label:"from",name:new Date()},{label:"to",name:new Date()}])
+          .subscribe((res) => {
+            if (this.chart) {
+              this.chart.destroy();
+            }
+            this.statics = res.data;
+            this.displayChart = true;
+            setTimeout(() => {
+              this.createChart(res.data);
+            }, 1);
+          });
         }
       });
   }
@@ -199,18 +220,33 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  statics:any;
+  statics: any;
   getStatics(form: FormGroup) {
+    if (form.value.date) {
+      if (form.value.date[1]) {
+        form.patchValue({
+          from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+          to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+          date: null,
+        });
+      } else {
+        form.patchValue({
+          date: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+        });
+      }
+    }
     const filtered: any = {};
     for (let key in form.value) {
       if (form.value[key]) {
         filtered[key] = form.value[key];
       }
     }
+    console.log(filtered);
     const arrayOfValues = Object.values(filtered).map((item) => item);
+    // { statics: arrayOfValues }
     if (arrayOfValues.length) {
       this._AnalysisService
-        .getStatics({ statics: arrayOfValues })
+        .getStatics(arrayOfValues)
         .subscribe((res) => {
           if (this.chart) {
             this.chart.destroy();
@@ -226,6 +262,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   reset() {
     this.staticsForm.reset();
+  }
+
+  agents: any[] = [];
+  getAgents() {
+    this._SurveyService.getAllAgents().subscribe({
+      next: (res) => {
+        this.agents = res.data;
+      },
+    });
   }
 }
 
