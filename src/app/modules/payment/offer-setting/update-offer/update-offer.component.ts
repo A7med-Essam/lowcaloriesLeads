@@ -78,7 +78,6 @@ export class UpdateOfferComponent implements OnInit, OnDestroy {
   }
 
   patchValues(data: any) {
-    console.log(data);
     const company =
       data.program.company == 'CH' ? 'chef' : data.program.type.toLowerCase();
     const type = Object.keys(this.paymentDetails.Programs).filter((k) =>
