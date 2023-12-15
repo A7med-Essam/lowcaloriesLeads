@@ -10,7 +10,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <th class="text-center">Name</th>
-                <th class="text-center">Link</th>
+                <!-- <th class="text-center">Link</th> -->
                 <th class="text-center">Status</th>
                 <th class="text-center">Actions</th>
             </tr>
@@ -18,15 +18,17 @@
         <ng-template pTemplate="body" let-offer>
             <tr>
                 <td class="text-center">{{offer.name}}</td>
-                <td class="text-center">
+                <!-- <td class="text-center">
                     <a href="{{offer.link}}" target="_blank">{{offer.link}}</a>
-                </td>
+                </td> -->
                 <td class="text-center">
                     <p-tag [severity]="offer.status =='active'? 'success':'danger'" [value]="offer.status"></p-tag>
                 </td>
                 <td class="text-center">
                     <!-- <button [disabled]="!deletePermission" pButton type="button" icon="pi pi-trash"
                         (click)="confirm(offer.id)" class="m-1 p-button-danger p-button-sm"></button> -->
+                        <button pButton type="button" icon="pi pi-user"  
+                        (click)="showRow2(offer)" class="m-1 p-button-sm p-button-help"></button>
 
                         <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"  
                         (click)="updateRow(offer)" class="m-1 p-button-sm p-button-warning"></button>
@@ -81,6 +83,39 @@
                                 <ng-container *ngSwitchDefault>
                                     {{ item.value }}
                                 </ng-container>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Agent Links Modal" [(visible)]="agentLinkModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+    [resizable]="true">
+    <div class="card">
+        <div class="card-header">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 200px;">Name</h6>
+                <h6 class="m-0">Link</h6>
+                <h6 class="ms-auto">Copy Link</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive overflow-auto">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let item of agents">
+                            <td [width]="200">
+                                {{ item?.name }}
+                            </td>
+                            <td>
+                                {{ currentRow2?.link }}/{{item?.id}}
+                            </td>
+                            <td>
+                                <button pButton type="button" icon="pi pi-copy"  
+                                (click)="copyMessage(currentRow2?.link,item?.id)" class="m-1 p-button-sm p-button-success"></button>
                             </td>
                         </tr>
                     </tbody>

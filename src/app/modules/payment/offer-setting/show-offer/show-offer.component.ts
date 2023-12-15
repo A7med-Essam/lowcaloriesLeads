@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { GuardService } from 'src/app/services/guard.service';
 import { PaymentlinkService } from 'src/app/services/paymentlink.service';
+import { SurveyService } from 'src/app/services/survey.service';
 import { UploadService } from 'src/app/services/upload.service';
 
 @Component({
@@ -15,7 +16,9 @@ export class ShowOfferComponent implements OnInit {
     private _PaymentlinkService: PaymentlinkService,
     private _GuardService: GuardService,
     private confirmationService: ConfirmationService,
-    private _Router:Router
+    private _Router: Router,
+    private _SurveyService: SurveyService,
+    private _MessageService:MessageService
   ) {}
 
   createPermission: boolean = false;
@@ -36,6 +39,7 @@ export class ShowOfferComponent implements OnInit {
   ngOnInit(): void {
     this.getPermission();
     this.getOfferSettings();
+    this.getAgents();
   }
 
   getOfferSettings() {
@@ -70,12 +74,9 @@ export class ShowOfferComponent implements OnInit {
     this.detailsModal = true;
   }
 
-  
   removeObjectValues(obj: any) {
     for (const key in obj) {
-      if (
-        typeof obj[key] === 'object'
-      ) {
+      if (typeof obj[key] === 'object') {
         delete obj[key];
       }
     }
@@ -85,5 +86,40 @@ export class ShowOfferComponent implements OnInit {
   updateRow(row: any) {
     this._PaymentlinkService.offer.next(row);
     this._Router.navigate(['offer-settings/updateOffer']);
+  }
+
+  agentLinkModal: boolean = false;
+  currentRow2:any;
+  showRow2(row: any) {
+    this.currentRow2 = row;
+    this.agentLinkModal = true;
+  }
+
+  agents: any[] = [];
+  getAgents() {
+    this._SurveyService.getAllAgents().subscribe({
+      next: (res) => {
+        this.agents = res.data.filter((f:any)=>f.team != "Management" && f.team != "Branches");
+      },
+    });
+  }
+
+  copyMessage(link:string,id:string) {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = link+"/"+id;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Notification ',
+      detail: 'Copied to clipboard!',
+    });
   }
 }

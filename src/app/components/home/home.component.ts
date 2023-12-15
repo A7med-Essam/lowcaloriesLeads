@@ -45,9 +45,11 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.chart.destroy();
             }
             this.statics = res.data;
+            this.statics[0].name = "Analytics"
+            this.statics[0].label = "Analytics Count"
             this.displayChart = true;
             setTimeout(() => {
-              this.createChart(res.data);
+              this.createChart(this.statics);
             }, 1);
           });
         }
@@ -241,12 +243,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         filtered[key] = form.value[key];
       }
     }
-    console.log(filtered);
     const arrayOfValues = Object.values(filtered).map((item) => item);
-    // { statics: arrayOfValues }
     if (arrayOfValues.length) {
       this._AnalysisService
-        .getStatics(arrayOfValues)
+        .getStatics({ statics: arrayOfValues })
         .subscribe((res) => {
           if (this.chart) {
             this.chart.destroy();
