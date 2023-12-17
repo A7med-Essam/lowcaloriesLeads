@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
 import { GuardService } from 'src/app/services/guard.service';
+import { LocalService } from 'src/app/services/local.service';
 import { RefundService } from 'src/app/services/refund.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
@@ -28,7 +29,8 @@ export class ShowAnalysis2Component implements OnInit {
     private _ConfirmationService: ConfirmationService,
     private _Router: Router,
     private _RefundService: RefundService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _LocalService:LocalService
   ) {}
 
   isLoading: boolean = false;
@@ -42,6 +44,10 @@ export class ShowAnalysis2Component implements OnInit {
   PaginationInfo: any;
 
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('analysis_filter');
+    if (filterTab) {
+      this._AnalysisService.filter.next(filterTab)
+    }
     this._AnalysisService.filter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {

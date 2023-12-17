@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
 import { GuardService } from 'src/app/services/guard.service';
+import { LocalService } from 'src/app/services/local.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
     private _AnalysisService: AnalysisService,
     private _SurveyService: SurveyService,
     private _ConfirmationService: ConfirmationService,
-    private _Router: Router
+    private _Router: Router,
+    private _LocalService:LocalService
   ) {}
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -32,6 +34,10 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
   PaginationInfo: any;
 
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('analysis_filter');
+    if (filterTab) {
+      this._AnalysisService.filterv1.next(filterTab)
+    }
     this._AnalysisService.filterv1
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {

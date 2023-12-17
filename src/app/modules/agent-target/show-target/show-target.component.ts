@@ -15,6 +15,7 @@ import { MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-show-target',
@@ -28,7 +29,8 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     private _AgentTargetService: AgentTargetService,
     private _DislikeService: DislikeService,
     private _GuardService: GuardService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _LocalService: LocalService
   ) {}
 
   createPermission: boolean = false;
@@ -166,6 +168,10 @@ export class ShowTargetComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('target_filter');
+    if (filterTab) {
+      this._AgentTargetService.target_filter.next(filterTab)
+    }
     this._AgentTargetService.target_filter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {

@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-show-dislike',
@@ -23,7 +24,8 @@ export class ShowDislikeComponent implements OnInit, OnDestroy {
     private _Router: Router,
     private _DislikeService: DislikeService,
     private _GuardService: GuardService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _LocalService:LocalService
   ) {
     this.userId = _GuardService.getUser().id;
     this.role = _GuardService.getUser().role_name;
@@ -69,6 +71,10 @@ export class ShowDislikeComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('dislike_filter');
+    if (filterTab) {
+      this._DislikeService.dislike_filter.next(filterTab)
+    }
     this._DislikeService.dislike_filter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {

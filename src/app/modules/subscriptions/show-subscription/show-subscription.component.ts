@@ -18,6 +18,7 @@ import {
   PaymentlinkService,
 } from 'src/app/services/paymentlink.service';
 import { SurveyService } from 'src/app/services/survey.service';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-show-subscription',
@@ -40,10 +41,15 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     private _Router: Router,
     private _MessageService: MessageService,
     private _PaymentlinkService: PaymentlinkService,
-    private _SurveyService: SurveyService
+    private _SurveyService: SurveyService,
+    private _LocalService:LocalService
   ) {}
 
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('subscriptions_filter');
+    if (filterTab) {
+      this._SubscriptionsService.subscription_filter.next(filterTab)
+    }
     this._SubscriptionsService.subscription_filter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {

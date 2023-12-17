@@ -25,7 +25,11 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.createLoginForm();
     if (this._GuardService.getUser()) {
-      this._Router.navigate(['./home']);
+      // this._Router.navigate(['./home']);
+      const returnUrl = this._LocalService.getJsonValue('returnUrl');
+      const navigationUrl = returnUrl ? returnUrl : '/home';
+      this._AuthService.returnUrl.next(null);
+      this._Router.navigateByUrl(navigationUrl);
     }
   }
 
@@ -41,7 +45,7 @@ export class LoginComponent implements OnInit {
             this._PusherService.firePusher();
             const returnUrl = this._AuthService.returnUrl.value;
             const navigationUrl = returnUrl ? returnUrl : '/home';
-            this._AuthService.returnUrl.next(null)
+            this._AuthService.returnUrl.next(null);
             this._Router.navigateByUrl(navigationUrl);
           }
         });

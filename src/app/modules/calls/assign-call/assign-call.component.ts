@@ -13,6 +13,7 @@ import { GuardService } from 'src/app/services/guard.service';
 import { TableCheckbox } from 'primeng/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-assign-call',
@@ -27,7 +28,8 @@ export class AssignCallComponent implements OnInit, OnDestroy {
     private _FormBuilder: FormBuilder,
     private _DislikeService: DislikeService,
     private _Router: Router,
-    private _GuardService: GuardService
+    private _GuardService: GuardService,
+    private _LocalService:LocalService
   ) {}
   printPermission: boolean = false;
   exportPermission: boolean = false;
@@ -54,6 +56,10 @@ export class AssignCallComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('calls_filter');
+    if (filterTab) {
+      this._CallsService.call_filter.next(filterTab)
+    }
     this._CallsService.call_filter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {

@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GuardService } from 'src/app/services/guard.service';
+import { LocalService } from 'src/app/services/local.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
     private _SurveyService: SurveyService,
     private _Router: Router,
     private _GuardService: GuardService,
-    private _MessageService:MessageService
+    private _MessageService:MessageService,
+    private _LocalService:LocalService
   ) {}
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -29,6 +31,10 @@ export class ShowLeadComponent implements OnInit, OnDestroy {
   PaginationInfo: any;
 
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('leads_filter');
+    if (filterTab) {
+      this._SurveyService.lead_filter.next(filterTab)
+    }
     this._SurveyService.lead_filter
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res=>{

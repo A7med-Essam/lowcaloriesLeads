@@ -34,6 +34,7 @@ import { Error404Component } from './components/error404/error404.component';
 import { AuthInterceptor } from './core/http.interceptor';
 import { HomeComponent } from './components/home/home.component';
 import { ImageModule } from 'primeng/image';
+import { TabViewModule } from 'primeng/tabview';
 
 const APP_PRIMENG_MODULE = [
   SharedModule,
@@ -55,7 +56,8 @@ const APP_PRIMENG_MODULE = [
   MultiSelectModule,
   ChipsModule,
   AccordionModule,
-  ToastModule
+  ToastModule,
+  TabViewModule
 ];
 
 @NgModule({

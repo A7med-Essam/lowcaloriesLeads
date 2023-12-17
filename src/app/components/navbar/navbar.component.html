@@ -78,7 +78,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="btn nav-link" (click)="phoneModal = true">
+        <a class="btn nav-link" (click)="openSearchModal()">
           <i class="fas fa-cog"></i>
           <span class="link-text">Setting</span>
         </a>
@@ -113,20 +113,14 @@
 
 <p-dialog [(visible)]="customerModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false">
   <div class="row customerModels">
-    <ng-container *ngFor="let model of customerModels | keyvalue">
-      <div class="col-xl-3 col-lg-4 mb-3" *ngIf="model.key != 'info'">
+    <!-- <ng-container *ngFor="let model of customerModels | keyvalue">
+      <div class="col-xl-3 col-lg-4 mb-3" *ngIf="model.key != 'info'" (click)="getModelDetails(model.key,customerModels.info)">
         <div class="card card-stats h-100">
           <div class="card-body ">
             <div class="row">
               <div class="col-5 col-md-4">
                 <div class="icon-big text-center icon-warning text-secondary">
                   <div [ngSwitch]="model.key">
-                    <ng-container *ngSwitchCase="'Clinic'">
-                      <i class="fas fa-hospital-symbol"></i>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'Dislikes'">
-                      <i class="fas fa-thumbs-down"></i>
-                    </ng-container>
                     <ng-container *ngSwitchCase="'Mobile Subscription'">
                       <i class="fas fa-mobile-alt"></i>
                     </ng-container>
@@ -136,20 +130,26 @@
                     <ng-container *ngSwitchCase="'addresses'">
                       <i class="far fa-address-card"></i>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'calls'">
-                      <i class="fas fa-headset"></i>
-                    </ng-container>
                     <ng-container *ngSwitchCase="'dataAnalytics'">
                       <i class="far fa-chart-bar"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'Clinic'">
+                      <i class="fas fa-hospital-symbol"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'Dislikes'">
+                      <i class="fas fa-thumbs-down"></i>
                     </ng-container>
                     <ng-container *ngSwitchCase="'issues'">
                       <i class="fas fa-clipboard-list"></i>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'leads'">
-                      <i class="fa fa-star"></i>
-                    </ng-container>
                     <ng-container *ngSwitchCase="'refunds'">
                       <i class="fas fa-hand-holding-usd"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'calls'">
+                      <i class="fas fa-headset"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'leads'">
+                      <i class="fa fa-star"></i>
                     </ng-container>
                     <ng-container *ngSwitchCase="'targets'">
                       <i class="fas fa-user-tag"></i>
@@ -177,7 +177,380 @@
           </div>
         </div>
       </div>
-    </ng-container>
+    </ng-container> -->
+
+    <p-tabView (onChange)="getModelDetails($event)" [scrollable]="true">
+      <p-tabPanel header="webSubscription ({{customerModels?.webSubscription}})">
+        <p-table [value]="filter">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">invoice_no</th>
+              <th class="text-center">subscriptions plan</th>
+              <th class="text-center">total_price</th>
+              <th class="text-center">name</th>
+              <th class="text-center">created_at</th>
+              <th class="text-center">Starting Day</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-sub>
+            <tr [pSelectableRow]="sub">
+              <td class="text-center">{{sub.invoice_no}}</td>
+              <td class="text-center">{{sub.subscriptions_note}}</td>
+              <td class="text-center">{{sub.total_price}}</td>
+              <td class="text-center">{{sub.user?.first_name}}</td>
+              <td class="text-center">{{sub.created_at | date}}</td>
+              <td class="text-center">{{sub.delivery_starting_day}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <button class="btn btn-success px-4 mt-3" (click)="viewTab('webSubscription')">
+          <b>View Tab</b>
+        </button>
+      </p-tabPanel>
+      <ng-container *ngIf="customerModels?.paymentLink">
+        <p-tabPanel header="paymentLink ({{customerModels?.paymentLink}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">invoice_no</th>
+                <th class="text-center">subscriptions plan</th>
+                <th class="text-center">total_price</th>
+                <th class="text-center">name</th>
+                <th class="text-center">created_at</th>
+                <th class="text-center">Starting Day</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sub>
+              <tr [pSelectableRow]="sub">
+                <td class="text-center">{{sub.invoice_no}}</td>
+                <td class="text-center">{{sub.subscriptions_note}}</td>
+                <td class="text-center">{{sub.total_price}}</td>
+                <td class="text-center">{{sub.user?.first_name}}</td>
+                <td class="text-center">{{sub.created_at | date}}</td>
+                <td class="text-center">{{sub.delivery_starting_day}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('paymentLink')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.mobileSubscription">
+        <p-tabPanel header="mobileSubscription ({{customerModels?.mobileSubscription}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">invoice_no</th>
+                <th class="text-center">subscriptions plan</th>
+                <th class="text-center">total_price</th>
+                <th class="text-center">name</th>
+                <th class="text-center">created_at</th>
+                <th class="text-center">Starting Day</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sub>
+              <tr [pSelectableRow]="sub">
+                <td class="text-center">{{sub.invoice_no}}</td>
+                <td class="text-center">{{sub.subscriptions_note}}</td>
+                <td class="text-center">{{sub.total_price}}</td>
+                <td class="text-center">{{sub.user?.first_name}}</td>
+                <td class="text-center">{{sub.created_at | date}}</td>
+                <td class="text-center">{{sub.delivery_starting_day}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('mobileSubscription')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.dataAnalytics">
+        <p-tabPanel header="dataAnalytics ({{customerModels?.dataAnalytics}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Date</th>
+                <th class="text-center">Agent</th>
+                <th class="text-center">Customer Mobile</th>
+                <th class="text-center">Customer Name</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-analysis>
+              <tr>
+                <td class="text-center">{{analysis?.date}}</td>
+                <td class="text-center">{{analysis?.agent?.name}}</td>
+                <td class="text-center">{{analysis?.mobile}}</td>
+                <td class="text-center">{{analysis?.customer_name}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('dataAnalytics')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.Clinic">
+        <p-tabPanel header="Clinic ({{customerModels?.Clinic}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <!-- <th class="text-center">agent_name</th> -->
+                <th class="text-center">invoice_no</th>
+                <th class="text-center">subscriptions plan</th>
+                <th class="text-center">total_price</th>
+                <th class="text-center">name</th>
+                <th class="text-center">created_at</th>
+                <th class="text-center">Starting Day</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sub>
+              <tr [pSelectableRow]="sub">
+                <!-- <td class="text-center">{{sub.agent?.name}}</td> -->
+                <td class="text-center">{{sub.invoice_no}}</td>
+                <td class="text-center">{{sub.subscriptions_note}}</td>
+                <td class="text-center">{{sub.total_price}}</td>
+                <td class="text-center">{{sub.user?.first_name}}</td>
+                <td class="text-center">{{sub.created_at | date}}</td>
+                <td class="text-center">{{sub.delivery_starting_day}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('Clinic')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.Dislikes">
+        <p-tabPanel header="Dislikes ({{customerModels?.Dislikes}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">name </th>
+                <th class="text-center">cid </th>
+                <th class="text-center">branch </th>
+                <th class="text-center">agent </th>
+                <th class="text-center">sent_by </th>
+                <th class="text-center">dislike_meals </th>
+                <th class="text-center">reasons </th>
+                <th class="text-center">created_at </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-dislike>
+              <tr>
+                <td class="text-center">{{dislike.name}}</td>
+                <td class="text-center">{{dislike.cid}}</td>
+                <td class="text-center">{{dislike.branch}}</td>
+                <td class="text-center">{{dislike.agent?.name}}</td>
+                <td class="text-center">{{dislike.sent_by}}</td>
+                <td class="text-center">{{dislike.dislike_meals}}</td>
+                <td class="text-center">{{dislike.reasons}}</td>
+                <td class="text-center">{{dislike?.created_at | date}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('Dislikes')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.issues">
+        <p-tabPanel header="issues ({{customerModels?.issues}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">action </th>
+                <th class="text-center">agent_name </th>
+                <th class="text-center">branch </th>
+                <th class="text-center">c_name </th>
+                <th class="text-center">cid </th>
+                <th class="text-center">created_at </th>
+                <th class="text-center">date </th>
+                <th class="text-center">issue_details </th>
+                <th class="text-center">status </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-complaint>
+              <tr>
+                <td class="text-center">{{complaint?.action}}</td>
+                <td class="text-center">{{complaint?.agent_name}}</td>
+                <td class="text-center">{{complaint?.branch}}</td>
+                <td class="text-center">{{complaint?.c_name}}</td>
+                <td class="text-center">{{complaint?.cid}}</td>
+                <td class="text-center">{{complaint?.created_at}}</td>
+                <td class="text-center">{{complaint?.date}}</td>
+                <td class="text-center">{{complaint?.issue_details}}</td>
+                <td class="text-center">{{complaint?.status}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('issues')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.refunds">
+        <p-tabPanel header="refunds ({{customerModels?.refunds}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">agent_name</th>
+                <th class="text-center">amount_paid</th>
+                <th class="text-center">branch</th>
+                <th class="text-center">cid</th>
+                <th class="text-center">created_at</th>
+                <th class="text-center">name</th>
+                <th class="text-center">payment_method</th>
+                <!-- <th class="text-center">reason</th> -->
+                <th class="text-center">remaining_days</th>
+                <!-- <th class="text-center">subscription_plan</th> -->
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-refund>
+              <tr [pSelectableRow]="refund">
+                <td class="text-center">{{refund.agent_name}}</td>
+                <td class="text-center">{{refund.amount_paid}}</td>
+                <td class="text-center">{{refund.branch}}</td>
+                <td class="text-center">{{refund.cid}}</td>
+                <td class="text-center">{{refund.created_at | date}}</td>
+                <td class="text-center">{{refund.name}}</td>
+                <td class="text-center">{{refund.payment_method}}</td>
+                <!-- <td class="text-center">{{refund.reason}}</td> -->
+                <td class="text-center">{{refund.remaining_days}}</td>
+                <!-- <td class="text-center">{{refund.subscription_plan}}</td> -->
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('refunds')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.calls">
+        <p-tabPanel header="calls ({{customerModels?.calls}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">cid </th>
+                <th class="text-center">remaining days </th>
+                <th class="text-center">branch </th>
+                <th class="text-center">customer name </th>
+                <th class="text-center">plan </th>
+                <th class="text-center">date </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-call>
+              <tr>
+                <td class="text-center">{{call.cid}}</td>
+                <td class="text-center">{{call.subscription_id}}</td>
+                <td class="text-center">{{call.branch}}</td>
+                <td class="text-center">{{call.customer_name}}</td>
+                <td class="text-center">{{call.plan}}</td>
+                <td class="text-center">{{call.date}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('calls')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.leads">
+        <p-tabPanel header="leads ({{customerModels?.leads}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">created_at </th>
+                <th class="text-center">customer_name </th>
+                <th class="text-center">status </th>
+                <th class="text-center">platforms </th>
+                <th class="text-center">type </th>
+                <th class="text-center">Created By </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-lead>
+              <tr>
+                <td class="text-center">{{lead?.created_at}}</td>
+                <td class="text-center">{{lead?.customer_name}}</td>
+                <td class="text-center">{{lead?.status}}</td>
+                <td class="text-center">{{lead?.platforms}}</td>
+                <td class="text-center">{{lead?.type}}</td>
+                <td class="text-center">{{lead?.user_created?.name}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('leads')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <ng-container *ngIf="customerModels?.targets">
+        <p-tabPanel header="targets ({{customerModels?.targets}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">agent_name </th>
+                <th class="text-center">date </th>
+                <th class="text-center">client_cid </th>
+                <th class="text-center">branch </th>
+                <th class="text-center">customer_type </th>
+                <th class="text-center">paid_by </th>
+                <th class="text-center">status </th>
+                <th class="text-center">invoice_number </th>
+                <th class="text-center">client_name </th>
+                <th class="text-center">amount_paid </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-agent>
+              <tr [pSelectableRow]="agent">
+                <td class="text-center">{{agent?.agent?.name}}</td>
+                <td class="text-center">{{agent?.date}}</td>
+                <td class="text-center">{{agent?.client_cid}}</td>
+                <td class="text-center">{{agent?.branch}}</td>
+                <td class="text-center">{{agent?.customer_type}}</td>
+                <td class="text-center">{{agent?.paid_by}}</td>
+                <td class="text-center">{{agent?.status}}</td>
+                <td class="text-center">{{agent?.invoice_number}}</td>
+                <td class="text-center">{{agent?.client_name}}</td>
+                <td class="text-center">{{agent?.amount_paid}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('targets')">
+            <b>View Tab</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
+      <!-- <p-tabPanel header="System Subscription">
+      </p-tabPanel>  -->
+      <!-- <p-tabPanel *ngIf="customerModels?.branches"  header="branches ({{customerModels?.branches}})">
+        <p-table [value]="filter">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">invoice_no</th>
+              <th class="text-center">subscriptions plan</th>
+              <th class="text-center">total_price</th>
+              <th class="text-center">name</th>
+              <th class="text-center">created_at</th>
+              <th class="text-center">Starting Day</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-sub>
+            <tr [pSelectableRow]="sub">
+              <td class="text-center">{{sub.invoice_no}}</td>
+              <td class="text-center">{{sub.subscriptions_note}}</td>
+              <td class="text-center">{{sub.total_price}}</td>
+              <td class="text-center">{{sub.user?.first_name}}</td>
+              <td class="text-center">{{sub.created_at | date}}</td>
+              <td class="text-center">{{sub.delivery_starting_day}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <button class="btn btn-success px-4 mt-3" (click)="viewTab('branches')">
+          <b>View Tab</b>
+        </button>
+      </p-tabPanel> -->
+    </p-tabView>
   </div>
 </p-dialog>
 

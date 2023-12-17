@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-show-complaints',
@@ -25,7 +26,8 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     private _DislikeService: DislikeService,
     private _ComplaintsService: ComplaintsService,
     private _GuardService: GuardService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _LocalService:LocalService
   ) {}
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -161,6 +163,10 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
   PaginationInfo: any;
 
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('complaints_filter');
+    if (filterTab) {
+      this._ComplaintsService.complaints_filter.next(filterTab)
+    }
     this._ComplaintsService.complaints_filter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {

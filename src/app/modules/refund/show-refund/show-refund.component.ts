@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { LocalService } from 'src/app/services/local.service';
 
 @Component({
   selector: 'app-show-refund',
@@ -26,7 +27,8 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     private _RefundService: RefundService,
     private _DislikeService: DislikeService,
     private _GuardService: GuardService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _LocalService:LocalService
   ) {
     this.role = this._GuardService.getUser().role_name;
   }
@@ -181,6 +183,10 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
   ngOnInit(): void {
+    const filterTab = this._LocalService.getJsonValue('refund_filter');
+    if (filterTab) {
+      this._RefundService.refund_filter.next(filterTab)
+    }
     this._RefundService.refund_filter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
