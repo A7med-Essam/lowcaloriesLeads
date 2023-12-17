@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { CallsService } from 'src/app/services/calls.service';
-import { DislikeService } from 'src/app/services/dislike.service';
 import { GuardService } from 'src/app/services/guard.service';
 import { PusherService } from 'src/app/services/pusher.service';
-import { RefundService } from 'src/app/services/refund.service';
-import { SurveyService } from 'src/app/services/survey.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-navbar',
@@ -26,10 +22,13 @@ export class NavbarComponent implements OnInit {
     // private _RefundService: RefundService,
     // private _AgentTargetService: AgentTargetService,
     // private _CallsService: CallsService,
-    private _Router: Router
+    private _Router: Router,
+    private _UsersService: UsersService
   ) {}
 
   notificationModal:boolean = false;
+  customerModal:boolean = false;
+  phoneModal:boolean = false;
 
   ngOnInit() {
     this._AuthService.currentUser.subscribe((data) => {
@@ -143,6 +142,21 @@ export class NavbarComponent implements OnInit {
         break;
       default:
         return;
+    }
+  }
+
+  // =================================================================================================
+  customerModels:any;
+  getCustomerModels(mobile: any){
+    if (mobile != '') {
+      this._UsersService.getCustomerModels(mobile.value).subscribe(res=>{
+        if (res.status == 1) {
+          this.phoneModal = false;
+          this.customerModal = true;
+          this.customerModels = res.data;
+          mobile.value = null;
+        }
+      })
     }
   }
 }

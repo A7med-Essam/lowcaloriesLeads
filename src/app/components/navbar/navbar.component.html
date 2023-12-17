@@ -78,7 +78,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="btn nav-link">
+        <a class="btn nav-link" (click)="phoneModal = true">
           <i class="fas fa-cog"></i>
           <span class="link-text">Setting</span>
         </a>
@@ -87,8 +87,8 @@
   </div>
 </nav>
 
-<p-dialog [(visible)]="notificationModal" [modal]="true" [style]="{width: '25vw'}"
-  [draggable]="false" [resizable]="false">
+<p-dialog [(visible)]="notificationModal" [modal]="true" [style]="{width: '25vw'}" [draggable]="false"
+  [resizable]="false">
   <ng-container *ngIf="currentNotification?.notifications.length > 0; else noNotification">
     <div class="modal-content py-md-5 px-md-4 p-sm-3 p-4">
       <h3>{{ currentNotification?.notifications[0]?.title }}</h3>
@@ -96,7 +96,8 @@
       <p class="r3 px-md-5 px-sm-1">{{ currentNotification?.notifications[0]?.details }}</p>
 
       <div class="text-center mb-3">
-        <button class="btn btn-primary w-50 rounded-pill b1" (click)="redirect(currentNotification?.notifications[0]);notificationModal=false">
+        <button class="btn btn-primary w-50 rounded-pill b1"
+          (click)="redirect(currentNotification?.notifications[0]);notificationModal=false">
           GO TO {{ currentNotification?.notifications[0]?.type | uppercase }}
         </button>
       </div>
@@ -108,4 +109,91 @@
   <ng-template #noNotification>
     <div class="no-notification">No notifications to display.</div>
   </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="customerModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false">
+  <div class="row customerModels">
+    <ng-container *ngFor="let model of customerModels | keyvalue">
+      <div class="col-xl-3 col-lg-4 mb-3" *ngIf="model.key != 'info'">
+        <div class="card card-stats h-100">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning text-secondary">
+                  <div [ngSwitch]="model.key">
+                    <ng-container *ngSwitchCase="'Clinic'">
+                      <i class="fas fa-hospital-symbol"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'Dislikes'">
+                      <i class="fas fa-thumbs-down"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'Mobile Subscription'">
+                      <i class="fas fa-mobile-alt"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'Web Subscription'">
+                      <i class="fab fa-chrome"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'addresses'">
+                      <i class="far fa-address-card"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'calls'">
+                      <i class="fas fa-headset"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'dataAnalytics'">
+                      <i class="far fa-chart-bar"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'issues'">
+                      <i class="fas fa-clipboard-list"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'leads'">
+                      <i class="fa fa-star"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'refunds'">
+                      <i class="fas fa-hand-holding-usd"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'targets'">
+                      <i class="fas fa-user-tag"></i>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      <i class="far fa-question-circle"></i>
+                    </ng-container>
+                </div>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{model.key}}</p>
+                  <p class="card-title">{{model.value}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <hr>
+            <div class="stats">
+              <i class="fa fa-star text-warning"></i>{{customerModels?.info?.first_name}}
+              {{customerModels?.info?.last_name}} has {{model.value}} {{model.key}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</p-dialog>
+
+<p-dialog [(visible)]="phoneModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label for="">Customer Phone</label>
+        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter Customer Phone" maxlength="10"
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" #CID_INPUT>
+        <div class="text-end">
+          <button class="btn btn-success px-4" (click)="getCustomerModels(CID_INPUT)">
+            <b>Get Customer Info</b>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </p-dialog>

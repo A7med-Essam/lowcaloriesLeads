@@ -53,4 +53,8 @@ export class UsersService {
   getTeams(): Observable<any> {
     return this._ApiConfigService.postReq3("getAgentTeams", "");
   }
+
+  getCustomerModels(phone_number:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`getCustomerModels`,{phone_number});
+  }
 }
