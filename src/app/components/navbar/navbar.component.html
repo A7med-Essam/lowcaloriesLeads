@@ -525,14 +525,16 @@
         <p-table [value]="filter">
           <ng-template pTemplate="header">
             <tr>
+              <th class="text-center">#</th>
               <th class="text-center">CID</th>
               <th class="text-center">Remaining Days</th>
               <th class="text-center">Plan Title</th>
               <th class="text-center">Status</th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-system>
+          <ng-template pTemplate="body" let-system let-i="rowIndex">
             <tr>
+              <td class="text-center">{{i+1}}</td>
               <td class="text-center">{{system?.cid}}</td>
               <td class="text-center">{{system?.remainingDays}}</td>
               <td class="text-center">{{system?.planTitle}}</td>

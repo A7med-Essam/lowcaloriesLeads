@@ -384,7 +384,7 @@ export class NavbarComponent implements OnInit {
     const urlTree = this._Router.createUrlTree([returnUrl]);
     const url = this._Router.serializeUrl(urlTree);
     // window.open(url, '_blank',"width= 1015 , height= 800");
-    window.open(url, '_blank');
+    window.open("/#"+url, '_blank');
     setTimeout(() => {
       this._LocalService.removeItem('returnUrl');
       this._LocalService.removeItem(filterKey);
