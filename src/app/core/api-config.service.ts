@@ -47,7 +47,8 @@ export class ApiConfigService {
             this._MessageService.add({
               severity: 'warn',
               summary: 'Error',
-              detail: 'No Data Found For This CID',
+              // detail: 'No Data Found For This CID',
+              detail: 'No Data Found',
             });
           }
         },

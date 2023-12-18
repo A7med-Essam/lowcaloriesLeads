@@ -173,6 +173,7 @@ export class NavbarComponent implements OnInit {
     }
   }
   customerModels: any;
+  system: any[]=[];
   getCustomerModels(mobile: any) {
     if (mobile != '') {
       this._UsersService.getCustomerModels(mobile.value).subscribe((res) => {
@@ -182,13 +183,19 @@ export class NavbarComponent implements OnInit {
           this.customerModels = res.data;
           mobile.value = null;
           this._SubscriptionsService
-          .filterSubscriptions(1, {
-            Mobile_no: res.data.info.phone_number,
-            sub_from: 'web',
-          })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+            .filterSubscriptions(1, {
+              Mobile_no: res.data.info.phone_number,
+              sub_from: 'web',
+            })
+            .subscribe((res) => {
+              this.filter = res.data.data;
+            });
+
+          this._SubscriptionsService
+            .getSystemSybscriptions(res.data.info.phone_number)
+            .subscribe((res) => {
+              this.system = res;
+            });
         }
       });
     }
@@ -289,6 +296,9 @@ export class NavbarComponent implements OnInit {
           .subscribe((res) => {
             this.filter = res.data.data;
           });
+        break;
+      case 'systemSubscription':
+        this.filter = this.system;
         break;
     }
   }

@@ -41,6 +41,12 @@ export class SubscriptionsService {
   addCidForInvoice(data:any): Observable<any> {
     return this._ApiConfigService.postReq3(`addCidForInvoice`, data);
   }
+
+  // ==========================================================================
+
+  getSystemSybscriptions(phone:any): Observable<any> {
+    return this._ApiConfigService.getReq2(`Subscription/GetCid?phone=${phone}`);
+  }
 }
 
 
