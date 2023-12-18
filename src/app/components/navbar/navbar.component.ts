@@ -173,9 +173,10 @@ export class NavbarComponent implements OnInit {
     }
   }
   customerModels: any;
-  system: any[]=[];
+  system: any[] = [];
   getCustomerModels(mobile: any) {
     if (mobile != '') {
+      this.resetAllModels();
       this._UsersService.getCustomerModels(mobile.value).subscribe((res) => {
         if (res.status == 1) {
           this.phoneModal = false;
@@ -186,9 +187,10 @@ export class NavbarComponent implements OnInit {
             .filterSubscriptions(1, {
               Mobile_no: res.data.info.phone_number,
               sub_from: 'web',
+              paginate: 10,
             })
             .subscribe((res) => {
-              this.filter = res.data.data;
+              this.filter =this.paymentWeb= res.data.data;
             });
 
           this._SubscriptionsService
@@ -203,99 +205,42 @@ export class NavbarComponent implements OnInit {
   filter: any;
   @ViewChild(TabView) tabView!: TabView;
   getModelDetails(event: any, client: any = this.customerModels.info) {
+    this.filter = [];
     let model = this.tabView.tabs[event.index].header;
     model = model.split(' (')[0];
     switch (model) {
       case 'Clinic':
-        this._SubscriptionsService
-          .filterSubscriptions(1, {
-            Mobile_no: client.phone_number,
-            full_plan_name: 'Appointment',
-          })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadClinic(client);
         break;
       case 'refunds':
-        this._RefundService
-          .filterRefund(1, { mobile: client.phone_number })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadRefund(client);
         break;
       case 'targets':
-        this._AgentTargetService
-          .filterTargets(1, { client_number: client.phone_number })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadTargets(client);
         break;
       case 'leads':
-        this._SurveyService
-          .filterLeads(1, { customer_mobile: client.phone_number })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadLeads(client);
         break;
       case 'issues':
-        this._ComplaintsService
-          .filterComplaints(1, { c_mobile: client.phone_number })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadIssues(client);
         break;
       case 'dataAnalytics':
-        this._AnalysisService
-          .filterAnalytics(1, { mobile: client.phone_number })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadAnalytics(client);
         break;
       case 'calls':
-        this._CallsService
-          .filterCalls(1, { customer_phone: client.phone_number })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
-        break;
-      case 'addresses':
+        this.loadCalls(client);
         break;
       case 'webSubscription':
-        this._SubscriptionsService
-          .filterSubscriptions(1, {
-            Mobile_no: client.phone_number,
-            program_id: 'web',
-          })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadPaymentWeb(client);
         break;
       case 'mobileSubscription':
-        this._SubscriptionsService
-          .filterSubscriptions(1, {
-            Mobile_no: client.phone_number,
-            program_id: 'mobile',
-          })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadPaymentMobile(client);
         break;
       case 'Dislikes':
-        this._DislikeService
-          .filterDislikes(1, { mobile: client.phone_number })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadDislikes(client);
         break;
       case 'paymentLink':
-        this._SubscriptionsService
-          .filterSubscriptions(1, {
-            Mobile_no: client.phone_number,
-            program_id: '50',
-          })
-          .subscribe((res) => {
-            this.filter = res.data.data;
-          });
+        this.loadPaymentlink(client);
         break;
       case 'systemSubscription':
         this.filter = this.system;
@@ -384,10 +329,181 @@ export class NavbarComponent implements OnInit {
     const urlTree = this._Router.createUrlTree([returnUrl]);
     const url = this._Router.serializeUrl(urlTree);
     // window.open(url, '_blank',"width= 1015 , height= 800");
-    window.open("/#"+url, '_blank');
+    window.open('/#' + url, '_blank');
     setTimeout(() => {
       this._LocalService.removeItem('returnUrl');
       this._LocalService.removeItem(filterKey);
     }, 1000);
+  }
+
+  // ================================================================LOAD MODELS====================================================================
+
+  leads: any[] = [];
+  loadLeads(client: any) {
+    if (this.leads.length) {
+      this.filter = this.leads;
+    } else {
+      this._SurveyService
+      .filterLeads(1, {
+        customer_mobile: client.phone_number,
+        paginate: 10,
+      })
+      .subscribe((res) => {
+        this.filter = this.leads= res.data.data;
+      });
+    }
+  }
+  issues: any[] = [];
+  loadIssues(client: any) {
+    if (this.issues.length) {
+      this.filter = this.issues;
+    } else {
+      this._ComplaintsService
+      .filterComplaints(1, { c_mobile: client.phone_number, paginate: 10 })
+      .subscribe((res) => {
+        this.filter = this.issues= res.data.data;
+      });
+    }
+  }
+  refunds: any[] = [];
+  loadRefund(client: any) {
+    if (this.refunds.length) {
+      this.filter = this.refunds;
+    } else {
+      this._RefundService
+        .filterRefund(1, { mobile: client.phone_number, paginate: 10 })
+        .subscribe((res) => {
+          this.filter= this.refunds = res.data.data;
+        });
+    }
+  }
+  paymentlink: any[] = [];
+  loadPaymentlink(client: any) {
+    if (this.paymentlink.length) {
+      this.filter = this.paymentlink;
+    } else {
+      this._SubscriptionsService
+      .filterSubscriptions(1, {
+        Mobile_no: client.phone_number,
+        program_id: '50',
+        paginate: 10,
+      })
+      .subscribe((res) => {
+        this.filter = this.paymentlink= res.data.data;
+      });
+    }
+  }
+  paymentWeb: any[] = [];
+  loadPaymentWeb(client: any) {
+    if (this.paymentWeb.length) {
+      this.filter = this.paymentWeb;
+    } else {
+      this._SubscriptionsService
+      .filterSubscriptions(1, {
+        Mobile_no: client.phone_number,
+        program_id: 'web',
+        paginate: 10,
+      })
+      .subscribe((res) => {
+        this.filter = this.paymentWeb= res.data.data;
+      });
+    }
+  }
+  paymentMobile: any[] = [];
+  loadPaymentMobile(client: any) {
+    if (this.paymentMobile.length) {
+      this.filter = this.paymentMobile;
+    } else {
+      this._SubscriptionsService
+      .filterSubscriptions(1, {
+        Mobile_no: client.phone_number,
+        program_id: 'mobile',
+        paginate: 10,
+      })
+      .subscribe((res) => {
+        this.filter = this.paymentMobile= res.data.data;
+      });
+    }
+  }
+  clinics: any[] = [];
+  loadClinic(client: any) {
+    if (this.clinics.length) {
+      this.filter = this.clinics;
+    } else {
+      this._SubscriptionsService
+        .filterSubscriptions(1, {
+          Mobile_no: client.phone_number,
+          full_plan_name: 'Appointment',
+          paginate: 10,
+        })
+        .subscribe((res) => {
+          this.filter  = this.clinics= res.data.data;
+        });
+    }
+  }
+  targets: any[] = [];
+  loadTargets(client: any) {
+    if (this.targets.length) {
+      this.filter = this.targets;
+    } else {
+      this._AgentTargetService
+        .filterTargets(1, {
+          client_number: client.phone_number,
+          paginate: 10,
+        })
+        .subscribe((res) => {
+          this.filter  = this.targets= res.data.data;
+        });
+    }
+  }
+  analytics: any[] = [];
+  loadAnalytics(client: any) {
+    if (this.analytics.length) {
+      this.filter = this.analytics;
+    } else {
+      this._AnalysisService
+      .filterAnalytics(1, { mobile: client.phone_number, paginate: 10 })
+      .subscribe((res) => {
+        this.filter = this.analytics= res.data.data;
+      });
+    }
+  }
+  calls: any[] = [];
+  loadCalls(client: any) {
+    if (this.calls.length) {
+      this.filter = this.calls;
+    } else {
+      this._CallsService
+      .filterCalls(1, { customer_phone: client.phone_number, paginate: 10 })
+      .subscribe((res) => {
+        this.filter = this.calls= res.data.data;
+      });
+    }
+  }
+  dislikes: any[] = [];
+  loadDislikes(client: any) {
+    if (this.dislikes.length) {
+      this.filter = this.dislikes;
+    } else {
+      this._DislikeService
+      .filterDislikes(1, { mobile: client.phone_number, paginate: 10 })
+      .subscribe((res) => {
+        this.filter = this.dislikes = res.data.data;
+      });
+    }
+  }
+
+  resetAllModels(){
+    this.leads = [];
+    this.issues = [];
+    this.refunds = [];
+    this.paymentlink = [];
+    this.paymentWeb = [];
+    this.paymentMobile = [];
+    this.clinics = [];
+    this.targets = [];
+    this.analytics = [];
+    this.calls = [];
+    this.dislikes = [];
   }
 }
