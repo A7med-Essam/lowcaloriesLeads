@@ -174,18 +174,23 @@ export class NavbarComponent implements OnInit {
   }
   customerModels: any;
   system: any[] = [];
+  currentCustomerMobile:any;
+  currentModel:string = '';
   getCustomerModels(mobile: any) {
     if (mobile != '') {
       this.resetAllModels();
+      this.tabOption = 0;
       this._UsersService.getCustomerModels(mobile.value).subscribe((res) => {
         if (res.status == 1) {
+          this.currentCustomerMobile = mobile.value;
           this.phoneModal = false;
           this.customerModal = true;
           this.customerModels = res.data;
           mobile.value = null;
           this._SubscriptionsService
             .filterSubscriptions(1, {
-              Mobile_no: res.data.info.phone_number,
+              Mobile_no: this.currentCustomerMobile,
+              // Mobile_no: res.data.info.phone_number,
               sub_from: 'web',
               paginate: 10,
             })
@@ -194,7 +199,8 @@ export class NavbarComponent implements OnInit {
             });
 
           this._SubscriptionsService
-            .getSystemSybscriptions(res.data.info.phone_number)
+            .getSystemSybscriptions(this.currentCustomerMobile)
+            // .getSystemSybscriptions(res.data.info.phone_number)
             .subscribe((res) => {
               this.system = res;
             });
@@ -204,10 +210,11 @@ export class NavbarComponent implements OnInit {
   }
   filter: any;
   @ViewChild(TabView) tabView!: TabView;
-  getModelDetails(event: any, client: any = this.customerModels.info) {
+  getModelDetails(event: any, client: any = this.currentCustomerMobile) {
     this.filter = [];
     let model = this.tabView.tabs[event.index].header;
     model = model.split(' (')[0];
+    this.currentModel = model;
     switch (model) {
       case 'Clinic':
         this.loadClinic(client);
@@ -252,72 +259,72 @@ export class NavbarComponent implements OnInit {
     switch (model) {
       case 'Clinic':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
-          Mobile_no: client.phone_number,
+          Mobile_no: this.currentCustomerMobile,
           full_plan_name: 'Appointment',
         });
         break;
       case 'refunds':
         this.redirectWithFilter('refund', 'refund_filter', {
-          mobile: client.phone_number,
+          mobile: this.currentCustomerMobile,
         });
         break;
       case 'targets':
         this.redirectWithFilter('target', 'target_filter', {
-          client_number: client.phone_number,
+          client_number: this.currentCustomerMobile,
         });
         break;
       case 'leads':
         this.redirectWithFilter('leads', 'leads_filter', {
-          customer_mobile: client.phone_number,
+          customer_mobile: this.currentCustomerMobile,
         });
         break;
       case 'issues':
         this.redirectWithFilter('complaints/show', 'complaints_filter', {
-          c_mobile: client.phone_number,
+          c_mobile: this.currentCustomerMobile,
         });
         break;
       case 'dataAnalytics':
         this.redirectWithFilter('analysis', 'analysis_filter', {
-          mobile: client.phone_number,
+          mobile: this.currentCustomerMobile,
         });
         break;
       case 'calls':
         this.redirectWithFilter('calls', 'calls_filter', {
-          customer_phone: client.phone_number,
+          customer_phone: this.currentCustomerMobile,
         });
         break;
       case 'addresses':
         break;
       case 'webSubscription':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
-          Mobile_no: client.phone_number,
+          Mobile_no: this.currentCustomerMobile,
           program_id: 'web',
           // sub_from: 'web',
         });
         break;
       case 'mobileSubscription':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
-          Mobile_no: client.phone_number,
+          Mobile_no: this.currentCustomerMobile,
           program_id: 'mobile',
           // sub_from: 'mobile',
         });
         break;
       case 'paymentLink':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
-          Mobile_no: client.phone_number,
+          Mobile_no: this.currentCustomerMobile,
           // sub_from: 'payment link',
           program_id: '50',
         });
         break;
       case 'branches':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
-          Mobile_no: client.phone_number,
+          Mobile_no: this.currentCustomerMobile,
           program_id: 'mobile',
         });
         break;
       case 'Dislikes':
         this.redirectWithFilter('dislike', 'dislike_filter', {
-          mobile: client.phone_number,
+          mobile: this.currentCustomerMobile,
         });
         break;
     }
@@ -337,19 +344,24 @@ export class NavbarComponent implements OnInit {
   }
 
   // ================================================================LOAD MODELS====================================================================
-
+  loadingTable:boolean = false;
+  tabOption:number = 0;
   leads: any[] = [];
   loadLeads(client: any) {
     if (this.leads.length) {
       this.filter = this.leads;
     } else {
+      this.loadingTable = true;
       this._SurveyService
       .filterLeads(1, {
-        customer_mobile: client.phone_number,
+        customer_mobile: client,
         paginate: 10,
       })
       .subscribe((res) => {
-        this.filter = this.leads= res.data.data;
+        this.loadingTable = false;
+        if (this.currentModel == 'leads') {
+          this.filter = this.leads= res.data.data;
+        }
       });
     }
   }
@@ -358,10 +370,16 @@ export class NavbarComponent implements OnInit {
     if (this.issues.length) {
       this.filter = this.issues;
     } else {
+      this.loadingTable = true;
       this._ComplaintsService
-      .filterComplaints(1, { c_mobile: client.phone_number, paginate: 10 })
+      .filterComplaints(1, { c_mobile: client, paginate: 10 })
       .subscribe((res) => {
-        this.filter = this.issues= res.data.data;
+        this.loadingTable = false;
+        if (this.currentModel == 'issues') {
+
+          this.filter = this.issues= res.data.data;
+        }
+
       });
     }
   }
@@ -370,10 +388,16 @@ export class NavbarComponent implements OnInit {
     if (this.refunds.length) {
       this.filter = this.refunds;
     } else {
+      this.loadingTable = true;
       this._RefundService
-        .filterRefund(1, { mobile: client.phone_number, paginate: 10 })
+        .filterRefund(1, { mobile: client, paginate: 10 })
         .subscribe((res) => {
+          this.loadingTable = false;
+        if (this.currentModel == 'refunds') {
+
           this.filter= this.refunds = res.data.data;
+        }
+
         });
     }
   }
@@ -382,14 +406,20 @@ export class NavbarComponent implements OnInit {
     if (this.paymentlink.length) {
       this.filter = this.paymentlink;
     } else {
+      this.loadingTable = true;
       this._SubscriptionsService
       .filterSubscriptions(1, {
-        Mobile_no: client.phone_number,
+        Mobile_no: client,
         program_id: '50',
         paginate: 10,
       })
       .subscribe((res) => {
-        this.filter = this.paymentlink= res.data.data;
+        this.loadingTable = false;
+        if (this.currentModel == 'paymentLink') {
+
+          this.filter = this.paymentlink= res.data.data;
+        }
+
       });
     }
   }
@@ -398,14 +428,19 @@ export class NavbarComponent implements OnInit {
     if (this.paymentWeb.length) {
       this.filter = this.paymentWeb;
     } else {
+      this.loadingTable = true;
       this._SubscriptionsService
       .filterSubscriptions(1, {
-        Mobile_no: client.phone_number,
+        Mobile_no: client,
         program_id: 'web',
         paginate: 10,
       })
       .subscribe((res) => {
-        this.filter = this.paymentWeb= res.data.data;
+        this.loadingTable = false;
+        if (this.currentModel == 'webSubscription') {
+          this.filter = this.paymentWeb= res.data.data;
+        }
+
       });
     }
   }
@@ -414,14 +449,20 @@ export class NavbarComponent implements OnInit {
     if (this.paymentMobile.length) {
       this.filter = this.paymentMobile;
     } else {
+      this.loadingTable = true;
       this._SubscriptionsService
       .filterSubscriptions(1, {
-        Mobile_no: client.phone_number,
+        Mobile_no: client,
         program_id: 'mobile',
         paginate: 10,
       })
       .subscribe((res) => {
-        this.filter = this.paymentMobile= res.data.data;
+        this.loadingTable = false;
+        if (this.currentModel == 'mobileSubscription') {
+
+          this.filter = this.paymentMobile= res.data.data;
+        }
+
       });
     }
   }
@@ -430,14 +471,18 @@ export class NavbarComponent implements OnInit {
     if (this.clinics.length) {
       this.filter = this.clinics;
     } else {
+      this.loadingTable = true;
       this._SubscriptionsService
         .filterSubscriptions(1, {
-          Mobile_no: client.phone_number,
+          Mobile_no: client,
           full_plan_name: 'Appointment',
           paginate: 10,
         })
         .subscribe((res) => {
-          this.filter  = this.clinics= res.data.data;
+          this.loadingTable = false;
+          if (this.currentModel == 'Clinic') {
+            this.filter  = this.clinics= res.data.data;
+          }
         });
     }
   }
@@ -446,13 +491,19 @@ export class NavbarComponent implements OnInit {
     if (this.targets.length) {
       this.filter = this.targets;
     } else {
+      this.loadingTable = true;
       this._AgentTargetService
         .filterTargets(1, {
-          client_number: client.phone_number,
+          client_number: client,
           paginate: 10,
         })
         .subscribe((res) => {
+          this.loadingTable = false;
+        if (this.currentModel == 'targets') {
+
           this.filter  = this.targets= res.data.data;
+        }
+
         });
     }
   }
@@ -461,10 +512,16 @@ export class NavbarComponent implements OnInit {
     if (this.analytics.length) {
       this.filter = this.analytics;
     } else {
+      this.loadingTable = true;
       this._AnalysisService
-      .filterAnalytics(1, { mobile: client.phone_number, paginate: 10 })
+      .filterAnalytics(1, { mobile: client, paginate: 10 })
       .subscribe((res) => {
-        this.filter = this.analytics= res.data.data;
+        this.loadingTable = false;
+        if (this.currentModel == 'dataAnalytics') {
+
+          this.filter = this.analytics= res.data.data;
+        }
+
       });
     }
   }
@@ -473,10 +530,16 @@ export class NavbarComponent implements OnInit {
     if (this.calls.length) {
       this.filter = this.calls;
     } else {
+      this.loadingTable = true;
       this._CallsService
-      .filterCalls(1, { customer_phone: client.phone_number, paginate: 10 })
+      .filterCalls(1, { customer_phone: client, paginate: 10 })
       .subscribe((res) => {
-        this.filter = this.calls= res.data.data;
+        this.loadingTable = false;
+        if (this.currentModel == 'calls') {
+
+          this.filter = this.calls= res.data.data;
+        }
+
       });
     }
   }
@@ -485,10 +548,16 @@ export class NavbarComponent implements OnInit {
     if (this.dislikes.length) {
       this.filter = this.dislikes;
     } else {
+      this.loadingTable = true;
       this._DislikeService
-      .filterDislikes(1, { mobile: client.phone_number, paginate: 10 })
+      .filterDislikes(1, { mobile: client, paginate: 10 })
       .subscribe((res) => {
-        this.filter = this.dislikes = res.data.data;
+        this.loadingTable = false;
+        if (this.currentModel == 'Dislikes') {
+
+          this.filter = this.dislikes = res.data.data;
+        }
+
       });
     }
   }

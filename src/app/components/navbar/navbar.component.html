@@ -179,9 +179,11 @@
       </div>
     </ng-container> -->
 
-    <p-tabView (onChange)="getModelDetails($event)" [scrollable]="true">
+    <p-tabView (onChange)="getModelDetails($event)" [scrollable]="true" [(activeIndex)]="tabOption">
       <p-tabPanel header="webSubscription ({{customerModels?.webSubscription}})">
-        <p-table [value]="filter">
+        <p-table [value]="filter" *ngIf="customerModels?.webSubscription"
+        [loading]="loadingTable"
+        >
           <ng-template pTemplate="header">
             <tr>
               <th class="text-center">invoice_no</th>
@@ -203,13 +205,14 @@
             </tr>
           </ng-template>
         </p-table>
-        <button class="btn btn-success px-4 mt-3" (click)="viewTab('webSubscription')">
+        <button *ngIf="customerModels?.webSubscription" class="btn btn-success px-4 mt-3" (click)="viewTab('webSubscription')">
           <b>Web subscription in details</b>
         </button>
       </p-tabPanel>
       <ng-container *ngIf="customerModels?.paymentLink">
         <p-tabPanel header="paymentLink ({{customerModels?.paymentLink}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter"
+          [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">invoice_no</th>
@@ -238,7 +241,8 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.mobileSubscription">
         <p-tabPanel header="mobileSubscription ({{customerModels?.mobileSubscription}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter"
+          [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">invoice_no</th>
@@ -267,7 +271,7 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.dataAnalytics">
         <p-tabPanel header="dataAnalytics ({{customerModels?.dataAnalytics}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">Date</th>
@@ -292,7 +296,7 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.Clinic">
         <p-tabPanel header="Clinic ({{customerModels?.Clinic}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <!-- <th class="text-center">agent_name</th> -->
@@ -323,7 +327,7 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.Dislikes">
         <p-tabPanel header="Dislikes ({{customerModels?.Dislikes}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">name </th>
@@ -356,7 +360,7 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.issues">
         <p-tabPanel header="issues ({{customerModels?.issues}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">action </th>
@@ -391,7 +395,7 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.refunds">
         <p-tabPanel header="refunds ({{customerModels?.refunds}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">agent_name</th>
@@ -428,7 +432,7 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.calls">
         <p-tabPanel header="calls ({{customerModels?.calls}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">cid </th>
@@ -457,7 +461,7 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.leads">
         <p-tabPanel header="leads ({{customerModels?.leads}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">created_at </th>
@@ -486,7 +490,7 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.targets">
         <p-tabPanel header="targets ({{customerModels?.targets}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">agent_name </th>
@@ -521,28 +525,30 @@
           </button>
         </p-tabPanel>
       </ng-container>
-      <p-tabPanel header="systemSubscription ({{system.length}})">
-        <p-table [value]="filter">
-          <ng-template pTemplate="header">
-            <tr>
-              <th class="text-center">#</th>
-              <th class="text-center">CID</th>
-              <th class="text-center">Remaining Days</th>
-              <th class="text-center">Plan Title</th>
-              <th class="text-center">Status</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-system let-i="rowIndex">
-            <tr>
-              <td class="text-center">{{i+1}}</td>
-              <td class="text-center">{{system?.cid}}</td>
-              <td class="text-center">{{system?.remainingDays}}</td>
-              <td class="text-center">{{system?.planTitle}}</td>
-              <td class="text-center">{{system?.status}}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </p-tabPanel> 
+      <ng-container *ngIf="system.length">
+        <p-tabPanel header="systemSubscription ({{system.length}})">
+          <p-table [value]="filter">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">CID</th>
+                <th class="text-center">Remaining Days</th>
+                <th class="text-center">Plan Title</th>
+                <th class="text-center">Status</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-system let-i="rowIndex">
+              <tr>
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">{{system?.cid}}</td>
+                <td class="text-center">{{system?.remainingDays}}</td>
+                <td class="text-center">{{system?.planTitle}}</td>
+                <td class="text-center">{{system?.status}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel> 
+      </ng-container>
       <!-- <p-tabPanel *ngIf="customerModels?.branches"  header="branches ({{customerModels?.branches}})">
         <p-table [value]="filter">
           <ng-template pTemplate="header">
