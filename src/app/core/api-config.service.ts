@@ -47,21 +47,23 @@ export class ApiConfigService {
             this._MessageService.add({
               severity: 'warn',
               summary: 'Error',
-              // detail: 'No Data Found For This CID',
               detail: 'No Data Found',
             });
           }
-        },
-        (err: any) => {
-          // this._MessageService.add({
-          //   severity: 'error',
-          //   summary: 'Error',
-          //   detail: err.message,
-          // });
         }
       )
     );
   }
+
+  postReq22(url: string, body: any, params?: HttpParams): Observable<any> {
+    return this.http
+      .post(environment.BaseUrl_50 + url, body, { params: params })
+      .pipe(
+        retry(2),
+      );
+  }
+
+
 
   getReq3(url: string, params?: HttpParams): Observable<any> {
     return this.http.get(environment.BaseUrl4 + url, { params: params }).pipe(

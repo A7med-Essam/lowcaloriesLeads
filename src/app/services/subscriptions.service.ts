@@ -47,6 +47,14 @@ export class SubscriptionsService {
   getSystemSybscriptions(phone:any): Observable<any> {
     return this._ApiConfigService.getReq2(`Subscription/GetCid?phone=${phone}`);
   }
+
+  getSystemPickup(customerPhone:any): Observable<any> {
+    return this._ApiConfigService.postReq22(`Subscription/Customer/GetCustmer`,{
+      "customerID": 0,
+      "customerPhone": customerPhone,
+      "customerPlanID": 0
+    });
+  }
 }
 
 

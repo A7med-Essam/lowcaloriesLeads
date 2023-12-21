@@ -549,6 +549,30 @@
           </p-table>
         </p-tabPanel> 
       </ng-container>
+      <ng-container *ngIf="pickup.length">
+        <p-tabPanel header="systemPickup ({{pickup.length}})">
+          <p-table [value]="pickup">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Invoice Branch</th>
+                <th class="text-center">Remaining Meals</th>
+                <th class="text-center">Remaining Snacks</th>
+                <th class="text-center">Plan Name</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-pickup let-i="rowIndex">
+              <tr>
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">{{pickup?.invoiceBranchName}}</td>
+                <td class="text-center">{{pickup?.remainingMeals}}</td>
+                <td class="text-center">{{pickup?.remainingSnacks}}</td>
+                <td class="text-center">{{pickup?.planName}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel> 
+      </ng-container>
       <!-- <p-tabPanel *ngIf="customerModels?.branches"  header="branches ({{customerModels?.branches}})">
         <p-table [value]="filter">
           <ng-template pTemplate="header">

@@ -174,8 +174,9 @@ export class NavbarComponent implements OnInit {
   }
   customerModels: any;
   system: any[] = [];
-  currentCustomerMobile:any;
-  currentModel:string = '';
+  pickup: any[] = [];
+  currentCustomerMobile: any;
+  currentModel: string = '';
   getCustomerModels(mobile: any) {
     if (mobile != '') {
       this.resetAllModels();
@@ -190,19 +191,28 @@ export class NavbarComponent implements OnInit {
           this._SubscriptionsService
             .filterSubscriptions(1, {
               Mobile_no: this.currentCustomerMobile,
-              // Mobile_no: res.data.info.phone_number,
               sub_from: 'web',
               paginate: 10,
             })
             .subscribe((res) => {
-              this.filter =this.paymentWeb= res.data.data;
+              this.filter = this.paymentWeb = res.data.data;
             });
 
           this._SubscriptionsService
             .getSystemSybscriptions(this.currentCustomerMobile)
-            // .getSystemSybscriptions(res.data.info.phone_number)
             .subscribe((res) => {
               this.system = res;
+            });
+
+            this._SubscriptionsService
+            .getSystemPickup(this.currentCustomerMobile)
+            .subscribe((res) => {
+              if (res.data) {
+                this.pickup = res;
+              }
+              else{
+                this.pickup = [];
+              }
             });
         }
       });
@@ -251,6 +261,9 @@ export class NavbarComponent implements OnInit {
         break;
       case 'systemSubscription':
         this.filter = this.system;
+        break;
+      case 'systemPickup':
+        this.filter = this.pickup;
         break;
     }
   }
@@ -344,8 +357,8 @@ export class NavbarComponent implements OnInit {
   }
 
   // ================================================================LOAD MODELS====================================================================
-  loadingTable:boolean = false;
-  tabOption:number = 0;
+  loadingTable: boolean = false;
+  tabOption: number = 0;
   leads: any[] = [];
   loadLeads(client: any) {
     if (this.leads.length) {
@@ -353,16 +366,16 @@ export class NavbarComponent implements OnInit {
     } else {
       this.loadingTable = true;
       this._SurveyService
-      .filterLeads(1, {
-        customer_mobile: client,
-        paginate: 10,
-      })
-      .subscribe((res) => {
-        this.loadingTable = false;
-        if (this.currentModel == 'leads') {
-          this.filter = this.leads= res.data.data;
-        }
-      });
+        .filterLeads(1, {
+          customer_mobile: client,
+          paginate: 10,
+        })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'leads') {
+            this.filter = this.leads = res.data.data;
+          }
+        });
     }
   }
   issues: any[] = [];
@@ -372,15 +385,13 @@ export class NavbarComponent implements OnInit {
     } else {
       this.loadingTable = true;
       this._ComplaintsService
-      .filterComplaints(1, { c_mobile: client, paginate: 10 })
-      .subscribe((res) => {
-        this.loadingTable = false;
-        if (this.currentModel == 'issues') {
-
-          this.filter = this.issues= res.data.data;
-        }
-
-      });
+        .filterComplaints(1, { c_mobile: client, paginate: 10 })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'issues') {
+            this.filter = this.issues = res.data.data;
+          }
+        });
     }
   }
   refunds: any[] = [];
@@ -393,11 +404,9 @@ export class NavbarComponent implements OnInit {
         .filterRefund(1, { mobile: client, paginate: 10 })
         .subscribe((res) => {
           this.loadingTable = false;
-        if (this.currentModel == 'refunds') {
-
-          this.filter= this.refunds = res.data.data;
-        }
-
+          if (this.currentModel == 'refunds') {
+            this.filter = this.refunds = res.data.data;
+          }
         });
     }
   }
@@ -408,19 +417,17 @@ export class NavbarComponent implements OnInit {
     } else {
       this.loadingTable = true;
       this._SubscriptionsService
-      .filterSubscriptions(1, {
-        Mobile_no: client,
-        program_id: '50',
-        paginate: 10,
-      })
-      .subscribe((res) => {
-        this.loadingTable = false;
-        if (this.currentModel == 'paymentLink') {
-
-          this.filter = this.paymentlink= res.data.data;
-        }
-
-      });
+        .filterSubscriptions(1, {
+          Mobile_no: client,
+          program_id: '50',
+          paginate: 10,
+        })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'paymentLink') {
+            this.filter = this.paymentlink = res.data.data;
+          }
+        });
     }
   }
   paymentWeb: any[] = [];
@@ -430,18 +437,17 @@ export class NavbarComponent implements OnInit {
     } else {
       this.loadingTable = true;
       this._SubscriptionsService
-      .filterSubscriptions(1, {
-        Mobile_no: client,
-        program_id: 'web',
-        paginate: 10,
-      })
-      .subscribe((res) => {
-        this.loadingTable = false;
-        if (this.currentModel == 'webSubscription') {
-          this.filter = this.paymentWeb= res.data.data;
-        }
-
-      });
+        .filterSubscriptions(1, {
+          Mobile_no: client,
+          program_id: 'web',
+          paginate: 10,
+        })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'webSubscription') {
+            this.filter = this.paymentWeb = res.data.data;
+          }
+        });
     }
   }
   paymentMobile: any[] = [];
@@ -451,19 +457,17 @@ export class NavbarComponent implements OnInit {
     } else {
       this.loadingTable = true;
       this._SubscriptionsService
-      .filterSubscriptions(1, {
-        Mobile_no: client,
-        program_id: 'mobile',
-        paginate: 10,
-      })
-      .subscribe((res) => {
-        this.loadingTable = false;
-        if (this.currentModel == 'mobileSubscription') {
-
-          this.filter = this.paymentMobile= res.data.data;
-        }
-
-      });
+        .filterSubscriptions(1, {
+          Mobile_no: client,
+          program_id: 'mobile',
+          paginate: 10,
+        })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'mobileSubscription') {
+            this.filter = this.paymentMobile = res.data.data;
+          }
+        });
     }
   }
   clinics: any[] = [];
@@ -481,7 +485,7 @@ export class NavbarComponent implements OnInit {
         .subscribe((res) => {
           this.loadingTable = false;
           if (this.currentModel == 'Clinic') {
-            this.filter  = this.clinics= res.data.data;
+            this.filter = this.clinics = res.data.data;
           }
         });
     }
@@ -499,11 +503,9 @@ export class NavbarComponent implements OnInit {
         })
         .subscribe((res) => {
           this.loadingTable = false;
-        if (this.currentModel == 'targets') {
-
-          this.filter  = this.targets= res.data.data;
-        }
-
+          if (this.currentModel == 'targets') {
+            this.filter = this.targets = res.data.data;
+          }
         });
     }
   }
@@ -514,15 +516,13 @@ export class NavbarComponent implements OnInit {
     } else {
       this.loadingTable = true;
       this._AnalysisService
-      .filterAnalytics(1, { mobile: client, paginate: 10 })
-      .subscribe((res) => {
-        this.loadingTable = false;
-        if (this.currentModel == 'dataAnalytics') {
-
-          this.filter = this.analytics= res.data.data;
-        }
-
-      });
+        .filterAnalytics(1, { mobile: client, paginate: 10 })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'dataAnalytics') {
+            this.filter = this.analytics = res.data.data;
+          }
+        });
     }
   }
   calls: any[] = [];
@@ -532,15 +532,13 @@ export class NavbarComponent implements OnInit {
     } else {
       this.loadingTable = true;
       this._CallsService
-      .filterCalls(1, { customer_phone: client, paginate: 10 })
-      .subscribe((res) => {
-        this.loadingTable = false;
-        if (this.currentModel == 'calls') {
-
-          this.filter = this.calls= res.data.data;
-        }
-
-      });
+        .filterCalls(1, { customer_phone: client, paginate: 10 })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'calls') {
+            this.filter = this.calls = res.data.data;
+          }
+        });
     }
   }
   dislikes: any[] = [];
@@ -550,19 +548,17 @@ export class NavbarComponent implements OnInit {
     } else {
       this.loadingTable = true;
       this._DislikeService
-      .filterDislikes(1, { mobile: client, paginate: 10 })
-      .subscribe((res) => {
-        this.loadingTable = false;
-        if (this.currentModel == 'Dislikes') {
-
-          this.filter = this.dislikes = res.data.data;
-        }
-
-      });
+        .filterDislikes(1, { mobile: client, paginate: 10 })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'Dislikes') {
+            this.filter = this.dislikes = res.data.data;
+          }
+        });
     }
   }
 
-  resetAllModels(){
+  resetAllModels() {
     this.leads = [];
     this.issues = [];
     this.refunds = [];
