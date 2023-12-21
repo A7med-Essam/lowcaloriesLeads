@@ -10,7 +10,8 @@
         <ng-template pTemplate="header">
             <tr>
                 <th class="text-center">Name</th>
-                <!-- <th class="text-center">Link</th> -->
+                <th class="text-center">url name</th>
+                <th class="text-center">menu</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Actions</th>
             </tr>
@@ -18,9 +19,9 @@
         <ng-template pTemplate="body" let-offer>
             <tr>
                 <td class="text-center">{{offer.name}}</td>
-                <!-- <td class="text-center">
-                    <a href="{{offer.link}}" target="_blank">{{offer.link}}</a>
-                </td> -->
+                <td class="text-center">{{offer.url_name}}</td>
+                <td class="text-center">{{offer.menu}}</td>
+              
                 <td class="text-center">
                     <p-tag [severity]="offer.status =='active'? 'success':'danger'" [value]="offer.status"></p-tag>
                 </td>

@@ -168,6 +168,14 @@
                 <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('name')?.hasError('required')">This field is required.</small>
             </div>
+            <div class="col-xl-3 col-md-6 col-12 my-3">
+                <label for="">Url Name</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='url_name' />
+            </div>
+            <div class="col-xl-3 col-md-6 col-12 my-3">
+                <label for="">Menu</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='menu' />
+            </div>
             <hr>
             <div class="col-12 my-1">
                 <label for="">Note</label>

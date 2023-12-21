@@ -97,6 +97,8 @@ export class UpdateOfferComponent implements OnInit, OnDestroy {
       // status: data.status,
       plan_price: data.plan_price,
       notes: data.notes,
+      url_name: data.url_name,
+      menu: data.menu,
     });
     this.handleProgramTypeChange(type);
     this.handleProgramIdChange(
@@ -156,6 +158,8 @@ export class UpdateOfferComponent implements OnInit, OnDestroy {
       notes: new FormControl(null, [Validators.required]),
       name: new FormControl(null, [Validators.required]),
       offer_id: new FormControl(null, [Validators.required]),
+      url_name: new FormControl(null),
+      menu: new FormControl(null),
     });
   }
 

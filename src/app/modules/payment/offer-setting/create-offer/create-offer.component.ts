@@ -78,6 +78,8 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
       plan_price: new FormControl(null, [Validators.required]),
       notes: new FormControl(null, [Validators.required]),
       name: new FormControl(null, [Validators.required]),
+      url_name: new FormControl(null),
+      menu: new FormControl(null),
     });
     this.valueChanges()
   }
