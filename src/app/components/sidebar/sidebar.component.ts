@@ -51,7 +51,7 @@ export class SidebarComponent implements OnInit {
     if (data != null) {
       this.user = data;
       this.isLogin = true;
-      this.isSuperAdmin = data.role_name === 'super_admin';
+      this.isSuperAdmin = data?.role_name === 'super_admin';
       this.getPermission();
     } else {
       this.isLogin = false;

@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._AuthService.currentUser
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data: any) => {
-        this.isSuperAdmin = data.role_name === 'super_admin';
+        this.isSuperAdmin = data?.role_name === 'super_admin';
         if (this.isSuperAdmin) {
           this.getAgents();
           this.getLabels();

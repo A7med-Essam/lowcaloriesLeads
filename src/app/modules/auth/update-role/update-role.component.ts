@@ -47,8 +47,8 @@ export class UpdateRoleComponent implements OnInit, OnDestroy {
           this.role = res;
           this.getPermissionRoles();
           this.updateForm.patchValue({
-            role_id: this.role.id,
-            role_name: this.role.name,
+            role_id: this.role?.id,
+            role_name: this.role?.name,
           });
         }
       },
@@ -76,8 +76,8 @@ export class UpdateRoleComponent implements OnInit, OnDestroy {
   updateRole(form: FormGroup) {
     if (form.valid) {
       this.updateForm.patchValue({
-        display_name:form.value.role_name.toLowerCase().split(' ').map((word:string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        role_name: form.value.role_name.replace(/\s/g, '_')
+        display_name:form.value?.role_name.toLowerCase().split(' ').map((word:string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        role_name: form.value?.role_name.replace(/\s/g, '_')
       });
       this._UsersService.updateRole(form.value).subscribe((res) => {
         if (res.status == 1) {

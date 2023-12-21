@@ -30,7 +30,7 @@ export class ShowRefundComponent implements OnInit, OnDestroy {
     private _MessageService: MessageService,
     private _LocalService:LocalService
   ) {
-    this.role = this._GuardService.getUser().role_name;
+    this.role = this._GuardService.getUser()?.role_name;
   }
 
   printPermission: boolean = false;

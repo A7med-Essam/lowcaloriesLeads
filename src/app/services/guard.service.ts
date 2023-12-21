@@ -24,6 +24,6 @@ export class GuardService {
   }
 
   isSuperAdmin(): boolean {
-    return this.getUser().role_name === 'super_admin';
+    return this.getUser()?.role_name === 'super_admin';
   }
 }

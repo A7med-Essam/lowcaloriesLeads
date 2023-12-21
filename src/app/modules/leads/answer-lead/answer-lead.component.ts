@@ -29,7 +29,7 @@ export class AnswerLeadComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data) => {
         if (data != null) {
-          data.role_name == 'super_admin'
+          data?.role_name == 'super_admin'
             ? (this.isSuperAdmin = true)
             : (this.isSuperAdmin = false);
         } else {

@@ -43,7 +43,7 @@ export class CreateleadComponent implements OnInit, OnDestroy {
   }
 
   checkAgent(){
-    if (this._GuardService.getUser().role_name.toLowerCase() == 'agent') {
+    if (this._GuardService.getUser()?.role_name.toLowerCase() == 'agent') {
       this.createForm.get('user_ids')?.clearValidators();
       this.createForm.get('user_ids')?.disable();
       this.createForm.patchValue({

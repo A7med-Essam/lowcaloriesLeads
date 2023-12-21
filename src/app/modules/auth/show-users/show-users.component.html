@@ -43,7 +43,7 @@
           <p-tag *ngIf="user.status != 'Online'" severity="danger" [value]="user.status"></p-tag>
         </td>
         <td>
-          <div *ngIf="user.role_name != 'super_admin'">
+          <div *ngIf="user?.role_name != 'super_admin'">
             <button pButton type="button" icon="pi pi-eye" (click)="showRow(user.permissions)"
               class="m-1 p-button-sm"></button>
             <button pButton type="button" icon="pi pi-plus" (click)="getCurrentAgent(user)"

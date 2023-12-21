@@ -28,7 +28,7 @@ export class ShowDislikeComponent implements OnInit, OnDestroy {
     private _LocalService:LocalService
   ) {
     this.userId = _GuardService.getUser().id;
-    this.role = _GuardService.getUser().role_name;
+    this.role = _GuardService.getUser()?.role_name;
   }
 
   printPermission: boolean = false;
