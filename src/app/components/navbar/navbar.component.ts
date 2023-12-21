@@ -48,18 +48,18 @@ export class NavbarComponent implements OnInit {
     this._AuthService.currentUser.subscribe((data) => {
       if (data != null) {
         this.getNotifications();
-        this.getPermission();
+        // this.getPermission();
       } else {
         this.isLogin = false;
       }
     });
   }
 
-  searchPermission: boolean = false;
-  getPermission() {
-    this.searchPermission =
-      this._GuardService.getPermissionStatus('search_application');
-  }
+  searchPermission: boolean = true;
+  // getPermission() {
+  //   this.searchPermission =
+  //     this._GuardService.getPermissionStatus('search_application');
+  // }
 
   isCollapsed = true;
 
