@@ -549,8 +549,8 @@
           </p-table>
         </p-tabPanel> 
       </ng-container>
-      <ng-container *ngIf="pickup.length">
-        <p-tabPanel header="systemPickup ({{pickup.length}})">
+      <ng-container *ngIf="pickup?.length">
+        <p-tabPanel header="systemPickup ({{pickup?.length}})">
           <p-table [value]="pickup">
             <ng-template pTemplate="header">
               <tr>

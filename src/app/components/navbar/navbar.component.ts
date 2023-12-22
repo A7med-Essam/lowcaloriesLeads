@@ -207,7 +207,7 @@ export class NavbarComponent implements OnInit {
             this._SubscriptionsService
             .getSystemPickup(this.currentCustomerMobile)
             .subscribe((res) => {
-              if (res.data) {
+              if (res) {
                 this.pickup = res.data.customerPlan;
               }
               else{
