@@ -1,7 +1,14 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="m-3">
-        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel"
-            (click)="export()"></p-button>
+
+        <p-button  [disabled]="!exportPermission" class="mx-1" icon="pi pi-file"
+        label="Export current page" (click)="export2()"></p-button>
+
+        <p-button *ngIf="allFilteredSubscriptions.length && !specificRows.length" [disabled]="!exportPermission" class="mx-1" icon="pi pi-file"
+            label="Export by filter" (click)="export()"></p-button>
+
+        <p-button *ngIf="specificRows.length" [disabled]="!exportPermission" class="mx-1" icon="pi pi-file"
+            label="Export by specific rows" (click)="export()"></p-button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
     </div>
@@ -10,7 +17,7 @@
 <div class="card">
     <p-table [value]="subscriptions" [paginator]="true" [rows]="PaginationInfo?.per_page"
         [totalRecords]="PaginationInfo?.total" [lazy]="true" (onLazyLoad)="sort($event)" (onPage)="paginate($event)"
-        [showCurrentPageReport]="true" responsiveLayout="scroll" 
+        [showCurrentPageReport]="true" responsiveLayout="scroll"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="caption">
             <h5 class="mb-4">Table Filters</h5>
@@ -61,8 +68,9 @@
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
                         <label for="">Agent</label>
-                        <p-dropdown [options]="agents" optionLabel="name" optionValue="agent_id" formControlName='agent_id'
-                            appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
+                        <p-dropdown [options]="agents" optionLabel="name" optionValue="agent_id"
+                            formControlName='agent_id' appendTo="body" styleClass="w-100" placeholder="Select Agent"
+                            [filter]="true">
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
@@ -93,14 +101,16 @@
 
                     <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
                         <label for="">Discount</label>
-                        <p-dropdown [options]="getUniquePercentages(this.giftCodes)" placeholder="Select Discount Code" [filter]="true"
-                         optionGroupLabel="label" optionGroupChildren="items" [group]="true" formControlName='discount'>
+                        <p-dropdown [options]="getUniquePercentages(this.giftCodes)" placeholder="Select Discount Code"
+                            [filter]="true" optionGroupLabel="label" optionGroupChildren="items" [group]="true"
+                            formControlName='discount'>
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
                         <label for="">GiftCode</label>
-                        <p-dropdown [options]="giftCodes" placeholder="Select a GiftCode" optionLabel="code" [filter]="true"
-                         optionGroupLabel="label" optionGroupChildren="items" [group]="true" formControlName='code'>
+                        <p-dropdown [options]="giftCodes" placeholder="Select a GiftCode" optionLabel="code"
+                            [filter]="true" optionGroupLabel="label" optionGroupChildren="items" [group]="true"
+                            formControlName='code'>
                         </p-dropdown>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
@@ -160,9 +170,8 @@
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
                         class="m-1 p-button-sm"></button>
-                    <button *ngIf="!sub.cids"
-                     [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdateModal(sub)"
-                        class="m-1 p-button-sm p-button-warning"></button>
+                    <button *ngIf="!sub.cids" [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil"
+                        (click)="displayUpdateModal(sub)" class="m-1 p-button-sm p-button-warning"></button>
                     <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
                         [disabled]="!printPermission" (click)="print(sub)"></button>
                 </td>
@@ -253,8 +262,8 @@
         <div class="row">
             <div class="col-12 my-2">
                 <label for="">CID</label>
-                <input type="text" pInputText ngClass="w-100" #CID_UPDATE_INPUT 
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
+                <input type="text" pInputText ngClass="w-100" #CID_UPDATE_INPUT
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
             </div>
         </div>
     </div>

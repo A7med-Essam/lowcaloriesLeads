@@ -26,6 +26,11 @@ export class SubscriptionsService {
     return this._ApiConfigService.postReq3(`getSubscriptions?page=${page}`, filter);
   }
 
+  filterSubscriptionsWithoutPagination(page: number,filter:any): Observable<any>{
+    filter.withoutPagination = true;
+    return this._ApiConfigService.postReq3(`getSubscriptions`, filter);
+  }
+
   exportAll(): Observable<any> {
     return this._ApiConfigService.postReq3(`SubscriptionsExport`, '');
   }

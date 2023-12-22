@@ -317,7 +317,14 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
       });
+
+      this._SubscriptionsService
+      .filterSubscriptionsWithoutPagination(1, form.value)
+      .subscribe((res) => {
+        this.allFilteredSubscriptions = res.data;
+      });
   }
+  allFilteredSubscriptions :any[] = [];
 
   getOldFilters(page: number) {
     this._SubscriptionsService
@@ -325,6 +332,12 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
+      });
+
+      this._SubscriptionsService
+      .filterSubscriptionsWithoutPagination(1, this.appliedFilters)
+      .subscribe((res) => {
+        this.allFilteredSubscriptions = res.data;
       });
   }
 
@@ -475,9 +488,22 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       // }
 
       else {
-        const ids = this.subscriptions.map((obj: any) => obj.id);
+        const ids = this.allFilteredSubscriptions.map((obj: any) => obj.id);
         exportObservable = this._SubscriptionsService.exportByIds(ids);
       } 
+      exportObservable.subscribe({
+        next: (res) => {
+          this.handleExportSuccess(res.data);
+        },
+      });
+    }
+  }
+
+  export2() {
+    if (this.exportPermission) {
+      let exportObservable;
+      const ids = this.subscriptions.map((obj: any) => obj.id);
+      exportObservable = this._SubscriptionsService.exportByIds(ids);
       exportObservable.subscribe({
         next: (res) => {
           this.handleExportSuccess(res.data);
