@@ -53,6 +53,12 @@ export class SubscriptionsService {
       "phone_number": customerPhone,
     });
   }
+
+  getCustomerCHSubscriptions(customerPhone:any): Observable<any> {
+    return this._ApiConfigService.postReq333(`getCustomerCHSubscriptions`,{
+      "phone_number": customerPhone,
+    });
+  }
 }
 
 

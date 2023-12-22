@@ -175,6 +175,7 @@ export class NavbarComponent implements OnInit {
   customerModels: any;
   system: any[] = [];
   pickup: any[] = [];
+  CHSubscriptions: any;
   currentCustomerMobile: any;
   currentModel: string = '';
   getCustomerModels(mobile: any) {
@@ -204,15 +205,20 @@ export class NavbarComponent implements OnInit {
               this.system = res;
             });
 
-            this._SubscriptionsService
+          this._SubscriptionsService
             .getSystemPickup(this.currentCustomerMobile)
             .subscribe((res) => {
               if (res) {
                 this.pickup = res.data.customerPlan;
-              }
-              else{
+              } else {
                 this.pickup = [];
               }
+            });
+
+          this._SubscriptionsService
+            .getCustomerCHSubscriptions(this.currentCustomerMobile)
+            .subscribe((res) => {
+              this.CHSubscriptions = res.data;
             });
         }
       });
@@ -264,6 +270,9 @@ export class NavbarComponent implements OnInit {
         break;
       case 'systemPickup':
         this.filter = this.pickup;
+        break;
+      case 'CHSubscriptions':
+        this.filter = this.CHSubscriptions;
         break;
     }
   }
@@ -570,5 +579,13 @@ export class NavbarComponent implements OnInit {
     this.analytics = [];
     this.calls = [];
     this.dislikes = [];
+    this.system = [];
+    this.pickup = [];
+    this.CHSubscriptions = null;
   }
+
+  // ===============================================
+  showCustomerAdress : boolean  = false;
+  showCustomerPhones : boolean  = false;
+  showCustomerSub : boolean  = false;
 }
