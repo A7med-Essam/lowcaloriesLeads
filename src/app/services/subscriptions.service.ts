@@ -64,6 +64,11 @@ export class SubscriptionsService {
       "phone_number": customerPhone,
     });
   }
+
+    // ================================UPLOAD==========================================
+    uploadCustomerStatics(file:any): Observable<any> {
+      return this._ApiConfigService.postReq3(`getCustomerStatics`,file);
+    }
 }
 
 

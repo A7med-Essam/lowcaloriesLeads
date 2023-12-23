@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { TabView } from 'primeng/tabview';
 import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { AnalysisService } from 'src/app/services/analysis.service';
@@ -37,7 +38,8 @@ export class NavbarComponent implements OnInit {
     private _UsersService: UsersService,
     private _LocalService: LocalService,
     private _AnalysisService: AnalysisService,
-    private _SubscriptionsService: SubscriptionsService
+    private _SubscriptionsService: SubscriptionsService,
+    private _MessageService:MessageService
   ) {}
 
   notificationModal: boolean = false;
@@ -55,11 +57,14 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  uploadPermission: boolean = true;
   searchPermission: boolean = true;
-  // getPermission() {
-  //   this.searchPermission =
-  //     this._GuardService.getPermissionStatus('search_application');
-  // }
+  getPermission() {
+    // this.searchPermission =
+    //   this._GuardService.getPermissionStatus('search_application');
+    this.uploadPermission =
+      this._GuardService.getPermissionStatus('uploadPermission');
+  }
 
   isCollapsed = true;
 
@@ -588,4 +593,66 @@ export class NavbarComponent implements OnInit {
   showCustomerAdress : boolean  = false;
   showCustomerPhones : boolean  = false;
   showCustomerSub : boolean  = false;
+
+  // ===========================================================================UPLOAD==================================================================
+  isLoading: boolean = false;
+  uploadModal: boolean = false;
+  // getSample() {
+  //   if (this.uploadPermission) {
+  //     this._SubscriptionsService.downloadSampleCustomerStatics().subscribe((res) => {
+  //       const link = document.createElement('a');
+  //       link.target = '_blank';
+  //       link.href = res.data;
+  //       link.click();
+  //     });
+  //   }
+  // }
+
+  getFormData(object: any) {
+    const formData = new FormData();
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
+    return formData;
+  }
+
+
+  onFileSelected(event: any) {
+    if (this.uploadPermission) {
+      const file: File = event.target.files[0];
+      if (file) {
+        this.isLoading = true;
+        let f: File = this.getFormData({ file: file }) as any;
+        this._SubscriptionsService.uploadCustomerStatics(f).subscribe({
+          next: (res) => {
+            this.uploadModal = false;
+            this.isLoading = false;
+            this.handleUploadSuccess(res.data)
+          },
+          error: (err) => {
+            this.uploadModal = false;
+            this.isLoading = false;
+          }
+        });
+        this.uploadModal = false;
+      }
+    }
+  }
+
+  displayUploadModal() {
+    if (this.uploadPermission) {
+      this.uploadModal = true;
+    }
+  }
+
+  private handleUploadSuccess(data: any) {
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Upload File',
+      detail: 'File Uploaded Successfully',
+    });
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.download = "";
+    link.href = data;
+    link.click();
+  }
 }

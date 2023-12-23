@@ -72,9 +72,9 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="btn nav-link">
-          <i class="far fa-user"></i>
-          <span class="link-text">Profile</span>
+        <a class="btn nav-link" (click)="displayUploadModal()">
+          <i class="fas fa-upload"></i>
+          <span class="link-text">Upload</span>
         </a>
       </li>
       <li class="nav-item">
@@ -761,3 +761,26 @@
     </div>
   </div>
 </p-dialog>
+
+<p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
+    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper mx-2">
+            <a class="btn btn-primary" target="_blank" download href="https://api.lowcalories.ae/samples/mobiles.csv">Download Sample</a>
+        </div>
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary">Upload a file</button>
+            <input type="file" name="myfile" (change)="onFileSelected($event)" />
+        </div>
+    </ng-template>
+</p-dialog>
+
+<div class="loader-container" *ngIf="isLoading">
+  <div class="i-loader-inf-horizontal-container">
+    <div class="i-loader-inf-horizontal"></div>
+    <div class="pt-8px">
+      <span>Processing data</span>
+    </div>
+  </div>
+</div>
