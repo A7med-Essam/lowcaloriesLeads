@@ -41,6 +41,11 @@ export class ComplaintsService {
     return this._ApiConfigService.postReq3(`updateIssueStatus`, data);
   }
 
+  updateIssue(data:any): Observable<{status:number,data:any,message:string}> {
+    return this._ApiConfigService.postReq3(`updateIssueStatus`, data);
+  }
+  
+
   getSample(): Observable<any>{
     return this._ApiConfigService.postReq3(`issueSample` , '');
   }

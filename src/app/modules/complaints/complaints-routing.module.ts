@@ -4,6 +4,7 @@ import { PermissionGuard } from 'src/app/core/permission.guard';
 import { ComplaintsDetailsComponent } from './complaints-details/complaints-details.component';
 import { CreateComplaintsComponent } from './create-complaints/create-complaints.component';
 import { ShowComplaintsComponent } from './show-complaints/show-complaints.component';
+import { UpdateComplaintsComponent } from './update-complaints/update-complaints.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'create', pathMatch: 'full' },
@@ -13,6 +14,14 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       permission: ['create_complaints'],
+    },
+  },
+  {
+    path: 'update',
+    component: UpdateComplaintsComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['fullupdate_complaints'],
     },
   },
   {

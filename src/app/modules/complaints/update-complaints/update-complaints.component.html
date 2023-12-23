@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Update Complaint</h2>
+    </div>
+    <hr>
+    <form [formGroup]="updateForm" (ngSubmit)='update(updateForm)'>
+        <div class="row mx-0">
+            <!-- <div class="col-md-6 col-12 my-3">
+                <label for="">Client Name</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='c_name'/>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('c_name')?.touched &&
+                updateForm.get('c_name')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Client Mobile</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='c_mobile' maxlength="10"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('c_mobile')?.touched &&
+                updateForm.get('c_mobile')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('c_mobile')?.touched &&
+                updateForm.get('c_mobile')?.hasError('pattern')">Length must be 10</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Client CID</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='cid'/>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('cid')?.touched &&
+                updateForm.get('cid')?.hasError('required')">This field is required.</small>
+            </div> -->
+            <div class="col-md-6 col-12 my-3">
+                <label for="">issue_details</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='issue_details'/>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('issue_details')?.touched &&
+                updateForm.get('issue_details')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Action</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='action'/>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('action')?.touched &&
+                updateForm.get('action')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Branches</label>
+                <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='branch' appendTo="body"
+                    styleClass="w-100" placeholder="Select Branch" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('branch')?.touched &&
+                updateForm.get('branch')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Status</label>
+                <p-dropdown [options]="status" formControlName='status' appendTo="body"
+                    styleClass="w-100" placeholder="Select Status" [filter]="true">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('status')?.touched &&
+                updateForm.get('status')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">Update Complaint</button>
+            </div>
+        </div>
+    </form>
+</div>

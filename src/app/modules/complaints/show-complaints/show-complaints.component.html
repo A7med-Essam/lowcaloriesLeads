@@ -59,11 +59,14 @@
                 <td class="text-center" *ngIf="columns[9].status">{{complaint.issue_details}}</td>
                 <td class="text-center" *ngIf="columns[10].status">{{complaint.status}}</td>
                 <td class="text-center">
+                    <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-sync" (click)="displayUpdateModal(complaint)"
+                    class="m-1 p-button-sm p-button-help"></button>
+                    
                     <button  [disabled]="!uploadFilesPermission" pButton type="button" icon="pi pi-upload" class="m-1 p-button-sm p-button-success"
                     (click)="displayUploadFilesModal(complaint.id)"></button>
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(complaint)"
                         class="m-1 p-button-sm"></button>
-                    <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdateModal(complaint)"
+                    <button  [disabled]="!fullUpdatePermission" pButton type="button" icon="pi pi-pencil" (click)="fullUpdateRow(complaint)"
                         class="m-1 p-button-sm p-button-warning"></button>
                     <button  [disabled]="!printPermission" pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(complaint)"></button>
                 </td>

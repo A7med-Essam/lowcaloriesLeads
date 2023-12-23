@@ -27,7 +27,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     private _ComplaintsService: ComplaintsService,
     private _GuardService: GuardService,
     private _MessageService: MessageService,
-    private _LocalService:LocalService
+    private _LocalService: LocalService
   ) {}
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -41,6 +41,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
   downloadSamplePermission: boolean = false;
   uploadFilesPermission: boolean = false;
   updatePermission: boolean = false;
+  fullUpdatePermission: boolean = false;
 
   getPermission() {
     this.printPermission =
@@ -51,6 +52,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       this._GuardService.getPermissionStatus('create_complaints');
     this.updatePermission =
       this._GuardService.getPermissionStatus('update_complaints');
+    this.fullUpdatePermission = this._GuardService.getPermissionStatus(
+      'fullupdate_complaints'
+    );
     this.downloadSamplePermission = this._GuardService.getPermissionStatus(
       'downloadSample_complaints'
     );
@@ -62,6 +66,13 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
   displayUploadModal() {
     if (this.downloadSamplePermission) {
       this.uploadModal = true;
+    }
+  }
+
+  fullUpdateRow(row: any) {
+    if (this.fullUpdatePermission) {
+      this._ComplaintsService.complaint.next(row);
+      this._Router.navigate(['complaints/update']);
     }
   }
 
@@ -165,7 +176,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const filterTab = this._LocalService.getJsonValue('complaints_filter');
     if (filterTab) {
-      this._ComplaintsService.complaints_filter.next(filterTab)
+      this._ComplaintsService.complaints_filter.next(filterTab);
     }
     this._ComplaintsService.complaints_filter
       .pipe(takeUntil(this.unsubscribe$))

@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ImageModule } from 'primeng/image';
+import { UpdateComplaintsComponent } from './update-complaints/update-complaints.component';
 
 const APP_PRIMENG_MODULE = [
   DropdownModule,
@@ -30,6 +31,7 @@ const APP_PRIMENG_MODULE = [
     ShowComplaintsComponent,
     CreateComplaintsComponent,
     ComplaintsDetailsComponent,
+    UpdateComplaintsComponent,
   ],
   imports: [
     CommonModule,
