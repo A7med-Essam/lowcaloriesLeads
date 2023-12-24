@@ -69,6 +69,8 @@
                     <button  [disabled]="!fullUpdatePermission" pButton type="button" icon="pi pi-pencil" (click)="fullUpdateRow(complaint)"
                         class="m-1 p-button-sm p-button-warning"></button>
                     <button  [disabled]="!printPermission" pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(complaint)"></button>
+                    <button pButton type="button" icon="pi pi-trash" [disabled]="!deletePermission"
+                    (click)="confirm(complaint?.id)" class="m-1 p-button-danger p-button-sm"></button>
                 </td>
             </tr>
         </ng-template>
@@ -219,3 +221,6 @@
         </div>
     </form>
 </p-dialog>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

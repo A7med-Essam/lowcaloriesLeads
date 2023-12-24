@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ImageModule } from 'primeng/image';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { UpdateComplaintsComponent } from './update-complaints/update-complaints.component';
 
 const APP_PRIMENG_MODULE = [
@@ -23,7 +24,9 @@ const APP_PRIMENG_MODULE = [
   TableModule,
   DialogModule,
   CalendarModule,
-  CheckboxModule,ImageModule
+  CheckboxModule,
+  ImageModule,
+  ConfirmDialogModule
 ];
 
 @NgModule({

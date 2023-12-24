@@ -62,4 +62,8 @@ export class ComplaintsService {
     return this._ApiConfigService.postReq3(`uploadIssueFiles` , files);
   }
 
+  deleteIssue(issue_id:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`deleteIssue` , {issue_id});
+  }
+
 }

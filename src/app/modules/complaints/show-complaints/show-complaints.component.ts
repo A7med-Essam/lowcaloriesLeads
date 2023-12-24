@@ -8,7 +8,7 @@ import autoTable from 'jspdf-autotable';
 import { ComplaintsService } from 'src/app/services/complaints.service';
 import { Checkbox } from 'primeng/checkbox';
 import { GuardService } from 'src/app/services/guard.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -27,7 +27,8 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     private _ComplaintsService: ComplaintsService,
     private _GuardService: GuardService,
     private _MessageService: MessageService,
-    private _LocalService: LocalService
+    private _LocalService: LocalService,
+    private _ConfirmationService:ConfirmationService
   ) {}
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -42,6 +43,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
   uploadFilesPermission: boolean = false;
   updatePermission: boolean = false;
   fullUpdatePermission: boolean = false;
+  deletePermission: boolean = false;
 
   getPermission() {
     this.printPermission =
@@ -60,6 +62,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     );
     this.uploadFilesPermission = this._GuardService.getPermissionStatus(
       'uploadFiles_complaints'
+    );
+    this.deletePermission = this._GuardService.getPermissionStatus(
+      'delete_complaints'
     );
   }
 
@@ -664,5 +669,26 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         return 0;
       }
     });
+  }
+
+  // ===============================================================Delete======================================================================
+
+  deleteRow(id: number) {
+    if (this.deletePermission) {
+      this._ComplaintsService.deleteIssue(id).subscribe((res) => {
+        this.getComplaints();
+      });
+    }
+  }
+
+  confirm(id: any) {
+    if (this.deletePermission) {
+      this._ConfirmationService.confirm({
+        message: 'Are you sure that you want to perform this action?',
+        accept: () => {
+          this.deleteRow(id);
+        },
+      });
+    }
   }
 }
