@@ -54,6 +54,30 @@
                 <small class="text-danger ms-1" *ngIf="updateForm.get('status')?.touched &&
                 updateForm.get('status')?.hasError('required')">This field is required.</small>
             </div>
+            <div class="col-lg-6 col-12 my-3">
+                <label for="">feedback_type</label>
+                <p-dropdown [options]="feedback_type" formControlName='feedback_type'
+                    appendTo="body" styleClass="w-100" placeholder="Select feedback type">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('feedback_type')?.touched &&
+                updateForm.get('feedback_type')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-6 col-12 my-3">
+                <label for="">order_type</label>
+                <p-dropdown [options]="order_type" formControlName='order_type'
+                    appendTo="body" styleClass="w-100" placeholder="Select order type">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('order_type')?.touched &&
+                updateForm.get('order_type')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-6 col-12 my-3">
+                <label for="">issue_category</label>
+                <p-dropdown [options]="issue_category" formControlName='issue_category'
+                    appendTo="body" styleClass="w-100" placeholder="Select category">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="updateForm.get('issue_category')?.touched &&
+                updateForm.get('issue_category')?.hasError('required')">This field is required.</small>
+            </div>
             <div class="col-12 my-3">
                 <button class="btn btn-primary w-100">Update Complaint</button>
             </div>

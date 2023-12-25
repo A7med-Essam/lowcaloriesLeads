@@ -28,7 +28,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     private _GuardService: GuardService,
     private _MessageService: MessageService,
     private _LocalService: LocalService,
-    private _ConfirmationService:ConfirmationService
+    private _ConfirmationService: ConfirmationService
   ) {}
   private unsubscribe$ = new Subject<void>();
   ngOnDestroy(): void {
@@ -63,9 +63,8 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     this.uploadFilesPermission = this._GuardService.getPermissionStatus(
       'uploadFiles_complaints'
     );
-    this.deletePermission = this._GuardService.getPermissionStatus(
-      'delete_complaints'
-    );
+    this.deletePermission =
+      this._GuardService.getPermissionStatus('delete_complaints');
   }
 
   displayUploadModal() {
@@ -112,6 +111,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         'Branch',
         'Action',
         'issue_details',
+        'feedback_type',
+        'order_type',
+        'issue_category',
       ];
 
       let filteredArray = this.allComplaints.filter((item: any) =>
@@ -133,6 +135,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         obj.branch,
         obj.action,
         obj.issue_details,
+        obj.feedback_type,
+        obj.order_type,
+        obj.issue_category,
       ]);
 
       autoTable(doc, { startY: 70 });
@@ -249,6 +254,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       date: new FormControl(null),
       fromDate: new FormControl(null),
       toDate: new FormControl(null),
+      feedback_type: new FormControl(null),
+      order_type: new FormControl(null),
+      issue_category: new FormControl(null),
     });
   }
 
@@ -413,6 +421,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     { name: 'date', status: false },
     { name: 'issue_details', status: false },
     { name: 'status', status: false },
+    { name: 'feedback_type', status: false },
+    { name: 'order_type', status: false },
+    { name: 'issue_category', status: false },
   ];
 
   getFilterColumns() {
@@ -496,6 +507,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         { title: 'branch', dataKey: complaint.branch },
         { title: 'action', dataKey: complaint.action },
         { title: 'issue_details', dataKey: complaint.issue_details },
+        { title: 'feedback_type', dataKey: complaint?.feedback_type },
+        { title: 'order_type', dataKey: complaint?.order_type },
+        { title: 'issue_category', dataKey: complaint?.issue_category },
       ];
 
       // doc.text(140, 40, "Report");
@@ -691,4 +705,27 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+  // ===============================================================new columns======================================================================
+  feedback_type: any[] = [
+    'Call Center',
+    'In Store',
+    'Nutritionist',
+    'Social Media',
+    'Others',
+  ];
+  order_type: any[] = ['Dine In', 'Take Away', 'Subscription', 'Talabat'];
+  issue_category: any[] = [
+    'Food Quality',
+    'Service Issues',
+    'Cleanliness and Hygiene',
+    'Order Accuracy',
+    'Ambiance and Atmosphere',
+    'Billing and Pricing',
+    'Allergies and Dietary Restrictions',
+    'Communication Problems',
+    'Management and Staff Responsiveness',
+    'Online and Takeout Issues',
+    'Others',
+  ];
 }

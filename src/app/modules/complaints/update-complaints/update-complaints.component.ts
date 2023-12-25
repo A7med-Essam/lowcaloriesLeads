@@ -67,6 +67,9 @@ export class UpdateComplaintsComponent implements OnInit, OnDestroy {
       branch: new FormControl(null, [Validators.required]),
       reason: new FormControl('0'),
       status: new FormControl(null, [Validators.required]),
+      feedback_type: new FormControl(null, [Validators.required]),
+      order_type: new FormControl(null, [Validators.required]),
+      issue_category: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -77,6 +80,9 @@ export class UpdateComplaintsComponent implements OnInit, OnDestroy {
       action: this.currentRow.action,
       branch: this.currentRow.branch,
       status: this.currentRow.status,
+      feedback_type: this.currentRow?.feedback_type,
+      order_type: this.currentRow?.order_type,
+      issue_category: this.currentRow?.issue_category,
     });
   }
 
@@ -97,4 +103,26 @@ export class UpdateComplaintsComponent implements OnInit, OnDestroy {
       });
     }
   }
+      // ===============================================================new columns======================================================================
+      feedback_type: any[] = [
+        'Call Center',
+        'In Store',
+        'Nutritionist',
+        'Social Media',
+        'Others',
+      ];
+      order_type: any[] = ['Dine In', 'Take Away', 'Subscription', 'Talabat'];
+      issue_category: any[] = [
+        'Food Quality',
+        'Service Issues',
+        'Cleanliness and Hygiene',
+        'Order Accuracy',
+        'Ambiance and Atmosphere',
+        'Billing and Pricing',
+        'Allergies and Dietary Restrictions',
+        'Communication Problems',
+        'Management and Staff Responsiveness',
+        'Online and Takeout Issues',
+        'Others',
+      ];
 }

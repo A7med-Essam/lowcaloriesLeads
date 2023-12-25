@@ -39,6 +39,9 @@
                 <th class="text-center"*ngIf="columns[8].status" pSortableColumn="date">date <p-sortIcon field="date"></p-sortIcon></th>
                 <th class="text-center"*ngIf="columns[9].status" pSortableColumn="issue_details">issue_details <p-sortIcon field="issue_details"></p-sortIcon></th>
                 <th class="text-center"*ngIf="columns[10].status" pSortableColumn="status">status <p-sortIcon field="status"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[11].status" pSortableColumn="feedback_type">feedback_type <p-sortIcon field="feedback_type"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[12].status" pSortableColumn="order_type">order_type <p-sortIcon field="order_type"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[13].status" pSortableColumn="issue_category">issue_category <p-sortIcon field="issue_category"></p-sortIcon></th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -58,6 +61,9 @@
                 <td class="text-center" *ngIf="columns[8].status">{{complaint.date}}</td>
                 <td class="text-center" *ngIf="columns[9].status">{{complaint.issue_details}}</td>
                 <td class="text-center" *ngIf="columns[10].status">{{complaint.status}}</td>
+                <td class="text-center" *ngIf="columns[11].status">{{complaint.feedback_type}}</td>
+                <td class="text-center" *ngIf="columns[12].status">{{complaint.order_type}}</td>
+                <td class="text-center" *ngIf="columns[13].status">{{complaint.issue_category}}</td>
                 <td class="text-center">
                     <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-sync" (click)="displayUpdateModal(complaint)"
                     class="m-1 p-button-sm p-button-help"></button>
@@ -102,6 +108,24 @@
                     </p-dropdown>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
+                    <label for="">feedback_type</label>
+                    <p-dropdown [options]="feedback_type" formControlName='feedback_type'
+                        appendTo="body" styleClass="w-100" placeholder="Select feedback type">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">order_type</label>
+                    <p-dropdown [options]="order_type" formControlName='order_type'
+                        appendTo="body" styleClass="w-100" placeholder="Select order type">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
+                    <label for="">issue_category</label>
+                    <p-dropdown [options]="issue_category" formControlName='issue_category'
+                        appendTo="body" styleClass="w-100" placeholder="Select category">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-6 col-12 my-2">
                     <label for="">branch</label>
                     <p-dropdown [options]="branches" optionLabel="name" optionValue="name" formControlName='branch'
                         appendTo="body" styleClass="w-100" placeholder="Select Branch" [filter]="true">
@@ -113,7 +137,7 @@
                         placeholder="Select Status" [filter]="true">
                     </p-dropdown>
                 </div>
-                <div class="col-12 my-2">
+                <div class="col-lg-6 col-12 my-2">
                     <label for="range">Date Range</label>
                     <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
                         ngClass="w-100" appendTo="body">

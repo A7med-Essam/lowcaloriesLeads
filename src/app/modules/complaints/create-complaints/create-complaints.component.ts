@@ -55,6 +55,9 @@ export class CreateComplaintsComponent implements OnInit  {
       issue_details: new FormControl(null, [Validators.required]),
       action: new FormControl(null, [Validators.required]),
       status: new FormControl(null, [Validators.required]),
+      feedback_type: new FormControl(null, [Validators.required]),
+      order_type: new FormControl(null, [Validators.required]),
+      issue_category: new FormControl(null, [Validators.required]),
       agent_id: new FormControl(null),
       files: new FormControl(null),
     });
@@ -119,4 +122,26 @@ export class CreateComplaintsComponent implements OnInit  {
       readFiles();
     }
   }
+    // ===============================================================new columns======================================================================
+    feedback_type: any[] = [
+      'Call Center',
+      'In Store',
+      'Nutritionist',
+      'Social Media',
+      'Others',
+    ];
+    order_type: any[] = ['Dine In', 'Take Away', 'Subscription', 'Talabat'];
+    issue_category: any[] = [
+      'Food Quality',
+      'Service Issues',
+      'Cleanliness and Hygiene',
+      'Order Accuracy',
+      'Ambiance and Atmosphere',
+      'Billing and Pricing',
+      'Allergies and Dietary Restrictions',
+      'Communication Problems',
+      'Management and Staff Responsiveness',
+      'Online and Takeout Issues',
+      'Others',
+    ];
 }

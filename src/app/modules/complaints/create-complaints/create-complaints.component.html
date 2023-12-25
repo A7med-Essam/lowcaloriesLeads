@@ -54,6 +54,30 @@
                 <small class="text-danger ms-1" *ngIf="insertForm.get('status')?.touched &&
                 insertForm.get('status')?.hasError('required')">This field is required.</small>
             </div>
+            <div class="col-lg-6 col-12 my-3">
+                <label for="">feedback_type</label>
+                <p-dropdown [options]="feedback_type" formControlName='feedback_type'
+                    appendTo="body" styleClass="w-100" placeholder="Select feedback type">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('feedback_type')?.touched &&
+                insertForm.get('feedback_type')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-6 col-12 my-3">
+                <label for="">order_type</label>
+                <p-dropdown [options]="order_type" formControlName='order_type'
+                    appendTo="body" styleClass="w-100" placeholder="Select order type">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('order_type')?.touched &&
+                insertForm.get('order_type')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-lg-6 col-12 my-3">
+                <label for="">issue_category</label>
+                <p-dropdown [options]="issue_category" formControlName='issue_category'
+                    appendTo="body" styleClass="w-100" placeholder="Select category">
+                </p-dropdown>
+                <small class="text-danger ms-1" *ngIf="insertForm.get('issue_category')?.touched &&
+                insertForm.get('issue_category')?.hasError('required')">This field is required.</small>
+            </div>
             <div class="col-md-6 col-12 my-3">
                 <label for="">Upload Record/File/Video</label>
                 <button type="button" class="btn btn-primary w-100" style="padding: 12px 0px;" (click)="uploadFile()">Upload</button>
