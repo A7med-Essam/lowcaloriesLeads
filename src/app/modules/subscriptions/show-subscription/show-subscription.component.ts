@@ -318,8 +318,10 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         this.PaginationInfo = res.data;
       });
 
+      const deepClone = JSON.parse(JSON.stringify(form.value));
+      this.allFilteredSubscriptions = [];
       this._SubscriptionsService
-      .filterSubscriptionsWithoutPagination(1, form.value)
+      .filterSubscriptionsWithoutPagination(1, deepClone)
       .subscribe((res) => {
         this.allFilteredSubscriptions = res.data;
       });
@@ -334,8 +336,9 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         this.PaginationInfo = res.data;
       });
 
+      const deepClone = JSON.parse(JSON.stringify(this.appliedFilters));
       this._SubscriptionsService
-      .filterSubscriptionsWithoutPagination(1, this.appliedFilters)
+      .filterSubscriptionsWithoutPagination(1, deepClone)
       .subscribe((res) => {
         this.allFilteredSubscriptions = res.data;
       });
