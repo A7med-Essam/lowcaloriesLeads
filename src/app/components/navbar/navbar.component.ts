@@ -597,6 +597,27 @@ export class NavbarComponent implements OnInit {
   // ===========================================================================UPLOAD==================================================================
   isLoading: boolean = false;
   uploadModal: boolean = false;
+  detailsModal: boolean = false;
+
+  currentRow: any;
+  showRow(row: any) {
+    this.currentRow = this.removeObjectValues(row);
+    this.detailsModal = true;
+  }
+
+  removeObjectValues(obj: any) {
+    for (const key in obj) {
+      if (
+        typeof obj[key] === 'object' 
+        // && key != 'emirate' &&
+        // key != 'data_options'
+      ) {
+        delete obj[key];
+      }
+    }
+    return obj;
+  }
+
   // getSample() {
   //   if (this.uploadPermission) {
   //     this._SubscriptionsService.downloadSampleCustomerStatics().subscribe((res) => {

@@ -125,6 +125,7 @@
               <th class="text-center">created_at</th>
               <th class="text-center">Starting Day</th>
               <th class="text-center">Status</th>
+              <th class="text-center">Actions</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-sub>
@@ -138,6 +139,10 @@
               <td class="text-center">
                 <p-tag [severity]="getSeverity(sub.mode)" [value]="getMode(sub.mode)">
                 </p-tag>
+              </td>
+              <td class="text-center">
+                <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                  class="m-1 p-button-sm"></button>
               </td>
             </tr>
           </ng-template>
@@ -158,8 +163,9 @@
                 <th class="text-center">name</th>
                 <th class="text-center">created_at</th>
                 <th class="text-center">Starting Day</th>
-              <th class="text-center">Status</th>
-            </tr>
+                <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
+              </tr>
             </ng-template>
             <ng-template pTemplate="body" let-sub>
               <tr [pSelectableRow]="sub">
@@ -172,6 +178,10 @@
                 <td class="text-center">
                   <p-tag [severity]="getSeverity(sub.mode)" [value]="getMode(sub.mode)">
                   </p-tag>
+                </td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                    class="m-1 p-button-sm"></button>
                 </td>
               </tr>
             </ng-template>
@@ -192,8 +202,9 @@
                 <th class="text-center">name</th>
                 <th class="text-center">created_at</th>
                 <th class="text-center">Starting Day</th>
-              <th class="text-center">Status</th>
-            </tr>
+                <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
+              </tr>
             </ng-template>
             <ng-template pTemplate="body" let-sub>
               <tr [pSelectableRow]="sub">
@@ -206,6 +217,10 @@
                 <td class="text-center">
                   <p-tag [severity]="getSeverity(sub.mode)" [value]="getMode(sub.mode)">
                   </p-tag>
+                </td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                    class="m-1 p-button-sm"></button>
                 </td>
               </tr>
             </ng-template>
@@ -224,6 +239,7 @@
                 <th class="text-center">Agent</th>
                 <th class="text-center">Customer Mobile</th>
                 <th class="text-center">Customer Name</th>
+                <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-analysis>
@@ -232,6 +248,10 @@
                 <td class="text-center">{{analysis?.agent?.name}}</td>
                 <td class="text-center">{{analysis?.mobile}}</td>
                 <td class="text-center">{{analysis?.customer_name}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -252,6 +272,7 @@
                 <th class="text-center">name</th>
                 <th class="text-center">created_at</th>
                 <th class="text-center">Starting Day</th>
+                <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-sub>
@@ -263,6 +284,10 @@
                 <td class="text-center">{{sub.user?.first_name}}</td>
                 <td class="text-center">{{sub.created_at | date}}</td>
                 <td class="text-center">{{sub.delivery_starting_day}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -284,6 +309,7 @@
                 <th class="text-center">dislike_meals </th>
                 <th class="text-center">reasons </th>
                 <th class="text-center">created_at </th>
+                <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-dislike>
@@ -296,6 +322,10 @@
                 <td class="text-center">{{dislike.dislike_meals}}</td>
                 <td class="text-center">{{dislike.reasons}}</td>
                 <td class="text-center">{{dislike?.created_at | date}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(dislike)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -318,6 +348,7 @@
                 <th class="text-center">date </th>
                 <th class="text-center">issue_details </th>
                 <th class="text-center">status </th>
+                <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-complaint>
@@ -331,6 +362,10 @@
                 <td class="text-center">{{complaint?.date}}</td>
                 <td class="text-center">{{complaint?.issue_details}}</td>
                 <td class="text-center">{{complaint?.status}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(complaint)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -354,6 +389,7 @@
                 <!-- <th class="text-center">reason</th> -->
                 <th class="text-center">remaining_days</th>
                 <!-- <th class="text-center">subscription_plan</th> -->
+                <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-refund>
@@ -368,6 +404,10 @@
                 <!-- <td class="text-center">{{refund.reason}}</td> -->
                 <td class="text-center">{{refund.remaining_days}}</td>
                 <!-- <td class="text-center">{{refund.subscription_plan}}</td> -->
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(refund)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -387,6 +427,7 @@
                 <th class="text-center">customer name </th>
                 <th class="text-center">plan </th>
                 <th class="text-center">date </th>
+                <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-call>
@@ -397,6 +438,10 @@
                 <td class="text-center">{{call.customer_name}}</td>
                 <td class="text-center">{{call.plan}}</td>
                 <td class="text-center">{{call.date}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -416,6 +461,7 @@
                 <th class="text-center">platforms </th>
                 <th class="text-center">type </th>
                 <th class="text-center">Created By </th>
+                <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-lead>
@@ -426,6 +472,10 @@
                 <td class="text-center">{{lead?.platforms}}</td>
                 <td class="text-center">{{lead?.type}}</td>
                 <td class="text-center">{{lead?.user_created?.name}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(lead)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -449,6 +499,7 @@
                 <th class="text-center">invoice_number </th>
                 <th class="text-center">client_name </th>
                 <th class="text-center">amount_paid </th>
+                <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-agent>
@@ -463,6 +514,10 @@
                 <td class="text-center">{{agent?.invoice_number}}</td>
                 <td class="text-center">{{agent?.client_name}}</td>
                 <td class="text-center">{{agent?.amount_paid}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -637,8 +692,9 @@
                         customerAdress
                       </td>
                       <td>
-                        <button pButton type="button" icon="pi pi-eye"  
-                        (click)="showCustomerAdress = !showCustomerAdress" class="m-1 p-button-sm p-button-primary"></button>
+                        <button pButton type="button" icon="pi pi-eye"
+                          (click)="showCustomerAdress = !showCustomerAdress"
+                          class="m-1 p-button-sm p-button-primary"></button>
                       </td>
                     </tr>
 
@@ -647,8 +703,9 @@
                         customerPhones
                       </td>
                       <td>
-                        <button pButton type="button" icon="pi pi-eye"  
-                        (click)="showCustomerPhones = !showCustomerPhones" class="m-1 p-button-sm p-button-primary"></button>                      
+                        <button pButton type="button" icon="pi pi-eye"
+                          (click)="showCustomerPhones = !showCustomerPhones"
+                          class="m-1 p-button-sm p-button-primary"></button>
                       </td>
                     </tr>
 
@@ -657,8 +714,8 @@
                         subscriptions
                       </td>
                       <td>
-                        <button pButton type="button" icon="pi pi-eye"  
-                        (click)="showCustomerSub = !showCustomerSub" class="m-1 p-button-sm p-button-primary"></button>
+                        <button pButton type="button" icon="pi pi-eye" (click)="showCustomerSub = !showCustomerSub"
+                          class="m-1 p-button-sm p-button-primary"></button>
                       </td>
                     </tr>
                   </tbody>
@@ -778,17 +835,18 @@
 </p-dialog>
 
 <p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
-    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+  [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
 
-    <ng-template pTemplate="footer">
-        <div class="upload-btn-wrapper mx-2">
-            <a class="btn btn-primary" target="_blank" download href="https://api.lowcalories.ae/samples/mobiles.csv">Download Sample</a>
-        </div>
-        <div class="upload-btn-wrapper">
-            <button class="btn btn-primary">Upload a file</button>
-            <input type="file" name="myfile" (change)="onFileSelected($event)" />
-        </div>
-    </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="upload-btn-wrapper mx-2">
+      <a class="btn btn-primary" target="_blank" download href="https://api.lowcalories.ae/samples/mobiles.csv">Download
+        Sample</a>
+    </div>
+    <div class="upload-btn-wrapper">
+      <button class="btn btn-primary">Upload a file</button>
+      <input type="file" name="myfile" (change)="onFileSelected($event)" />
+    </div>
+  </ng-template>
 </p-dialog>
 
 <div class="loader-container" *ngIf="isLoading">
@@ -799,3 +857,71 @@
     </div>
   </div>
 </div>
+
+
+<p-dialog header="Details Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+  [resizable]="true">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-muted d-flex align-items-center">
+        <h6 class="m-0" style="width: 200px;">Title</h6>
+        <h6 class="m-0">Description</h6>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive overflow-auto">
+        <table class="table">
+          <tbody>
+            <tr *ngFor="let item of currentRow | keyvalue">
+              <td [width]="200">
+                {{ item.key }}
+              </td>
+              <td [ngSwitch]="item.key">
+                <ng-container *ngSwitchCase="'subscription_days'">
+                  <span *ngFor="let sub of currentRow.subscription_days">
+                    ({{sub?.date}} {{sub?.day}}) <br>
+                  </span>
+                </ng-container>
+                <ng-container *ngSwitchCase="'location'">
+                </ng-container>
+                <ng-container *ngSwitchCase="'data_options'">
+                    <div *ngFor="let option of currentRow?.data_options">{{ option.label }} : {{ option.name }}</div> 
+                </ng-container>
+                <ng-container *ngSwitchCase="'emirate'">
+                  {{ currentRow.emirate?.en_name }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'program'">
+                  {{ currentRow.program?.name }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'user'">
+                  {{ currentRow.user?.name }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'agent'">
+                  {{ currentRow.agent?.name }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'created_at'">
+                  {{ currentRow.created_at | date }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'updated_at'">
+                  {{ currentRow.updated_at | date }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'expired_at'">
+                  {{ currentRow.expired_at | date }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'start_date'">
+                  {{ currentRow.start_date | date }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'end_date'">
+                  {{ currentRow.end_date | date }}
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  {{ item.value }}
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</p-dialog>
