@@ -655,4 +655,30 @@ export class NavbarComponent implements OnInit {
     link.href = data;
     link.click();
   }
+
+  getSeverity(status: number) {
+    switch (status) {
+      case 0: //pending
+        return 'danger';
+      case 1: //not complete
+        return 'warning';
+      case 2: //completed
+        return 'success';
+      default:
+        return 'info';
+    }
+  }
+
+  getMode(status: number) {
+    switch (status) {
+      case 0:
+        return 'Pending';
+      case 1:
+        return 'Not Complete';
+      case 2:
+        return 'Completed';
+      default:
+        return '';
+    }
+  }
 }

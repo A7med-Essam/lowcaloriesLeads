@@ -33,7 +33,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { Error404Component } from './components/error404/error404.component';
 import { AuthInterceptor } from './core/http.interceptor';
 import { HomeComponent } from './components/home/home.component';
-import { ImageModule } from 'primeng/image';
+import { TagModule } from 'primeng/tag';
 import { TabViewModule } from 'primeng/tabview';
 
 const APP_PRIMENG_MODULE = [
@@ -57,7 +57,8 @@ const APP_PRIMENG_MODULE = [
   ChipsModule,
   AccordionModule,
   ToastModule,
-  TabViewModule
+  TabViewModule,
+  TagModule
 ];
 
 @NgModule({
