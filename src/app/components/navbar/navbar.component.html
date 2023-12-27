@@ -114,8 +114,8 @@
 <p-dialog [(visible)]="customerModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false">
   <div class="row customerModels">
     <p-tabView (onChange)="getModelDetails($event)" [scrollable]="true" [(activeIndex)]="tabOption">
-      <p-tabPanel header="webSubscription ({{customerModels?.webSubscription}})">
-        <p-table [value]="filter" *ngIf="customerModels?.webSubscription" [loading]="loadingTable">
+      <p-tabPanel header="allSubscriptions">
+        <p-table [value]="filter" [loading]="loadingTable">
           <ng-template pTemplate="header">
             <tr>
               <th class="text-center">invoice_no</th>
@@ -125,6 +125,7 @@
               <th class="text-center">created_at</th>
               <th class="text-center">Starting Day</th>
               <th class="text-center">Status</th>
+              <th class="text-center">sub_from</th>
               <th class="text-center">Actions</th>
             </tr>
           </ng-template>
@@ -140,6 +141,7 @@
                 <p-tag [severity]="getSeverity(sub.mode)" [value]="getMode(sub.mode)">
                 </p-tag>
               </td>
+              <td class="text-center">{{sub.sub_from}}</td>
               <td class="text-center">
                 <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
                   class="m-1 p-button-sm"></button>
@@ -147,11 +149,50 @@
             </tr>
           </ng-template>
         </p-table>
-        <button *ngIf="customerModels?.webSubscription" class="btn btn-success px-4 mt-3"
-          (click)="viewTab('webSubscription')">
-          <b>Web subscription in details</b>
+        <button class="btn btn-success px-4 mt-3" (click)="viewTab('allSubscriptions')">
+          <b>All Subscriptions in details</b>
         </button>
       </p-tabPanel>
+      <ng-container *ngIf="customerModels?.webSubscription">
+        <p-tabPanel header="webSubscription ({{customerModels?.webSubscription}})">
+          <p-table [value]="filter" *ngIf="customerModels?.webSubscription" [loading]="loadingTable">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">invoice_no</th>
+                <th class="text-center">subscriptions plan</th>
+                <th class="text-center">total_price</th>
+                <th class="text-center">name</th>
+                <th class="text-center">created_at</th>
+                <th class="text-center">Starting Day</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sub>
+              <tr [pSelectableRow]="sub">
+                <td class="text-center">{{sub.invoice_no}}</td>
+                <td class="text-center">{{sub.subscriptions_note}}</td>
+                <td class="text-center">{{sub.total_price}}</td>
+                <td class="text-center">{{sub.user?.first_name}}</td>
+                <td class="text-center">{{sub.created_at | date}}</td>
+                <td class="text-center">{{sub.delivery_starting_day}}</td>
+                <td class="text-center">
+                  <p-tag [severity]="getSeverity(sub.mode)" [value]="getMode(sub.mode)">
+                  </p-tag>
+                </td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                    class="m-1 p-button-sm"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button *ngIf="customerModels?.webSubscription" class="btn btn-success px-4 mt-3"
+            (click)="viewTab('webSubscription')">
+            <b>Web subscription in details</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
       <ng-container *ngIf="customerModels?.paymentLink">
         <p-tabPanel header="paymentLink ({{customerModels?.paymentLink}})">
           <p-table [value]="filter" [loading]="loadingTable">
@@ -536,6 +577,7 @@
                 <th class="text-center">Remaining Days</th>
                 <th class="text-center">Plan Title</th>
                 <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-system let-i="rowIndex">
@@ -545,6 +587,10 @@
                 <td class="text-center">{{system?.remainingDays}}</td>
                 <td class="text-center">{{system?.planTitle}}</td>
                 <td class="text-center">{{system?.status}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(system)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -560,6 +606,7 @@
                 <th class="text-center">Remaining Meals</th>
                 <th class="text-center">Remaining Snacks</th>
                 <th class="text-center">Plan Name</th>
+                <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-pickup let-i="rowIndex">
@@ -569,6 +616,10 @@
                 <td class="text-center">{{pickup?.remainingMeals}}</td>
                 <td class="text-center">{{pickup?.remainingSnacks}}</td>
                 <td class="text-center">{{pickup?.planName}}</td>
+                <td class="text-center">
+                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(pickup)"
+                    class="m-1 p-button-sm"></button>
+                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -784,7 +835,6 @@
           </p-table>
         </p-tabPanel>
       </ng-container>
-
 
       <!-- <p-tabPanel *ngIf="customerModels?.branches"  header="branches ({{customerModels?.branches}})">
         <p-table [value]="filter">

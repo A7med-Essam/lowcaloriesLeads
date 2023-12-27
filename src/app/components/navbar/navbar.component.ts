@@ -39,7 +39,7 @@ export class NavbarComponent implements OnInit {
     private _LocalService: LocalService,
     private _AnalysisService: AnalysisService,
     private _SubscriptionsService: SubscriptionsService,
-    private _MessageService:MessageService
+    private _MessageService: MessageService
   ) {}
 
   notificationModal: boolean = false;
@@ -197,11 +197,11 @@ export class NavbarComponent implements OnInit {
           this._SubscriptionsService
             .filterSubscriptions(1, {
               Mobile_no: this.currentCustomerMobile,
-              sub_from: 'web',
+              // sub_from: 'web',
               paginate: 10,
             })
             .subscribe((res) => {
-              this.filter = this.paymentWeb = res.data.data;
+              this.filter = this.allSub = res.data.data;
             });
 
           this._SubscriptionsService
@@ -270,6 +270,9 @@ export class NavbarComponent implements OnInit {
       case 'paymentLink':
         this.loadPaymentlink(client);
         break;
+      case 'allSubscriptions':
+        this.loadAllSub(client);
+        break;
       case 'systemSubscription':
         this.filter = this.system;
         break;
@@ -325,28 +328,30 @@ export class NavbarComponent implements OnInit {
       case 'webSubscription':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
           Mobile_no: this.currentCustomerMobile,
-          program_id: 'web',
-          // sub_from: 'web',
+          sub_from: 'web',
         });
         break;
       case 'mobileSubscription':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
           Mobile_no: this.currentCustomerMobile,
-          program_id: 'mobile',
-          // sub_from: 'mobile',
+          sub_from: 'mobile',
         });
         break;
       case 'paymentLink':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
           Mobile_no: this.currentCustomerMobile,
-          // sub_from: 'payment link',
-          program_id: '50',
+          sub_from: 'payment link',
+        });
+        break;
+      case 'allSubscriptions':
+        this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
+          Mobile_no: this.currentCustomerMobile,
         });
         break;
       case 'branches':
         this.redirectWithFilter('subscriptions', 'subscriptions_filter', {
           Mobile_no: this.currentCustomerMobile,
-          program_id: 'mobile',
+          sub_from: 'mobile',
         });
         break;
       case 'Dislikes':
@@ -433,7 +438,7 @@ export class NavbarComponent implements OnInit {
       this._SubscriptionsService
         .filterSubscriptions(1, {
           Mobile_no: client,
-          program_id: '50',
+          sub_from: 'payment link',
           paginate: 10,
         })
         .subscribe((res) => {
@@ -453,7 +458,7 @@ export class NavbarComponent implements OnInit {
       this._SubscriptionsService
         .filterSubscriptions(1, {
           Mobile_no: client,
-          program_id: 'web',
+          sub_from: 'web',
           paginate: 10,
         })
         .subscribe((res) => {
@@ -473,7 +478,7 @@ export class NavbarComponent implements OnInit {
       this._SubscriptionsService
         .filterSubscriptions(1, {
           Mobile_no: client,
-          program_id: 'mobile',
+          sub_from: 'mobile',
           paginate: 10,
         })
         .subscribe((res) => {
@@ -572,6 +577,25 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  allSub: any[] = [];
+  loadAllSub(client: any) {
+    if (this.allSub.length) {
+      this.filter = this.allSub;
+    } else {
+      this.loadingTable = true;
+      this._SubscriptionsService
+        .filterSubscriptions(1, {
+          Mobile_no: client,
+          paginate: 10,
+        })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'allSub') {
+            this.filter = this.allSub = res.data.data;
+          }
+        });
+    }
+  }
   resetAllModels() {
     this.leads = [];
     this.issues = [];
@@ -586,13 +610,14 @@ export class NavbarComponent implements OnInit {
     this.dislikes = [];
     this.system = [];
     this.pickup = [];
+    this.allSub = [];
     this.CHSubscriptions = null;
   }
 
   // ===============================================
-  showCustomerAdress : boolean  = false;
-  showCustomerPhones : boolean  = false;
-  showCustomerSub : boolean  = false;
+  showCustomerAdress: boolean = false;
+  showCustomerPhones: boolean = false;
+  showCustomerSub: boolean = false;
 
   // ===========================================================================UPLOAD==================================================================
   isLoading: boolean = false;
@@ -608,7 +633,7 @@ export class NavbarComponent implements OnInit {
   removeObjectValues(obj: any) {
     for (const key in obj) {
       if (
-        typeof obj[key] === 'object' 
+        typeof obj[key] === 'object'
         // && key != 'emirate' &&
         // key != 'data_options'
       ) {
@@ -635,7 +660,6 @@ export class NavbarComponent implements OnInit {
     return formData;
   }
 
-
   onFileSelected(event: any) {
     if (this.uploadPermission) {
       const file: File = event.target.files[0];
@@ -646,12 +670,12 @@ export class NavbarComponent implements OnInit {
           next: (res) => {
             this.uploadModal = false;
             this.isLoading = false;
-            this.handleUploadSuccess(res.data)
+            this.handleUploadSuccess(res.data);
           },
           error: (err) => {
             this.uploadModal = false;
             this.isLoading = false;
-          }
+          },
         });
         this.uploadModal = false;
       }
@@ -672,7 +696,7 @@ export class NavbarComponent implements OnInit {
     });
     const link = document.createElement('a');
     link.target = '_blank';
-    link.download = "";
+    link.download = '';
     link.href = data;
     link.click();
   }
