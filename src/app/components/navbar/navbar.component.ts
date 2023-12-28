@@ -622,37 +622,55 @@ export class NavbarComponent implements OnInit {
   // ===========================================================================UPLOAD==================================================================
   isLoading: boolean = false;
   uploadModal: boolean = false;
-  detailsModal: boolean = false;
+  subscriptionDetailsModal: boolean = false;
+  dataAnalyticsDetailsModal: boolean = false;
+  DislikesDetailsModal: boolean = false;
+  issuesDetailsModal: boolean = false;
+  refundsDetailsModal: boolean = false;
+  callsDetailsModal: boolean = false;
+  leadsDetailsModal: boolean = false;
+  targetsDetailsModal: boolean = false;
 
-  currentRow: any;
-  showRow(row: any) {
-    this.currentRow = this.removeObjectValues(row);
-    this.detailsModal = true;
+  current_subscription: any;
+  show_subscription(row: any) {
+    this.current_subscription = row;
+    this.subscriptionDetailsModal = true;
   }
-
-  removeObjectValues(obj: any) {
-    for (const key in obj) {
-      if (
-        typeof obj[key] === 'object'
-        // && key != 'emirate' &&
-        // key != 'data_options'
-      ) {
-        delete obj[key];
-      }
-    }
-    return obj;
+  current_dataAnalytics: any;
+  show_dataAnalytics(row: any) {
+    this.current_dataAnalytics = row;
+    this.dataAnalyticsDetailsModal = true;
   }
-
-  // getSample() {
-  //   if (this.uploadPermission) {
-  //     this._SubscriptionsService.downloadSampleCustomerStatics().subscribe((res) => {
-  //       const link = document.createElement('a');
-  //       link.target = '_blank';
-  //       link.href = res.data;
-  //       link.click();
-  //     });
-  //   }
-  // }
+  current_Dislikes: any;
+  show_Dislikes(row: any) {
+    this.current_Dislikes = row;
+    this.DislikesDetailsModal = true;
+  }
+  current_issues: any;
+  show_issues(row: any) {
+    this.current_issues = row;
+    this.issuesDetailsModal = true;
+  }
+  current_refunds: any;
+  show_refunds(row: any) {
+    this.current_refunds = row;
+    this.refundsDetailsModal = true;
+  }
+  current_calls: any;
+  show_calls(row: any) {
+    this.current_calls = row;
+    this.callsDetailsModal = true;
+  }
+  current_leads: any;
+  show_leads(row: any) {
+    this.current_leads = row;
+    this.leadsDetailsModal = true;
+  }
+  current_targets: any;
+  show_targets(row: any) {
+    this.current_targets = row;
+    this.targetsDetailsModal = true;
+  }
 
   getFormData(object: any) {
     const formData = new FormData();

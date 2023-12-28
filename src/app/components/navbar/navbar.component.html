@@ -118,11 +118,11 @@
         <p-table [value]="filter" [loading]="loadingTable">
           <ng-template pTemplate="header">
             <tr>
-              <th class="text-center">invoice_no</th>
+              <th class="text-center">invoice number</th>
               <th class="text-center">subscriptions plan</th>
-              <th class="text-center">total_price</th>
+              <th class="text-center">total price</th>
               <th class="text-center">name</th>
-              <th class="text-center">created_at</th>
+              <th class="text-center">created at</th>
               <th class="text-center">Starting Day</th>
               <th class="text-center">Status</th>
               <th class="text-center">sub_from</th>
@@ -143,7 +143,7 @@
               </td>
               <td class="text-center">{{sub.sub_from}}</td>
               <td class="text-center">
-                <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                <button pButton type="button" icon="pi pi-eye" (click)="show_subscription(sub)"
                   class="m-1 p-button-sm"></button>
               </td>
             </tr>
@@ -158,11 +158,11 @@
           <p-table [value]="filter" *ngIf="customerModels?.webSubscription" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">invoice_no</th>
+                <th class="text-center">invoice number</th>
                 <th class="text-center">subscriptions plan</th>
-                <th class="text-center">total_price</th>
+                <th class="text-center">total price</th>
                 <th class="text-center">name</th>
-                <th class="text-center">created_at</th>
+                <th class="text-center">created at</th>
                 <th class="text-center">Starting Day</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Actions</th>
@@ -181,7 +181,7 @@
                   </p-tag>
                 </td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_subscription(sub)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -198,11 +198,11 @@
           <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">invoice_no</th>
+                <th class="text-center">invoice number</th>
                 <th class="text-center">subscriptions plan</th>
-                <th class="text-center">total_price</th>
+                <th class="text-center">total price</th>
                 <th class="text-center">name</th>
-                <th class="text-center">created_at</th>
+                <th class="text-center">created at</th>
                 <th class="text-center">Starting Day</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Actions</th>
@@ -221,7 +221,7 @@
                   </p-tag>
                 </td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_subscription(sub)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -237,11 +237,11 @@
           <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">invoice_no</th>
+                <th class="text-center">invoice number</th>
                 <th class="text-center">subscriptions plan</th>
-                <th class="text-center">total_price</th>
+                <th class="text-center">total price</th>
                 <th class="text-center">name</th>
-                <th class="text-center">created_at</th>
+                <th class="text-center">created at</th>
                 <th class="text-center">Starting Day</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Actions</th>
@@ -260,7 +260,7 @@
                   </p-tag>
                 </td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_subscription(sub)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -290,7 +290,7 @@
                 <td class="text-center">{{analysis?.mobile}}</td>
                 <td class="text-center">{{analysis?.customer_name}}</td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_dataAnalytics(analysis)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -307,11 +307,11 @@
             <ng-template pTemplate="header">
               <tr>
                 <!-- <th class="text-center">agent_name</th> -->
-                <th class="text-center">invoice_no</th>
+                <th class="text-center">invoice number</th>
                 <th class="text-center">subscriptions plan</th>
-                <th class="text-center">total_price</th>
+                <th class="text-center">total price</th>
                 <th class="text-center">name</th>
-                <th class="text-center">created_at</th>
+                <th class="text-center">created at</th>
                 <th class="text-center">Starting Day</th>
                 <th class="text-center">Actions</th>
               </tr>
@@ -326,7 +326,7 @@
                 <td class="text-center">{{sub.created_at | date}}</td>
                 <td class="text-center">{{sub.delivery_starting_day}}</td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(sub)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_subscription(sub)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -346,10 +346,10 @@
                 <th class="text-center">cid </th>
                 <th class="text-center">branch </th>
                 <th class="text-center">agent </th>
-                <th class="text-center">sent_by </th>
-                <th class="text-center">dislike_meals </th>
+                <th class="text-center">sent by </th>
+                <th class="text-center">dislike meals </th>
                 <th class="text-center">reasons </th>
-                <th class="text-center">created_at </th>
+                <th class="text-center">created at </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
@@ -364,7 +364,7 @@
                 <td class="text-center">{{dislike.reasons}}</td>
                 <td class="text-center">{{dislike?.created_at | date}}</td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(dislike)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_Dislikes(dislike)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -380,31 +380,31 @@
           <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">action </th>
-                <th class="text-center">agent_name </th>
+                <!-- <th class="text-center">action </th> -->
+                <th class="text-center">agent name </th>
                 <th class="text-center">branch </th>
-                <th class="text-center">c_name </th>
+                <th class="text-center">client name </th>
                 <th class="text-center">cid </th>
-                <th class="text-center">created_at </th>
+                <!-- <th class="text-center">created at </th> -->
                 <th class="text-center">date </th>
-                <th class="text-center">issue_details </th>
+                <!-- <th class="text-center">issue details </th> -->
                 <th class="text-center">status </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-complaint>
               <tr>
-                <td class="text-center">{{complaint?.action}}</td>
+                <!-- <td class="text-center">{{complaint?.action}}</td> -->
                 <td class="text-center">{{complaint?.agent_name}}</td>
                 <td class="text-center">{{complaint?.branch}}</td>
                 <td class="text-center">{{complaint?.c_name}}</td>
                 <td class="text-center">{{complaint?.cid}}</td>
-                <td class="text-center">{{complaint?.created_at}}</td>
+                <!-- <td class="text-center">{{complaint?.created_at | date}}</td> -->
                 <td class="text-center">{{complaint?.date}}</td>
-                <td class="text-center">{{complaint?.issue_details}}</td>
+                <!-- <td class="text-center">{{complaint?.issue_details}}</td> -->
                 <td class="text-center">{{complaint?.status}}</td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(complaint)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_issues(complaint)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -420,15 +420,15 @@
           <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">agent_name</th>
-                <th class="text-center">amount_paid</th>
+                <th class="text-center">agent name</th>
+                <th class="text-center">amount paid</th>
                 <th class="text-center">branch</th>
                 <th class="text-center">cid</th>
-                <th class="text-center">created_at</th>
+                <th class="text-center">created at</th>
                 <th class="text-center">name</th>
-                <th class="text-center">payment_method</th>
+                <th class="text-center">payment method</th>
                 <!-- <th class="text-center">reason</th> -->
-                <th class="text-center">remaining_days</th>
+                <th class="text-center">remaining days</th>
                 <!-- <th class="text-center">subscription_plan</th> -->
                 <th class="text-center">Actions</th>
               </tr>
@@ -446,7 +446,7 @@
                 <td class="text-center">{{refund.remaining_days}}</td>
                 <!-- <td class="text-center">{{refund.subscription_plan}}</td> -->
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(refund)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_refunds(refund)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -480,7 +480,7 @@
                 <td class="text-center">{{call.plan}}</td>
                 <td class="text-center">{{call.date}}</td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(call)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_calls(call)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -496,8 +496,8 @@
           <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">created_at </th>
-                <th class="text-center">customer_name </th>
+                <th class="text-center">created at </th>
+                <th class="text-center">customer name </th>
                 <th class="text-center">status </th>
                 <th class="text-center">platforms </th>
                 <th class="text-center">type </th>
@@ -507,14 +507,14 @@
             </ng-template>
             <ng-template pTemplate="body" let-lead>
               <tr>
-                <td class="text-center">{{lead?.created_at}}</td>
+                <td class="text-center">{{lead?.created_at | date}}</td>
                 <td class="text-center">{{lead?.customer_name}}</td>
                 <td class="text-center">{{lead?.status}}</td>
                 <td class="text-center">{{lead?.platforms}}</td>
                 <td class="text-center">{{lead?.type}}</td>
                 <td class="text-center">{{lead?.user_created?.name}}</td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(lead)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_leads(lead)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -530,16 +530,16 @@
           <p-table [value]="filter" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">agent_name </th>
+                <th class="text-center">agent name </th>
                 <th class="text-center">date </th>
-                <th class="text-center">client_cid </th>
-                <th class="text-center">branch </th>
-                <th class="text-center">customer_type </th>
-                <th class="text-center">paid_by </th>
-                <th class="text-center">status </th>
-                <th class="text-center">invoice_number </th>
-                <th class="text-center">client_name </th>
-                <th class="text-center">amount_paid </th>
+                <!-- <th class="text-center">client_cid </th> -->
+                <!-- <th class="text-center">branch </th> -->
+                <th class="text-center">customer type </th>
+                <th class="text-center">paid by </th>
+                <!-- <th class="text-center">status </th> -->
+                <th class="text-center">invoice number </th>
+                <th class="text-center">client name </th>
+                <th class="text-center">amount paid </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
@@ -547,16 +547,16 @@
               <tr [pSelectableRow]="agent">
                 <td class="text-center">{{agent?.agent?.name}}</td>
                 <td class="text-center">{{agent?.date}}</td>
-                <td class="text-center">{{agent?.client_cid}}</td>
-                <td class="text-center">{{agent?.branch}}</td>
+                <!-- <td class="text-center">{{agent?.client_cid}}</td> -->
+                <!-- <td class="text-center">{{agent?.branch}}</td> -->
                 <td class="text-center">{{agent?.customer_type}}</td>
                 <td class="text-center">{{agent?.paid_by}}</td>
-                <td class="text-center">{{agent?.status}}</td>
+                <!-- <td class="text-center">{{agent?.status}}</td> -->
                 <td class="text-center">{{agent?.invoice_number}}</td>
                 <td class="text-center">{{agent?.client_name}}</td>
                 <td class="text-center">{{agent?.amount_paid}}</td>
                 <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
+                  <button pButton type="button" icon="pi pi-eye" (click)="show_targets(agent)"
                     class="m-1 p-button-sm"></button>
                 </td>
               </tr>
@@ -577,7 +577,6 @@
                 <th class="text-center">Remaining Days</th>
                 <th class="text-center">Plan Title</th>
                 <th class="text-center">Status</th>
-                <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-system let-i="rowIndex">
@@ -587,10 +586,6 @@
                 <td class="text-center">{{system?.remainingDays}}</td>
                 <td class="text-center">{{system?.planTitle}}</td>
                 <td class="text-center">{{system?.status}}</td>
-                <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(system)"
-                    class="m-1 p-button-sm"></button>
-                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -606,7 +601,6 @@
                 <th class="text-center">Remaining Meals</th>
                 <th class="text-center">Remaining Snacks</th>
                 <th class="text-center">Plan Name</th>
-                <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-pickup let-i="rowIndex">
@@ -616,10 +610,6 @@
                 <td class="text-center">{{pickup?.remainingMeals}}</td>
                 <td class="text-center">{{pickup?.remainingSnacks}}</td>
                 <td class="text-center">{{pickup?.planName}}</td>
-                <td class="text-center">
-                  <button pButton type="button" icon="pi pi-eye" (click)="showRow(pickup)"
-                    class="m-1 p-button-sm"></button>
-                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -640,7 +630,7 @@
                   <tbody>
                     <tr>
                       <td>
-                        customerId
+                        customer Id
                       </td>
                       <td>
                         {{CHSubscriptions?.customerId}}
@@ -648,7 +638,7 @@
                     </tr>
                     <tr>
                       <td>
-                        customerName
+                        customer Name
                       </td>
                       <td>
                         {{CHSubscriptions?.customerName}}
@@ -696,7 +686,7 @@
                     </tr>
                     <tr>
                       <td>
-                        customerCategory
+                        customer Category
                       </td>
                       <td>
                         {{CHSubscriptions?.customerCategory}}
@@ -704,7 +694,7 @@
                     </tr>
                     <tr>
                       <td>
-                        regType
+                        register Type
                       </td>
                       <td>
                         {{CHSubscriptions?.regType}}
@@ -713,7 +703,7 @@
 
                     <tr>
                       <td>
-                        birthDate
+                        birth Date
                       </td>
                       <td>
                         {{CHSubscriptions?.birthDate | date}}
@@ -740,7 +730,7 @@
 
                     <tr>
                       <td>
-                        customerAdress
+                        customer Adress
                       </td>
                       <td>
                         <button pButton type="button" icon="pi pi-eye"
@@ -751,7 +741,7 @@
 
                     <tr>
                       <td>
-                        customerPhones
+                        customer Phones
                       </td>
                       <td>
                         <button pButton type="button" icon="pi pi-eye"
@@ -908,9 +898,76 @@
   </div>
 </div>
 
+<p-dialog header="Details Modal" [(visible)]="targetsDetailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-muted d-flex align-items-center">
+        <h6 class="m-0" style="width: 200px;">Title</h6>
+        <h6 class="m-0">Description</h6>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive overflow-auto">
+        <table class="table">
+          <thead class="text-muted">
+            <th class="py-3">Title</th>
+            <th class="py-3">Description</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Date</td>
+              <td>{{current_targets?.date | date}}</td>
+            </tr>
+            <tr>
+              <td>agent</td>
+              <td>{{current_targets?.agent?.name}}</td>
+            </tr>
+            <tr>
+              <td>team</td>
+              <td>{{current_targets?.team}}</td>
+            </tr>
+            <tr>
+              <td>client number</td>
+              <td>{{current_targets?.client_number}}</td>
+            </tr>
+            <tr>
+              <td>client cid</td>
+              <td>{{current_targets?.client_cid}}</td>
+            </tr>
+            <tr>
+              <td>branch</td>
+              <td>{{current_targets?.branch}}</td>
+            </tr>
+            <tr>
+              <td>customer type</td>
+              <td>{{current_targets?.customer_type}}</td>
+            </tr>
+            <tr>
+              <td>paid by</td>
+              <td>{{current_targets?.paid_by}}</td>
+            </tr>
+            <tr>
+              <td>status</td>
+              <td>{{current_targets?.status}}</td>
+            </tr>
+            <tr>
+              <td>invoice number</td>
+              <td>{{current_targets?.invoice_number}}</td>
+            </tr>
+            <tr>
+              <td>type</td>
+              <td>{{current_targets?.type}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</p-dialog>
 
-<p-dialog header="Details Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
-  [resizable]="true">
+<p-dialog header="Details Modal" [(visible)]="dataAnalyticsDetailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
   <div class="card">
     <div class="card-header">
       <div class="text-muted d-flex align-items-center">
@@ -922,55 +979,744 @@
       <div class="table-responsive overflow-auto">
         <table class="table">
           <tbody>
-            <tr *ngFor="let item of currentRow | keyvalue">
+            <tr *ngIf="current_dataAnalytics?.date">
+              <td width="200">Date</td>
+              <td>{{ current_dataAnalytics?.date }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.agent">
+              <td width="200">Agent Name</td>
+              <td>{{ current_dataAnalytics?.agent.name }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.mobile">
+              <td width="200">Customer Mobile</td>
+              <td>{{ current_dataAnalytics?.mobile }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.customer_name">
+              <td width="200">Customer Name</td>
+              <td>{{ current_dataAnalytics?.customer_name }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.customer_gender">
+              <td width="200">Customer Gender</td>
+              <td>{{ current_dataAnalytics?.customer_gender }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.emirate">
+              <td width="200">Emirate</td>
+              <td>{{ current_dataAnalytics?.emirate?.en_name }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.platform">
+              <td width="200">Platform</td>
+              <td>{{ current_dataAnalytics?.platform }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.platform_option">
+              <td width="200">Platform Option</td>
+              <td>{{ current_dataAnalytics?.platform_option }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.customer_status">
+              <td width="200">Customer Status</td>
+              <td>{{ current_dataAnalytics?.customer_status }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.concern">
+              <td width="200">Concern</td>
+              <td>{{ current_dataAnalytics?.concern }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.mode">
+              <td width="200">Mode</td>
+              <td>{{ current_dataAnalytics?.mode }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.mode_reason">
+              <td width="200">Mode Reason</td>
+              <td>{{ current_dataAnalytics?.mode_reason }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.ask_for">
+              <td width="200">Ask For</td>
+              <td>{{ current_dataAnalytics?.ask_for }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.ask_for_options">
+              <td width="200">Ask For Options</td>
+              <td>{{ current_dataAnalytics?.ask_for_options }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.actions">
+              <td width="200">Actions</td>
+              <td>{{ current_dataAnalytics?.actions }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.notes">
+              <td width="200">Notes</td>
+              <td>{{ current_dataAnalytics?.notes }}</td>
+            </tr>
+            <tr *ngIf="current_dataAnalytics?.notes">
+              <td width="200">Notes</td>
+              <td>{{ current_dataAnalytics?.notes }}</td>
+            </tr>
+            <tr *ngFor="let item of current_dataAnalytics?.data_options">
               <td [width]="200">
-                {{ item.key }}
+                {{ item.label }}
               </td>
-              <td [ngSwitch]="item.key">
-                <ng-container *ngSwitchCase="'subscription_days'">
-                  <span *ngFor="let sub of currentRow.subscription_days">
-                    ({{sub?.date}} {{sub?.day}}) <br>
-                  </span>
-                </ng-container>
-                <ng-container *ngSwitchCase="'location'">
-                </ng-container>
-                <ng-container *ngSwitchCase="'data_options'">
-                    <div *ngFor="let option of currentRow?.data_options">{{ option.label }} : {{ option.name }}</div> 
-                </ng-container>
-                <ng-container *ngSwitchCase="'emirate'">
-                  {{ currentRow.emirate?.en_name }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'program'">
-                  {{ currentRow.program?.name }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'user'">
-                  {{ currentRow.user?.name }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'agent'">
-                  {{ currentRow.agent?.name }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'created_at'">
-                  {{ currentRow.created_at | date }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'updated_at'">
-                  {{ currentRow.updated_at | date }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'expired_at'">
-                  {{ currentRow.expired_at | date }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'start_date'">
-                  {{ currentRow.start_date | date }}
-                </ng-container>
-                <ng-container *ngSwitchCase="'end_date'">
-                  {{ currentRow.end_date | date }}
-                </ng-container>
-                <ng-container *ngSwitchDefault>
-                  {{ item.value }}
-                </ng-container>
+              <td>{{ item.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="callsDetailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-muted d-flex align-items-center">
+        <h6 class="m-0" style="width: 200px;">Title</h6>
+        <h6 class="m-0">Description</h6>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive overflow-auto">
+        <table class="table">
+          <thead class="text-muted">
+            <th class="py-3">Title</th>
+            <th class="py-3">Description</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cid</td>
+              <td>{{current_calls?.cid}}</td>
+            </tr>
+            <tr>
+              <td>remaining days</td>
+              <td>{{current_calls?.subscription_id}}</td>
+            </tr>
+            <tr>
+              <td>branch</td>
+              <td>{{current_calls?.branch}}</td>
+            </tr>
+            <tr>
+              <td>customer name</td>
+              <td>{{current_calls?.customer_name}}</td>
+            </tr>
+            <tr>
+              <td>customer phone</td>
+              <td>{{current_calls?.customer_mobile}}</td>
+            </tr>
+            <tr>
+              <td>customer mobile</td>
+              <td>{{current_calls?.customer_phone}}</td>
+            </tr>
+            <tr>
+              <td>plan</td>
+              <td>{{current_calls?.plan}}</td>
+            </tr>
+            <tr>
+              <td>date</td>
+              <td>{{current_calls?.date}}</td>
+            </tr>
+            <tr>
+              <td>note</td>
+              <td>{{current_calls?.note}}</td>
+            </tr>
+            <tr>
+              <td>created at</td>
+              <td>{{current_calls?.created_at|date}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="issuesDetailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-muted d-flex align-items-center">
+        <h6 class="m-0" style="width: 200px;">Title</h6>
+        <h6 class="m-0">Description</h6>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive overflow-auto">
+        <table class="table">
+          <thead class="text-muted">
+            <th class="py-3">Title</th>
+            <th class="py-3">Description</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Date</td>
+              <td>{{current_issues?.date | date}}</td>
+            </tr>
+            <tr>
+              <td>client number</td>
+              <td>{{current_issues?.c_mobile}}</td>
+            </tr>
+            <tr>
+              <td>client cid</td>
+              <td>{{current_issues?.cid}}</td>
+            </tr>
+            <tr>
+              <td>client name</td>
+              <td>{{current_issues?.c_name}}</td>
+            </tr>
+            <tr>
+              <td>agent</td>
+              <td>{{current_issues?.agent_name}}</td>
+            </tr>
+            <tr>
+              <td>branch</td>
+              <td>{{current_issues?.branch}}</td>
+            </tr>
+            <tr>
+              <td>action</td>
+              <td>{{current_issues?.action}}</td>
+            </tr>
+            <tr>
+              <td>status</td>
+              <td>{{current_issues?.status}}</td>
+            </tr>
+            <tr>
+              <td>issue details</td>
+              <td>{{current_issues?.issue_details}}</td>
+            </tr>
+            <tr>
+              <td>feedback type</td>
+              <td>{{current_issues?.feedback_type}}</td>
+            </tr>
+            <tr>
+              <td>order type</td>
+              <td>{{current_issues?.order_type}}</td>
+            </tr>
+            <tr>
+              <td>issue category</td>
+              <td>{{current_issues?.issue_category}}</td>
+            </tr>
+            <tr *ngIf="current_issues?.reason">
+              <td>reason</td>
+              <td>{{current_issues?.reason}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="DislikesDetailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-muted d-flex align-items-center">
+        <h6 class="m-0" style="width: 200px;">Title</h6>
+        <h6 class="m-0">Description</h6>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive overflow-auto">
+        <table class="table">
+          <thead class="text-muted">
+            <th class="py-3">Title</th>
+            <th class="py-3">Description</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Created By</td>
+              <td>{{current_Dislikes?.agent.name}}</td>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td>{{current_Dislikes?.name}}</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>{{current_Dislikes?.email}}</td>
+            </tr>
+            <tr>
+              <td>Mobile</td>
+              <td>
+                <span *ngFor="let mob of current_Dislikes?.mobile;let i = index">
+                  <span *ngIf="mob">{{mob}}<br></span>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td>Sent by</td>
+              <td>{{current_Dislikes?.sent_by}}</td>
+            </tr>
+            <tr>
+              <td>Branch</td>
+              <td>{{current_Dislikes?.branch}}</td>
+            </tr>
+            <tr>
+              <td>Date Issue</td>
+              <td>{{current_Dislikes?.created_at | date}}</td>
+            </tr>
+            <tr>
+              <td>Reasons</td>
+              <td>
+                <span *ngFor="let reason of current_Dislikes?.reasons;let i = index">
+                  <i class="fas fa-info-circle mx-2 text-muted"></i> {{reason}} <br>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td>Dislike Meals</td>
+              <td>
+                <span *ngFor="let meal of current_Dislikes?.dislike_meals;let i = index">
+                  <i class="fas fa-utensils mx-2 text-muted"></i> {{meal}} <br>
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="refundsDetailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-muted d-flex align-items-center">
+        <h6 class="m-0" style="width: 200px;">Title</h6>
+        <h6 class="m-0">Description</h6>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive overflow-auto">
+        <table class="table">
+          <thead class="text-muted">
+            <th class="py-3">Title</th>
+            <th class="py-3">Description</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Date</td>
+              <td>{{current_refunds?.created_at | date}}</td>
+            </tr>
+            <tr>
+              <td>agent name</td>
+              <td>{{current_refunds?.agent_name}}</td>
+            </tr>
+            <tr>
+              <td>name</td>
+              <td>{{current_refunds?.name}}</td>
+            </tr>
+            <tr>
+              <td>email</td>
+              <td>{{current_refunds?.email}}</td>
+            </tr>
+            <tr>
+              <td>mobile</td>
+              <td>{{current_refunds?.mobile}}</td>
+            </tr>
+            <tr>
+              <td>branch</td>
+              <td>{{current_refunds?.branch}}</td>
+            </tr>
+            <tr>
+              <td>delivery branch</td>
+              <td>{{current_refunds?.delivery_branch}}</td>
+            </tr>
+            <tr>
+              <td>subscription plan</td>
+              <td>{{current_refunds?.subscription_plan}}</td>
+            </tr>
+            <tr>
+              <td>remaining days</td>
+              <td>{{current_refunds?.remaining_days}}</td>
+            </tr>
+            <tr>
+              <td>payment method</td>
+              <td>{{current_refunds?.payment_method}}</td>
+            </tr>
+            <tr>
+              <td>cid</td>
+              <td>{{current_refunds?.cid}}</td>
+            </tr>
+            <tr>
+              <td>address</td>
+              <td>{{current_refunds?.address}}</td>
+            </tr>
+            <tr>
+              <td>bank name</td>
+              <td>{{current_refunds?.bank_name}}</td>
+            </tr>
+            <tr>
+              <td>amount paid</td>
+              <td>{{current_refunds?.amount_paid}}</td>
+            </tr>
+            <tr>
+              <td>reason</td>
+              <td>{{current_refunds?.reason}}</td>
+            </tr>
+            <tr>
+              <td>notes</td>
+              <td>{{current_refunds?.notes}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="leadsDetailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
+  <div class="card">
+    <div class="card-header">
+      <div class="text-muted d-flex align-items-center">
+        <h6 class="m-0" style="width: 200px;">Title</h6>
+        <h6 class="m-0">Description</h6>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive overflow-auto">
+        <table class="table">
+          <thead class="text-muted">
+            <th class="py-3">Title</th>
+            <th class="py-3">Description</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Date</td>
+              <td>{{current_leads?.created_at | date}}</td>
+            </tr>
+            <tr>
+              <td>Created By</td>
+              <td>{{current_leads?.user_created.name}}</td>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td>{{current_leads?.customer_name}}</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>{{current_leads?.customer_email}}</td>
+            </tr>
+            <tr>
+              <td>Mobile</td>
+              <td>{{current_leads?.customer_mobile}}</td>
+            </tr>
+            <tr>
+              <td>Platform</td>
+              <td>{{current_leads?.platforms}}</td>
+            </tr>
+            <tr>
+              <td>Lost Reason</td>
+              <td>{{current_leads?.lost_reasons}}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>{{current_leads?.status}}</td>
+            </tr>
+            <tr>
+              <td>Type</td>
+              <td>{{current_leads?.type}}</td>
+            </tr>
+            <tr>
+              <td>Details</td>
+              <td>{{current_leads?.notes}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="subscriptionDetailsModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
+  <div id="invoice">
+    <div class="invoice overflow-auto" *ngIf="current_subscription">
+      <div>
+        <main class="d-flex flex-wraps">
+          <table cellspacing="0" cellpadding="0" style="text-align: center">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th colspan="6"><i>Subscription Deatils</i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="no">01</td>
+                <td class="text-center">
+                  <h3>INVOICE NO</h3>
+                </td>
+                <td colspan="6" class="text-right" style="padding-right: 50px;">
+                  <span>{{ current_subscription?.invoice_no }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">02</td>
+                <td class="text-center">
+                  <h3>PROGRAM</h3>
+                </td>
+                <td style="font-size: 14px;">
+                  <span> {{current_subscription?.subscriptions_note.split('-')[1]}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {{current_subscription?.full_plan_name.split('-')[0] + ""}}
+                    &#160;&#160;&#160;&#160;&#160;
+                    {{current_subscription?.full_plan_name.split('-')[2] + ""}}
+                    &#160;&#160;&#160;&#160;&#160;
+                    {{current_subscription?.full_plan_name.split('-')[3]}}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">03</td>
+                <td class="text-center">
+                  <h3>PLAN TITLE</h3>
+                </td>
+                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                  <span>{{ current_subscription?.subscriptions_note }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">04</td>
+                <td class="text-center">
+                  <h3>MEAL TYPES</h3>
+                </td>
+                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                  <span>{{ current_subscription?.dislike }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">05</td>
+                <td class="text-center">
+                  <h3>Need Cutlery?</h3>
+                </td>
+                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                  <span>{{ current_subscription?.cutlery == 'checked' ? "yes" : "no" }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">06</td>
+                <td class="text-center">
+                  <h3>Dislike Meals</h3>
+                </td>
+                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                  <span>{{ current_subscription?.dis_like_user }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">07</td>
+                <td class="text-center">
+                  <h3>Payment Type</h3>
+                </td>
+                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                  <div *ngIf="current_subscription?.sub_from.toLowerCase() == 'branch'">
+                    <div [ngSwitch]="current_subscription?.program_id">
+                      <span *ngSwitchCase="51">
+                        Branch Cash
+                      </span>
+                      <span *ngSwitchCase="52">
+                        Branch Credit Card
+                      </span>
+                      <span *ngSwitchCase="53">
+                        Branch EXCHANGE
+                      </span>
+                      <span *ngSwitchDefault>
+                        {{current_subscription?.sub_from}}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="current_subscription?.sub_from.toLowerCase() == 'web' || current_subscription?.sub_from.toLowerCase() == 'mobile'">
+                    Online
+                  </div>
+                  <div *ngIf="current_subscription?.sub_from.toLowerCase() == 'payment link'">
+                    Payment Link
+                  </div>
+                  <div *ngIf="current_subscription?.sub_from.toLowerCase() == 'exchange'">
+                    Payment Link Exchange
+                  </div>
+                  <div *ngIf="current_subscription?.program_id == 60 || current_subscription?.program_id == 61">
+                    NUTRAION ONLINE
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="current_subscription?.agent">
+                <td class="no">08</td>
+                <td class="text-center">
+                  <h3>Agent</h3>
+                </td>
+                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                  <span>{{ current_subscription?.agent.name }}</span>
+                </td>
+              </tr>
+              <tr *ngIf="current_subscription?.program_id == 50 || current_subscription?.program_id < 15">
+                <td class="no">{{current_subscription?.agent? '09': '08'}}</td>
+                <td class="text-center">
+                  <h3>Confirmed Terms</h3>
+                </td>
+                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                  <span>YES</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table cellspacing="0" cellpadding="0" style="text-align: center">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th colspan="4"><i>Personal Deatils</i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="no">01</td>
+                <td class="text-center">
+                  <h3>First Name</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.first_name }}</span>
+                </td>
+                <td class="text-center">
+                  <h3>Last Name</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.last_name }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">02</td>
+                <td class="text-center">
+                  <h3>Gender</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.gender }}</span>
+                </td>
+                <td class="text-center">
+                  <h3>Birth Date</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.birthday }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">03</td>
+                <td class="text-center">
+                  <h3>Height</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.height }}</span>
+                </td>
+                <td class="text-center">
+                  <h3>Weight</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.Weight }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">04</td>
+                <td class="text-center">
+                  <h3>Email</h3>
+                </td>
+                <td style="word-break: break-all;">
+                  <span>{{ current_subscription?.user.email }}</span>
+                </td>
+                <td class="text-center">
+                  <h3>Land Line</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.land_line }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">05</td>
+                <td class="text-center">
+                  <h3>Mobile Number</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.phone_number }}</span>
+                </td>
+                <td class="text-center">
+                  <h3>Second Mobile Number</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.user.second_phone_number }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">06</td>
+                <td class="text-center">
+                  <h3>Note</h3>
+                </td>
+                <td colspan="3">
+                  <span>{{ current_subscription?.note }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table cellspacing="0" cellpadding="0" style="text-align: center">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th colspan="4"><i>Delivery Deatils</i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="no">01</td>
+                <td class="text-center">
+                  <h3>Start Date</h3>
+                </td>
+                <td colspan="3">
+                  <span>{{ current_subscription?.delivery_starting_day }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">02</td>
+                <td class="text-center">
+                  <h3>Emirate</h3>
+                </td>
+                <td>
+                  <span>{{ current_subscription?.location.emirate.en_name }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">03</td>
+                <td class="text-center">
+                  <h3>Land mark</h3>
+                </td>
+                <td colspan="3">
+                  <span>{{ current_subscription?.location.landmark }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">04</td>
+                <td class="text-center">
+                  <h3>Villa / Flat</h3>
+                </td>
+                <td colspan="3">
+                  <span>{{ current_subscription?.location.property_number }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">05</td>
+                <td class="text-center">
+                  <h3>Area</h3>
+                </td>
+                <td colspan="3">
+                  <span>{{ current_subscription?.location.area_id }}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no">06</td>
+                <td class="text-center">
+                  <h3>Delivery days</h3>
+                </td>
+                <td colspan="3" style="line-break: auto;">
+                  <span style="word-break: break-all;">{{ current_subscription?.days_of_week }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </main>
       </div>
     </div>
   </div>
