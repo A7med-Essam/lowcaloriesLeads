@@ -843,12 +843,13 @@
                 <td class="text-center">{{callGear?.start_time| date: 'dd/MM/yyyy hh:mm a'}}</td>
                 <td class="text-center">{{callGear?.direction}}</td>
                 <td class="text-center">
-                  <p-tag [severity]="getSeverity(callGear.is_lost ? 0 : 2)" [value]="callGear.is_lost ? 'Missed' :'Done'">
+                  <p-tag [severity]="getSeverity(callGear.is_lost ? 0 : 2)"
+                    [value]="callGear.is_lost ? 'Missed' :'Done'">
                   </p-tag>
                 </td>
                 <td class="text-center">
-                  <button *ngIf="callGear?.call_records?.length" pButton type="button" icon="pi pi-eye" (click)="show_callGear(callGear)"
-                    class="m-1 p-button-sm"></button>
+                  <button *ngIf="callGear?.call_records?.length" pButton type="button" icon="pi pi-eye"
+                    (click)="show_callGear(callGear)" class="m-1 p-button-sm"></button>
                 </td>
               </tr>
             </ng-template>
@@ -891,7 +892,8 @@
     <div class="col-12">
       <div class="form-group">
         <label for="">Customer Phone</label>
-        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter Customer Phone" maxlength="10" (keydown.enter)="getCustomerModels(CID_INPUT)"
+        <input type="text" class="w-100 py-2 my-2" pInputText placeholder="Enter Customer Phone" maxlength="10"
+          (keydown.enter)="getCustomerModels(CID_INPUT)"
           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" #CID_INPUT>
         <div class="text-end">
           <button class="btn btn-success px-4" (click)="getCustomerModels(CID_INPUT)">
@@ -1739,7 +1741,8 @@
     <div class="card-header">
       <div class="text-muted d-flex align-items-center">
         <h6 class="m-0" style="width: 200px;">Title</h6>
-        <h6 class="m-0">Description</h6>
+        <h6 class="m-0" style="width: 400px;">Description</h6>
+        <h6 class="m-0">Download</h6>
       </div>
     </div>
     <div class="card-body">
@@ -1750,8 +1753,16 @@
               <td style="vertical-align: middle;">#{{i+1}}</td>
               <td>
                 <audio controls>
-                  <source src="https://app.callgear.com/system/media/talk/{{current_callGear.communication_id}}/{{call}}/" type="audio/mpeg">
-              </audio>
+                  <source
+                    src="https://app.callgear.com/system/media/talk/{{current_callGear.communication_id}}/{{call}}/"
+                    type="audio/mpeg">
+                </audio>
+              </td>
+              <td style="vertical-align: middle;">
+                <button class="btn btn-primary rounded-pill b1"
+                  (click)="convertAudioToBase64('https://app.callgear.com/system/media/talk/',current_callGear.communication_id,call)">
+                  Download Call
+                </button>
               </td>
             </tr>
           </tbody>

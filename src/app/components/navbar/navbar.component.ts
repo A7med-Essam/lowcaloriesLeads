@@ -16,6 +16,7 @@ import { RefundService } from 'src/app/services/refund.service';
 import { SubscriptionsService } from 'src/app/services/subscriptions.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import { UsersService } from 'src/app/services/users.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-navbar',
@@ -39,7 +40,8 @@ export class NavbarComponent implements OnInit {
     private _LocalService: LocalService,
     private _AnalysisService: AnalysisService,
     private _SubscriptionsService: SubscriptionsService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private http: HttpClient
   ) {}
 
   notificationModal: boolean = false;
@@ -754,7 +756,7 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  callGear: any[]=[];
+  callGear: any[] = [];
   getCallGear(phone: number) {
     // const modifiedPhoneNumber = '971' + phone.slice(1);
     // const today = new Date();
@@ -789,9 +791,77 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  current_callGear:any;
-  show_callGear(calls:any){
+  current_callGear: any;
+  show_callGear(calls: any) {
     this.current_callGear = calls;
     this.callGearModal = true;
+  }
+
+  // convertAudioToBase64(audioFileURL: string) {
+  //   fetch(audioFileURL)
+  //     .then((response) => response.blob())
+  //     .then((blob) => {
+  //       const reader: any = new FileReader();
+  //       reader.onloadend = () => {
+  //         const base64Audio = reader.result.split(',')[1];
+  //         this.downloadBase64Audio(base64Audio, 'FILE_TEST');
+  //       };
+  //       reader.readAsDataURL(blob);
+  //     })
+  //     .catch((error) =>
+  //       console.error('Error converting audio to Base64:', error)
+  //     );
+  // }
+
+  convertAudioToBase64(audioFileURL: string,communication_id:number, call:number) {
+    const audio = audioFileURL+communication_id+'/'+call+'/audio.mp3'
+    this.http.get(audio, { responseType: 'blob' })
+      .subscribe((blob: Blob) => {
+        const reader: any = new FileReader();
+        reader.onloadend = () => {
+          const base64Audio = reader.result.split(',')[1];
+          this.downloadBase64Audio(base64Audio, 'Audio_'+this.generateRandomString(16)+'_'+communication_id+'_'+call+'_'+Date.now());
+        };
+        reader.readAsDataURL(blob);
+      }, (error:any) => {
+        console.error('Error converting audio to Base64:', error);
+      });
+  }
+
+  generateRandomString(length:number) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+  
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomString += characters.charAt(randomIndex);
+    }
+  
+    return randomString;
+  }
+
+  downloadBase64Audio(base64AudioString: string, fileName: string) {
+    const byteCharacters = atob(base64AudioString);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'audio/mp3' }); // Adjust the type accordingly
+
+    // Create a download link
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = fileName; // Replace 'your_audio_file.mp3' with the desired file name
+    downloadLink.style.display = 'none';
+    document.body.appendChild(downloadLink);
+
+    // Trigger the click event to start the download
+    downloadLink.click();
+
+    // Clean up
+    document.body.removeChild(downloadLink);
   }
 }
