@@ -834,7 +834,7 @@
                 <th class="text-center">Start Time </th>
                 <th class="text-center">Direction </th>
                 <th class="text-center">is_lost </th>
-                <th class="text-center">Calls </th>
+                <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-callGear>
@@ -848,8 +848,10 @@
                   </p-tag>
                 </td>
                 <td class="text-center">
-                  <button *ngIf="callGear?.call_records?.length" pButton type="button" icon="pi pi-eye"
-                    (click)="show_callGear(callGear)" class="m-1 p-button-sm"></button>
+                  <button *ngIf="callGear?.employees" pButton type="button" icon="pi pi-users"
+                    (click)="show_callEmp(callGear)" class="m-1 p-button-sm"></button>
+                    <button *ngIf="callGear?.call_records?.length" pButton type="button" icon="pi pi-play"
+                    (click)="show_callGear(callGear)" class="m-1 p-button-sm p-button-help"></button>
                 </td>
               </tr>
             </ng-template>
@@ -1770,4 +1772,32 @@
       </div>
     </div>
   </div>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="employeeCallModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+  [resizable]="true">
+  <p-table [value]="current_callEmp">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">Employee Name</th>
+        <th class="text-center">is Answered</th>
+        <th class="text-center">is Talked </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-callGear>
+      <tr>
+        <td class="text-center">{{callGear?.employee_full_name}}</td>
+        <td class="text-center">
+          <p-tag [severity]="getSeverity(callGear.is_answered ? 2 : 0)"
+            [value]="callGear.is_answered ? 'Call Answered' :'Call Missed'">
+          </p-tag>
+        </td>
+        <td class="text-center">
+          <p-tag [severity]="getSeverity(callGear.is_talked ? 2 : 1)"
+            [value]="callGear.is_talked ? 'Employee Talked' :'Employee Listened'">
+          </p-tag>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </p-dialog>

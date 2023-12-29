@@ -641,6 +641,7 @@ export class NavbarComponent implements OnInit {
   leadsDetailsModal: boolean = false;
   targetsDetailsModal: boolean = false;
   callGearModal: boolean = false;
+  employeeCallModal: boolean = false;
 
   current_subscription: any;
   show_subscription(row: any) {
@@ -795,6 +796,11 @@ export class NavbarComponent implements OnInit {
   show_callGear(calls: any) {
     this.current_callGear = calls;
     this.callGearModal = true;
+  }
+  current_callEmp:any;
+  show_callEmp(calls: any) {
+    this.current_callEmp = calls.employees;
+    this.employeeCallModal = true;
   }
 
   // convertAudioToBase64(audioFileURL: string) {
