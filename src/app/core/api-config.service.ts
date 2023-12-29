@@ -41,29 +41,23 @@ export class ApiConfigService {
   getReq2(url: string, params?: HttpParams): Observable<any> {
     return this.http.get(environment.BaseUrl2 + url, { params: params }).pipe(
       retry(2),
-      tap(
-        (res: any) => {
-          if (res.count == 0) {
-            this._MessageService.add({
-              severity: 'warn',
-              summary: 'Error',
-              detail: 'No Data Found',
-            });
-          }
+      tap((res: any) => {
+        if (res.count == 0) {
+          this._MessageService.add({
+            severity: 'warn',
+            summary: 'Error',
+            detail: 'No Data Found',
+          });
         }
-      )
+      })
     );
   }
 
   postReq22(url: string, body: any, params?: HttpParams): Observable<any> {
     return this.http
       .post(environment.BaseUrl_50 + url, body, { params: params })
-      .pipe(
-        retry(2),
-      );
+      .pipe(retry(2));
   }
-
-
 
   getReq3(url: string, params?: HttpParams): Observable<any> {
     return this.http.get(environment.BaseUrl4 + url, { params: params }).pipe(
@@ -174,17 +168,13 @@ export class ApiConfigService {
   postReq33(url: string, body: any, params?: HttpParams): Observable<any> {
     return this.http
       .post(environment.BaseUrl4 + url, body, { params: params })
-      .pipe(
-        retry(2)
-      );
+      .pipe(retry(2));
   }
 
   postReq333(url: string, body: any, params?: HttpParams): Observable<any> {
     return this.http
       .post(environment.BaseUrl4 + url, body, { params: params })
-      .pipe(
-        retry(2)
-      );
+      .pipe(retry(2));
   }
 
 }

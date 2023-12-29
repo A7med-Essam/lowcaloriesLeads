@@ -185,10 +185,12 @@ export class NavbarComponent implements OnInit {
   currentModel: string = '';
   getCustomerModels(mobile: any) {
     if (mobile != '') {
+      this.isLoading = true;
       this.resetAllModels();
       this.tabOption = 0;
       this._UsersService.getCustomerModels(mobile.value).subscribe((res) => {
         if (res.status == 1) {
+          this.isLoading = false;
           this.currentCustomerMobile = mobile.value;
           this.phoneModal = false;
           this.customerModal = true;
@@ -225,6 +227,8 @@ export class NavbarComponent implements OnInit {
             .subscribe((res) => {
               this.CHSubscriptions = res.data;
             });
+
+          this.getCallGear(this.currentCustomerMobile);
         }
       });
     }
@@ -281,6 +285,9 @@ export class NavbarComponent implements OnInit {
         break;
       case 'CHSubscriptions':
         this.filter = this.CHSubscriptions;
+        break;
+      case 'callGear':
+        this.filter = this.callGear;
         break;
     }
   }
@@ -611,6 +618,7 @@ export class NavbarComponent implements OnInit {
     this.system = [];
     this.pickup = [];
     this.allSub = [];
+    this.callGear = [];
     this.CHSubscriptions = null;
   }
 
@@ -630,6 +638,7 @@ export class NavbarComponent implements OnInit {
   callsDetailsModal: boolean = false;
   leadsDetailsModal: boolean = false;
   targetsDetailsModal: boolean = false;
+  callGearModal: boolean = false;
 
   current_subscription: any;
   show_subscription(row: any) {
@@ -743,5 +752,46 @@ export class NavbarComponent implements OnInit {
       default:
         return '';
     }
+  }
+
+  callGear: any[]=[];
+  getCallGear(phone: number) {
+    // const modifiedPhoneNumber = '971' + phone.slice(1);
+    // const today = new Date();
+    // const dateFrom = new Date(today);
+    // dateFrom.setDate(today.getDate() - 90);
+
+    // const formattedDateFrom = dateFrom
+    //   .toISOString()
+    //   .slice(0, 19)
+    //   .replace('T', ' ');
+
+    // const formattedDateTill = today.toISOString().slice(0, 10) + ' 00:00:00';
+
+    // const data = {
+    //   jsonrpc: '2.0',
+    //   id: 1,
+    //   method: 'get.calls_report',
+    //   params: {
+    //     access_token: 'hjxuyk9hcbsnqm4leuz7cnhlj4kze2qtqapg451y',
+    //     date_from: formattedDateFrom,
+    //     date_till: formattedDateTill,
+    //     filter: {
+    //       field: 'contact_phone_number',
+    //       operator: '=',
+    //       value: modifiedPhoneNumber,
+    //     },
+    //   },
+    // };
+
+    this._UsersService.callgear(phone).subscribe((res) => {
+      this.callGear = res.data;
+    });
+  }
+
+  current_callGear:any;
+  show_callGear(calls:any){
+    this.current_callGear = calls;
+    this.callGearModal = true;
   }
 }
