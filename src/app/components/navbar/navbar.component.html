@@ -115,17 +115,33 @@
   <div class="row customerModels">
     <p-tabView (onChange)="getModelDetails($event)" [scrollable]="true" [(activeIndex)]="tabOption">
       <p-tabPanel header="allSubscriptions">
-        <p-table [value]="filter" [loading]="loadingTable">
+        <p-table [value]="filter" [loading]="loadingTable" (onLazyLoad)="sort($event)">
           <ng-template pTemplate="header">
             <tr>
-              <th class="text-center">invoice number</th>
-              <th class="text-center">subscriptions plan</th>
-              <th class="text-center">total price</th>
-              <th class="text-center">name</th>
-              <th class="text-center">created at</th>
-              <th class="text-center">Starting Day</th>
-              <th class="text-center">Status</th>
-              <th class="text-center">sub_from</th>
+              <th class="text-center" pSortableColumn="invoice_no">invoice number
+                <p-sortIcon field="invoice_no"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="subscriptions_note">subscriptions plan
+                <p-sortIcon field="subscriptions_note"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="total_price">total price
+                <p-sortIcon field="total_price"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="user.first_name">name
+                <p-sortIcon field="user.first_name"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="created_at">created at
+                <p-sortIcon field="created_at"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="delivery_starting_day">Starting Day
+                <p-sortIcon field="delivery_starting_day"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="mode">Status
+                <p-sortIcon field="mode"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="sub_from">sub_from
+                <p-sortIcon field="sub_from"></p-sortIcon>
+              </th>
               <th class="text-center">Actions</th>
             </tr>
           </ng-template>
@@ -155,16 +171,31 @@
       </p-tabPanel>
       <ng-container *ngIf="customerModels?.webSubscription">
         <p-tabPanel header="webSubscription ({{customerModels?.webSubscription}})">
-          <p-table [value]="filter" *ngIf="customerModels?.webSubscription" [loading]="loadingTable">
+          <p-table [value]="filter" *ngIf="customerModels?.webSubscription" [loading]="loadingTable"
+            (onLazyLoad)="sort($event)">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">invoice number</th>
-                <th class="text-center">subscriptions plan</th>
-                <th class="text-center">total price</th>
-                <th class="text-center">name</th>
-                <th class="text-center">created at</th>
-                <th class="text-center">Starting Day</th>
-                <th class="text-center">Status</th>
+                <th class="text-center" pSortableColumn="invoice_no">invoice number
+                  <p-sortIcon field="invoice_no"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="subscriptions_note">subscriptions plan
+                  <p-sortIcon field="subscriptions_note"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="total_price">total price
+                  <p-sortIcon field="total_price"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="user.first_name">name
+                  <p-sortIcon field="user.first_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="created_at">created at
+                  <p-sortIcon field="created_at"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="delivery_starting_day">Starting Day
+                  <p-sortIcon field="delivery_starting_day"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="mode">Status
+                  <p-sortIcon field="mode"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions</th>
               </tr>
             </ng-template>
@@ -195,16 +226,30 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.paymentLink">
         <p-tabPanel header="paymentLink ({{customerModels?.paymentLink}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" [loading]="loadingTable" (onLazyLoad)="sort($event)">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">invoice number</th>
-                <th class="text-center">subscriptions plan</th>
-                <th class="text-center">total price</th>
-                <th class="text-center">name</th>
-                <th class="text-center">created at</th>
-                <th class="text-center">Starting Day</th>
-                <th class="text-center">Status</th>
+                <th class="text-center" pSortableColumn="invoice_no">invoice number
+                  <p-sortIcon field="invoice_no"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="subscriptions_note">subscriptions plan
+                  <p-sortIcon field="subscriptions_note"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="total_price">total price
+                  <p-sortIcon field="total_price"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="user.first_name">name
+                  <p-sortIcon field="user.first_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="created_at">created at
+                  <p-sortIcon field="created_at"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="delivery_starting_day">Starting Day
+                  <p-sortIcon field="delivery_starting_day"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="mode">Status
+                  <p-sortIcon field="mode"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions</th>
               </tr>
             </ng-template>
@@ -234,16 +279,30 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.mobileSubscription">
         <p-tabPanel header="mobileSubscription ({{customerModels?.mobileSubscription}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">invoice number</th>
-                <th class="text-center">subscriptions plan</th>
-                <th class="text-center">total price</th>
-                <th class="text-center">name</th>
-                <th class="text-center">created at</th>
-                <th class="text-center">Starting Day</th>
-                <th class="text-center">Status</th>
+                <th class="text-center" pSortableColumn="invoice_no">invoice number
+                  <p-sortIcon field="invoice_no"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="subscriptions_note">subscriptions plan
+                  <p-sortIcon field="subscriptions_note"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="total_price">total price
+                  <p-sortIcon field="total_price"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="user.first_name">name
+                  <p-sortIcon field="user.first_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="created_at">created at
+                  <p-sortIcon field="created_at"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="delivery_starting_day">Starting Day
+                  <p-sortIcon field="delivery_starting_day"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="mode">Status
+                  <p-sortIcon field="mode"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions</th>
               </tr>
             </ng-template>
@@ -273,18 +332,26 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.dataAnalytics">
         <p-tabPanel header="dataAnalytics ({{customerModels?.dataAnalytics}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">Date</th>
-                <th class="text-center">Agent</th>
-                <th class="text-center">Customer Mobile</th>
-                <th class="text-center">Customer Name</th>
+                <th class="text-center" pSortableColumn="date">Date
+                  <p-sortIcon field="date"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="agent.name">Agent
+                  <p-sortIcon field="agent.name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="mobile">Customer Mobile
+                  <p-sortIcon field="mobile"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="customer_name">Customer Name
+                  <p-sortIcon field="customer_name"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-analysis>
-              <tr>
+              <tr [pSelectableRow]="analysis">
                 <td class="text-center">{{analysis?.date}}</td>
                 <td class="text-center">{{analysis?.agent?.name}}</td>
                 <td class="text-center">{{analysis?.mobile}}</td>
@@ -303,28 +370,45 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.Clinic">
         <p-tabPanel header="Clinic ({{customerModels?.Clinic}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <!-- <th class="text-center">agent_name</th> -->
-                <th class="text-center">invoice number</th>
-                <th class="text-center">subscriptions plan</th>
-                <th class="text-center">total price</th>
-                <th class="text-center">name</th>
-                <th class="text-center">created at</th>
-                <th class="text-center">Starting Day</th>
+                <th class="text-center" pSortableColumn="invoice_no">invoice number
+                  <p-sortIcon field="invoice_no"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="subscriptions_note">subscriptions plan
+                  <p-sortIcon field="subscriptions_note"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="total_price">total price
+                  <p-sortIcon field="total_price"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="user.first_name">name
+                  <p-sortIcon field="user.first_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="created_at">created at
+                  <p-sortIcon field="created_at"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="delivery_starting_day">Starting Day
+                  <p-sortIcon field="delivery_starting_day"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="mode">Status
+                  <p-sortIcon field="mode"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-sub>
               <tr [pSelectableRow]="sub">
-                <!-- <td class="text-center">{{sub.agent?.name}}</td> -->
                 <td class="text-center">{{sub.invoice_no}}</td>
                 <td class="text-center">{{sub.subscriptions_note}}</td>
                 <td class="text-center">{{sub.total_price}}</td>
                 <td class="text-center">{{sub.user?.first_name}}</td>
                 <td class="text-center">{{sub.created_at | date}}</td>
                 <td class="text-center">{{sub.delivery_starting_day}}</td>
+                <td class="text-center">
+                  <p-tag [severity]="getSeverity(sub.mode)" [value]="getMode(sub.mode)">
+                  </p-tag>
+                </td>
                 <td class="text-center">
                   <button pButton type="button" icon="pi pi-eye" (click)="show_subscription(sub)"
                     class="m-1 p-button-sm"></button>
@@ -339,22 +423,38 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.Dislikes">
         <p-tabPanel header="Dislikes ({{customerModels?.Dislikes}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">name </th>
-                <th class="text-center">cid </th>
-                <th class="text-center">branch </th>
-                <th class="text-center">agent </th>
-                <th class="text-center">sent by </th>
-                <th class="text-center">dislike meals </th>
-                <th class="text-center">reasons </th>
-                <th class="text-center">created at </th>
+                <th class="text-center" pSortableColumn="name">name
+                  <p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="cid">cid
+                  <p-sortIcon field="cid"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="branch">branch
+                  <p-sortIcon field="branch"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="agent.name">agent
+                  <p-sortIcon field="agent.name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="sent_by">sent by
+                  <p-sortIcon field="sent_by"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="dislike_meals">dislike meals
+                  <p-sortIcon field="dislike_meals"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="reasons">reasons
+                  <p-sortIcon field="reasons"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="created_at">created at
+                  <p-sortIcon field="created_at"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-dislike>
-              <tr>
+              <tr [pSelectableRow]="dislike">
                 <td class="text-center">{{dislike.name}}</td>
                 <td class="text-center">{{dislike.cid}}</td>
                 <td class="text-center">{{dislike.branch}}</td>
@@ -377,31 +477,37 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.issues">
         <p-tabPanel header="issues ({{customerModels?.issues}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <!-- <th class="text-center">action </th> -->
-                <th class="text-center">agent name </th>
-                <th class="text-center">branch </th>
-                <th class="text-center">client name </th>
-                <th class="text-center">cid </th>
-                <!-- <th class="text-center">created at </th> -->
-                <th class="text-center">date </th>
-                <!-- <th class="text-center">issue details </th> -->
-                <th class="text-center">status </th>
+                <th class="text-center" pSortableColumn="agent_name">agent name
+                  <p-sortIcon field="agent_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="branch">branch
+                  <p-sortIcon field="branch"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="c_name">client name
+                  <p-sortIcon field="c_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="cid">cid
+                  <p-sortIcon field="cid"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="date">date
+                  <p-sortIcon field="date"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="status">status
+                  <p-sortIcon field="status"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-complaint>
-              <tr>
-                <!-- <td class="text-center">{{complaint?.action}}</td> -->
+              <tr [pSelectableRow]="complaint">
                 <td class="text-center">{{complaint?.agent_name}}</td>
                 <td class="text-center">{{complaint?.branch}}</td>
                 <td class="text-center">{{complaint?.c_name}}</td>
                 <td class="text-center">{{complaint?.cid}}</td>
-                <!-- <td class="text-center">{{complaint?.created_at | date}}</td> -->
                 <td class="text-center">{{complaint?.date}}</td>
-                <!-- <td class="text-center">{{complaint?.issue_details}}</td> -->
                 <td class="text-center">{{complaint?.status}}</td>
                 <td class="text-center">
                   <button pButton type="button" icon="pi pi-eye" (click)="show_issues(complaint)"
@@ -417,19 +523,33 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.refunds">
         <p-tabPanel header="refunds ({{customerModels?.refunds}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">agent name</th>
-                <th class="text-center">amount paid</th>
-                <th class="text-center">branch</th>
-                <th class="text-center">cid</th>
-                <th class="text-center">created at</th>
-                <th class="text-center">name</th>
-                <th class="text-center">payment method</th>
-                <!-- <th class="text-center">reason</th> -->
-                <th class="text-center">remaining days</th>
-                <!-- <th class="text-center">subscription_plan</th> -->
+                <th class="text-center" pSortableColumn="agent_name">agent name
+                  <p-sortIcon field="agent_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="amount_paid">amount paid
+                  <p-sortIcon field="amount_paid"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="branch">branch
+                  <p-sortIcon field="branch"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="cid">cid
+                  <p-sortIcon field="cid"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="created_at">created at
+                  <p-sortIcon field="created_at"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="name">name
+                  <p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="payment_method">payment method
+                  <p-sortIcon field="payment_method"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="remaining_days">remaining days
+                  <p-sortIcon field="remaining_days"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions</th>
               </tr>
             </ng-template>
@@ -442,9 +562,7 @@
                 <td class="text-center">{{refund.created_at | date}}</td>
                 <td class="text-center">{{refund.name}}</td>
                 <td class="text-center">{{refund.payment_method}}</td>
-                <!-- <td class="text-center">{{refund.reason}}</td> -->
                 <td class="text-center">{{refund.remaining_days}}</td>
-                <!-- <td class="text-center">{{refund.subscription_plan}}</td> -->
                 <td class="text-center">
                   <button pButton type="button" icon="pi pi-eye" (click)="show_refunds(refund)"
                     class="m-1 p-button-sm"></button>
@@ -459,20 +577,32 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.calls">
         <p-tabPanel header="calls ({{customerModels?.calls}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">cid </th>
-                <th class="text-center">remaining days </th>
-                <th class="text-center">branch </th>
-                <th class="text-center">customer name </th>
-                <th class="text-center">plan </th>
-                <th class="text-center">date </th>
+                <th class="text-center" pSortableColumn="cid">cid
+                  <p-sortIcon field="cid"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="subscription_id">remaining days
+                  <p-sortIcon field="subscription_id"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="branch">branch
+                  <p-sortIcon field="branch"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="customer_name">customer name
+                  <p-sortIcon field="customer_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="plan">plan
+                  <p-sortIcon field="plan"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="date">date
+                  <p-sortIcon field="date"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-call>
-              <tr>
+              <tr [pSelectableRow]="call">
                 <td class="text-center">{{call.cid}}</td>
                 <td class="text-center">{{call.subscription_id}}</td>
                 <td class="text-center">{{call.branch}}</td>
@@ -493,20 +623,32 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.leads">
         <p-tabPanel header="leads ({{customerModels?.leads}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">created at </th>
-                <th class="text-center">customer name </th>
-                <th class="text-center">status </th>
-                <th class="text-center">platforms </th>
-                <th class="text-center">type </th>
-                <th class="text-center">Created By </th>
+                <th class="text-center" pSortableColumn="created_at">created at
+                  <p-sortIcon field="created_at"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="customer_name">customer name
+                  <p-sortIcon field="customer_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="status">status
+                  <p-sortIcon field="status"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="platforms">platforms
+                  <p-sortIcon field="platforms"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="type">type
+                  <p-sortIcon field="type"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="user_created.name">Created By
+                  <p-sortIcon field="user_created.name"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-lead>
-              <tr>
+              <tr [pSelectableRow]="lead">
                 <td class="text-center">{{lead?.created_at | date}}</td>
                 <td class="text-center">{{lead?.customer_name}}</td>
                 <td class="text-center">{{lead?.status}}</td>
@@ -527,19 +669,30 @@
       </ng-container>
       <ng-container *ngIf="customerModels?.targets">
         <p-tabPanel header="targets ({{customerModels?.targets}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">agent name </th>
-                <th class="text-center">date </th>
-                <!-- <th class="text-center">client_cid </th> -->
-                <!-- <th class="text-center">branch </th> -->
-                <th class="text-center">customer type </th>
-                <th class="text-center">paid by </th>
-                <!-- <th class="text-center">status </th> -->
-                <th class="text-center">invoice number </th>
-                <th class="text-center">client name </th>
-                <th class="text-center">amount paid </th>
+                <th class="text-center" pSortableColumn="agent.name">agent name
+                  <p-sortIcon field="agent.name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="date">date
+                  <p-sortIcon field="date"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="customer_type">customer type
+                  <p-sortIcon field="customer_type"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="paid_by">paid by
+                  <p-sortIcon field="paid_by"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="invoice_number">invoice number
+                  <p-sortIcon field="invoice_number"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="client_name">client name
+                  <p-sortIcon field="client_name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="amount_paid">amount paid
+                  <p-sortIcon field="amount_paid"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
@@ -547,11 +700,8 @@
               <tr [pSelectableRow]="agent">
                 <td class="text-center">{{agent?.agent?.name}}</td>
                 <td class="text-center">{{agent?.date}}</td>
-                <!-- <td class="text-center">{{agent?.client_cid}}</td> -->
-                <!-- <td class="text-center">{{agent?.branch}}</td> -->
                 <td class="text-center">{{agent?.customer_type}}</td>
                 <td class="text-center">{{agent?.paid_by}}</td>
-                <!-- <td class="text-center">{{agent?.status}}</td> -->
                 <td class="text-center">{{agent?.invoice_number}}</td>
                 <td class="text-center">{{agent?.client_name}}</td>
                 <td class="text-center">{{agent?.amount_paid}}</td>
@@ -569,18 +719,26 @@
       </ng-container>
       <ng-container *ngIf="system.length">
         <p-tabPanel header="systemSubscription ({{system.length}})">
-          <p-table [value]="filter">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">#</th>
-                <th class="text-center">CID</th>
-                <th class="text-center">Remaining Days</th>
-                <th class="text-center">Plan Title</th>
-                <th class="text-center">Status</th>
+                <th class="text-center" pSortableColumn="cid">CID
+                  <p-sortIcon field="cid"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="remainingDays">Remaining Days
+                  <p-sortIcon field="remainingDays"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="planTitle">Plan Title
+                  <p-sortIcon field="planTitle"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="status">Status
+                  <p-sortIcon field="status"></p-sortIcon>
+                </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-system let-i="rowIndex">
-              <tr>
+              <tr [pSelectableRow]="system">
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">{{system?.cid}}</td>
                 <td class="text-center">{{system?.remainingDays}}</td>
@@ -592,19 +750,27 @@
         </p-tabPanel>
       </ng-container>
       <ng-container *ngIf="pickup?.length">
-        <p-tabPanel header="systemPickup ({{pickup?.length}})">
-          <p-table [value]="pickup">
+        <p-tabPanel header="systemPickup ({{pickup.length}})">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">#</th>
-                <th class="text-center">Invoice Branch</th>
-                <th class="text-center">Remaining Meals</th>
-                <th class="text-center">Remaining Snacks</th>
-                <th class="text-center">Plan Name</th>
+                <th class="text-center" pSortableColumn="invoiceBranchName">Invoice Branch
+                  <p-sortIcon field="invoiceBranchName"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="remainingMeals">Remaining Meals
+                  <p-sortIcon field="remainingMeals"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="remainingSnacks">Remaining Snacks
+                  <p-sortIcon field="remainingSnacks"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="planName">Plan Name
+                  <p-sortIcon field="planName"></p-sortIcon>
+                </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-pickup let-i="rowIndex">
-              <tr>
+              <tr [pSelectableRow]="pickup">
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">{{pickup?.invoiceBranchName}}</td>
                 <td class="text-center">{{pickup?.remainingMeals}}</td>
@@ -827,18 +993,26 @@
       </ng-container>
       <ng-container *ngIf="callGear.length">
         <p-tabPanel header="callGear ({{callGear.length}})">
-          <p-table [value]="filter" [loading]="loadingTable">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
-                <th class="text-center">Total Duration</th>
-                <th class="text-center">Start Time </th>
-                <th class="text-center">Direction </th>
-                <th class="text-center">is_lost </th>
+                <th class="text-center" pSortableColumn="total_duration">Total Duration
+                  <p-sortIcon field="total_duration"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="start_time">Start Time
+                  <p-sortIcon field="start_time"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="direction">Direction
+                  <p-sortIcon field="direction"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="is_lost">is_lost
+                  <p-sortIcon field="is_lost"></p-sortIcon>
+                </th>
                 <th class="text-center">Actions </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-callGear>
-              <tr>
+              <tr [pSelectableRow]="callGear">
                 <td class="text-center">{{callGear?.total_duration}}s</td>
                 <td class="text-center">{{callGear?.start_time| date: 'dd/MM/yyyy hh:mm a'}}</td>
                 <td class="text-center">{{callGear?.direction}}</td>
@@ -850,7 +1024,7 @@
                 <td class="text-center">
                   <button *ngIf="callGear?.employees" pButton type="button" icon="pi pi-users"
                     (click)="show_callEmp(callGear)" class="m-1 p-button-sm"></button>
-                    <button *ngIf="callGear?.call_records?.length" pButton type="button" icon="pi pi-play"
+                  <button *ngIf="callGear?.call_records?.length" pButton type="button" icon="pi pi-play"
                     (click)="show_callGear(callGear)" class="m-1 p-button-sm p-button-help"></button>
                 </td>
               </tr>
@@ -858,33 +1032,6 @@
           </p-table>
         </p-tabPanel>
       </ng-container>
-      <!-- <p-tabPanel *ngIf="customerModels?.branches"  header="branches ({{customerModels?.branches}})">
-        <p-table [value]="filter">
-          <ng-template pTemplate="header">
-            <tr>
-              <th class="text-center">invoice_no</th>
-              <th class="text-center">subscriptions plan</th>
-              <th class="text-center">total_price</th>
-              <th class="text-center">name</th>
-              <th class="text-center">created_at</th>
-              <th class="text-center">Starting Day</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-sub>
-            <tr [pSelectableRow]="sub">
-              <td class="text-center">{{sub.invoice_no}}</td>
-              <td class="text-center">{{sub.subscriptions_note}}</td>
-              <td class="text-center">{{sub.total_price}}</td>
-              <td class="text-center">{{sub.user?.first_name}}</td>
-              <td class="text-center">{{sub.created_at | date}}</td>
-              <td class="text-center">{{sub.delivery_starting_day}}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-        <button class="btn btn-success px-4 mt-3" (click)="viewTab('branches')">
-          <b>Model in details</b>
-        </button>
-      </p-tabPanel> -->
     </p-tabView>
   </div>
 </p-dialog>
@@ -1774,8 +1921,8 @@
   </div>
 </p-dialog>
 
-<p-dialog header="Details Modal" [(visible)]="employeeCallModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
-  [resizable]="true">
+<p-dialog header="Details Modal" [(visible)]="employeeCallModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="true" [resizable]="true">
   <p-table [value]="current_callEmp">
     <ng-template pTemplate="header">
       <tr>
