@@ -22,7 +22,18 @@ export class RefundService  {
     return this._ApiConfigService.getReq2(`Subscription/GetPlanDetails?CID=${cid}`);
   }
 
+  getCustomerPlanInfo(cid: number): Observable<any> {
+    // return this._ApiConfigService.getReq2(`Subscription/ExecuteProc?ProcName=CinfoByCID @CID=${cid}`);
+    return this._ApiConfigService.getReq2(`Subscription/GetPlanDetails?CID=${cid}`);
+  }
 
+  GetMealsPlanNutiration(cid: number): Observable<any> {
+    return this._ApiConfigService.getReq2(`Subscription/GetNutirations2?CID=${cid}`);
+  }
+
+  GetNutirationAVG(cid: number): Observable<any> {
+    return this._ApiConfigService.getReq2(`Subscription/GetNutirationAVG?CID=${cid}`);
+  }
 
   getRefunds(page: number): Observable<{status:number,data:any,message:string}> {
     return this._ApiConfigService.postReq3(`refundRequests?page=${page}`, '');

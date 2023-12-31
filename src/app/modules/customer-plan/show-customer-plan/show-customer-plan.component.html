@@ -1,0 +1,169 @@
+<section>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Customer Plans Inquiry</h2>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 my-2">
+                <div class="form-group">
+                    <label for="">Customer Phone</label>
+                    <input type="text" pInputText placeholder="Enter Customer Phone" maxlength="10" [(ngModel)]="phone"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                        class="p-inputtext p-component p-element w-100" (keydown.enter)="getCustomerCIDS()"
+                        (blur)="getCustomerCIDS()">
+                </div>
+            </div>
+            <div class="col-md-6 my-2">
+                <div class="form-group">
+                    <label for="">Customer CID</label>
+                    <p-dropdown [options]="CIDs" styleClass="w-100" placeholder="Select CID" appendTo="body"
+                        [(ngModel)]="cid" optionValue="cid" optionLabel="cid" (onChange)="reset()">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="col-12 my-2">
+                <div class="form-group">
+                    <div class="text-end">
+                        <button class="btn btn-success px-4" [disabled]="cid == '' || cid == null || phone == ''"
+                            (click)="getCustomerInfo()">
+                            <b>Get Customer Plans</b>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr *ngIf="customerInfo">
+        <div class="card" *ngIf="customerInfo">
+            <div class="card-body">
+                <div class="table-responsive overflow-auto">
+                    <table class="table">
+                        <thead class="text-muted">
+                            <th class="py-3">Customer Info</th>
+                            <th class="py-3">Description</th>
+                            <th class="py-3">Plan Info</th>
+                            <th class="py-3">Description</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CID</td>
+                                <td>{{customerInfo?.cid}}</td>
+                                <td>Branch</td>
+                                <td>{{customerInfo?.deliveryBranch}}</td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>{{customerInfo?.customerName}}</td>
+                                <td>Last Delivery</td>
+                                <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                            </tr>
+                            <tr>
+                                <td>Addreess</td>
+                                <td>{{customerInfo?.deliveryAddress}}</td>
+                                <td>Status</td>
+                                <td>{{customerInfo?.status}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{customerInfo?.email}}</td>
+                                <td>Plan</td>
+                                <td>{{customerInfo?.planTitle}}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td>
+                                <td>{{customerInfo?.customerPhone}}</td>
+                                <td>Remaining Days</td>
+                                <td>{{customerInfo?.remainingDays}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Start Date</td>
+                                <td>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-12 my-2">
+                        <div class="form-group">
+                            <div class="text-end">
+                                <button class="btn btn-success px-4" (click)="getDetails();GetNutirationAVG()">
+                                    <b>Show Meals</b>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<p-dialog header="Plan Details" [(visible)]="planModal" [modal]="true" [style]="{width: '75vw'}"
+    [draggable]="true" [resizable]="true">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th style="background-color:#cbcbcb" colspan="200">
+                            <h3 style="text-align:center">Nutiration Facts</h3>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td *ngFor="let week of nutirationAVG | keyvalue">
+                            <h3 style="text-align:center">{{week.key}}</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Carb</th>
+                                        <th>Protein</th>
+                                        <th>Calories</th>
+                                        <th>Fats</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{nutirationAVG[getItem(week.key)].carb}}</td>
+                                        <td>{{nutirationAVG[getItem(week.key)].protiens}}</td>
+                                        <td>{{nutirationAVG[getItem(week.key)].calories}}</td>
+                                        <td>{{nutirationAVG[getItem(week.key)].fats}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <ng-template pTemplate="body">
+        <p-table [value]="meals" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-center">Day</th>
+                    <th class="text-center" *ngFor="let type of meals[0].meals; let i = index">Meal {{i+1}}</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-index>
+                <tr>
+                    <td class="text-center">
+                        {{index.dayname}}
+                    </td>
+                    <td class="text-center" *ngFor="let meal of index.meals">
+                        {{meal.mealName}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+    <!-- <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper">
+            <button class="btn btn-primary">Export As PDF</button>
+        </div>
+    </ng-template> -->
+</p-dialog>

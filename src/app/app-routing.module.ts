@@ -210,6 +210,15 @@ const routes: Routes = [
       permission: ['show_enquiry'],
     },
   },
+  {
+    path: 'customer-plan',
+    loadChildren: () =>
+      import('./modules/customer-plan/customer-plan.module').then((m) => m.CustomerPlanModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_customerPlan'],
+    },
+  },
   { path: '**', component: Error404Component },
 ];
 

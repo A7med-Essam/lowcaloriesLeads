@@ -55,10 +55,10 @@
     </ul>
     <!-- ================================================SUBSCRIPTIONS================================================== -->
     <div class="menu-header mt-3 mb-2"
-      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission">
+      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission">
       Report Components
     </div>
-    <ul class="menu-items" *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission">
+    <ul class="menu-items" *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission">
       <li *ngIf="showSubscriptionPermission">
         <a routerLink="/subscriptions/show" routerLinkActive="active">
           <i class="fas fa-bookmark"></i>
@@ -81,6 +81,12 @@
         <a routerLink="/enquiry/show" routerLinkActive="active">
           <i class="fas fa-address-book"></i>
           <span>Inquiry</span>
+        </a>
+      </li>
+      <li *ngIf="showCustomerPlanPermission">
+        <a routerLink="/customer-plan/show" routerLinkActive="active">
+          <i class="fas fa-search-plus"></i>
+          <span>Customer Plans</span>
         </a>
       </li>
       <hr>
