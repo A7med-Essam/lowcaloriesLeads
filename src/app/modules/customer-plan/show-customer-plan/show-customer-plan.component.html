@@ -104,6 +104,48 @@
 
 <p-dialog header="Plan Details" [(visible)]="planModal" [modal]="true" [style]="{width: '75vw'}"
     [draggable]="true" [resizable]="true">
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>CID</td>
+                <td>{{customerInfo?.cid}}</td>
+                <td>Branch</td>
+                <td>{{customerInfo?.deliveryBranch}}</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>{{customerInfo?.customerName}}</td>
+                <td>Last Delivery</td>
+                <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+            </tr>
+            <tr>
+                <td>Addreess</td>
+                <td>{{customerInfo?.deliveryAddress}}</td>
+                <td>Status</td>
+                <td>{{customerInfo?.status}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{customerInfo?.email}}</td>
+                <td>Plan</td>
+                <td>{{customerInfo?.planTitle}}</td>
+            </tr>
+            <tr>
+                <td>Phone</td>
+                <td>{{customerInfo?.customerPhone}}</td>
+                <td>Remaining Days</td>
+                <td>{{customerInfo?.remainingDays}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Start Date</td>
+                <td>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+            </tr>
+        </tbody>
+    </table>
+
     <div class="row">
         <div class="col-md-12">
             <table class="table table-bordered">
@@ -146,24 +188,41 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th class="text-center">Day</th>
-                    <th class="text-center" *ngFor="let type of meals[0].meals; let i = index">Meal {{i+1}}</th>
+                    <th class="text-center" *ngFor="let type of meals[0].meals; let i = index">
+                        {{(i+1) > customerInfo?.planTitle.split("-")[0].at(0) ? "SNACK" : "MEAL "+(i+1)}}
+                    </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-index>
                 <tr>
                     <td class="text-center">
                         {{index.dayname}}
+                        <br>
+                        <span class="text-primary">
+                            Protiens: {{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}
+                            Fats: {{calculateTotalNutrition(index.meals).fats.toFixed(1)}}
+                            <br>
+                            Carb: {{calculateTotalNutrition(index.meals).carb.toFixed(1)}}
+                            Calories: {{calculateTotalNutrition(index.meals).calories.toFixed(1)}}
+                        </span>
                     </td>
                     <td class="text-center" *ngFor="let meal of index.meals">
-                        {{meal.mealName}}
+                        {{meal.mealName}} <br>
+                        <span class="text-primary">
+                            Protiens: {{meal.protiens}}
+                            Fats: {{meal.fats}}
+                            <br>
+                            Carb: {{meal.carb}}
+                            Calories: {{meal.calories}}
+                        </span>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </ng-template>
-    <!-- <ng-template pTemplate="footer">
+    <ng-template pTemplate="footer">
         <div class="upload-btn-wrapper">
-            <button class="btn btn-primary">Export As PDF</button>
+            <button class="btn btn-primary" [disabled]="!printPermission" (click)="exportAsPDF()">Export As PDF</button>
         </div>
-    </ng-template> -->
+    </ng-template>
 </p-dialog>
