@@ -112,6 +112,12 @@ export class ShowCustomerPlanComponent implements OnInit {
       const mealHeaders= this.meals[0].meals.map((e:any,index:number)=>{
         return (index+1) > this.customerInfo?.planTitle.split("-")[0].at(0) ? "SNACK" : "MEAL "+(index+1)
       })
+
+      // Protiens: {{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}
+      // Fats: {{calculateTotalNutrition(index.meals).fats.toFixed(1)}}
+      // <br>
+      // Carb: {{calculateTotalNutrition(index.meals).carb.toFixed(1)}}
+      // Calories: {{calculateTotalNutrition(index.meals).calories.toFixed(1)}}
       const headers = [
         'DAY',
           ...mealHeaders
@@ -123,7 +129,7 @@ export class ShowCustomerPlanComponent implements OnInit {
         });
 
         return [
-          obj.dayname,
+          obj.dayname + `\n Protiens: ${this.calculateTotalNutrition(obj.meals).protiens.toFixed(1)} \n Fats: ${this.calculateTotalNutrition(obj.meals).fats.toFixed(1)} \n Carb: ${this.calculateTotalNutrition(obj.meals).carb.toFixed(1)} \n Calories: ${this.calculateTotalNutrition(obj.meals).calories.toFixed(1)}`,
           ...meals
         ]
       });
