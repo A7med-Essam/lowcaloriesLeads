@@ -11,6 +11,7 @@ import { GuardService } from 'src/app/services/guard.service';
 })
 export class ShowCustomerPlanComponent implements OnInit {
   planModal: boolean = false;
+  searchByCID: boolean = false;
   phone: string = '';
   cid: string = '';
   constructor(
@@ -40,13 +41,18 @@ export class ShowCustomerPlanComponent implements OnInit {
 
   customerInfo: any = null;
   getCustomerInfo() {
-    if (this.phone != '' && this.cid && this.cid != '') {
+    if (this.cid && this.cid != '') {
       this._RefundService
         .getCustomerPlanInfo(Number(this.cid))
         .subscribe((res) => {
           this.customerInfo = res;
         });
     }
+  }
+
+  toggleSearch(){
+    this.searchByCID = !this.searchByCID;
+    this.cid = '';
   }
 
   reset() {
@@ -113,11 +119,6 @@ export class ShowCustomerPlanComponent implements OnInit {
         return (index+1) > this.customerInfo?.planTitle.split("-")[0].at(0) ? "SNACK" : "MEAL "+(index+1)
       })
 
-      // Protiens: {{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}
-      // Fats: {{calculateTotalNutrition(index.meals).fats.toFixed(1)}}
-      // <br>
-      // Carb: {{calculateTotalNutrition(index.meals).carb.toFixed(1)}}
-      // Calories: {{calculateTotalNutrition(index.meals).calories.toFixed(1)}}
       const headers = [
         'DAY',
           ...mealHeaders

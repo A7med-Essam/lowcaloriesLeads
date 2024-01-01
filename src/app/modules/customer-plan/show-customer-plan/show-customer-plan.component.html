@@ -5,7 +5,7 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-md-6 my-2">
+            <div class="col-md-6 my-2" *ngIf="!searchByCID">
                 <div class="form-group">
                     <label for="">Customer Phone</label>
                     <input type="text" pInputText placeholder="Enter Customer Phone" maxlength="10" [(ngModel)]="phone"
@@ -14,7 +14,7 @@
                         (blur)="getCustomerCIDS()">
                 </div>
             </div>
-            <div class="col-md-6 my-2">
+            <div class="col-md-6 my-2" *ngIf="!searchByCID">
                 <div class="form-group">
                     <label for="">Customer CID</label>
                     <p-dropdown [options]="CIDs" styleClass="w-100" placeholder="Select CID" appendTo="body"
@@ -22,13 +22,25 @@
                     </p-dropdown>
                 </div>
             </div>
+            <div class="col-12 my-2" *ngIf="searchByCID">
+                <div class="form-group">
+                    <label for="">Customer CID</label>
+                    <input type="text" pInputText placeholder="Enter Customer CID" maxlength="10" [(ngModel)]="cid"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                        class="p-inputtext p-component p-element w-100" (keydown.enter)="getCustomerCIDS()"
+                        (blur)="getCustomerCIDS()">
+                </div>
+            </div>
             <div class="col-12 my-2">
                 <div class="form-group">
-                    <div class="text-end">
-                        <button class="btn btn-success px-4" [disabled]="cid == '' || cid == null || phone == ''"
-                            (click)="getCustomerInfo()">
-                            <b>Get Customer Plans</b>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-secondary px-4 mx-2" (click)="toggleSearch()">
+                            <b>Search By CID</b>
                         </button>
+                        <button class="btn btn-success px-4 mx-2" [disabled]="cid == '' || cid == null"
+                        (click)="getCustomerInfo()">
+                        <b>Get Customer Plans</b>
+                    </button>
                     </div>
                 </div>
             </div>
