@@ -27,8 +27,8 @@
                     <label for="">Customer CID</label>
                     <input type="text" pInputText placeholder="Enter Customer CID" maxlength="10" [(ngModel)]="cid"
                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                        class="p-inputtext p-component p-element w-100" (keydown.enter)="getCustomerCIDS()"
-                        (blur)="getCustomerCIDS()">
+                        class="p-inputtext p-component p-element w-100" (keydown.enter)="getCustomerInfo()"
+                        (blur)="getCustomerInfo()">
                 </div>
             </div>
             <div class="col-12 my-2">
@@ -102,7 +102,7 @@
                     <div class="col-12 my-2">
                         <div class="form-group">
                             <div class="text-end">
-                                <button class="btn btn-success px-4" (click)="getDetails();GetNutirationAVG()">
+                                <button class="btn btn-success px-4" (click)="getDetails(customerInfo?.cid);GetNutirationAVG(customerInfo?.cid)">
                                     <b>Show Meals</b>
                                 </button>
                             </div>
@@ -114,7 +114,7 @@
     </div>
 </section>
 
-<p-dialog header="Plan Details" [(visible)]="planModal" [modal]="true" [style]="{width: '75vw'}"
+<p-dialog header="Plan Details" [(visible)]="planModal" [modal]="true" [style]="{width: '90vw'}"
     [draggable]="true" [resizable]="true">
 
     <table class="table">
@@ -173,18 +173,18 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Carb</th>
-                                        <th>Protein</th>
                                         <th>Calories</th>
+                                        <th>Protein</th>
                                         <th>Fats</th>
+                                        <th>Carb</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{nutirationAVG[getItem(week.key)].carb}}</td>
-                                        <td>{{nutirationAVG[getItem(week.key)].protiens}}</td>
                                         <td>{{nutirationAVG[getItem(week.key)].calories}}</td>
+                                        <td>{{nutirationAVG[getItem(week.key)].protiens}}</td>
                                         <td>{{nutirationAVG[getItem(week.key)].fats}}</td>
+                                        <td>{{nutirationAVG[getItem(week.key)].carb}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -203,37 +203,64 @@
                     <th class="text-center" *ngFor="let type of meals[0].meals; let i = index">
                         {{(i+1) > customerInfo?.planTitle.split("-")[0].at(0) ? "SNACK" : "MEAL "+(i+1)}}
                     </th>
+                    <th class="text-center">
+                        Day Nutrition Facts
+                    </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-index>
                 <tr>
                     <td class="text-center">
                         {{index.dayname}}
-                        <br>
-                        <span class="text-primary">
-                            Protiens: {{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}
-                            Fats: {{calculateTotalNutrition(index.meals).fats.toFixed(1)}}
-                            <br>
-                            Carb: {{calculateTotalNutrition(index.meals).carb.toFixed(1)}}
-                            Calories: {{calculateTotalNutrition(index.meals).calories.toFixed(1)}}
-                        </span>
                     </td>
                     <td class="text-center" *ngFor="let meal of index.meals">
                         {{meal.mealName}} <br>
-                        <span class="text-primary">
-                            Protiens: {{meal.protiens}}
-                            Fats: {{meal.fats}}
-                            <br>
-                            Carb: {{meal.carb}}
-                            Calories: {{meal.calories}}
-                        </span>
+                        <table class="table table-bordered" style="width: 350px;">
+                            <thead>
+                                <tr>
+                                    <th>Calories</th>
+                                    <th>Protein</th>
+                                    <th>Fats</th>
+                                    <th>Carb</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{meal.calories}}</td>
+                                    <td>{{meal.protiens}}</td>
+                                    <td>{{meal.fats}}</td>
+                                    <td>{{meal.carb}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td style="width: 350px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Calories</th>
+                                    <th>Protein</th>
+                                    <th>Fats</th>
+                                    <th>Carb</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{calculateTotalNutrition(index.meals).calories.toFixed(1)}}</td>
+                                    <td>{{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}</td>
+                                    <td>{{calculateTotalNutrition(index.meals).fats.toFixed(1)}}</td>
+                                    <td>{{calculateTotalNutrition(index.meals).carb.toFixed(1)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </ng-template>
     <ng-template pTemplate="footer">
-        <div class="upload-btn-wrapper">
+        <div class="upload-btn-wrapper mt-3">
             <button class="btn btn-primary" [disabled]="!printPermission" (click)="exportAsPDF()">Export As PDF</button>
         </div>
     </ng-template>

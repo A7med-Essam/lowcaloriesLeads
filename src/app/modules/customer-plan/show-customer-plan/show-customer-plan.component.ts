@@ -50,7 +50,7 @@ export class ShowCustomerPlanComponent implements OnInit {
     }
   }
 
-  toggleSearch(){
+  toggleSearch() {
     this.searchByCID = !this.searchByCID;
     this.cid = '';
   }
@@ -60,30 +60,29 @@ export class ShowCustomerPlanComponent implements OnInit {
   }
 
   meals: any;
-  getDetails() {
-    this._RefundService
-      .GetMealsPlanNutiration(Number(this.cid))
-      .subscribe((res) => {
-        this.planModal = true;
-        this.meals = ([] as any[]).concat(...Object.values(res));
-      });
+  getDetails(cid: number) {
+    this._RefundService.GetMealsPlanNutiration(cid).subscribe((res) => {
+      this.planModal = true;
+      this.meals = ([] as any[]).concat(...Object.values(res));
+    });
   }
 
-  calculateTotalNutrition(meals:any[]) {
-    const totalNutrition:any = {};
-    meals.forEach(meal => {
+  calculateTotalNutrition(meals: any[]) {
+    const totalNutrition: any = {};
+    meals.forEach((meal) => {
       for (const nutrient in meal) {
-        if (nutrient !== "mealType" && !isNaN(meal[nutrient])) {
-          totalNutrition[nutrient] = (totalNutrition[nutrient] || 0) + meal[nutrient];
+        if (nutrient !== 'mealType' && !isNaN(meal[nutrient])) {
+          totalNutrition[nutrient] =
+            (totalNutrition[nutrient] || 0) + meal[nutrient];
         }
       }
     });
     return totalNutrition;
   }
-  
+
   nutirationAVG: any;
-  GetNutirationAVG() {
-    this._RefundService.GetNutirationAVG(Number(this.cid)).subscribe((res) => {
+  GetNutirationAVG(cid: number) {
+    this._RefundService.GetNutirationAVG(cid).subscribe((res) => {
       this.nutirationAVG = res;
     });
   }
@@ -97,48 +96,90 @@ export class ShowCustomerPlanComponent implements OnInit {
     if (this.printPermission) {
       // Default export is a4 paper, portrait, using millimeters for units
       const doc = new jsPDF();
-      doc.internal.pageSize.width = 420;
+      doc.internal.pageSize.width = 520;
       const imageFile = '../../../../assets/images/logo.png';
-      doc.addImage(imageFile, 'JPEG', 10, 10, 20, 15);
+      doc.addImage(imageFile, 'JPEG', 15, 10, 20, 15);
 
       doc.setTextColor(50);
       doc.setFontSize(14);
-      doc.text(`CID:${this.customerInfo?.cid}`, 10, 35);
-      doc.text(`Customer Name:${this.customerInfo?.customerName}`, 10, 45);
-      doc.text(`LastDelivery Date:${this.customerInfo?.lastDeliveryDate}`, 10, 55);
-      doc.text(`Delivery Address:${this.customerInfo?.deliveryAddress}`, 10, 65);
-      doc.text(`Status:${this.customerInfo?.status}`, 320, 35);
-      doc.text(`Email:${this.customerInfo?.email}`, 320, 45);
-      doc.text(`Plan Title:${this.customerInfo?.planTitle}`, 320, 55);
-      doc.text(`Customer Phone:${this.customerInfo?.customerPhone}`, 320, 65);
-      doc.text(`Remaining Days:${this.customerInfo?.remainingDays}`, 320, 75);
-      doc.text(`Start Date:${this.customerInfo?.startDate}`, 10, 75);
-      doc.text(`Delivery Branch:${this.customerInfo?.deliveryBranch}`, 10, 85);
+      doc.text(`CID:${this.customerInfo?.cid}`, 15, 35);
+      doc.text(`Customer Name:${this.customerInfo?.customerName}`, 15, 45);
+      doc.text(
+        `Customer Phone:${this.customerInfo?.customerPhone}`,
+        15,
+        55
+      );
+      doc.text(
+        `Delivery Address:${this.customerInfo?.deliveryAddress}`,
+        15,
+        65
+      );
+      doc.text(`Status:${this.customerInfo?.status}`, 440, 35);
+      doc.text(`Start Date:${this.customerInfo?.startDate?.split('T')[0]?? ""}`, 440, 45);
+      doc.text(`Plan Title:${this.customerInfo?.planTitle}`, 440, 55);
+      doc.text(`Last Delivery:${this.customerInfo?.lastDeliveryDate?.split('T')[0] ?? ""}`, 440, 65);
+      doc.text(`Remaining Days:${this.customerInfo?.remainingDays}`, 440, 75);
+      doc.text(`Email:${this.customerInfo?.email}`, 15, 75);
+      doc.text(`Delivery Branch:${this.customerInfo?.deliveryBranch}`, 15, 85);
 
-      const mealHeaders= this.meals[0].meals.map((e:any,index:number)=>{
-        return (index+1) > this.customerInfo?.planTitle.split("-")[0].at(0) ? "SNACK" : "MEAL "+(index+1)
-      })
+      const mealHeaders = this.meals[0].meals.map((e: any, index: number) => {
+        return index + 1 > this.customerInfo?.planTitle.split('-')[0].at(0)
+          ? 'SNACK'
+          : 'MEAL ' + (index + 1);
+      });
 
-      const headers = [
-        'DAY',
-          ...mealHeaders
-      ];
+      const headers = ['DAY', ...mealHeaders, 'Day Nutrition Facts'];
 
       const convertedData = this.meals.map((obj: any) => {
-        const meals = obj.meals.map((e:any)=>{
-          return e.mealName + `\nProtiens: ${e.protiens} - Fats: ${e.fats} \n Carb: ${e.carb} - Calories: ${e.calories}`
+        const meals = obj.meals.map((e: any) => {
+          return (
+            e.mealName +
+            `\n\nCalories: ${e.calories} - Protiens: ${e.protiens} \nFats: ${e.fats} - Carb: ${e.carb}`
+          );
         });
 
         return [
-          obj.dayname + `\n Protiens: ${this.calculateTotalNutrition(obj.meals).protiens.toFixed(1)} \n Fats: ${this.calculateTotalNutrition(obj.meals).fats.toFixed(1)} \n Carb: ${this.calculateTotalNutrition(obj.meals).carb.toFixed(1)} \n Calories: ${this.calculateTotalNutrition(obj.meals).calories.toFixed(1)}`,
-          ...meals
-        ]
+          obj.dayname,
+          ...meals,
+        ];
       });
 
-      autoTable(doc, { startY: 90 });
+      const convertedNutritions = this.meals.map((obj: any) => {
+        return [
+          this.calculateTotalNutrition(obj.meals).carb.toFixed(1),
+          this.calculateTotalNutrition(obj.meals).protiens.toFixed(1),
+          this.calculateTotalNutrition(obj.meals).calories.toFixed(1),
+          this.calculateTotalNutrition(obj.meals).fats.toFixed(1),
+        ];
+      });
+
+      autoTable(doc, { startY: 85 });
       autoTable(doc, {
         head: [headers],
         body: convertedData,
+        bodyStyles:{
+          cellPadding:[5,15,5,1]
+        },
+        didDrawCell: (data:any) => {
+          const index = this.meals.findIndex((day:any) => day.dayname === data.row.raw[0]);
+          if (
+            data.column.dataKey === headers.length - 1 &&
+            data.cell.section === 'body' && index >= 0
+          ) {
+            autoTable(doc, {
+              head: [['Carb', 'Protein', 'Calories', 'Fats']],
+              body: [convertedNutritions[index]],
+              startY: data.cell.y + 2,
+              margin: { left: data.cell.x - 10 },
+              tableWidth: 'wrap',
+              theme: 'grid',
+              styles: {
+                fontSize: 7,
+                cellPadding: 1,
+              },
+            });
+          }
+        },
       });
 
       // Set the line color and width
@@ -152,12 +193,12 @@ export class ShowCustomerPlanComponent implements OnInit {
 
       // Iterate over each page and add the footer
       for (let i = 1; i <= totalPages.length; i++) {
-        doc.internal.pageSize.width = 420;
+        doc.internal.pageSize.width = 520;
         doc.line(
-          20,
-          doc.internal.pageSize.height - 20,
-          doc.internal.pageSize.width - 20,
-          doc.internal.pageSize.height - 20
+          10,
+          doc.internal.pageSize.height - 10,
+          doc.internal.pageSize.width - 10,
+          doc.internal.pageSize.height - 10
         );
         // Set the current page as active
         doc.setPage(i);
@@ -167,7 +208,7 @@ export class ShowCustomerPlanComponent implements OnInit {
         doc.text(
           'Thelowcalories.com',
           20,
-          doc.internal.pageSize.getHeight() - 10
+          doc.internal.pageSize.getHeight() - 5
         );
       }
 
