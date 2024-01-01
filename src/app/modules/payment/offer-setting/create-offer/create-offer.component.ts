@@ -74,7 +74,7 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
       end_date: new FormControl(null, [Validators.required]),
       bag_option: new FormControl('no', [Validators.required]),
       cutlery_option: new FormControl('no', [Validators.required]),
-      // status: new FormControl('active', [Validators.required]),
+      status: new FormControl('active', [Validators.required]),
       plan_price: new FormControl(null, [Validators.required]),
       notes: new FormControl(null, [Validators.required]),
       name: new FormControl(null, [Validators.required]),
