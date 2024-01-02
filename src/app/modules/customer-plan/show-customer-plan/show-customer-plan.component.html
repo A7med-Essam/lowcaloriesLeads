@@ -104,8 +104,17 @@
             </div>
             <div class="card-footer">
                 <div class="row">
-                    <div class="col-12 my-2">
-                        <div class="form-group">
+                    <div class="col-12 my-2 d-flex justify-content-end">
+                        <div class="form-group mx-2">
+                            <div class="text-end">
+                                <button class="btn btn-warning px-4">
+                                    <a style="color: #fff;text-decoration: none;" href="https://thelowcalories.com:91/Home/inv?CID={{customerInfo.cid}}" target="_blank">
+                                        <b>Show Invoice</b>
+                                    </a>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group mx-2">
                             <div class="text-end">
                                 <button class="btn btn-success px-4" (click)="getDetails(customerInfo?.cid);GetNutirationAVG(customerInfo?.cid)">
                                     <b>Show Meals</b>
@@ -269,7 +278,7 @@
         </div>
     </ng-template>
     <ng-template pTemplate="footer">
-        <div class="upload-btn-wrapper mt-3">
+        <div class="upload-btn-wrapper mt-3 mx-3">
             <button class="btn btn-primary" [disabled]="!printPermission" (click)="pdfDownload()">
                 <b>Export As PDF <i *ngIf="isLoading" class="fas fa-circle-notch fa-spin p-0"></i></b>
             </button>

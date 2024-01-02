@@ -26,7 +26,6 @@ export class ShowCustomerPlanComponent implements OnInit {
   }
 
   printPermission: boolean = false;
-
   getPermission() {
     this.printPermission =
       this._GuardService.getPermissionStatus('print_customerPlan');
@@ -52,20 +51,6 @@ export class ShowCustomerPlanComponent implements OnInit {
     }
   }
 
-  toggleBtnName: string = 'Search By CID';
-  toggleSearch() {
-    this.searchByCID = !this.searchByCID;
-    this.cid = '';
-    this.toggleBtnName =
-      this.toggleBtnName === 'Search By CID'
-        ? 'Search By Phone Number'
-        : 'Search By CID';
-  }
-
-  reset() {
-    this.customerInfo = null;
-  }
-
   meals: any;
   getDetails(cid: number) {
     this._RefundService.GetMealsPlanNutiration(cid).subscribe((res) => {
@@ -74,6 +59,14 @@ export class ShowCustomerPlanComponent implements OnInit {
     });
   }
 
+  nutirationAVG: any;
+  GetNutirationAVG(cid: number) {
+    this._RefundService.GetNutirationAVG(cid).subscribe((res) => {
+      this.nutirationAVG = res;
+    });
+  }
+
+  // =================================================HELPER =================================
   calculateTotalNutrition(meals: any[]) {
     const totalNutrition: any = {};
     meals.forEach((meal) => {
@@ -85,13 +78,6 @@ export class ShowCustomerPlanComponent implements OnInit {
       }
     });
     return totalNutrition;
-  }
-
-  nutirationAVG: any;
-  GetNutirationAVG(cid: number) {
-    this._RefundService.GetNutirationAVG(cid).subscribe((res) => {
-      this.nutirationAVG = res;
-    });
   }
 
   getItem(item: any) {
@@ -111,6 +97,20 @@ export class ShowCustomerPlanComponent implements OnInit {
       default:
         return 'warning';
     }
+  }
+
+  toggleBtnName: string = 'Search By CID';
+  toggleSearch() {
+    this.searchByCID = !this.searchByCID;
+    this.cid = '';
+    this.toggleBtnName =
+      this.toggleBtnName === 'Search By CID'
+        ? 'Search By Phone Number'
+        : 'Search By CID';
+  }
+
+  reset() {
+    this.customerInfo = null;
   }
 
   // ========================================= PRINT =================================
