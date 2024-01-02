@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import { GuardService } from 'src/app/services/guard.service';
 // import * as html2canvas from "html2canvas";
 import html2canvas from 'html2canvas';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-show-customer-plan',
@@ -18,7 +19,8 @@ export class ShowCustomerPlanComponent implements OnInit {
   cid: string = '';
   constructor(
     private _RefundService: RefundService,
-    private _GuardService: GuardService
+    private _GuardService: GuardService,
+    private http:HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -53,18 +55,46 @@ export class ShowCustomerPlanComponent implements OnInit {
 
   meals: any;
   getDetails(cid: number) {
-    this._RefundService.GetMealsPlanNutiration(cid).subscribe((res) => {
+    if (!this.meals) {
+      this._RefundService.GetMealsPlanNutiration(cid).subscribe((res) => {
+        this.planModal = true;
+        this.meals = ([] as any[]).concat(...Object.values(res));
+        this.meals = this.updateDaynames(this.meals)
+      });
+    }
+    else{
       this.planModal = true;
-      this.meals = ([] as any[]).concat(...Object.values(res));
-      this.meals = this.updateDaynames(this.meals)
-    });
+    }
   }
 
   nutirationAVG: any;
   GetNutirationAVG(cid: number) {
-    this._RefundService.GetNutirationAVG(cid).subscribe((res) => {
-      this.nutirationAVG = res;
-    });
+    if (!this.nutirationAVG) {
+      this._RefundService.GetNutirationAVG(cid).subscribe((res) => {
+        this.nutirationAVG = res;
+      });
+    }
+  }
+
+  logsModal: boolean = false;
+  selectedDate:Date[]=[];
+  logs:any = [];
+  loadingLogs:boolean = false;
+  getLogs(){
+    this.loadingLogs = true;
+    const info = {
+      "cid": this.customerInfo.cid,
+      "from": this.selectedDate.length > 0 ? new Date(new Date(this.selectedDate[0]).setDate(new Date(this.selectedDate[0]).getDate() + 1)):new Date(),
+      "to": this.selectedDate.length == 2 ? new Date(new Date(this.selectedDate[1]).setDate(new Date(this.selectedDate[1]).getDate() + 1)):new Date()
+    };
+    this.http.post('https://thelowcalories.com:52/api/Subscription/GetSubscriptionLog',info).subscribe((res) => {
+      this.logs = res
+    this.loadingLogs = false;
+    })
+  }
+
+  resetDate(){
+    this.selectedDate = []
   }
 
   // =================================================HELPER =================================

@@ -9,6 +9,8 @@ import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { CalendarModule } from 'primeng/calendar';
+import { ButtonModule } from 'primeng/button';
 
 
 @NgModule({
@@ -23,7 +25,9 @@ import { TagModule } from 'primeng/tag';
     DialogModule,
     FormsModule,
     TableModule,
-    TagModule
+    TagModule,
+    CalendarModule,
+    ButtonModule
   ]
 })
 export class CustomerPlanModule { }

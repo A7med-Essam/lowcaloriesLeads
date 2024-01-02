@@ -107,11 +107,18 @@
                     <div class="col-12 my-2 d-flex justify-content-end">
                         <div class="form-group mx-2">
                             <div class="text-end">
-                                <button class="btn btn-warning px-4">
-                                    <a style="color: #fff;text-decoration: none;" href="https://thelowcalories.com:91/Home/inv?CID={{customerInfo.cid}}" target="_blank">
-                                        <b>Show Invoice</b>
-                                    </a>
+                                <button class="btn btn-secondary px-4" (click)="logsModal = true">
+                                    <b>Show Logs</b>
                                 </button>
+                            </div>
+                        </div>
+                        <div class="form-group mx-2" *ngIf="customerInfo.invoices.length">
+                            <div class="text-end">
+                                <a style="color: #fff;text-decoration: none;" href="https://thelowcalories.com:91/Home/inv?CID={{customerInfo.cid}}" target="_blank">
+                                    <button class="btn btn-warning px-4 text-white">
+                                        <b>Show Invoice</b>
+                                    </button>
+                                    </a>
                             </div>
                         </div>
                         <div class="form-group mx-2">
@@ -283,4 +290,48 @@
             </button>
         </div>
     </ng-template>
+</p-dialog>
+
+<p-dialog header="Customer Logs" [(visible)]="logsModal" [modal]="true" [style]="{width: '90vw'}"
+[draggable]="true" [resizable]="true">
+<div class="row">
+    <div class="col-md-6 col-12 my-2">
+        <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" ngClass="w-100" appendTo="body"
+            placeholder="Select Date Range" [(ngModel)]="selectedDate" dataType="date">
+        </p-calendar>
+    </div>
+    <div class="col-3 my-2">
+        <button class="btn btn-secondary px-4 h-100 mx-2" (click)="resetDate()">
+            <b>Reset</b>
+        </button>
+        <p-button class="mx-2" label="Show Logs" (click)="getLogs()"></p-button>
+    </div>
+</div>
+<div class="card-body mt-4">
+    <div class="table-responsive overflow-auto">
+        <p-table [value]="logs" [lazy]="true" [loading]="loadingLogs">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Action</th>
+                    <th>Action Date</th>
+                    <th>Ristirct End</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{log.customerName}}</td>
+                    <td>{{log.action}}</td>
+                    <td>{{log.actionDate | date}}</td>
+                    <td>{{log.ristirctEnd | date}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4"><h6 class="text-danger text-center">No Record Found</h6></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
 </p-dialog>
