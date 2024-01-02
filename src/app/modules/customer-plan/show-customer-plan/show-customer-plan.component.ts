@@ -56,6 +56,7 @@ export class ShowCustomerPlanComponent implements OnInit {
     this._RefundService.GetMealsPlanNutiration(cid).subscribe((res) => {
       this.planModal = true;
       this.meals = ([] as any[]).concat(...Object.values(res));
+      this.meals = this.updateDaynames(this.meals)
     });
   }
 
@@ -112,6 +113,28 @@ export class ShowCustomerPlanComponent implements OnInit {
   reset() {
     this.customerInfo = null;
   }
+
+  updateDaynames(mealPlan:any) {
+    const updatedMealPlan = mealPlan.map((day:any) => {
+        if (day.dayname.startsWith("MON")) {
+            day.dayname = "MONDAY" + (day.dayname.length > 3 ? day.dayname.slice(3) : "");
+        } else if (day.dayname.startsWith("TUS")) {
+            day.dayname = "TUESDAY" + (day.dayname.length > 3 ? day.dayname.slice(3) : "");
+        } else if (day.dayname.startsWith("WED")) {
+            day.dayname = "WEDNESDAY" + (day.dayname.length > 3 ? day.dayname.slice(3) : "");
+        } else if (day.dayname.startsWith("THU")) {
+            day.dayname = "THURSDAY" + (day.dayname.length > 3 ? day.dayname.slice(3) : "");
+        } else if (day.dayname.startsWith("FRI")) {
+            day.dayname = "FRIDAY" + (day.dayname.length > 3 ? day.dayname.slice(3) : "");
+        } else if (day.dayname.startsWith("SAT")) {
+            day.dayname = "SATURDAY" + (day.dayname.length > 3 ? day.dayname.slice(3) : "");
+        } else if (day.dayname.startsWith("SUN")) {
+            day.dayname = "SUNDAY" + (day.dayname.length > 3 ? day.dayname.slice(3) : "");
+        }
+        return day;
+    });
+    return updatedMealPlan;
+}
 
   // ========================================= PRINT =================================
   // exportAsPDF() {

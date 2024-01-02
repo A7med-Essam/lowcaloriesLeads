@@ -227,33 +227,12 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-index>
                     <tr>
-                        <td class="text-center">
+                        <td class="text-center" style="font-size: 10px;">
                             {{index.dayname}}
                         </td>
                         <td class="text-center p-1" *ngFor="let meal of index.meals">
                             {{meal.mealName}} <br><br>
-                            <table class="table table-bordered" style="width: 145px;font-size: 8px;">
-                                <thead>
-                                    <tr>
-                                        <th style="padding: 8px 0;">Calories</th>
-                                        <th style="padding: 8px 0;">Protein</th>
-                                        <th style="padding: 8px 0;">Fats</th>
-                                        <th style="padding: 8px 0;">Carb</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{meal.calories}}</td>
-                                        <td>{{meal.protiens}}</td>
-                                        <td>{{meal.fats}}</td>
-                                        <td>{{meal.carb}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                        <td class="p-1"  style="width: 145px;font-size: 8px;">
-    
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" style="width: 120px;font-size: 8px;">
                                 <thead>
                                     <tr>
                                         <th style="padding: 8px 0;text-align: center;">Calories</th>
@@ -264,10 +243,30 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{calculateTotalNutrition(index.meals).calories.toFixed(1)}}</td>
-                                        <td>{{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}</td>
-                                        <td>{{calculateTotalNutrition(index.meals).fats.toFixed(1)}}</td>
-                                        <td>{{calculateTotalNutrition(index.meals).carb.toFixed(1)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{meal.calories}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{meal.protiens}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{meal.fats}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{meal.carb}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="p-1"  style="width: 130px;font-size: 8px;">
+                            <table class="table table-bordered" style="width: 130px;font-size: 8px;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 8px 0;text-align: center;">Calories</th>
+                                        <th style="padding: 8px 0;text-align: center;">Protein</th>
+                                        <th style="padding: 8px 0;text-align: center;">Fats</th>
+                                        <th style="padding: 8px 0;text-align: center;">Carb</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).calories.toFixed(1)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).fats.toFixed(1)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).carb.toFixed(1)}}</td>
                                     </tr>
                                 </tbody>
                             </table>
