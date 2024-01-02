@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RefundService } from 'src/app/services/refund.service';
-import autoTable from 'jspdf-autotable';
+// import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import { GuardService } from 'src/app/services/guard.service';
+// import * as html2canvas from "html2canvas";
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-show-customer-plan',
@@ -50,9 +52,14 @@ export class ShowCustomerPlanComponent implements OnInit {
     }
   }
 
+  toggleBtnName: string = 'Search By CID';
   toggleSearch() {
     this.searchByCID = !this.searchByCID;
     this.cid = '';
+    this.toggleBtnName =
+      this.toggleBtnName === 'Search By CID'
+        ? 'Search By Phone Number'
+        : 'Search By CID';
   }
 
   reset() {
@@ -91,128 +98,167 @@ export class ShowCustomerPlanComponent implements OnInit {
     return item;
   }
 
-  // ========================================= PRINT =================================
-  exportAsPDF() {
-    if (this.printPermission) {
-      // Default export is a4 paper, portrait, using millimeters for units
-      const doc = new jsPDF();
-      doc.internal.pageSize.width = 520;
-      const imageFile = '../../../../assets/images/logo.png';
-      doc.addImage(imageFile, 'JPEG', 15, 10, 20, 15);
+  blur(input: HTMLInputElement) {
+    input.blur();
+  }
 
-      doc.setTextColor(50);
-      doc.setFontSize(14);
-      doc.text(`CID:${this.customerInfo?.cid}`, 15, 35);
-      doc.text(`Customer Name:${this.customerInfo?.customerName}`, 15, 45);
-      doc.text(
-        `Customer Phone:${this.customerInfo?.customerPhone}`,
-        15,
-        55
-      );
-      doc.text(
-        `Delivery Address:${this.customerInfo?.deliveryAddress}`,
-        15,
-        65
-      );
-      doc.text(`Status:${this.customerInfo?.status}`, 440, 35);
-      doc.text(`Start Date:${this.customerInfo?.startDate?.split('T')[0]?? ""}`, 440, 45);
-      doc.text(`Plan Title:${this.customerInfo?.planTitle}`, 440, 55);
-      doc.text(`Last Delivery:${this.customerInfo?.lastDeliveryDate?.split('T')[0] ?? ""}`, 440, 65);
-      doc.text(`Remaining Days:${this.customerInfo?.remainingDays}`, 440, 75);
-      doc.text(`Email:${this.customerInfo?.email}`, 15, 75);
-      doc.text(`Delivery Branch:${this.customerInfo?.deliveryBranch}`, 15, 85);
-
-      const mealHeaders = this.meals[0].meals.map((e: any, index: number) => {
-        return index + 1 > this.customerInfo?.planTitle.split('-')[0].at(0)
-          ? 'SNACK'
-          : 'MEAL ' + (index + 1);
-      });
-
-      const headers = ['DAY', ...mealHeaders, 'Day Nutrition Facts'];
-
-      const convertedData = this.meals.map((obj: any) => {
-        const meals = obj.meals.map((e: any) => {
-          return (
-            e.mealName +
-            `\n\nCalories: ${e.calories} - Protiens: ${e.protiens} \nFats: ${e.fats} - Carb: ${e.carb}`
-          );
-        });
-
-        return [
-          obj.dayname,
-          ...meals,
-        ];
-      });
-
-      const convertedNutritions = this.meals.map((obj: any) => {
-        return [
-          this.calculateTotalNutrition(obj.meals).carb.toFixed(1),
-          this.calculateTotalNutrition(obj.meals).protiens.toFixed(1),
-          this.calculateTotalNutrition(obj.meals).calories.toFixed(1),
-          this.calculateTotalNutrition(obj.meals).fats.toFixed(1),
-        ];
-      });
-
-      autoTable(doc, { startY: 85 });
-      autoTable(doc, {
-        head: [headers],
-        body: convertedData,
-        bodyStyles:{
-          cellPadding:[5,15,5,1]
-        },
-        didDrawCell: (data:any) => {
-          const index = this.meals.findIndex((day:any) => day.dayname === data.row.raw[0]);
-          if (
-            data.column.dataKey === headers.length - 1 &&
-            data.cell.section === 'body' && index >= 0
-          ) {
-            autoTable(doc, {
-              head: [['Carb', 'Protein', 'Calories', 'Fats']],
-              body: [convertedNutritions[index]],
-              startY: data.cell.y + 2,
-              margin: { left: data.cell.x - 10 },
-              tableWidth: 'wrap',
-              theme: 'grid',
-              styles: {
-                fontSize: 7,
-                cellPadding: 1,
-              },
-            });
-          }
-        },
-      });
-
-      // Set the line color and width
-      doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
-      doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
-
-      // Draw a line at the bottom of the page
-
-      // Get the total number of pages
-      const totalPages = doc.internal.pages;
-
-      // Iterate over each page and add the footer
-      for (let i = 1; i <= totalPages.length; i++) {
-        doc.internal.pageSize.width = 520;
-        doc.line(
-          10,
-          doc.internal.pageSize.height - 10,
-          doc.internal.pageSize.width - 10,
-          doc.internal.pageSize.height - 10
-        );
-        // Set the current page as active
-        doc.setPage(i);
-        // Set the position and alignment of the footer
-        doc.setFontSize(10);
-        doc.setTextColor(150);
-        doc.text(
-          'Thelowcalories.com',
-          20,
-          doc.internal.pageSize.getHeight() - 5
-        );
-      }
-
-      doc.save('customer_plans.pdf');
+  getSeverity(status: string) {
+    switch (status.toLowerCase()) {
+      case 'deactive': //pending
+        return 'danger';
+      case 'active': //completed
+        return 'success';
+      default:
+        return 'warning';
     }
+  }
+
+  // ========================================= PRINT =================================
+  // exportAsPDF() {
+  //   if (this.printPermission) {
+  //     // Default export is a4 paper, portrait, using millimeters for units
+  //     const doc = new jsPDF();
+  //     doc.internal.pageSize.width = 520;
+  //     const imageFile = '../../../../assets/images/logo.png';
+  //     doc.addImage(imageFile, 'JPEG', 15, 10, 20, 15);
+
+  //     doc.setTextColor(50);
+  //     doc.setFontSize(14);
+  //     doc.text(`CID:${this.customerInfo?.cid}`, 15, 35);
+  //     doc.text(`Customer Name:${this.customerInfo?.customerName}`, 15, 45);
+  //     doc.text(`Customer Phone:${this.customerInfo?.customerPhone}`, 15, 55);
+  //     doc.text(
+  //       `Delivery Address:${this.customerInfo?.deliveryAddress}`,
+  //       15,
+  //       65
+  //     );
+  //     doc.text(`Status:${this.customerInfo?.status}`, 440, 35);
+  //     doc.text(
+  //       `Start Date:${this.customerInfo?.startDate?.split('T')[0] ?? ''}`,
+  //       440,
+  //       45
+  //     );
+  //     doc.text(`Plan Title:${this.customerInfo?.planTitle}`, 440, 55);
+  //     doc.text(
+  //       `Last Delivery:${
+  //         this.customerInfo?.lastDeliveryDate?.split('T')[0] ?? ''
+  //       }`,
+  //       440,
+  //       65
+  //     );
+  //     doc.text(`Remaining Days:${this.customerInfo?.remainingDays}`, 440, 75);
+  //     doc.text(`Email:${this.customerInfo?.email}`, 15, 75);
+  //     doc.text(`Delivery Branch:${this.customerInfo?.deliveryBranch}`, 15, 85);
+
+  //     const mealHeaders = this.meals[0].meals.map((e: any, index: number) => {
+  //       return index + 1 > this.customerInfo?.planTitle.split('-')[0].at(0)
+  //         ? 'SNACK'
+  //         : 'MEAL ' + (index + 1);
+  //     });
+
+  //     const headers = ['DAY', ...mealHeaders, 'Day Nutrition Facts'];
+
+  //     const convertedData = this.meals.map((obj: any) => {
+  //       const meals = obj.meals.map((e: any) => {
+  //         return (
+  //           e.mealName +
+  //           `\n\nCalories: ${e.calories} - Protiens: ${e.protiens} \nFats: ${e.fats} - Carb: ${e.carb}`
+  //         );
+  //       });
+
+  //       return [obj.dayname, ...meals];
+  //     });
+
+  //     const convertedNutritions = this.meals.map((obj: any) => {
+  //       return [
+  //         this.calculateTotalNutrition(obj.meals).calories.toFixed(1),
+  //         this.calculateTotalNutrition(obj.meals).protiens.toFixed(1),
+  //         this.calculateTotalNutrition(obj.meals).fats.toFixed(1),
+  //         this.calculateTotalNutrition(obj.meals).carb.toFixed(1),
+  //       ];
+  //     });
+
+  //     autoTable(doc, { startY: 85 });
+  //     autoTable(doc, {
+  //       head: [headers],
+  //       body: convertedData,
+  //       bodyStyles: {
+  //         cellPadding: [5, 15, 5, 1],
+  //       },
+  //       didDrawCell: (data: any) => {
+  //         const index = this.meals.findIndex(
+  //           (day: any) => day.dayname === data.row.raw[0]
+  //         );
+  //         if (
+  //           data.column.dataKey === headers.length - 1 &&
+  //           data.cell.section === 'body' &&
+  //           index >= 0
+  //         ) {
+  //           autoTable(doc, {
+  //             head: [['Calories', 'Protein', 'Fats', 'Carb']],
+  //             body: [convertedNutritions[index]],
+  //             startY: data.cell.y + 2,
+  //             margin: { left: data.cell.x - 10 },
+  //             tableWidth: 'wrap',
+  //             theme: 'grid',
+  //             styles: {
+  //               fontSize: 7,
+  //               cellPadding: 1,
+  //             },
+  //           });
+  //         }
+  //       },
+  //     });
+
+  //     // Set the line color and width
+  //     doc.setDrawColor(0, 0, 0); // RGB color values (black in this case)
+  //     doc.setLineWidth(0.5); // Line width in mm (adjust as needed)
+
+  //     // Draw a line at the bottom of the page
+
+  //     // Get the total number of pages
+  //     const totalPages = doc.internal.pages;
+
+  //     // Iterate over each page and add the footer
+  //     for (let i = 1; i <= totalPages.length; i++) {
+  //       doc.internal.pageSize.width = 520;
+  //       doc.line(
+  //         10,
+  //         doc.internal.pageSize.height - 10,
+  //         doc.internal.pageSize.width - 10,
+  //         doc.internal.pageSize.height - 10
+  //       );
+  //       // Set the current page as active
+  //       doc.setPage(i);
+  //       // Set the position and alignment of the footer
+  //       doc.setFontSize(10);
+  //       doc.setTextColor(150);
+  //       doc.text(
+  //         'Thelowcalories.com',
+  //         20,
+  //         doc.internal.pageSize.getHeight() - 5
+  //       );
+  //     }
+
+  //     doc.save('customer_plans.pdf');
+  //   }
+  // }
+
+  @ViewChild('download_container') download_container!: ElementRef;
+  isLoading: boolean = false;
+
+  pdfDownload() {
+    this.isLoading = true;
+    let HTML_Width = this.download_container.nativeElement.clientWidth;
+    let HTML_Height = this.download_container.nativeElement.clientHeight;
+    html2canvas(this.download_container.nativeElement).then((canvas) => {
+      let imgData = canvas.toDataURL('image/jpeg');
+      let pdf = new jsPDF('p', 'pt', [HTML_Width * 1.05, HTML_Height * 1.05]);
+      pdf.addImage(imgData, 'JPG', 50, 50, HTML_Width, HTML_Height);
+      const fileName =
+        this.customerInfo.customerName + '-' + this.customerInfo.cid;
+      pdf.save(fileName);
+      this.isLoading = false;
+    });
   }
 }

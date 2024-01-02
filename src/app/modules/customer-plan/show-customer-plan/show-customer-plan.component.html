@@ -10,7 +10,7 @@
                     <label for="">Customer Phone</label>
                     <input type="text" pInputText placeholder="Enter Customer Phone" maxlength="10" [(ngModel)]="phone"
                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                        class="p-inputtext p-component p-element w-100" (keydown.enter)="getCustomerCIDS()"
+                        class="p-inputtext p-component p-element w-100" #PHONE_INPUT (keydown.enter)="getCustomerCIDS();blur(PHONE_INPUT)"
                         (blur)="getCustomerCIDS()">
                 </div>
             </div>
@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <label for="">Customer CID</label>
                     <p-dropdown [options]="CIDs" styleClass="w-100" placeholder="Select CID" appendTo="body"
-                        [(ngModel)]="cid" optionValue="cid" optionLabel="cid" (onChange)="reset()">
+                        [(ngModel)]="cid" optionValue="cid" optionLabel="cid" (onChange)="reset();getCustomerInfo()">
                     </p-dropdown>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     <label for="">Customer CID</label>
                     <input type="text" pInputText placeholder="Enter Customer CID" maxlength="10" [(ngModel)]="cid"
                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                        class="p-inputtext p-component p-element w-100" (keydown.enter)="getCustomerInfo()"
+                        class="p-inputtext p-component p-element w-100" #CID_INPUT (keydown.enter)="getCustomerInfo();blur(CID_INPUT)"
                         (blur)="getCustomerInfo()">
                 </div>
             </div>
@@ -35,12 +35,12 @@
                 <div class="form-group">
                     <div class="d-flex justify-content-between">
                         <button class="btn btn-secondary px-4 mx-2" (click)="toggleSearch()">
-                            <b>Search By CID</b>
+                            <b>{{toggleBtnName}}</b>
                         </button>
-                        <button class="btn btn-success px-4 mx-2" [disabled]="cid == '' || cid == null"
+                        <!-- <button class="btn btn-success px-4 mx-2" [disabled]="cid == '' || cid == null"
                         (click)="getCustomerInfo()">
                         <b>Get Customer Plans</b>
-                    </button>
+                    </button> -->
                     </div>
                 </div>
             </div>
@@ -60,38 +60,43 @@
                             <tr>
                                 <td>CID</td>
                                 <td>{{customerInfo?.cid}}</td>
-                                <td>Branch</td>
-                                <td>{{customerInfo?.deliveryBranch}}</td>
-                            </tr>
-                            <tr>
-                                <td>Name</td>
-                                <td>{{customerInfo?.customerName}}</td>
-                                <td>Last Delivery</td>
-                                <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</td>
-                            </tr>
-                            <tr>
-                                <td>Addreess</td>
-                                <td>{{customerInfo?.deliveryAddress}}</td>
-                                <td>Status</td>
-                                <td>{{customerInfo?.status}}</td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>{{customerInfo?.email}}</td>
+                              
                                 <td>Plan</td>
                                 <td>{{customerInfo?.planTitle}}</td>
                             </tr>
                             <tr>
-                                <td>Phone</td>
-                                <td>{{customerInfo?.customerPhone}}</td>
+                                <td>Name</td>
+                                <td>{{customerInfo?.customerName}}</td>
+                            
+                             <td>Status</td>
+                             <td>
+                                 <p-tag [severity]="getSeverity(customerInfo?.status)" [value]="customerInfo?.status">
+                                 </p-tag>
+                             </td>
+                            </tr>
+                            <tr>
+                                <td>Addreess</td>
+                                <td>{{customerInfo?.deliveryAddress}}</td>
                                 <td>Remaining Days</td>
                                 <td>{{customerInfo?.remainingDays}}</td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td>Email</td>
+                                <td>{{customerInfo?.email}}</td>
+                                <td>Delivery Branch</td>
+                                <td>{{customerInfo?.deliveryBranch}}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td>
+                                <td>{{customerInfo?.customerPhone}}</td>
                                 <td>Start Date</td>
                                 <td>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Last Delivery</td>
+                                <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -116,152 +121,158 @@
 
 <p-dialog header="Plan Details" [(visible)]="planModal" [modal]="true" [style]="{width: '90vw'}"
     [draggable]="true" [resizable]="true">
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <td>CID</td>
-                <td>{{customerInfo?.cid}}</td>
-                <td>Branch</td>
-                <td>{{customerInfo?.deliveryBranch}}</td>
-            </tr>
-            <tr>
-                <td>Name</td>
-                <td>{{customerInfo?.customerName}}</td>
-                <td>Last Delivery</td>
-                <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</td>
-            </tr>
-            <tr>
-                <td>Addreess</td>
-                <td>{{customerInfo?.deliveryAddress}}</td>
-                <td>Status</td>
-                <td>{{customerInfo?.status}}</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td>{{customerInfo?.email}}</td>
-                <td>Plan</td>
-                <td>{{customerInfo?.planTitle}}</td>
-            </tr>
-            <tr>
-                <td>Phone</td>
-                <td>{{customerInfo?.customerPhone}}</td>
-                <td>Remaining Days</td>
-                <td>{{customerInfo?.remainingDays}}</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>Start Date</td>
-                <td>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-bordered">
+    <ng-template pTemplate="body">
+        <div #download_container>
+            <table class="table">
                 <tbody>
                     <tr>
-                        <th style="background-color:#cbcbcb" colspan="200">
-                            <h3 style="text-align:center">Nutiration Facts</h3>
-                        </th>
+                        <td>CID</td>
+                        <td>{{customerInfo?.cid}}</td>
+                      
+                        <td>Plan</td>
+                        <td>{{customerInfo?.planTitle}}</td>
                     </tr>
                     <tr>
-                        <td *ngFor="let week of nutirationAVG | keyvalue">
-                            <h3 style="text-align:center">{{week.key}}</h3>
-                            <table class="table table-bordered">
+                        <td>Name</td>
+                        <td>{{customerInfo?.customerName}}</td>
+                    
+                     <td>Status</td>
+                     <td>
+                         {{customerInfo?.status}}
+                     </td>
+                    </tr>
+                    <tr>
+                        <td>Addreess</td>
+                        <td>{{customerInfo?.deliveryAddress}}</td>
+                        <td>Remaining Days</td>
+                        <td>{{customerInfo?.remainingDays}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{customerInfo?.email}}</td>
+                        <td>Delivery Branch</td>
+                        <td>{{customerInfo?.deliveryBranch}}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>{{customerInfo?.customerPhone}}</td>
+                        <td>Start Date</td>
+                        <td>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Last Delivery</td>
+                        <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th style="background-color:#cbcbcb" colspan="200">
+                                    <h3 style="text-align:center">Nutiration Facts</h3>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td *ngFor="let week of nutirationAVG | keyvalue">
+                                    <h3 style="text-align:center">{{week.key}}</h3>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Calories</th>
+                                                <th>Protein</th>
+                                                <th>Fats</th>
+                                                <th>Carb</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{nutirationAVG[getItem(week.key)].calories}}</td>
+                                                <td>{{nutirationAVG[getItem(week.key)].protiens}}</td>
+                                                <td>{{nutirationAVG[getItem(week.key)].fats}}</td>
+                                                <td>{{nutirationAVG[getItem(week.key)].carb}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p-table [value]="meals" styleClass="p-datatable-gridlines" >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Day</th>
+                        <th class="text-center" *ngFor="let type of meals[0].meals; let i = index">
+                            {{(i+1) > customerInfo?.planTitle.split("-")[0].at(0) ? "SNACK" : "MEAL "+(i+1)}}
+                        </th>
+                        <th class="text-center">
+                            Day Nutrition Facts
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-index>
+                    <tr>
+                        <td class="text-center">
+                            {{index.dayname}}
+                        </td>
+                        <td class="text-center p-1" *ngFor="let meal of index.meals">
+                            {{meal.mealName}} <br><br>
+                            <table class="table table-bordered" style="width: 145px;font-size: 8px;">
                                 <thead>
                                     <tr>
-                                        <th>Calories</th>
-                                        <th>Protein</th>
-                                        <th>Fats</th>
-                                        <th>Carb</th>
+                                        <th style="padding: 8px 0;">Calories</th>
+                                        <th style="padding: 8px 0;">Protein</th>
+                                        <th style="padding: 8px 0;">Fats</th>
+                                        <th style="padding: 8px 0;">Carb</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{nutirationAVG[getItem(week.key)].calories}}</td>
-                                        <td>{{nutirationAVG[getItem(week.key)].protiens}}</td>
-                                        <td>{{nutirationAVG[getItem(week.key)].fats}}</td>
-                                        <td>{{nutirationAVG[getItem(week.key)].carb}}</td>
+                                        <td>{{meal.calories}}</td>
+                                        <td>{{meal.protiens}}</td>
+                                        <td>{{meal.fats}}</td>
+                                        <td>{{meal.carb}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="p-1"  style="width: 145px;font-size: 8px;">
+    
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 8px 0;text-align: center;">Calories</th>
+                                        <th style="padding: 8px 0;text-align: center;">Protein</th>
+                                        <th style="padding: 8px 0;text-align: center;">Fats</th>
+                                        <th style="padding: 8px 0;text-align: center;">Carb</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{calculateTotalNutrition(index.meals).calories.toFixed(1)}}</td>
+                                        <td>{{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}</td>
+                                        <td>{{calculateTotalNutrition(index.meals).fats.toFixed(1)}}</td>
+                                        <td>{{calculateTotalNutrition(index.meals).carb.toFixed(1)}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
                     </tr>
-                </tbody>
-            </table>
+                </ng-template>
+            </p-table>
         </div>
-    </div>
-
-    <ng-template pTemplate="body">
-        <p-table [value]="meals" styleClass="p-datatable-gridlines">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th class="text-center">Day</th>
-                    <th class="text-center" *ngFor="let type of meals[0].meals; let i = index">
-                        {{(i+1) > customerInfo?.planTitle.split("-")[0].at(0) ? "SNACK" : "MEAL "+(i+1)}}
-                    </th>
-                    <th class="text-center">
-                        Day Nutrition Facts
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-index>
-                <tr>
-                    <td class="text-center">
-                        {{index.dayname}}
-                    </td>
-                    <td class="text-center" *ngFor="let meal of index.meals">
-                        {{meal.mealName}} <br>
-                        <table class="table table-bordered" style="width: 350px;">
-                            <thead>
-                                <tr>
-                                    <th>Calories</th>
-                                    <th>Protein</th>
-                                    <th>Fats</th>
-                                    <th>Carb</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{meal.calories}}</td>
-                                    <td>{{meal.protiens}}</td>
-                                    <td>{{meal.fats}}</td>
-                                    <td>{{meal.carb}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td style="width: 350px;">
-
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Calories</th>
-                                    <th>Protein</th>
-                                    <th>Fats</th>
-                                    <th>Carb</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{calculateTotalNutrition(index.meals).calories.toFixed(1)}}</td>
-                                    <td>{{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}</td>
-                                    <td>{{calculateTotalNutrition(index.meals).fats.toFixed(1)}}</td>
-                                    <td>{{calculateTotalNutrition(index.meals).carb.toFixed(1)}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
     </ng-template>
     <ng-template pTemplate="footer">
         <div class="upload-btn-wrapper mt-3">
-            <button class="btn btn-primary" [disabled]="!printPermission" (click)="exportAsPDF()">Export As PDF</button>
+            <button class="btn btn-primary" [disabled]="!printPermission" (click)="pdfDownload()">
+                <b>Export As PDF <i *ngIf="isLoading" class="fas fa-circle-notch fa-spin p-0"></i></b>
+            </button>
         </div>
     </ng-template>
 </p-dialog>

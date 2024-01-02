@@ -8,6 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { TableModule } from 'primeng/table';
     DropdownModule,
     DialogModule,
     FormsModule,
-    TableModule
+    TableModule,
+    TagModule
   ]
 })
 export class CustomerPlanModule { }
