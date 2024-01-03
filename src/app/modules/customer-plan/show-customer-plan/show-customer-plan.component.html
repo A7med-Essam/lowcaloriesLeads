@@ -17,7 +17,7 @@
             <div class="col-md-6 my-2" *ngIf="!searchByCID">
                 <div class="form-group">
                     <label for="">Customer CID</label>
-                    <p-dropdown [options]="CIDs" styleClass="w-100" placeholder="Select CID" appendTo="body"
+                    <p-dropdown [options]="CIDs" styleClass="w-100" appendTo="body"
                         [(ngModel)]="cid" optionValue="cid" optionLabel="cid" (onChange)="reset();getCustomerInfo()">
                     </p-dropdown>
                 </div>
@@ -47,7 +47,13 @@
         </div>
         <hr *ngIf="customerInfo">
         <div class="card" *ngIf="customerInfo">
-            <div class="card-body">
+            <div class="card-body ribbon-wrapper">
+                <div class="ribbon-content">
+                    <span class="ribbon" 
+                    [ngClass]="customerInfo?.status.toLowerCase() == 'active'? 'success':customerInfo?.status.toLowerCase() == 'deactive'?'danger':'warning'">
+                    {{customerInfo?.status}}
+                </span>
+                    </div>
                 <div class="table-responsive overflow-auto">
                     <table class="table">
                         <thead class="text-muted">
@@ -67,36 +73,26 @@
                             <tr>
                                 <td>Name</td>
                                 <td>{{customerInfo?.customerName}}</td>
-                            
-                             <td>Status</td>
-                             <td>
-                                 <p-tag [severity]="getSeverity(customerInfo?.status)" [value]="customerInfo?.status">
-                                 </p-tag>
-                             </td>
+                             <td>Remaining Days</td>
+                             <td>{{customerInfo?.remainingDays}}</td>
                             </tr>
                             <tr>
                                 <td>Addreess</td>
                                 <td>{{customerInfo?.deliveryAddress}}</td>
-                                <td>Remaining Days</td>
-                                <td>{{customerInfo?.remainingDays}}</td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>{{customerInfo?.email}}</td>
                                 <td>Delivery Branch</td>
                                 <td>{{customerInfo?.deliveryBranch}}</td>
                             </tr>
                             <tr>
-                                <td>Phone</td>
-                                <td>{{customerInfo?.customerPhone}}</td>
+                                <td>Email</td>
+                                <td>{{customerInfo?.email}}</td>
                                 <td>Start Date</td>
-                                <td>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                                <td>{{customerInfo?.startDate | date:'dd/MM/yyyy'}}</td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td>Phone</td>
+                                <td>{{customerInfo?.customerPhone}}</td>
                                 <td>Last Delivery</td>
-                                <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                                <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy'}}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -39,6 +39,10 @@ export class ShowCustomerPlanComponent implements OnInit {
     if (this.phone && this.phone.length == 10) {
       this._RefundService.getCIDs(this.phone).subscribe((res) => {
         this.CIDs = res;
+        if (this.CIDs.length) {
+           this.cid = res[0].cid
+           this.getCustomerInfo();
+        }
       });
     }
   }
@@ -95,7 +99,7 @@ export class ShowCustomerPlanComponent implements OnInit {
       info.to = this.selectedDate.length == 2 ? new Date(new Date(this.selectedDate[1]).setDate(new Date(this.selectedDate[1]).getDate() + 1)):new Date()
     }
     if (this.selectedFilters.length) {
-      info.Opts = this.selectedFilters
+      info.filter = this.selectedFilters.join(", ")
     }
     this.http.post('https://thelowcalories.com:52/api/Subscription/GetSubscriptionLog',info).subscribe((res) => {
       this.logs = res
