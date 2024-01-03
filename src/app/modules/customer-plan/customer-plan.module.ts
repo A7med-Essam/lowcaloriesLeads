@@ -11,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { ButtonModule } from 'primeng/button';
     TableModule,
     TagModule,
     CalendarModule,
-    ButtonModule
+    ButtonModule,
+    MultiSelectModule
   ]
 })
 export class CustomerPlanModule { }

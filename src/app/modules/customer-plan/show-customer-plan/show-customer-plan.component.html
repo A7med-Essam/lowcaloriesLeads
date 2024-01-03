@@ -107,7 +107,7 @@
                     <div class="col-12 my-2 d-flex justify-content-end">
                         <div class="form-group mx-2">
                             <div class="text-end">
-                                <button class="btn btn-secondary px-4" (click)="logsModal = true">
+                                <button class="btn btn-secondary px-4" (click)="logsModal = true;getLogs()">
                                     <b>Show Logs</b>
                                 </button>
                             </div>
@@ -207,10 +207,10 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{{nutirationAVG[getItem(week.key)].calories}}</td>
-                                                <td>{{nutirationAVG[getItem(week.key)].protiens}}</td>
-                                                <td>{{nutirationAVG[getItem(week.key)].fats}}</td>
-                                                <td>{{nutirationAVG[getItem(week.key)].carb}}</td>
+                                                <td>{{nutirationAVG[getItem(week.key)].calories.toFixed(2)}}</td>
+                                                <td>{{nutirationAVG[getItem(week.key)].protiens.toFixed(2)}}</td>
+                                                <td>{{nutirationAVG[getItem(week.key)].fats.toFixed(2)}}</td>
+                                                <td>{{nutirationAVG[getItem(week.key)].carb.toFixed(2)}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -250,10 +250,10 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="padding: 8px 0;text-align: center;">{{meal.calories}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{meal.protiens}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{meal.fats}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{meal.carb}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{meal.calories.toFixed(2)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{meal.protiens.toFixed(2)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{meal.fats.toFixed(2)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{meal.carb.toFixed(2)}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -270,10 +270,10 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).calories.toFixed(1)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).protiens.toFixed(1)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).fats.toFixed(1)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).carb.toFixed(1)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).calories.toFixed(2)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).protiens.toFixed(2)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).fats.toFixed(2)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).carb.toFixed(2)}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -297,29 +297,46 @@
 <div class="row">
     <div class="col-md-6 col-12 my-2">
         <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" ngClass="w-100" appendTo="body"
-            placeholder="Select Date Range" [(ngModel)]="selectedDate" dataType="date">
+            placeholder="Select Date Range" [(ngModel)]="selectedDate" dataType="date" #logDateRangeInput
+            (onSelect)="onDateSelect(logDateRangeInput)">
         </p-calendar>
     </div>
     <div class="col-3 my-2">
+        <p-multiSelect [options]="logFilters" appendTo="body" defaultLabel="Select Filters"  [filter]="false"
+        styleClass="w-100" display="chip" [(ngModel)]="selectedFilters"></p-multiSelect>
+    </div>
+    <div class="col-3 my-2">
+        <p-button class="mx-2" label="Show Logs" (click)="getLogs()"></p-button>
         <button class="btn btn-secondary px-4 h-100 mx-2" (click)="resetDate()">
             <b>Reset</b>
         </button>
-        <p-button class="mx-2" label="Show Logs" (click)="getLogs()"></p-button>
     </div>
 </div>
 <div class="card-body mt-4">
     <div class="table-responsive overflow-auto">
-        <p-table [value]="logs" [lazy]="true" [loading]="loadingLogs">
+        <p-table [value]="logs" [loading]="loadingLogs">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Customer Name</th>
-                    <th>Action</th>
-                    <th>Action Date</th>
-                    <th>Ristirct End</th>
+                    <th pSortableColumn="customerName">
+                        Customer Name
+                        <p-sortIcon field="customerName"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="action">
+                        Action
+                        <p-sortIcon field="action"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="actionDate">
+                        Action Date
+                        <p-sortIcon field="actionDate"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="ristirctEnd">
+                        Ristirct End
+                        <p-sortIcon field="ristirctEnd"></p-sortIcon>
+                    </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-log let-rowIndex="rowIndex">
-                <tr>
+                <tr [pSelectableRow]="log">
                     <td>{{log.customerName}}</td>
                     <td>{{log.action}}</td>
                     <td>{{log.actionDate | date}}</td>

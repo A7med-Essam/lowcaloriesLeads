@@ -6,6 +6,7 @@ import { GuardService } from 'src/app/services/guard.service';
 // import * as html2canvas from "html2canvas";
 import html2canvas from 'html2canvas';
 import { HttpClient } from '@angular/common/http';
+import { Calendar } from 'primeng/calendar';
 
 @Component({
   selector: 'app-show-customer-plan',
@@ -82,19 +83,35 @@ export class ShowCustomerPlanComponent implements OnInit {
   loadingLogs:boolean = false;
   getLogs(){
     this.loadingLogs = true;
-    const info = {
+    const info:any = {
       "cid": this.customerInfo.cid,
-      "from": this.selectedDate.length > 0 ? new Date(new Date(this.selectedDate[0]).setDate(new Date(this.selectedDate[0]).getDate() + 1)):new Date(),
-      "to": this.selectedDate.length == 2 ? new Date(new Date(this.selectedDate[1]).setDate(new Date(this.selectedDate[1]).getDate() + 1)):new Date()
+      // "from": this.selectedDate.length > 0 ? new Date(new Date(this.selectedDate[0]).setDate(new Date(this.selectedDate[0]).getDate() + 1)):new Date(),
+      // "to": this.selectedDate.length == 2 ? new Date(new Date(this.selectedDate[1]).setDate(new Date(this.selectedDate[1]).getDate() + 1)):new Date(),
+      // "Opts":this.selectedFilters
     };
+
+    if (this.selectedDate.length) {
+      info.from = new Date(new Date(this.selectedDate[0]).setDate(new Date(this.selectedDate[0]).getDate() + 1))
+      info.to = this.selectedDate.length == 2 ? new Date(new Date(this.selectedDate[1]).setDate(new Date(this.selectedDate[1]).getDate() + 1)):new Date()
+    }
+    if (this.selectedFilters.length) {
+      info.Opts = this.selectedFilters
+    }
     this.http.post('https://thelowcalories.com:52/api/Subscription/GetSubscriptionLog',info).subscribe((res) => {
       this.logs = res
-    this.loadingLogs = false;
+      this.loadingLogs = false;
     })
   }
 
   resetDate(){
     this.selectedDate = []
+    this.selectedFilters = []
+  }
+
+  onDateSelect(e:Calendar){
+    if (this.selectedDate.length == 2 && this.selectedDate[1]) {
+      e.hideOverlay();
+    }
   }
 
   // =================================================HELPER =================================
@@ -314,4 +331,17 @@ export class ShowCustomerPlanComponent implements OnInit {
       this.isLoading = false;
     });
   }
+
+  // ================================================================= FILTERS =================================================================
+  logFilters:string[] = [
+    'Update',
+    'ISDELIVERD',
+    'Extended',
+    'Transfer',
+    'Phone',
+    'Create',
+    'Activate',
+    'DeActivate',
+  ];
+  selectedFilters:any[]=[]
 }
