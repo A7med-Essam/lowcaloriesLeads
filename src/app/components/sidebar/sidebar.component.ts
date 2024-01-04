@@ -104,8 +104,8 @@ export class SidebarComponent implements OnInit {
       this._GuardService.getPermissionStatus('show_enquiry');
     this.showOfferPermission =
       this._GuardService.getPermissionStatus('show_offer');
-    this.showCustomerPlanPermission =
-      this._GuardService.getPermissionStatus('show_customerPlan');
+    this.showCustomerPlanPermission = true;
+      // this._GuardService.getPermissionStatus('show_customerPlan');
   }
 
   logOut() {

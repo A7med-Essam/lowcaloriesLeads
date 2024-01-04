@@ -214,10 +214,10 @@ const routes: Routes = [
     path: 'customer-plan',
     loadChildren: () =>
       import('./modules/customer-plan/customer-plan.module').then((m) => m.CustomerPlanModule),
-    canActivate: [PermissionGuard],
-    data: {
-      permission: ['show_customerPlan'],
-    },
+    // canActivate: [PermissionGuard],
+    // data: {
+    //   permission: ['show_customerPlan'],
+    // },
   },
   { path: '**', component: Error404Component },
 ];

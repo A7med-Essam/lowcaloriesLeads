@@ -30,17 +30,17 @@ export class ShowCustomerPlanComponent implements OnInit {
 
   printPermission: boolean = false;
   getPermission() {
-    this.printPermission =
-      this._GuardService.getPermissionStatus('print_customerPlan');
+    this.printPermission = true;
+      // this._GuardService.getPermissionStatus('print_customerPlan');
   }
 
   CIDs: any[] = [];
   getCustomerCIDS() {
     if (this.phone && this.phone.length == 10) {
       this._RefundService.getCIDs(this.phone).subscribe((res) => {
-        this.CIDs = res;
+        this.CIDs = res.sort((a:any, b:any) => a.cid - b.cid);
         if (this.CIDs.length) {
-           this.cid = res[0].cid
+           this.cid = this.CIDs[0].cid
            this.getCustomerInfo();
         }
       });

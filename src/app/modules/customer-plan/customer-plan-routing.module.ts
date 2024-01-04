@@ -8,10 +8,10 @@ const routes: Routes = [
   {
     path: 'show',
     component: ShowCustomerPlanComponent,
-    canActivate: [PermissionGuard],
-    data: {
-      permission: ['show_customerPlan'],
-    },
+    // canActivate: [PermissionGuard],
+    // data: {
+    //   permission: ['show_customerPlan'],
+    // },
   }
 ];
 
