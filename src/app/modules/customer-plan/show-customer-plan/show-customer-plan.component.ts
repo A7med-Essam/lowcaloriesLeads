@@ -60,25 +60,25 @@ export class ShowCustomerPlanComponent implements OnInit {
 
   meals: any;
   getDetails(cid: number) {
-    if (!this.meals) {
+    // if (!this.meals) {
       this._RefundService.GetMealsPlanNutiration(cid).subscribe((res) => {
         this.planModal = true;
         this.meals = ([] as any[]).concat(...Object.values(res));
         this.meals = this.updateDaynames(this.meals)
       });
-    }
-    else{
-      this.planModal = true;
-    }
+    // }
+    // else{
+    //   this.planModal = true;
+    // }
   }
 
   nutirationAVG: any;
   GetNutirationAVG(cid: number) {
-    if (!this.nutirationAVG) {
+    // if (!this.nutirationAVG) {
       this._RefundService.GetNutirationAVG(cid).subscribe((res) => {
         this.nutirationAVG = res;
       });
-    }
+    // }
   }
 
   logsModal: boolean = false;
