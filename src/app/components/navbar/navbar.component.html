@@ -1032,6 +1032,26 @@
           </p-table>
         </p-tabPanel>
       </ng-container>
+      <ng-container>
+        <p-tabPanel header="EXPORT">
+          <p-table [value]="exportModels">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Model</th>
+                <th class="text-center">Download Excel File</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-model>
+              <tr>
+                <td class="text-center">{{model.model}}</td>
+                <td class="text-center">
+                    <a [href]="model.value" target="_blank" rel="noopener noreferrer">Download {{model.model}}</a>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel>
+      </ng-container>
     </p-tabView>
   </div>
 </p-dialog>

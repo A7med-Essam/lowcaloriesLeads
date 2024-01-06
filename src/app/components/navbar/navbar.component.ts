@@ -231,6 +231,7 @@ export class NavbarComponent implements OnInit {
             });
 
           this.getCallGear(this.currentCustomerMobile);
+          this.getExportFiles();
         }
       });
     }
@@ -382,6 +383,13 @@ export class NavbarComponent implements OnInit {
       this._LocalService.removeItem('returnUrl');
       this._LocalService.removeItem(filterKey);
     }, 1000);
+  }
+
+  exportModels:any[]=[];
+  getExportFiles(){
+    this._SubscriptionsService.exportCustomerModels(this.currentCustomerMobile).subscribe(res => {
+      this.exportModels = Object.entries(res.data).map(([model, value]) => ({ model, value }));
+    });
   }
 
   // ================================================================LOAD MODELS====================================================================
@@ -759,34 +767,6 @@ export class NavbarComponent implements OnInit {
 
   callGear: any[] = [];
   getCallGear(phone: number) {
-    // const modifiedPhoneNumber = '971' + phone.slice(1);
-    // const today = new Date();
-    // const dateFrom = new Date(today);
-    // dateFrom.setDate(today.getDate() - 90);
-
-    // const formattedDateFrom = dateFrom
-    //   .toISOString()
-    //   .slice(0, 19)
-    //   .replace('T', ' ');
-
-    // const formattedDateTill = today.toISOString().slice(0, 10) + ' 00:00:00';
-
-    // const data = {
-    //   jsonrpc: '2.0',
-    //   id: 1,
-    //   method: 'get.calls_report',
-    //   params: {
-    //     access_token: 'hjxuyk9hcbsnqm4leuz7cnhlj4kze2qtqapg451y',
-    //     date_from: formattedDateFrom,
-    //     date_till: formattedDateTill,
-    //     filter: {
-    //       field: 'contact_phone_number',
-    //       operator: '=',
-    //       value: modifiedPhoneNumber,
-    //     },
-    //   },
-    // };
-
     this._UsersService.callgear(phone).subscribe((res) => {
       this.callGear = res.data;
     });
@@ -802,22 +782,6 @@ export class NavbarComponent implements OnInit {
     this.current_callEmp = calls.employees;
     this.employeeCallModal = true;
   }
-
-  // convertAudioToBase64(audioFileURL: string) {
-  //   fetch(audioFileURL)
-  //     .then((response) => response.blob())
-  //     .then((blob) => {
-  //       const reader: any = new FileReader();
-  //       reader.onloadend = () => {
-  //         const base64Audio = reader.result.split(',')[1];
-  //         this.downloadBase64Audio(base64Audio, 'FILE_TEST');
-  //       };
-  //       reader.readAsDataURL(blob);
-  //     })
-  //     .catch((error) =>
-  //       console.error('Error converting audio to Base64:', error)
-  //     );
-  // }
 
   convertAudioToBase64(audioFileURL: string,communication_id:number, call:number) {
     const audio = audioFileURL+communication_id+'/'+call+'/audio.mp3'

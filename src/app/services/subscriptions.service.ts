@@ -69,6 +69,10 @@ export class SubscriptionsService {
     uploadCustomerStatics(file:any): Observable<any> {
       return this._ApiConfigService.postReq3(`getCustomerStatics`,file);
     }
+
+    exportCustomerModels(phone_number:any): Observable<any> {
+      return this._ApiConfigService.postReq3(`exportCustomerModels`,{phone_number});
+    }
 }
 
 
