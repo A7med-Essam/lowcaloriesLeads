@@ -134,48 +134,48 @@
 <p-dialog header="Plan Details" [(visible)]="planModal" [modal]="true" [style]="{width: '90vw'}"
     [draggable]="true" [resizable]="true">
     <ng-template pTemplate="body">
-        <div #download_container>
+        <div #download_container *ngIf="isLoading">
             <table class="table">
                 <tbody>
                     <tr>
-                        <td>CID</td>
-                        <td>{{customerInfo?.cid}}</td>
+                        <td><b>CID</b></td>
+                        <td><b>{{customerInfo?.cid}}</b></td>
                       
-                        <td>Plan</td>
-                        <td>{{customerInfo?.planTitle}}</td>
+                        <td><b>Plan</b></td>
+                        <td><b>{{customerInfo?.planTitle}}</b></td>
                     </tr>
                     <tr>
-                        <td>Name</td>
-                        <td>{{customerInfo?.customerName}}</td>
+                        <td><b>Name</b></td>
+                        <td><b>{{customerInfo?.customerName}}</b></td>
                     
-                     <td>Status</td>
+                     <td><b>Status</b></td>
                      <td>
-                         {{customerInfo?.status}}
+                         <b>{{customerInfo?.status}}</b>
                      </td>
                     </tr>
                     <tr>
-                        <td>Addreess</td>
-                        <td>{{customerInfo?.deliveryAddress}}</td>
-                        <td>Remaining Days</td>
-                        <td>{{customerInfo?.remainingDays}}</td>
+                        <td><b>Addreess</b></td>
+                        <td><b>{{customerInfo?.deliveryAddress}}</b></td>
+                        <td><b>Remaining Days</b></td>
+                        <td><b>{{customerInfo?.remainingDays}}</b></td>
                     </tr>
                     <tr>
-                        <td>Email</td>
-                        <td>{{customerInfo?.email}}</td>
-                        <td>Delivery Branch</td>
-                        <td>{{customerInfo?.deliveryBranch}}</td>
+                        <td><b>Email</b></td>
+                        <td><b>{{customerInfo?.email}}</b></td>
+                        <td><b>Delivery Branch</b></td>
+                        <td><b>{{customerInfo?.deliveryBranch}}</b></td>
                     </tr>
                     <tr>
-                        <td>Phone</td>
-                        <td>{{customerInfo?.customerPhone}}</td>
-                        <td>Start Date</td>
-                        <td>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                        <td><b>Phone</b></td>
+                        <td><b>{{customerInfo?.customerPhone}}</b></td>
+                        <td><b>Start Date</b></td>
+                        <td><b>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</b></td>
                     </tr>
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>Last Delivery</td>
-                        <td>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+                        <td><b>Last Delivery</b></td>
+                        <td><b>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</b></td>
                     </tr>
                 </tbody>
             </table>
@@ -186,27 +186,27 @@
                         <tbody>
                             <tr>
                                 <th style="background-color:#cbcbcb" colspan="200">
-                                    <h3 style="text-align:center">Nutiration Facts</h3>
+                                    <h3 style="text-align:center"><b>Nutiration Facts</b></h3>
                                 </th>
                             </tr>
                             <tr>
                                 <td *ngFor="let week of nutirationAVG | keyvalue">
-                                    <h3 style="text-align:center">{{week.key}}</h3>
+                                    <h3 style="text-align:center"><b>{{week.key}}</b></h3>
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Calories</th>
-                                                <th>Protein</th>
-                                                <th>Fats</th>
-                                                <th>Carb</th>
+                                                <th><b>Calories</b></th>
+                                                <th><b>Protein</b></th>
+                                                <th><b>Fats</b></th>
+                                                <th><b>Carb</b></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{{nutirationAVG[getItem(week.key)].calories.toFixed(2)}}</td>
-                                                <td>{{nutirationAVG[getItem(week.key)].protiens.toFixed(2)}}</td>
-                                                <td>{{nutirationAVG[getItem(week.key)].fats.toFixed(2)}}</td>
-                                                <td>{{nutirationAVG[getItem(week.key)].carb.toFixed(2)}}</td>
+                                                <td><b>{{nutirationAVG[getItem(week.key)].calories.toFixed(2)}}</b></td>
+                                                <td><b>{{nutirationAVG[getItem(week.key)].protiens.toFixed(2)}}</b></td>
+                                                <td><b>{{nutirationAVG[getItem(week.key)].fats.toFixed(2)}}</b></td>
+                                                <td><b>{{nutirationAVG[getItem(week.key)].carb.toFixed(2)}}</b></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -216,6 +216,7 @@
                     </table>
                 </div>
             </div>
+
             <p-table [value]="meals" styleClass="p-datatable-gridlines" >
                 <ng-template pTemplate="header">
                     <tr>
@@ -231,25 +232,25 @@
                 <ng-template pTemplate="body" let-index>
                     <tr>
                         <td class="text-center" style="font-size: 10px;">
-                            {{index.dayname}}
+                            <b>{{index.dayname}}</b>
                         </td>
                         <td class="text-center p-1" *ngFor="let meal of index.meals">
-                            {{meal.mealName}} <br><br>
+                            <b>{{meal.mealName}}</b> <br><br>
                             <table class="table table-bordered" style="width: 120px;font-size: 8px;">
                                 <thead>
                                     <tr>
-                                        <th style="padding: 8px 0;text-align: center;">Calories</th>
-                                        <th style="padding: 8px 0;text-align: center;">Protein</th>
-                                        <th style="padding: 8px 0;text-align: center;">Fats</th>
-                                        <th style="padding: 8px 0;text-align: center;">Carb</th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Calories</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Protein</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Fats</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Carb</b></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="padding: 8px 0;text-align: center;">{{meal.calories.toFixed(2)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{meal.protiens.toFixed(2)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{meal.fats.toFixed(2)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{meal.carb.toFixed(2)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{meal.calories.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{meal.protiens.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{meal.fats.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{meal.carb.toFixed(2)}}</b></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -258,18 +259,164 @@
                             <table class="table table-bordered" style="width: 130px;font-size: 8px;">
                                 <thead>
                                     <tr>
-                                        <th style="padding: 8px 0;text-align: center;">Calories</th>
-                                        <th style="padding: 8px 0;text-align: center;">Protein</th>
-                                        <th style="padding: 8px 0;text-align: center;">Fats</th>
-                                        <th style="padding: 8px 0;text-align: center;">Carb</th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Calories</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Protein</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Fats</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Carb</b></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).calories.toFixed(2)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).protiens.toFixed(2)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).fats.toFixed(2)}}</td>
-                                        <td style="padding: 8px 0;text-align: center;">{{calculateTotalNutrition(index.meals).carb.toFixed(2)}}</td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{calculateTotalNutrition(index.meals).calories.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{calculateTotalNutrition(index.meals).protiens.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{calculateTotalNutrition(index.meals).fats.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{calculateTotalNutrition(index.meals).carb.toFixed(2)}}</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div *ngIf="!isLoading">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td><b>CID</b></td>
+                        <td><b>{{customerInfo?.cid}}</b></td>
+                      
+                        <td><b>Plan</b></td>
+                        <td><b>{{customerInfo?.planTitle}}</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Name</b></td>
+                        <td><b>{{customerInfo?.customerName}}</b></td>
+                    
+                     <td><b>Status</b></td>
+                     <td>
+                         <b>{{customerInfo?.status}}</b>
+                     </td>
+                    </tr>
+                    <tr>
+                        <td><b>Addreess</b></td>
+                        <td><b>{{customerInfo?.deliveryAddress}}</b></td>
+                        <td><b>Remaining Days</b></td>
+                        <td><b>{{customerInfo?.remainingDays}}</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Email</b></td>
+                        <td><b>{{customerInfo?.email}}</b></td>
+                        <td><b>Delivery Branch</b></td>
+                        <td><b>{{customerInfo?.deliveryBranch}}</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Phone</b></td>
+                        <td><b>{{customerInfo?.customerPhone}}</b></td>
+                        <td><b>Start Date</b></td>
+                        <td><b>{{customerInfo?.startDate | date:'dd/MM/yyyy hh:mm a'}}</b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><b>Last Delivery</b></td>
+                        <td><b>{{customerInfo?.lastDeliveryDate | date:'dd/MM/yyyy hh:mm a'}}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th style="background-color:#cbcbcb" colspan="200">
+                                    <h3 style="text-align:center"><b>Nutiration Facts</b></h3>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td *ngFor="let week of nutirationAVG | keyvalue">
+                                    <h3 style="text-align:center"><b>{{week.key}}</b></h3>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th><b>Calories</b></th>
+                                                <th><b>Protein</b></th>
+                                                <th><b>Fats</b></th>
+                                                <th><b>Carb</b></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><b>{{nutirationAVG[getItem(week.key)].calories.toFixed(2)}}</b></td>
+                                                <td><b>{{nutirationAVG[getItem(week.key)].protiens.toFixed(2)}}</b></td>
+                                                <td><b>{{nutirationAVG[getItem(week.key)].fats.toFixed(2)}}</b></td>
+                                                <td><b>{{nutirationAVG[getItem(week.key)].carb.toFixed(2)}}</b></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <p-table [value]="meals" styleClass="p-datatable-gridlines" >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Day</th>
+                        <th class="text-center" *ngFor="let type of meals[0].meals; let i = index">
+                            {{(i+1) > customerInfo?.planTitle.split("-")[0].at(0) ? "SNACK" : "MEAL "+(i+1)}}
+                        </th>
+                        <th class="text-center">
+                            Day Nutrition Facts
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-index>
+                    <tr>
+                        <td class="text-center">
+                            <b>{{index.dayname}}</b>
+                        </td>
+                        <td class="text-center p-1" *ngFor="let meal of index.meals">
+                            <b>{{meal.mealName}}</b> <br><br>
+                            <table class="table table-bordered" style="width: 350px;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Calories</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Protein</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Fats</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Carb</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{meal.calories.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{meal.protiens.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{meal.fats.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{meal.carb.toFixed(2)}}</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="p-1" >
+                            <table class="table table-bordered" style="width: 350px;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Calories</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Protein</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Fats</b></th>
+                                        <th style="padding: 8px 0;text-align: center;"><b>Carb</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{calculateTotalNutrition(index.meals).calories.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{calculateTotalNutrition(index.meals).protiens.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{calculateTotalNutrition(index.meals).fats.toFixed(2)}}</b></td>
+                                        <td style="padding: 8px 0;text-align: center;"><b>{{calculateTotalNutrition(index.meals).carb.toFixed(2)}}</b></td>
                                     </tr>
                                 </tbody>
                             </table>

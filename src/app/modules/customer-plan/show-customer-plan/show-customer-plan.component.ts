@@ -323,17 +323,19 @@ export class ShowCustomerPlanComponent implements OnInit {
 
   pdfDownload() {
     this.isLoading = true;
-    let HTML_Width = this.download_container.nativeElement.clientWidth;
-    let HTML_Height = this.download_container.nativeElement.clientHeight;
-    html2canvas(this.download_container.nativeElement).then((canvas) => {
-      let imgData = canvas.toDataURL('image/jpeg');
-      let pdf = new jsPDF('p', 'pt', [HTML_Width * 1.05, HTML_Height * 1.05]);
-      pdf.addImage(imgData, 'JPG', 50, 50, HTML_Width, HTML_Height);
-      const fileName =
-        this.customerInfo.customerName + '-' + this.customerInfo.cid;
-      pdf.save(fileName);
-      this.isLoading = false;
-    });
+    setTimeout(() => {
+      let HTML_Width = this.download_container.nativeElement.clientWidth;
+      let HTML_Height = this.download_container.nativeElement.clientHeight;
+      html2canvas(this.download_container.nativeElement).then((canvas) => {
+        let imgData = canvas.toDataURL('image/jpeg');
+        let pdf = new jsPDF('p', 'pt', [HTML_Width * 1.05, HTML_Height * 1.05]);
+        pdf.addImage(imgData, 'JPG', 50, 50, HTML_Width, HTML_Height);
+        const fileName =
+          this.customerInfo.customerName + '-' + this.customerInfo.cid;
+        pdf.save(fileName);
+        this.isLoading = false;
+      });
+    }, 1);
   }
 
   // ================================================================= FILTERS =================================================================
