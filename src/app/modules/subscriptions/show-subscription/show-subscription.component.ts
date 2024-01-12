@@ -708,6 +708,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   }
   // ****************************************************UPDATE************************************************************************
   updateModal: boolean = false;
+  updatePasswordModal: boolean = false;
   currentEditRow: any;
   displayUpdateModal(sub: any) {
     if (this.updatePermission) {
@@ -715,6 +716,12 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       this.updateModal = true;
     }
   }
+
+  displayUpdatePasswordModal(sub: any) {
+    this.currentEditRow = sub;
+    this.updatePasswordModal = true;
+  }
+
   updateRow(input: HTMLInputElement) {
     if (this.updatePermission) {
       const data = {
@@ -733,6 +740,32 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         this.getSubscriptions();
       });
     }
+  }
+
+
+  updatePassword(input: HTMLInputElement) {
+    const data = {
+      user_id: this.currentEditRow.user_id, 
+      password: input.value,
+    };
+    this._SubscriptionsService.resetClientPassword(data).subscribe((res) => {
+      if (res.status == 1) {
+        this.currentEditRow = null;
+        this.updatePasswordModal = false;
+        this._MessageService.add({
+          severity: 'success',
+          summary: 'Update Client Password',
+          detail: 'client password updated successfully',
+        });
+      } else {
+        this._MessageService.add({
+          severity: 'warn',
+          summary: 'Update Client Password',
+          detail: 'could not update client password',
+        });
+      }
+
+    });
   }
 
   

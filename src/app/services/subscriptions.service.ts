@@ -73,6 +73,10 @@ export class SubscriptionsService {
     exportCustomerModels(phone_number:any): Observable<any> {
       return this._ApiConfigService.postReq3(`exportCustomerModels`,{phone_number});
     }
+
+    resetClientPassword(data:any): Observable<any> {
+      return this._ApiConfigService.postReq3(`resetClientPassword`,data);
+    }
 }
 
 

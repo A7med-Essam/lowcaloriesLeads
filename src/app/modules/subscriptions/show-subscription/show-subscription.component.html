@@ -172,6 +172,8 @@
                         class="m-1 p-button-sm"></button>
                     <button *ngIf="!sub.cids" [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil"
                         (click)="displayUpdateModal(sub)" class="m-1 p-button-sm p-button-warning"></button>
+                    <button pButton type="button" icon="pi pi-key"
+                        (click)="displayUpdatePasswordModal(sub)" class="m-1 p-button-sm p-button-success"></button>
                     <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
                         [disabled]="!printPermission" (click)="print(sub)"></button>
                 </td>
@@ -270,6 +272,29 @@
     <ng-template pTemplate="footer">
         <div>
             <button class="btn btn-primary" (click)="updateRow(CID_UPDATE_INPUT)">
+                Update
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Update Password Modal" [(visible)]="updatePasswordModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="">Client Email</label>
+                <input type="text" pInputText ngClass="w-100" disabled [value]="currentEditRow?.user?.email" />
+            </div>
+            <div class="col-12 my-2">
+                <label for="">Client Password</label>
+                <input type="text" pInputText ngClass="w-100" #PASSWORD_UPDATE_INPUT />
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div>
+            <button class="btn btn-success" (click)="updatePassword(PASSWORD_UPDATE_INPUT)">
                 Update
             </button>
         </div>
