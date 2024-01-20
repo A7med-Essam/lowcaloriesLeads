@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { ComplaintsService } from 'src/app/services/complaints.service';
+import { GuardService } from 'src/app/services/guard.service';
 
 @Component({
   selector: 'app-complaints-details',
@@ -12,10 +13,12 @@ import { ComplaintsService } from 'src/app/services/complaints.service';
 })
 export class ComplaintsDetailsComponent implements OnInit, OnDestroy {
   complaint: any;
+  isSuperAdmin: boolean = false;
 
   constructor(
     private _Router: Router,
-    private _ComplaintsService: ComplaintsService
+    private _ComplaintsService: ComplaintsService,
+    private _GuardService:GuardService
   ) {}
 
   private unsubscribe$ = new Subject<void>();
@@ -30,6 +33,9 @@ export class ComplaintsDetailsComponent implements OnInit, OnDestroy {
           } else {
             this.complaint = res
             this.getFiles(res.id)
+
+            this.isSuperAdmin = 
+            this._GuardService.isSuperAdmin();
           }
         },
       });

@@ -18,7 +18,7 @@
                                         <th class="py-3">Description</th>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        <tr *ngIf="isSuperAdmin">
                                             <td>Date</td>
                                             <td>{{complaint?.date | date}}</td>
                                         </tr>

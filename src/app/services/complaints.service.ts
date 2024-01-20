@@ -37,7 +37,7 @@ export class ComplaintsService {
     return this._ApiConfigService.postReq3(`getAllIssues`, {withoutPagination:true});
   }
 
-  updateIssueStatus(data:{id:number,status:string,reason:string}): Observable<{status:number,data:any,message:string}> {
+  updateIssueStatus(data:any): Observable<{status:number,data:any,message:string}> {
     return this._ApiConfigService.postReq3(`updateIssueStatus`, data);
   }
 

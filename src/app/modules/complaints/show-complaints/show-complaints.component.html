@@ -35,13 +35,13 @@
                 <th class="text-center"*ngIf="columns[4].status" pSortableColumn="c_mobile">c_mobile <p-sortIcon field="c_mobile"></p-sortIcon></th>
                 <th class="text-center"*ngIf="columns[5].status" pSortableColumn="c_name">c_name <p-sortIcon field="c_name"></p-sortIcon></th>
                 <th class="text-center"*ngIf="columns[6].status" pSortableColumn="cid">cid <p-sortIcon field="cid"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[7].status" pSortableColumn="created_at">created_at <p-sortIcon field="created_at"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[8].status" pSortableColumn="date">date <p-sortIcon field="date"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[9].status" pSortableColumn="issue_details">issue_details <p-sortIcon field="issue_details"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[10].status" pSortableColumn="status">status <p-sortIcon field="status"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[11].status" pSortableColumn="feedback_type">feedback_type <p-sortIcon field="feedback_type"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[12].status" pSortableColumn="order_type">order_type <p-sortIcon field="order_type"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[13].status" pSortableColumn="issue_category">issue_category <p-sortIcon field="issue_category"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[7].status" pSortableColumn="issue_details">issue_details <p-sortIcon field="issue_details"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[8].status" pSortableColumn="status">status <p-sortIcon field="status"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[9].status" pSortableColumn="feedback_type">feedback_type <p-sortIcon field="feedback_type"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[10].status" pSortableColumn="order_type">order_type <p-sortIcon field="order_type"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[11].status" pSortableColumn="issue_category">issue_category <p-sortIcon field="issue_category"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[12]?.status" pSortableColumn="created_at">created_at <p-sortIcon field="created_at"></p-sortIcon></th>
+                <th class="text-center"*ngIf="columns[13]?.status" pSortableColumn="date">date <p-sortIcon field="date"></p-sortIcon></th>
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
@@ -57,13 +57,13 @@
                 <td class="text-center" *ngIf="columns[4].status">{{complaint.c_mobile}}</td>
                 <td class="text-center" *ngIf="columns[5].status">{{complaint.c_name}}</td>
                 <td class="text-center" *ngIf="columns[6].status">{{complaint.cid}}</td>
-                <td class="text-center" *ngIf="columns[7].status">{{complaint.created_at | date}}</td>
-                <td class="text-center" *ngIf="columns[8].status">{{complaint.date}}</td>
-                <td class="text-center" *ngIf="columns[9].status">{{complaint.issue_details}}</td>
-                <td class="text-center" *ngIf="columns[10].status">{{complaint.status}}</td>
-                <td class="text-center" *ngIf="columns[11].status">{{complaint.feedback_type}}</td>
-                <td class="text-center" *ngIf="columns[12].status">{{complaint.order_type}}</td>
-                <td class="text-center" *ngIf="columns[13].status">{{complaint.issue_category}}</td>
+                <td class="text-center" *ngIf="columns[7].status">{{complaint.issue_details}}</td>
+                <td class="text-center" *ngIf="columns[8].status">{{complaint.status}}</td>
+                <td class="text-center" *ngIf="columns[9].status">{{complaint.feedback_type}}</td>
+                <td class="text-center" *ngIf="columns[10].status">{{complaint.order_type}}</td>
+                <td class="text-center" *ngIf="columns[11].status">{{complaint.issue_category}}</td>
+                <td class="text-center" *ngIf="columns[12]?.status">{{complaint?.created_at | date}}</td>
+                <td class="text-center" *ngIf="columns[13]?.status">{{complaint?.date}}</td>
                 <td class="text-center">
                     <button  [disabled]="!updatePermission" pButton type="button" icon="pi pi-sync" (click)="displayUpdateModal(complaint)"
                     class="m-1 p-button-sm p-button-help"></button>

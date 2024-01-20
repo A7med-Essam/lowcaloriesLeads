@@ -44,6 +44,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
   updatePermission: boolean = false;
   fullUpdatePermission: boolean = false;
   deletePermission: boolean = false;
+  isSuperAdmin: boolean = false;
 
   getPermission() {
     this.printPermission =
@@ -65,6 +66,8 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     );
     this.deletePermission =
       this._GuardService.getPermissionStatus('delete_complaints');
+
+    this.isSuperAdmin = this._GuardService.isSuperAdmin();
   }
 
   displayUploadModal() {
@@ -102,7 +105,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       doc.text('Website: thelowcalories.com', 320, 65);
 
       const headers = [
-        'Date',
+        // 'Date',
         'customer_name',
         'customer_mobile',
         'CID',
@@ -115,7 +118,9 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         'order_type',
         'issue_category',
       ];
-
+      if (this.isSuperAdmin) {
+        headers.push('Date');
+      }
       let filteredArray = this.allComplaints.filter((item: any) =>
         this.specificRows.includes(item.id)
       );
@@ -125,20 +130,38 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       filteredArray.length == 0 &&
         this.appliedFilters != null &&
         (filteredArray = this.complaints);
-      const convertedData = filteredArray.map((obj: any) => [
-        obj.date,
-        obj.c_name,
-        obj.c_mobile,
-        obj.cid,
-        obj.agent_name,
-        obj.status,
-        obj.branch,
-        obj.action,
-        obj.issue_details,
-        obj.feedback_type,
-        obj.order_type,
-        obj.issue_category,
-      ]);
+      let convertedData;
+
+      if (this.isSuperAdmin) {
+        convertedData = filteredArray.map((obj: any) => [
+          obj.c_name,
+          obj.c_mobile,
+          obj.cid,
+          obj.agent_name,
+          obj.status,
+          obj.branch,
+          obj.action,
+          obj.issue_details,
+          obj.feedback_type,
+          obj.order_type,
+          obj.issue_category,
+          obj.date,
+        ]);
+      } else {
+        convertedData = filteredArray.map((obj: any) => [
+          obj.c_name,
+          obj.c_mobile,
+          obj.cid,
+          obj.agent_name,
+          obj.status,
+          obj.branch,
+          obj.action,
+          obj.issue_details,
+          obj.feedback_type,
+          obj.order_type,
+          obj.issue_category,
+        ]);
+      }
 
       autoTable(doc, { startY: 70 });
       autoTable(doc, {
@@ -202,6 +225,13 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     this.getAgents();
     this.getAgentBranches();
     this.getAllComplaints();
+
+    if (this.isSuperAdmin) {
+      this.columns.push(
+        { name: 'created_at', status: false },
+        { name: 'date', status: false }
+      );
+    }
   }
 
   allComplaints: any[] = [];
@@ -376,6 +406,12 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
           id: this.currentEditRow.id,
           status: status.toLowerCase(),
           reason,
+          issue_details: this.currentEditRow.issue_details,
+          action: this.currentEditRow.action,
+          branch: this.currentEditRow.branch,
+          feedback_type: this.currentEditRow.feedback_type,
+          order_type: this.currentEditRow.order_type,
+          issue_category: this.currentEditRow.issue_category,
         })
         .subscribe((res) => {
           this.getAllComplaints();
@@ -417,8 +453,6 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
     { name: 'c_mobile', status: true },
     { name: 'c_name', status: true },
     { name: 'cid', status: true },
-    { name: 'created_at', status: false },
-    { name: 'date', status: false },
     { name: 'issue_details', status: false },
     { name: 'status', status: false },
     { name: 'feedback_type', status: false },
@@ -438,6 +472,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         }
       }
     });
+
   }
 
   selectAllColumns(checkboxContainer: HTMLElement, currentCheckbox: Checkbox) {
@@ -498,7 +533,7 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
       autoTable(doc, { startY: 55 });
 
       var columns = [
-        { title: 'Date', dataKey: complaint.date },
+        // { title: 'Date', dataKey: complaint.date },
         { title: 'customer_name', dataKey: complaint.c_name },
         { title: 'customer_mobile', dataKey: complaint.c_mobile },
         { title: 'cid', dataKey: complaint.cid },
@@ -511,6 +546,10 @@ export class ShowComplaintsComponent implements OnInit, OnDestroy {
         { title: 'order_type', dataKey: complaint?.order_type },
         { title: 'issue_category', dataKey: complaint?.issue_category },
       ];
+
+      if (this.isSuperAdmin) {
+        columns.push({ title: 'Date', dataKey: complaint.date });
+      }
 
       // doc.text(140, 40, "Report");
       autoTable(doc, { body: columns });
