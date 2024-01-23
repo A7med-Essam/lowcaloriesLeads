@@ -99,7 +99,9 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
           this.analysisForm.controls.customer_name.disable();
           this.analysisForm.controls.customer_gender.disable();
           this.isSearching = false;
+          this.isLead = true;
         } else {
+          this.isLead = false;
           this.analysisForm.controls.customer_gender.enable();
           this.analysisForm.controls.customer_name.enable();
           this.changeCustomerStatus('new');
