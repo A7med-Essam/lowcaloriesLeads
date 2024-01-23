@@ -12,16 +12,16 @@ import { UpdateAnalysis2Component } from './update-analysis2/update-analysis2.co
 
 const routes: Routes = [
   { path: '', redirectTo: 'show', pathMatch: 'full' },
+  // {
+  //   path: 'create',
+  //   component: CreateAnalysisComponent,
+  //   canActivate: [PermissionGuard],
+  //   data: {
+  //     permission: ['create_analysis'],
+  //   },
+  // },
   {
     path: 'create',
-    component: CreateAnalysisComponent,
-    canActivate: [PermissionGuard],
-    data: {
-      permission: ['create_analysis'],
-    },
-  },
-  {
-    path: 'createV2',
     component: CreateAnalysis2Component,
     canActivate: [PermissionGuard],
     data: {
@@ -29,15 +29,15 @@ const routes: Routes = [
     },
   },
   {
-    path: 'show',
+    path: 'show-admin',
     component: ShowAnalysisComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['show_analysis'],
+      permission: [''],
     },
   },
   {
-    path: 'showV2',
+    path: 'show',
     component: ShowAnalysis2Component,
     canActivate: [PermissionGuard],
     data: {
@@ -45,15 +45,15 @@ const routes: Routes = [
     },
   },
   {
-    path: 'update',
+    path: 'update-admin',
     component: UpdateAnalysisComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['update_analysis'],
+      permission: [''],
     },
   },
   {
-    path: 'updateV2',
+    path: 'update',
     component: UpdateAnalysis2Component,
     canActivate: [PermissionGuard],
     data: {

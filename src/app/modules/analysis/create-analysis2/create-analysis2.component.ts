@@ -65,6 +65,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     }
   }
 
+  isLead:boolean = false;
   checkCustomerExsist(number: any) {
     this._AnalysisService.checkPhoneNumberExist(number).subscribe((res) => {
       if (res.status == 1) {
@@ -77,8 +78,10 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
         this.analysisForm.controls.customer_name.disable();
         this.analysisForm.controls.customer_gender.disable();
         this.changeCustomerStatus('old');
+        this.isLead = true;
       } else {
         this.filterByMobile(number);
+        this.isLead = false;
       }
     });
   }

@@ -72,6 +72,7 @@ export class ShowAnalysis2Component implements OnInit {
   downloadSamplePermission: boolean = false;
   superAdminPermission: boolean = false;
   uploadFilesPermission: boolean = false;
+  isSuperAdmin: boolean = false;
 
   getPermission() {
     this.exportPermission =
@@ -91,6 +92,8 @@ export class ShowAnalysis2Component implements OnInit {
     this.uploadFilesPermission = this._GuardService.getPermissionStatus(
       'upload_analysis'
     );
+
+    this.isSuperAdmin = this._GuardService.isSuperAdmin();
   }
 
   analytics: any[] = [];

@@ -1,5 +1,7 @@
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center" *ngIf="isSuperAdmin">
     <div class="m-3">
+        <p-button class="mb-3 mx-2" icon="pi pi-eye" label="Show V1" routerLink="../show-admin">
+        </p-button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter V1" (click)="filterModal1 = true;">
         </p-button>
         <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export V1"
@@ -7,11 +9,24 @@
         </p-button>
     </div>
     <div class="m-3">
-        <button [disabled]="!createPermission" pButton pRipple label="Create" class="p-button-success mx-1"
-            icon="pi pi-plus" routerLink="../createV2"></button>
+        <button [disabled]="!createPermission" pButton pRipple label="Create V2" class="p-button-success mx-1"
+            icon="pi pi-plus" routerLink="../create"></button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter V2" (click)="filterModal = true;">
         </p-button>
         <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export V2"
+            (click)="export()">
+        </p-button>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center" *ngIf="!isSuperAdmin">
+    <div class="m-3"></div>
+    <div class="m-3">
+        <button [disabled]="!createPermission" pButton pRipple label="Create" class="p-button-success mx-1"
+            icon="pi pi-plus" routerLink="../create"></button>
+        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+        </p-button>
+        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export"
             (click)="export()">
         </p-button>
     </div>
