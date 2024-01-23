@@ -35,7 +35,8 @@ import { AuthInterceptor } from './core/http.interceptor';
 import { HomeComponent } from './components/home/home.component';
 import { TagModule } from 'primeng/tag';
 import { TabViewModule } from 'primeng/tabview';
-
+import { NodeTreeComponent } from './components/node-tree/node-tree.component';
+import { OrganizationChartModule } from 'primeng/organizationchart';
 const APP_PRIMENG_MODULE = [
   SharedModule,
   TableModule,
@@ -58,7 +59,8 @@ const APP_PRIMENG_MODULE = [
   AccordionModule,
   ToastModule,
   TabViewModule,
-  TagModule
+  TagModule,
+  OrganizationChartModule
 ];
 
 @NgModule({
@@ -70,6 +72,7 @@ const APP_PRIMENG_MODULE = [
     LoginComponent,
     Error404Component,
     HomeComponent,
+    NodeTreeComponent,
   ],
   imports: [
     BrowserModule,

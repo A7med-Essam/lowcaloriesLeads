@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { Error404Component } from './components/error404/error404.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
+import { NodeTreeComponent } from './components/node-tree/node-tree.component';
 import { PermissionGuard } from './core/permission.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'node', component: NodeTreeComponent },
   {
     path: 'home',
     component: HomeComponent,

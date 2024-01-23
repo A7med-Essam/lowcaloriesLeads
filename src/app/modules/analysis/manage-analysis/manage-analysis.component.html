@@ -11,6 +11,7 @@
             (click)="createLabelModal = true"></button>
         <button pButton pRipple label="Delete Bulk" class="p-button-danger mx-1" icon="pi pi-trash"
             (click)="deleteBulk()"></button>
+        <a #anchor pButton pRipple label="Show Tree" (click)="displayNode(anchor)" class="p-button-help mx-1" icon="pi pi-sitemap"></a>
     </div>
 </div>
 
@@ -60,7 +61,7 @@
         <div class="col-12 my-3">
             <label for="">Analytic Name</label>
             <div class="card flex justify-content-center">
-                <p-treeSelect class="w-full md:w-20rem" [(ngModel)]="selectedNode" [filter]="true" appendTo="body" 
+                <p-treeSelect class="w-full md:w-20rem" [(ngModel)]="selectedNode" [filter]="true" appendTo="body"
                     styleClass="w-100" [options]="dropDownAnalytics" [metaKeySelection]="false" selectionMode="signle"
                     placeholder="Select Item" (onNodeSelect)="nodeSelect($event)" [showClear]="true">
                 </p-treeSelect>

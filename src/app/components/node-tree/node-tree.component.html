@@ -1,0 +1,17 @@
+<p-organizationChart [value]="data" selectionMode="single" (onNodeSelect)="onNodeSelect($event)"  *ngIf="!isLoading">
+    <ng-template let-node pTemplate="person">
+        <div class="p-4 text-center" [class.bg-warning]="!node.data.has_children">
+            <div style="font-weight: 600;color:#09c">{{ node.data.title }}</div>
+            <div>{{ node.data.name }}</div>
+        </div>
+    </ng-template>
+</p-organizationChart>
+
+<div class="loader-container" *ngIf="isLoading">
+    <div class="i-loader-inf-horizontal-container">
+        <div class="i-loader-inf-horizontal"></div>
+        <div class="pt-8px">
+            <span>Processing data</span>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AnalysisService } from 'src/app/services/analysis.service';
 import { ConfirmationService, MenuItem, SelectItem } from 'primeng/api';
 import { TableCheckbox } from 'primeng/table';
+import { AuthService } from 'src/app/services/auth.service';
+import { AppService } from 'src/app/services/app.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-analysis',
@@ -21,12 +24,21 @@ export class ManageAnalysisComponent implements OnInit {
   selectedLabel: any = null;
   constructor(
     private _AnalysisService: AnalysisService,
-    private _ConfirmationService: ConfirmationService
+    private _ConfirmationService: ConfirmationService,
+    // private _AppService:AppService,
+    // private _Router:Router
   ) {}
 
   ngOnInit(): void {
     this.getAnalytics();
     this.getLabels();
+  }
+
+  displayNode(anchor:HTMLAnchorElement){
+    // this._AppService.setData(this.analytics)
+    anchor.href = "/node"
+    anchor.target = "_blank"
+    // this._Router.navigate(['/node'])
   }
 
   labels: any[] = [];

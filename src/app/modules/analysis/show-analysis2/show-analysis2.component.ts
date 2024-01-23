@@ -313,7 +313,7 @@ export class ShowAnalysis2Component implements OnInit {
       this._Router.navigate(['analysis/update']);
     } else {
       this._AnalysisService.analysisV2.next(row);
-      this._Router.navigate(['analysis/updateV2']);
+      this._Router.navigate(['analysis/update']);
     }
   }
   // ===============================================================Details======================================================================

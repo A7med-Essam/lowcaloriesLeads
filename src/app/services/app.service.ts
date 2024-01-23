@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -6,6 +7,13 @@ import { Injectable } from '@angular/core';
 export class AppService {
   isSidebarPinned = false;
   isSidebarToggeled = false;
+
+  // private dataSubject = new BehaviorSubject<any>(null);
+  // public data$ = this.dataSubject.asObservable();
+
+  // setData(data: any): void {
+  //   this.dataSubject.next(data);
+  // }
 
   constructor() {}
 
