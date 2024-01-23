@@ -883,3 +883,7 @@ input[type=file]::file-selector-button:hover {
 .p-organizationchart .p-organizationchart-node-content{
   padding: 0 !important;
 }
+
+p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button{
+  border-color: #fff !important;
+}

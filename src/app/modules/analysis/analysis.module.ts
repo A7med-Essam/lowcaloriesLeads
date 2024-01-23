@@ -26,6 +26,7 @@ import { TreeSelectModule } from 'primeng/treeselect';
 import { ChipsModule } from 'primeng/chips';
 import { AnalysisReminderComponent } from './analysis-reminder/analysis-reminder.component';
 import { ImageModule } from 'primeng/image';
+import { SelectButtonModule } from 'primeng/selectbutton';
 @NgModule({
   declarations: [
     CreateAnalysisComponent,
@@ -56,7 +57,8 @@ import { ImageModule } from 'primeng/image';
     TagModule,
     TreeSelectModule,
     ChipsModule,
-    ImageModule
+    ImageModule,
+    SelectButtonModule
   ],
 })
 export class AnalysisModule {}

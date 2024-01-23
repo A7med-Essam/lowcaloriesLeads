@@ -8,10 +8,10 @@ import {
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { AgentTargetService } from 'src/app/services/agent-target.service';
 import { AnalysisService } from 'src/app/services/analysis.service';
 import { LocalService } from 'src/app/services/local.service';
 import { RefundService } from 'src/app/services/refund.service';
+import { SubscriptionsService } from 'src/app/services/subscriptions.service';
 
 @Component({
   selector: 'app-create-analysis2',
@@ -20,6 +20,9 @@ import { RefundService } from 'src/app/services/refund.service';
 })
 export class CreateAnalysis2Component implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
+  selectedState: string = 'Low Calories';
+  stateOptions: any[] = ['Low Calories','Chef Gourmet'];
+
   analyticOptions: any;
   emirates: any[] = [];
   analysisForm!: FormGroup;
@@ -34,7 +37,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     private _RefundService: RefundService,
     private fb: FormBuilder,
     private _MessageService: MessageService,
-    private _LocalService: LocalService
+    private _LocalService: LocalService,
+    private _SubscriptionsService:SubscriptionsService
   ) {}
 
   ngOnInit(): void {
@@ -47,22 +51,46 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
 
   currentNumber: string = '';
   getCustomerCID(e: HTMLInputElement) {
-    if (
-      e.value != '' &&
-      e.value.length == 10 &&
-      e.value != this.currentNumber
-    ) {
-      this.currentNumber = e.value;
+    if (this.selectedState != 'Chef Gourmet') {
+      if (
+        e.value != '' &&
+        e.value.length == 10 &&
+        e.value != this.currentNumber
+      ) {
+        this.currentNumber = e.value;
+        this.isSearching = true;
+        this._AnalysisService.getFormAnalytics().subscribe((res) => {
+          this.analyticOptions = res.data.options;
+          this.emirates = res.data.emirates;
+          this.options = [res.data.options];
+          this.analysisForm.controls.customer_status.enable();
+          this.analysisForm.patchValue({ cid: '', customer_name: '' });
+          this.getCIDs(e.value);
+        });
+      }
+    } else {
       this.isSearching = true;
-      this._AnalysisService.getFormAnalytics().subscribe((res) => {
-        this.analyticOptions = res.data.options;
-        this.emirates = res.data.emirates;
-        this.options = [res.data.options];
-        this.analysisForm.controls.customer_status.enable();
-        this.analysisForm.patchValue({ cid: '', customer_name: '' });
-        this.getCIDs(e.value);
+      this._SubscriptionsService
+      .getCustomerCHSubscriptions(e.value)
+      .subscribe({
+        next:res=>{
+          if (res.data) {
+            this.isSearching = false;
+            this.analysisForm.patchValue({
+              customer_name: res.data.customerName,
+              customer_branch: res.data.branch,
+            });
+            this.showBranch = true;
+            this.analysisForm.controls.customer_name.disable();
+            this.analysisForm.controls.customer_branch.disable();
+          }
+        },
+        error:err=>{
+          this.isSearching = false;
+        }
       });
     }
+    
   }
 
   isLead:boolean = false;
@@ -76,7 +104,9 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
           customer_gender: res.data.gender,
         });
         this.analysisForm.controls.customer_name.disable();
-        this.analysisForm.controls.customer_gender.disable();
+        if (res.data.gender) {
+          this.analysisForm.controls.customer_gender.disable();
+        }
         this.changeCustomerStatus('old');
         this.isLead = true;
       } else {
