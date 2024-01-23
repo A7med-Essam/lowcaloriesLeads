@@ -51,7 +51,7 @@ export class NodeTreeComponent implements OnInit {
 
     data.forEach((entry: any) => {
       const node = {
-        expanded: entry.has_children,
+        expanded: true,
         type: 'person',
         data: {
           name: entry.name,
@@ -72,11 +72,12 @@ export class NodeTreeComponent implements OnInit {
 
   onNodeSelect(event: any) {
     if (event.node.data.title != 'Options') {
-      if (event.node.data.has_children) {
+      // if (event.node.data.has_children) {
         this.getChildren(event.node.data.id).subscribe((children) => {
           event.node.children = children;
+          event.node.data.has_children = true;
         });
-      }
+      // }
     }
   }
 
