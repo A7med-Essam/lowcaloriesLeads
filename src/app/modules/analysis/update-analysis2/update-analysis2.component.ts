@@ -74,7 +74,7 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
           this.addControls();
           this.patchValues(analysis);
         } else {
-          this._Router.navigate(['analysis/showV2']);
+          this._Router.navigate(['analysis/show']);
         }
       });
   }
@@ -168,7 +168,7 @@ export class UpdateAnalysis2Component implements OnInit, OnDestroy {
             summary: 'Created Successfully',
             detail: res.message,
           });
-          this._Router.navigate(['analysis/showV2']);
+          this._Router.navigate(['analysis/show']);
         });
     }
   }
