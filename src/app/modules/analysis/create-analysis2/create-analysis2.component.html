@@ -12,7 +12,7 @@
             </span>
         </div>
         <div>
-            <p-selectButton [options]="stateOptions" [(ngModel)]="selectedState" class="ng-invalid ng-dirty">
+            <p-selectButton [options]="stateOptions" [(ngModel)]="selectedState" class="ng-invalid ng-dirty" (onChange)="TrackChange()">
             </p-selectButton>
         </div>
     </div>

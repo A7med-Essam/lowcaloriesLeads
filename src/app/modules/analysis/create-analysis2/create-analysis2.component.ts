@@ -49,6 +49,15 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     );
   }
 
+  TrackChange(){
+    this.analysisForm.controls.customer_status.enable();
+    this.analysisForm.reset();
+    this.cids = [];
+    this.createAnalysisForm();
+    this.getFormAnalytics();
+
+  }
+
   currentNumber: string = '';
   getCustomerCID(e: HTMLInputElement) {
     if (this.selectedState != 'Chef Gourmet') {
@@ -74,8 +83,8 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       .getCustomerCHSubscriptions(e.value)
       .subscribe({
         next:res=>{
+          this.isSearching = false;
           if (res.data) {
-            this.isSearching = false;
             this.analysisForm.patchValue({
               customer_name: res.data.customerName,
               customer_branch: res.data.branch,
