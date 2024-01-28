@@ -2,11 +2,11 @@
     <div class="m-3">
         <p-button class="mb-3 mx-2" icon="pi pi-eye" label="Show V1" routerLink="../show-admin">
         </p-button>
-        <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter V1" (click)="filterModal1 = true;">
+        <!-- <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter V1" (click)="filterModal1 = true;">
         </p-button>
         <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export V1"
             (click)="export1()">
-        </p-button>
+        </p-button> -->
     </div>
     <div class="m-3">
         <button [disabled]="!createPermission" pButton pRipple label="Create V2" class="p-button-success mx-1"
@@ -87,6 +87,7 @@
                         appendTo="body">
                     </p-dropdown>
                 </div>
+           
                 <!-- <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
                     <label for="">Agent</label>
                     <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
@@ -104,6 +105,12 @@
                     <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
                         styleClass="w-100" appendTo="body" optionValue="id" optionLabel="name" [filter]="true">
                     </p-dropdown>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1">
+                    <label for="range">Date Range</label>
+                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+                        ngClass="w-100" appendTo="body">
+                    </p-calendar>
                 </div>
                 <div class="col-md-4 col-12 my-1">
                     <label for="">Phone Number <span class="text-danger">*</span></label>

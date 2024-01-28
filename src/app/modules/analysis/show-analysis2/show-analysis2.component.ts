@@ -218,23 +218,26 @@ export class ShowAnalysis2Component implements OnInit {
       data_options: '',
       team: '',
       agent_id: '',
+      date: '',
+      from: '',
+      to: '',
     });
   }
 
   applyFilter(form: FormGroup) {
-    // if (form.value.date) {
-    //   if (form.value.date[1]) {
-    //     form.patchValue({
-    //       from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
-    //       to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
-    //       date: null,
-    //     });
-    //   } else {
-    //     form.patchValue({
-    //       date: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
-    //     });
-    //   }
-    // }
+    if (form.value.date) {
+      if (form.value.date[1]) {
+        form.patchValue({
+          from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+          to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+          date: null,
+        });
+      } else {
+        form.patchValue({
+          date: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+        });
+      }
+    }
     // for (const prop in form.value) {
     //   if (form.value[prop] === null) {
     //     delete form.value[prop];

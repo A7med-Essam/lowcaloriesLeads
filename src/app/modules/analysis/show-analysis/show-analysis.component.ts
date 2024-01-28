@@ -324,7 +324,7 @@ export class ShowAnalysisComponent implements OnInit, OnDestroy {
 
   updateRow(row: any) {
     this._AnalysisService.analysis.next(row);
-    this._Router.navigate(['analysis/update']);
+    this._Router.navigate(['analysis/update-admin']);
   }
   // ===============================================================Details======================================================================
 
