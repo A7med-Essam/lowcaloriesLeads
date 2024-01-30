@@ -12,7 +12,8 @@
             </span>
         </div>
         <div>
-            <p-selectButton [options]="stateOptions" [(ngModel)]="selectedState" class="ng-invalid ng-dirty" (onChange)="TrackChange()">
+            <p-selectButton [options]="stateOptions" [(ngModel)]="selectedState" class="ng-invalid ng-dirty"
+                (onChange)="TrackChange()">
             </p-selectButton>
         </div>
     </div>
@@ -100,6 +101,35 @@
             </div>
         </div>
     </form>
+    <div *ngIf="analytics.length">
+        <hr>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Old Analytics</h2>
+        </div>
+        <div class="card">
+            <p-table [value]="analytics">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Date</th>
+                        <th class="text-center">Agent</th>
+                        <th class="text-center">Customer Name</th>
+                        <th class="text-center">View</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-analysis>
+                    <tr>
+                        <td class="text-center">{{analysis?.date}}</td>
+                        <td class="text-center">{{analysis?.agent?.name}}</td>
+                        <td class="text-center">{{analysis?.customer_name}}</td>
+                        <td class="text-center">
+                            <button pButton type="button" icon="pi pi-eye" (click)="showRow(analysis)"
+                                class="m-1 p-button-sm"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
 </div>
 
 <p-dialog header="Reminder Date" [(visible)]="reminderModal" position="bottom" [style]="{ width: '50vw' }"
@@ -119,3 +149,136 @@
         </div>
     </div>
 </div>
+
+<p-dialog header="Details Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+    [resizable]="true">
+    <div class="card">
+        <div class="card-header">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 200px;">Title</h6>
+                <h6 class="m-0">Description</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive overflow-auto">
+                <table class="table">
+                    <tbody>
+                        <tr *ngIf="currentRow?.date">
+                            <td width="200">Date</td>
+                            <td>{{ currentRow?.date }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.agent">
+                            <td width="200">Agent Name</td>
+                            <td>{{ currentRow?.agent.name }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.mobile">
+                            <td width="200">Customer Mobile</td>
+                            <td>{{ currentRow?.mobile }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.customer_name">
+                            <td width="200">Customer Name</td>
+                            <td>{{ currentRow?.customer_name }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.cid">
+                            <td [width]="200">
+                                Customer cid
+                            </td>
+                            <td>{{ currentRow?.cid }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.customer_gender">
+                            <td width="200">Customer Gender</td>
+                            <td>{{ currentRow?.customer_gender }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.area">
+                            <td width="200">area</td>
+                            <td>{{ currentRow?.area?.area_en }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.platform">
+                            <td width="200">Platform</td>
+                            <td>{{ currentRow?.platform }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.platform_option">
+                            <td width="200">Platform Option</td>
+                            <td>{{ currentRow?.platform_option }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.customer_status">
+                            <td width="200">Customer Status</td>
+                            <td>{{ currentRow?.customer_status }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.customer_branch">
+                            <td [width]="200">
+                                Customer Branch
+                            </td>
+                            <td>{{ currentRow?.customer_branch }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.concern">
+                            <td width="200">Concern</td>
+                            <td>{{ currentRow?.concern }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.mode">
+                            <td width="200">Mode</td>
+                            <td>{{ currentRow?.mode }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.mode_reason">
+                            <td width="200">Mode Reason</td>
+                            <td>{{ currentRow?.mode_reason }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.ask_for">
+                            <td width="200">Ask For</td>
+                            <td>{{ currentRow?.ask_for }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.ask_for_options">
+                            <td width="200">Ask For Options</td>
+                            <td>{{ currentRow?.ask_for_options }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.actions">
+                            <td width="200">Actions</td>
+                            <td>{{ currentRow?.actions }}</td>
+                        </tr>
+                        <tr *ngIf="currentRow?.notes">
+                            <td width="200">Notes</td>
+                            <td>{{ currentRow?.notes }}</td>
+                        </tr>
+
+
+                        <tr *ngFor="let item of currentRow?.data_options">
+                            <td [width]="200">
+                                {{ item.label }}
+                            </td>
+                            <td>{{ item.name }}</td>
+                        </tr>
+                        <ng-container *ngIf="currentRow?.files&&currentRow?.files.length">
+                            <tr *ngFor="let item of currentRow?.files">
+                                <td [width]="200">
+                                    Files
+                                </td>
+                                <td class="d-flex justify-content-between align-items-center">
+                                    <span *ngIf="item.type.includes('image')">
+                                        <p-image [src]="'http://api.thelowcalories.com/'+item?.file" alt="Uploaded Image"
+                                            width="50" [preview]="true">
+                                        </p-image>
+                                    </span>
+                                    <span *ngIf="item.type.includes('audio')">
+                                        <audio controls>
+                                            <source [src]="'http://api.thelowcalories.com/'+item.file" type="audio/mpeg">
+                                        </audio>
+                                    </span>
+                                    <span
+                                        *ngIf="!item.type.includes('audio')&&!item.type.includes('image')&&!item.type.includes('video')">
+                                        <a target="_blank" [href]="'http://api.thelowcalories.com/'+item.file"
+                                            download>{{item.type}}</a>
+                                    </span>
+                                    <span *ngIf="item.type.includes('video')">
+                                        <video width="250" class="m-1" controls>
+                                            <source src="http://api.thelowcalories.com/{{item?.file}}">
+                                        </video>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</p-dialog>
