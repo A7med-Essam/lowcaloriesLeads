@@ -30,6 +30,7 @@ export class SidebarComponent implements OnInit {
   showSubscriptionPermission: boolean = false;
   showGiftcodePermission: boolean = false;
   showMailServicePermission: boolean = false;
+  showReportStaticsServicePermission: boolean = false;
   showRedirectPermission: boolean = false;
   showUploadPermission: boolean = false;
   showAnalysisPermission: boolean = false;
@@ -94,6 +95,8 @@ export class SidebarComponent implements OnInit {
       this._GuardService.getPermissionStatus('show_giftcode');
     this.showMailServicePermission =
       this._GuardService.getPermissionStatus('show_mailService');
+    this.showReportStaticsServicePermission =
+      this._GuardService.getPermissionStatus('show_reportStaticService');
     this.showRedirectPermission =
       this._GuardService.getPermissionStatus('show_redirect');
     this.showUploadPermission =
@@ -105,7 +108,7 @@ export class SidebarComponent implements OnInit {
     this.showOfferPermission =
       this._GuardService.getPermissionStatus('show_offer');
     this.showCustomerPlanPermission = true;
-      // this._GuardService.getPermissionStatus('show_customerPlan');
+    // this._GuardService.getPermissionStatus('show_customerPlan');
   }
 
   logOut() {

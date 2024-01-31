@@ -58,7 +58,8 @@
       *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission">
       Report Components
     </div>
-    <ul class="menu-items" *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission">
+    <ul class="menu-items"
+      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission">
       <li *ngIf="showSubscriptionPermission">
         <a routerLink="/subscriptions/show" routerLinkActive="active">
           <i class="fas fa-bookmark"></i>
@@ -255,6 +256,19 @@
         <a routerLink="/mailService/show" routerLinkActive="active">
           <i class="fas fa-envelope"></i>
           <span>Mail Service</span>
+        </a>
+      </li>
+      <hr>
+    </ul>
+    <!-- ================================================NumberStatics SERVICE================================================== -->
+    <div class="menu-header mt-3 mb-2" *ngIf="showReportStaticsServicePermission">
+      Report Statics
+    </div>
+    <ul class="menu-items" *ngIf="showReportStaticsServicePermission">
+      <li>
+        <a routerLink="/reportStatics/show" routerLinkActive="active">
+          <i class="fas fa-chart-pie"></i>
+          <span>Report Statics</span>
         </a>
       </li>
       <hr>

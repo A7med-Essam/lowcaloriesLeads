@@ -1,0 +1,352 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Report Statics Report</h2>
+</div>
+<hr>
+<div class="card">
+  <form [formGroup]="filterForm" (ngSubmit)='filter(filterForm)'>
+    <div class="row mx-0">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
+        <label for="">Models Search</label>
+        <p-dropdown [options]="models" optionLabel="label" optionValue="value" formControlName='model' appendTo="body"
+          styleClass="w-100" [class]="{
+            'ng-invalid' : filterForm.get('model')?.hasError('required'),
+            'ng-dirty' : filterForm.get('model')?.hasError('required')
+          }" placeholder="Select Version" [filter]="true">
+        </p-dropdown>
+      </div>
+
+      <div *ngIf="filterForm.get('model')?.value == 'accounts_status' " class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
+        <label for="">Status</label>
+        <p-dropdown [options]="accounts_status" optionLabel="label" optionValue="value"
+          formControlName='accounts_status' appendTo="body" styleClass="w-100" [class]="{
+            'ng-invalid' : filterForm.get('model')?.value == 'accounts_status' && filterForm.get('accounts_status')?.value == null,
+            'ng-dirty' : filterForm.get('model')?.value == 'accounts_status' && filterForm.get('accounts_status')?.value == null
+          }" placeholder="Select Version" [filter]="true">
+        </p-dropdown>
+      </div>
+
+      <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
+        <label for="range">Date Range</label>
+        <p-calendar selectionMode="range" [class]="{
+          'ng-invalid' : filterForm.get('date')?.hasError('required'),
+          'ng-dirty' : filterForm.get('date')?.hasError('required'),
+          'w-100' : true
+        }" [readonlyInput]="true" inputId="range" formControlName="date" appendTo="body">
+        </p-calendar>
+      </div>
+
+
+      <div class="col-12 my-2">
+        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+          <div>
+            <p-button type="button" (click)="resetFields()" styleClass="p-button-raised p-button-secondary mx-2"
+              label="Reset Fields" icon="pi pi-refresh"></p-button>
+          </div>
+          <div>
+            <p-button type="button" (click)="resetFilter()" styleClass="p-button-raised p-button-secondary mx-2"
+              label="Reset" icon="pi pi-filter-slash"></p-button>
+            <p-button type="submit" styleClass="p-button-raised p-button-success mx-2"
+              [disabled]="filterForm.value.model ==null || filterForm.value.date == null || (filterForm.get('model')?.value == 'accounts_status' && filterForm.get('accounts_status')?.value == null) "
+              label="Apply Filter" icon="pi pi-filter"></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="card mt-5 "
+  *ngIf="filterForm.get('model')?.value != null && (logicTabelWithModal.includes(filterForm.get('model')?.value) ) ">
+  <p-table [loading]="isLoading" [value]="data?.count_data || []">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Branch</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-obj>
+      <tr>
+        <td>{{ obj!.Branch }}</td>
+        <td>{{ obj!.count }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModal(obj!.Branch)"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="">No Records Found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<div class="row mt-5 "
+  *ngIf="filterForm.get('model')?.value == 'new_lead' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
+  <div class="col-xl-4 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big icon-success">
+              <i class="fas fa-sitemap text-success"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total Social Media</p>
+              <p class="card-title">{{ ((newLeadData?.Facebook) || 0) + ((newLeadData?.Instagram) || 0) }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big icon-primary">
+              <i class="fa fa-phone text-primary"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total Calls Team</p>
+              <p class="card-title">{{ newLeadData?.Calls || 0 }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big icon-info">
+              <i class="fab fa-whatsapp text-info"></i>
+
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total Whatsapp Team</p>
+              <p class="card-title">{{ newLeadData?.Whatsapp || 0}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5"
+  *ngIf="filterForm.get('model')?.value == 'new_subscriptions' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big  icon-success">
+              <i class="fas fa-sitemap text-success"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers ">
+              <p class="card-category">Branches</p>
+              <p class="card-title">{{ ((newLeadData?.Branches) || 0) }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big  icon-info">
+              <i class="fa fa-phone text-info"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total Calls Team</p>
+              <p class="card-title">{{ newLeadData?.Calls || 0 }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big  icon-primary">
+              <i class="fab fa-whatsapp text-primary"></i>
+
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total Whatsapp Team</p>
+              <p class="card-title">{{ newLeadData?.Whatsapp || 0}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big  icon-warning">
+              <i class="fas fa-globe text-warning"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total Online</p>
+              <p class="card-title">{{ (newLeadData?.Web || 0) + (newLeadData?.Mobile || 0)}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row mt-5 "
+  *ngIf="filterForm.get('model')?.value == 'social_media' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big  icon-info">
+              <i class="fas fa-users-cog text-info"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total CustomerServices Subscribe</p>
+              <p class="card-title">{{ ((newLeadData?.CustomerServices_subscribe) || 0) }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big  icon-warning">
+              <i class="fas fa-users-cog text-warning"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total CustomerServices unSubscribe</p>
+              <p class="card-title">{{((newLeadData?.CustomerServices_unSubscribe) || 0) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big  icon-success">
+              <i class="fas fa-hospital-symbol text-success"></i>
+
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total Clinic Subscribe</p>
+              <p class="card-title">{{ newLeadData?.Clinic_subscribe || 0}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+    <div class="card card-stats">
+      <div class="card-body">
+        <div class="row" style="padding: 20px 10px;">
+          <div class="col-5 col-md-4">
+            <div class="icon-big  icon-primary">
+              <i class="fas fa-hospital-symbol text-primary"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">Total Clinic unSubscribe</p>
+              <p class="card-title">{{ (newLeadData?.Clinic_unSubscribe || 0)}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<p-dialog header="Show {{ branchData[0]?.branch  }} Branch Details [ {{ branchData.length  }} ]"
+  [(visible)]="openBrachDetailModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false">
+  <p-table [value]="branchData">
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">date</th>
+        <th>CID</th>
+        <th>Cname</th>
+        <th>CEmail</th>
+        <th>CMobile</th>
+        <th>planName</th>
+        <th>deliveryName</th>
+        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">Agent</th>
+        <th *ngIf="filterForm.get('model')?.value == 'accounts_status'">Status</th>
+        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-obj>
+      <tr>
+        <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.dstart?.split('T')[0] }}</td>
+        <td>{{ obj.CID }}</td>
+        <td>{{ obj.Cname }}</td>
+        <td>{{ obj.CustomerEmail }}</td>
+        <td>{{ obj.CustomerPhone }}</td>
+        <td>{{ obj.planName }}</td>
+        <td>{{ obj.deliveryName }}</td>
+        <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.Agent }}</td>
+        <td *ngIf="filterForm.get('model')?.value == 'accounts_status'">{{ obj.status }}</td>
+        <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.actionHappened }}</td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+</p-dialog>

@@ -184,6 +184,17 @@ const routes: Routes = [
     },
   },
   {
+    path: 'reportStatics',
+    loadChildren: () =>
+      import('./modules/report-statics/report-statics.module').then(
+        (m) => m.ReportStaticsModule
+      ),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_reportStaticService'],
+    },
+  },
+  {
     path: 'redirect',
     loadChildren: () =>
       import('./modules/redirect/redirect.module').then(
@@ -215,7 +226,9 @@ const routes: Routes = [
   {
     path: 'customer-plan',
     loadChildren: () =>
-      import('./modules/customer-plan/customer-plan.module').then((m) => m.CustomerPlanModule),
+      import('./modules/customer-plan/customer-plan.module').then(
+        (m) => m.CustomerPlanModule
+      ),
     // canActivate: [PermissionGuard],
     // data: {
     //   permission: ['show_customerPlan'],
