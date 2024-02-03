@@ -17,10 +17,10 @@
 
       <div *ngIf="filterForm.get('model')?.value == 'accounts_status' " class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
         <label for="">Status</label>
-        <p-dropdown [options]="accounts_status" optionLabel="label" optionValue="value"
-          formControlName='accounts_status' appendTo="body" styleClass="w-100" [class]="{
-            'ng-invalid' : filterForm.get('model')?.value == 'accounts_status' && filterForm.get('accounts_status')?.value == null,
-            'ng-dirty' : filterForm.get('model')?.value == 'accounts_status' && filterForm.get('accounts_status')?.value == null
+        <p-dropdown [options]="accounts_status" optionLabel="label" optionValue="value" formControlName='status'
+          appendTo="body" styleClass="w-100" [class]="{
+            'ng-invalid' : filterForm.get('model')?.value == 'accounts_status' && filterForm.get('status')?.value == null,
+            'ng-dirty' : filterForm.get('model')?.value == 'accounts_status' && filterForm.get('status')?.value == null
           }" placeholder="Select Version" [filter]="true">
         </p-dropdown>
       </div>
@@ -46,7 +46,7 @@
             <p-button type="button" (click)="resetFilter()" styleClass="p-button-raised p-button-secondary mx-2"
               label="Reset" icon="pi pi-filter-slash"></p-button>
             <p-button type="submit" styleClass="p-button-raised p-button-success mx-2"
-              [disabled]="filterForm.value.model ==null || filterForm.value.date == null || (filterForm.get('model')?.value == 'accounts_status' && filterForm.get('accounts_status')?.value == null) "
+              [disabled]="filterForm.value.model ==null || filterForm.value.date == null || (filterForm.get('model')?.value == 'accounts_status' && filterForm.get('status')?.value == null) "
               label="Apply Filter" icon="pi pi-filter"></p-button>
           </div>
         </div>
@@ -74,7 +74,11 @@
         </td>
       </tr>
     </ng-template>
-
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ sum }} Users.
+      </div>
+    </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="3" class="">No Records Found</td>
@@ -317,14 +321,14 @@
 
 
 <p-dialog header="Show {{ branchData[0]?.branch  }} Branch Details [ {{ branchData.length  }} ]"
-  [(visible)]="openBrachDetailModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false">
+  [(visible)]="openBrachDetailModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
   <p-table [value]="branchData">
     <ng-template pTemplate="header">
       <tr>
         <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">date</th>
         <th>CID</th>
         <th>Cname</th>
-        <th>CEmail</th>
+        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">CEmail</th>
         <th>CMobile</th>
         <th>planName</th>
         <th>deliveryName</th>
@@ -338,15 +342,16 @@
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.dstart?.split('T')[0] }}</td>
         <td>{{ obj.CID }}</td>
         <td>{{ obj.Cname }}</td>
-        <td>{{ obj.CustomerEmail }}</td>
+        <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.CustomerEmail }}</td>
         <td>{{ obj.CustomerPhone }}</td>
         <td>{{ obj.planName }}</td>
         <td>{{ obj.deliveryName }}</td>
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.Agent }}</td>
-        <td *ngIf="filterForm.get('model')?.value == 'accounts_status'">{{ obj.status }}</td>
+        <td *ngIf="filterForm.get('model')?.value == 'accounts_status'">{{ getStatusAsString(obj.status) }}</td>
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.actionHappened }}</td>
       </tr>
     </ng-template>
+
 
   </p-table>
 </p-dialog>

@@ -64,12 +64,14 @@ export class ShowReportStaticsComponent implements OnInit {
   createFilterForm() {
     this.filterForm = new FormGroup({
       model: new FormControl(null, [Validators.required]),
-      accounts_status: new FormControl(null),
+      status: new FormControl(null),
       date: new FormControl(null, [Validators.required]),
       date_from: new FormControl(null),
       date_to: new FormControl(null),
     });
   }
+
+  sum: number = 0;
 
   resetFields() {
     this.filterForm.reset();
@@ -117,8 +119,6 @@ export class ShowReportStaticsComponent implements OnInit {
       this._reportStaticsServices
         .getNewLeadFilteration(form.value)
         .subscribe((res) => {
-          console.log(res.data);
-          console.log(form.value.model);
           this.newLeadData = res.data;
           this.isLoading = false;
         });
@@ -126,20 +126,21 @@ export class ShowReportStaticsComponent implements OnInit {
       this._reportStaticsServices
         .getModelFilteration(form.value)
         .subscribe((res) => {
-          console.log(res.data);
-          console.log(form.value.model);
           if (
             form.value.model == 'location' ||
             form.value.model == 'update customer meal' ||
             form.value.model == 'accounts_status'
           ) {
             this.data = res.data;
-            console.log(res.data);
+            this.sum = this.data?.count_data?.reduce(
+              (accumulator, currentValue) => {
+                return accumulator + currentValue.count;
+              },
+              0
+            );
           }
 
-          // this.data = res.data;
           this.isLoading = false;
-          // this.resetFilter();
         });
     }
   }
@@ -147,5 +148,15 @@ export class ShowReportStaticsComponent implements OnInit {
     this.branchData = this.data.data.filter((item) => item.branch === branch);
     this.openBrachDetailModal = true;
     console.log(this.branchData);
+  }
+  getStatusAsString(status: any) {
+    console.log(status);
+    if (status == '0') {
+      return 'De Active';
+    } else if (status == '1') {
+      return 'Active';
+    } else {
+      return 'Restricted';
+    }
   }
 }
