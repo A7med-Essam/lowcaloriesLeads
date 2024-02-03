@@ -4,6 +4,8 @@ import { Subject } from 'rxjs';
 import {
   BranchCount,
   CustomerData,
+  DataRequests,
+  DataSubscription,
   NewLead,
   ReportStaticsService,
 } from 'src/app/services/reportStatics.service';
@@ -24,12 +26,19 @@ export class ShowReportStaticsComponent implements OnInit {
   }
   isLoading: boolean = false;
   openBrachDetailModal: boolean = false;
+  openDiffModal: boolean = false;
   data: {
     data: CustomerData[];
     count_data: BranchCount[];
   } = { data: [], count_data: [] };
 
   branchData: CustomerData[] = [];
+
+  requestsData: DataRequests[] = [];
+  subscriptionsData: DataSubscription[] = [];
+  title: string = '';
+  modelDetailTitle: string = '';
+
   logicTabelWithModal: any[] = [
     'location',
     'update customer meal',
@@ -148,6 +157,60 @@ export class ShowReportStaticsComponent implements OnInit {
     this.branchData = this.data.data.filter((item) => item.branch === branch);
     this.openBrachDetailModal = true;
     console.log(this.branchData);
+  }
+  openModalDetails(model: string, type: string) {
+    if (type == 'social_media') {
+      if (model == 'cs_s') {
+        this.title = 'Customer Services un Subscription';
+        this.subscriptionsData =
+          this.newLeadData?.CustomerServices_subscribeSubscriptions || [];
+      } else if (model == 'cs_un') {
+        this.title = 'Customer Services un Subscription';
+        this.subscriptionsData =
+          this.newLeadData?.CustomerServices_unSubscribeSubscriptions || [];
+      } else if (model == 'c_s') {
+        this.title = 'Clinic Subscription';
+        this.subscriptionsData =
+          this.newLeadData?.Clinic_subscribeSubscriptions || [];
+      } else {
+        // c_un
+        this.title = 'Clinic Un Subscription';
+        this.subscriptionsData =
+          this.newLeadData?.Clinic_unSubscribeSubscriptions || [];
+      }
+      this.modelDetailTitle = 'social_media';
+    } else if (type == 'new_lead') {
+      if (model == 'social') {
+        this.title = 'Social Media';
+        this.requestsData = this.newLeadData.SocialRequests || [];
+      } else if (model == 'calls') {
+        this.title = 'Calls';
+        this.requestsData = this.newLeadData.CallRequests || [];
+      } else {
+        this.title = 'WhatsApp';
+        this.requestsData = this.newLeadData.WhatsappRequests || [];
+      }
+      this.modelDetailTitle = 'new_lead';
+    } else {
+      if (model == 'branches') {
+        this.title = 'Branches';
+        this.subscriptionsData = this.newLeadData?.BranchSubscriptions || [];
+      } else if (model == 'calls') {
+        this.title = 'Call Subscription';
+        this.subscriptionsData = this.newLeadData?.CallSubscriptions || [];
+      } else if (model == 'whatsapp') {
+        this.title = 'whatsapp Subscription';
+        this.subscriptionsData = this.newLeadData?.WhatsappSubscriptions || [];
+      } else {
+        // c_un
+        this.title = 'online Subscription';
+        this.subscriptionsData = this.newLeadData?.OnlineSubscriptions || [];
+      }
+      this.modelDetailTitle = 'new_subscriptions';
+    }
+
+    this.openDiffModal = true;
+    console.log(model);
   }
   getStatusAsString(status: any) {
     console.log(status);

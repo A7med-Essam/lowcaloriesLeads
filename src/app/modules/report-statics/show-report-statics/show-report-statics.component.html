@@ -89,7 +89,7 @@
 
 <div class="row mt-5 "
   *ngIf="filterForm.get('model')?.value == 'new_lead' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
-  <div class="col-xl-4 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-4 col-lg-6 col-md-6 my-2" (click)="openModalDetails('social','new_lead')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -109,7 +109,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-4 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-4 col-lg-6 col-md-6 my-2" (click)="openModalDetails('calls','new_lead')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -128,7 +128,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-4 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-4 col-lg-6 col-md-6 my-2" (click)="openModalDetails('whatsapp','new_lead')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -152,7 +152,7 @@
 
 <div class="row mt-5"
   *ngIf="filterForm.get('model')?.value == 'new_subscriptions' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('branches','new_subscriptions')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -172,7 +172,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('calls','new_subscriptions')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -191,7 +191,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('whatsapp','new_subscriptions')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -212,7 +212,7 @@
     </div>
   </div>
 
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('online','new_subscriptions')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -236,7 +236,7 @@
 
 <div class="row mt-5 "
   *ngIf="filterForm.get('model')?.value == 'social_media' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('cs_s','social_media')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -256,7 +256,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('cs_un','social_media')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -275,7 +275,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('c_s','social_media')">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row" style="padding: 20px 10px;">
@@ -296,7 +296,7 @@
     </div>
   </div>
 
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('c_un','social_media')">
     <div class="card card-stats">
       <div class="card-body">
         <div class="row" style="padding: 20px 10px;">
@@ -315,13 +315,12 @@
       </div>
     </div>
   </div>
-
 </div>
 
 
 
 <p-dialog header="Show {{ branchData[0]?.branch  }} Branch Details [ {{ branchData.length  }} ]"
-  [(visible)]="openBrachDetailModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+  [(visible)]="openBrachDetailModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false">
   <p-table [value]="branchData">
     <ng-template pTemplate="header">
       <tr>
@@ -349,6 +348,58 @@
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.Agent }}</td>
         <td *ngIf="filterForm.get('model')?.value == 'accounts_status'">{{ getStatusAsString(obj.status) }}</td>
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.actionHappened }}</td>
+      </tr>
+    </ng-template>
+
+
+  </p-table>
+</p-dialog>
+
+<p-dialog header="Show {{ title }} Details " [(visible)]="openDiffModal" [modal]="true" [style]="{width: '75vw'}"
+  [draggable]="false" [resizable]="false">
+  <p-table [value]=" modelDetailTitle != 'new_lead' ? subscriptionsData: requestsData">
+    <ng-template pTemplate="header">
+
+      <tr *ngIf="modelDetailTitle != 'new_lead'">
+        <th>name</th>
+        <th>email</th>
+        <th>mobile</th>
+        <th>Status</th>
+        <th>Supscription From</th>
+        <th>invoice_no</th>
+        <th>Plan</th>
+        <th>start_date</th>
+        <th>total_price</th>
+      </tr>
+      <tr *ngIf="modelDetailTitle == 'new_lead'">
+        <th>date</th>
+        <th>name</th>
+        <th>mobile</th>
+        <th>branch</th>
+        <th>emirate</th>
+        <th>agent</th>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-obj>
+      <tr *ngIf="modelDetailTitle != 'new_lead'">
+        <td>{{ obj?.name }}</td>
+        <td>{{ obj?.email }}</td>
+        <td>{{ obj?.mobile }}</td>
+        <td>{{ obj?.status }}</td>
+        <td>{{ obj?.supscription_from }}</td>
+        <td>{{ obj?.invoice_no }}</td>
+        <td>{{ obj?.planName }}</td>
+        <td>{{ obj?.start_date }}</td>
+        <td>{{ obj?.total_price }}</td>
+      </tr>
+      <tr *ngIf="modelDetailTitle == 'new_lead'">
+        <td>{{ obj?.date }}</td>
+        <td>{{ obj?.customer_name ?? "--" }}</td>
+        <td>{{ obj?.mobile }}</td>
+        <td>{{ obj?.customer_branch }}</td>
+        <td>{{ obj?.emirate }}</td>
+        <td>{{ obj?.agent }}</td>
       </tr>
     </ng-template>
 
