@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TabView } from 'primeng/tabview';
@@ -41,7 +41,8 @@ export class NavbarComponent implements OnInit {
     private _AnalysisService: AnalysisService,
     private _SubscriptionsService: SubscriptionsService,
     private _MessageService: MessageService,
-    private http: HttpClient
+    private http: HttpClient,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   notificationModal: boolean = false;
@@ -56,6 +57,10 @@ export class NavbarComponent implements OnInit {
       } else {
         this.isLogin = false;
       }
+    });
+
+    this._UsersService.mobileState$.subscribe((state) => {
+      this.getCustomerModels(state);
     });
   }
 
@@ -185,6 +190,7 @@ export class NavbarComponent implements OnInit {
   CHSubscriptions: any;
   currentCustomerMobile: any;
   currentModel: string = '';
+
   getCustomerModels(mobile: any) {
     if (mobile != '') {
       this.isLoading = true;
@@ -230,6 +236,7 @@ export class NavbarComponent implements OnInit {
               this.CHSubscriptions = res.data;
             });
 
+          this.cdRef.detectChanges();
           this.getCallGear(this.currentCustomerMobile);
           this.getExportFiles();
         }
@@ -385,11 +392,16 @@ export class NavbarComponent implements OnInit {
     }, 1000);
   }
 
-  exportModels:any[]=[];
-  getExportFiles(){
-    this._SubscriptionsService.exportCustomerModels(this.currentCustomerMobile).subscribe(res => {
-      this.exportModels = Object.entries(res.data).map(([model, value]) => ({ model, value }));
-    });
+  exportModels: any[] = [];
+  getExportFiles() {
+    this._SubscriptionsService
+      .exportCustomerModels(this.currentCustomerMobile)
+      .subscribe((res) => {
+        this.exportModels = Object.entries(res.data).map(([model, value]) => ({
+          model,
+          value,
+        }));
+      });
   }
 
   // ================================================================LOAD MODELS====================================================================
@@ -777,36 +789,53 @@ export class NavbarComponent implements OnInit {
     this.current_callGear = calls;
     this.callGearModal = true;
   }
-  current_callEmp:any;
+  current_callEmp: any;
   show_callEmp(calls: any) {
     this.current_callEmp = calls.employees;
     this.employeeCallModal = true;
   }
 
-  convertAudioToBase64(audioFileURL: string,communication_id:number, call:number) {
-    const audio = audioFileURL+communication_id+'/'+call+'/audio.mp3'
-    this.http.get(audio, { responseType: 'blob' })
-      .subscribe((blob: Blob) => {
+  convertAudioToBase64(
+    audioFileURL: string,
+    communication_id: number,
+    call: number
+  ) {
+    const audio = audioFileURL + communication_id + '/' + call + '/audio.mp3';
+    this.http.get(audio, { responseType: 'blob' }).subscribe(
+      (blob: Blob) => {
         const reader: any = new FileReader();
         reader.onloadend = () => {
           const base64Audio = reader.result.split(',')[1];
-          this.downloadBase64Audio(base64Audio, 'Audio_'+this.generateRandomString(16)+'_'+communication_id+'_'+call+'_'+Date.now());
+          this.downloadBase64Audio(
+            base64Audio,
+            'Audio_' +
+              this.generateRandomString(16) +
+              '_' +
+              communication_id +
+              '_' +
+              call +
+              '_' +
+              Date.now()
+          );
         };
         reader.readAsDataURL(blob);
-      }, (error:any) => {
+      },
+      (error: any) => {
         console.error('Error converting audio to Base64:', error);
-      });
+      }
+    );
   }
 
-  generateRandomString(length:number) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  generateRandomString(length: number) {
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let randomString = '';
-  
+
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       randomString += characters.charAt(randomIndex);
     }
-  
+
     return randomString;
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import {
@@ -10,16 +10,24 @@ import {
   ReportStaticsService,
 } from 'src/app/services/reportStatics.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Calendar } from 'primeng/calendar';
+import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
+import { inject } from '@angular/core/testing';
+import { UsersService } from 'src/app/services/users.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-show-report-statics',
   templateUrl: './show-report-statics.component.html',
   styleUrls: ['./show-report-statics.component.scss'],
+  providers: [NavbarComponent],
 })
 export class ShowReportStaticsComponent implements OnInit {
   constructor(
     private _reportStaticsServices: ReportStaticsService,
     private confirmationService: ConfirmationService,
+    private appService: AppService,
+    private _UserServices: UsersService,
     private _MessageService: MessageService
   ) {
     this.createFilterForm();
@@ -79,7 +87,6 @@ export class ShowReportStaticsComponent implements OnInit {
       date_to: new FormControl(null),
     });
   }
-
   sum: number = 0;
 
   resetFields() {
@@ -182,13 +189,13 @@ export class ShowReportStaticsComponent implements OnInit {
     } else if (type == 'new_lead') {
       if (model == 'social') {
         this.title = 'Social Media';
-        this.requestsData = this.newLeadData.SocialRequests || [];
+        this.requestsData = this.newLeadData?.SocialRequests || [];
       } else if (model == 'calls') {
         this.title = 'Calls';
-        this.requestsData = this.newLeadData.CallRequests || [];
+        this.requestsData = this.newLeadData?.CallRequests || [];
       } else {
         this.title = 'WhatsApp';
-        this.requestsData = this.newLeadData.WhatsappRequests || [];
+        this.requestsData = this.newLeadData?.WhatsappRequests || [];
       }
       this.modelDetailTitle = 'new_lead';
     } else {
@@ -221,5 +228,18 @@ export class ShowReportStaticsComponent implements OnInit {
     } else {
       return 'Restricted';
     }
+  }
+
+  onSelectDateRange(event: Calendar) {
+    if (this.filterForm.value.date[1] != null) {
+      event.hideOverlay();
+    }
+  }
+
+  openModalViewMobileDetails(mobile: any) {
+    this._UserServices.sendMobileData({ value: mobile });
+  }
+  sort(event: any, dataSorting: any) {
+    this.appService.sort(event, dataSorting);
   }
 }

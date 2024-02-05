@@ -27,12 +27,15 @@
 
       <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
         <label for="range">Date Range</label>
-        <p-calendar selectionMode="range" [class]="{
+
+        <p-calendar (ngModelChange)="onSelectDateRange(dateRange)" #dateRange [numberOfMonths]="2" selectionMode="range"
+          [class]="{
           'ng-invalid' : filterForm.get('date')?.hasError('required'),
           'ng-dirty' : filterForm.get('date')?.hasError('required'),
           'w-100' : true
         }" [readonlyInput]="true" inputId="range" formControlName="date" appendTo="body">
         </p-calendar>
+
       </div>
 
 
@@ -54,6 +57,8 @@
     </div>
   </form>
 </div>
+
+
 <div class="card mt-5 "
   *ngIf="filterForm.get('model')?.value != null && (logicTabelWithModal.includes(filterForm.get('model')?.value) ) ">
   <p-table [loading]="isLoading" [value]="data?.count_data || []">
@@ -87,257 +92,203 @@
   </p-table>
 </div>
 
-<div class="row mt-5 "
+
+<!-- Leads table -->
+<div class="card mt-5 "
   *ngIf="filterForm.get('model')?.value == 'new_lead' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
-  <div class="col-xl-4 col-lg-6 col-md-6 my-2" (click)="openModalDetails('social','new_lead')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big icon-success">
-              <i class="fas fa-sitemap text-success"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Social Media</p>
-              <p class="card-title">{{ ((newLeadData?.Facebook) || 0) + ((newLeadData?.Instagram) || 0) }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-4 col-lg-6 col-md-6 my-2" (click)="openModalDetails('calls','new_lead')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big icon-primary">
-              <i class="fa fa-phone text-primary"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Calls Team</p>
-              <p class="card-title">{{ newLeadData?.Calls || 0 }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-4 col-lg-6 col-md-6 my-2" (click)="openModalDetails('whatsapp','new_lead')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big icon-info">
-              <i class="fab fa-whatsapp text-info"></i>
+  <p-table [loading]="isLoading" [value]="[1]">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Model</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <tr>
+        <td>Social Media</td>
+        <td>{{ ((newLeadData?.Facebook) || 0) + ((newLeadData?.Instagram) || 0) }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('social','new_lead')"></p-button>
+        </td>
+      </tr>
+      <tr>
+        <td>Calls Team</td>
+        <td>{{ newLeadData?.Calls || 0 }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('calls','new_lead')"></p-button>
+        </td>
+      </tr>
+      <tr>
+        <td>Whatsapp Team</td>
+        <td>{{ newLeadData?.Whatsapp || 0}}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('whatsapp','new_lead')"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{
+        (newLeadData?.Facebook || 0) +
+        (newLeadData?.Calls || 0) +
+        (newLeadData?.Whatsapp || 0) +
+        (newLeadData?.Instagram || 0)
 
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Whatsapp Team</p>
-              <p class="card-title">{{ newLeadData?.Whatsapp || 0}}</p>
-            </div>
-          </div>
-        </div>
+        }} Users.
       </div>
-    </div>
-  </div>
+    </ng-template>
+  </p-table>
 </div>
 
-<div class="row mt-5"
+
+<!-- SubScriptions Media table -->
+<div class="card mt-5 "
   *ngIf="filterForm.get('model')?.value == 'new_subscriptions' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('branches','new_subscriptions')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big  icon-success">
-              <i class="fas fa-sitemap text-success"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers ">
-              <p class="card-category">Branches</p>
-              <p class="card-title">{{ ((newLeadData?.Branches) || 0) }}
-              </p>
-            </div>
-          </div>
-        </div>
+  <p-table [loading]="isLoading" [value]="[1]">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Model</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <tr>
+        <td>Branches</td>
+        <td>{{ ((newLeadData?.Branches) || 0) }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('branches','new_subscriptions')"></p-button>
+        </td>
+      </tr>
+      <tr>
+        <td>Calls</td>
+        <td>{{((newLeadData?.Calls) || 0) }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('calls','new_subscriptions')"></p-button>
+        </td>
+      </tr>
+      <tr>
+        <td>Whatsapp</td>
+        <td>{{((newLeadData?.Whatsapp) || 0) }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('whatsapp','new_subscriptions')"></p-button>
+        </td>
+      </tr>
+      <tr>
+        <td>Online</td>
+        <td>{{ (newLeadData?.Web || 0) + (newLeadData?.Mobile || 0)}}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('online','new_subscriptions')"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ (newLeadData?.Branches || 0) +
+        (newLeadData?.Calls || 0) +
+        (newLeadData?.Whatsapp || 0) +
+        (newLeadData?.Mobile || 0) +
+        (newLeadData?.Web || 0) }} Users.
       </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('calls','new_subscriptions')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big  icon-info">
-              <i class="fa fa-phone text-info"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Calls Team</p>
-              <p class="card-title">{{ newLeadData?.Calls || 0 }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('whatsapp','new_subscriptions')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big  icon-primary">
-              <i class="fab fa-whatsapp text-primary"></i>
-
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Whatsapp Team</p>
-              <p class="card-title">{{ newLeadData?.Whatsapp || 0}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('online','new_subscriptions')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big  icon-warning">
-              <i class="fas fa-globe text-warning"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Online</p>
-              <p class="card-title">{{ (newLeadData?.Web || 0) + (newLeadData?.Mobile || 0)}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+    </ng-template>
+  </p-table>
 </div>
 
-<div class="row mt-5 "
+<!-- Social Media table -->
+<div class="card mt-5 "
   *ngIf="filterForm.get('model')?.value == 'social_media' && (logicTabelWithCards.includes(filterForm.get('model')?.value)) ">
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('cs_s','social_media')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big  icon-info">
-              <i class="fas fa-users-cog text-info"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total CustomerServices Subscribe</p>
-              <p class="card-title">{{ ((newLeadData?.CustomerServices_subscribe) || 0) }}
-              </p>
-            </div>
-          </div>
-        </div>
+  <p-table [loading]="isLoading" [value]="[1]">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Model</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <tr>
+        <td>Customer Services Subscribe</td>
+        <td>{{ ((newLeadData?.CustomerServices_subscribe) || 0) }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('cs_s','social_media')"></p-button>
+        </td>
+      </tr>
+      <tr>
+        <td>Customer Services Not Subscribe</td>
+        <td>{{((newLeadData?.CustomerServices_unSubscribe) || 0) }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('cs_un','social_media')"></p-button>
+        </td>
+      </tr>
+      <tr>
+        <td>Clinic Subscribe</td>
+        <td>{{((newLeadData?.Clinic_subscribe) || 0) }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('c_s','social_media')"></p-button>
+        </td>
+      </tr>
+      <tr>
+        <td>Clinic Not Subscribe</td>
+        <td>{{ (newLeadData?.Clinic_unSubscribe || 0)}}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalDetails('c_un','social_media')"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ (newLeadData?.CustomerServices_subscribe || 0) +
+        (newLeadData?.CustomerServices_unSubscribe || 0) +
+        (newLeadData?.Clinic_subscribe || 0) +
+        (newLeadData?.Clinic_unSubscribe || 0) }} Users.
       </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('cs_un','social_media')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big  icon-warning">
-              <i class="fas fa-users-cog text-warning"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total CustomerServices unSubscribe</p>
-              <p class="card-title">{{((newLeadData?.CustomerServices_unSubscribe) || 0) }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('c_s','social_media')">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big  icon-success">
-              <i class="fas fa-hospital-symbol text-success"></i>
-
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Clinic Subscribe</p>
-              <p class="card-title">{{ newLeadData?.Clinic_subscribe || 0}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2" (click)="openModalDetails('c_un','social_media')">
-    <div class="card card-stats">
-      <div class="card-body">
-        <div class="row" style="padding: 20px 10px;">
-          <div class="col-5 col-md-4">
-            <div class="icon-big  icon-primary">
-              <i class="fas fa-hospital-symbol text-primary"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Clinic unSubscribe</p>
-              <p class="card-title">{{ (newLeadData?.Clinic_unSubscribe || 0)}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    </ng-template>
+  </p-table>
 </div>
 
 
 
 <p-dialog header="Show {{ branchData[0]?.branch  }} Branch Details [ {{ branchData.length  }} ]"
   [(visible)]="openBrachDetailModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false">
-  <p-table [value]="branchData">
+  <p-table [value]="branchData" (onLazyLoad)="sort($event,branchData)">
     <ng-template pTemplate="header">
       <tr>
-        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">date</th>
-        <th>CID</th>
-        <th>Cname</th>
-        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">CEmail</th>
-        <th>CMobile</th>
-        <th>planName</th>
-        <th>deliveryName</th>
-        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">Agent</th>
-        <th *ngIf="filterForm.get('model')?.value == 'accounts_status'">Status</th>
-        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'">Action</th>
+        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'" class="text-center" pSortableColumn="dstart">
+          Date
+          <p-sortIcon field="dstart"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="CID">CID <p-sortIcon field="CID"></p-sortIcon></th>
+        <th pSortableColumn="Cname">name <p-sortIcon field="Cname"></p-sortIcon></th>
+        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'" pSortableColumn="CustomerEmail">Customer Email+
+          <p-sortIcon field="CustomerEmail"></p-sortIcon>
+        </th>
+        <th pSortableColumn="CustomerPhone">Mobile <p-sortIcon field="CustomerPhone"></p-sortIcon></th>
+        <th pSortableColumn="planName">planName <p-sortIcon field="planName"></p-sortIcon></th>
+        <th pSortableColumn="deliveryName">deliveryName <p-sortIcon field="deliveryName"></p-sortIcon></th>
+        <th pSortableColumn="Agent" *ngIf="filterForm.get('model')?.value != 'accounts_status'">Agent <p-sortIcon
+            field="Agent"></p-sortIcon></th>
+        <th pSortableColumn="status" *ngIf="filterForm.get('model')?.value == 'accounts_status'">Status <p-sortIcon
+            field="status"></p-sortIcon></th>
+        <th pSortableColumn="actionHappened" *ngIf="filterForm.get('model')?.value != 'accounts_status'">Log <p-sortIcon
+            field="actionHappened"></p-sortIcon></th>
+        <th>Action</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-obj>
-      <tr>
+      <tr [pSelectableRow]="obj">
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.dstart?.split('T')[0] }}</td>
         <td>{{ obj.CID }}</td>
         <td>{{ obj.Cname }}</td>
@@ -348,6 +299,10 @@
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.Agent }}</td>
         <td *ngIf="filterForm.get('model')?.value == 'accounts_status'">{{ getStatusAsString(obj.status) }}</td>
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.actionHappened }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalViewMobileDetails(obj?.CustomerPhone)"></p-button>
+        </td>
       </tr>
     </ng-template>
 
@@ -361,28 +316,31 @@
     <ng-template pTemplate="header">
 
       <tr *ngIf="modelDetailTitle != 'new_lead'">
-        <th>name</th>
-        <th>email</th>
-        <th>mobile</th>
-        <th>Status</th>
-        <th>Supscription From</th>
-        <th>invoice_no</th>
-        <th>Plan</th>
-        <th>start_date</th>
-        <th>total_price</th>
+        <th pSortableColumn="name">name <p-sortIcon field="name"></p-sortIcon></th>
+
+        <th pSortableColumn="email">email <p-sortIcon field="email"></p-sortIcon></th>
+        <th pSortableColumn="mobile">mobile <p-sortIcon field="mobile"></p-sortIcon></th>
+        <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+        <th pSortableColumn="supscription_from">Supscription From <p-sortIcon field="supscription_from"></p-sortIcon>
+        </th>
+        <th pSortableColumn="invoice_no">invoice_no <p-sortIcon field="invoice_no"></p-sortIcon></th>
+        <th pSortableColumn="planName">Plan <p-sortIcon field="planName"></p-sortIcon></th>
+        <th pSortableColumn="start_date">Start Date <p-sortIcon field="start_date"></p-sortIcon></th>
+        <th pSortableColumn="total_price">Total Price <p-sortIcon field="total_price"></p-sortIcon></th>
+        <th>Action</th>
       </tr>
       <tr *ngIf="modelDetailTitle == 'new_lead'">
-        <th>date</th>
-        <th>name</th>
-        <th>mobile</th>
-        <th>branch</th>
-        <th>emirate</th>
-        <th>agent</th>
-
+        <th pSortableColumn="date">Date<p-sortIcon field="date"></p-sortIcon></th>
+        <th pSortableColumn="customer_name">Name<p-sortIcon field="customer_name"></p-sortIcon></th>
+        <th pSortableColumn="mobile">Mobile<p-sortIcon field="mobile"></p-sortIcon></th>
+        <th pSortableColumn="customer_branch">Branch<p-sortIcon field="customer_branch"></p-sortIcon></th>
+        <th pSortableColumn="emirate">Emirate<p-sortIcon field="emirate"></p-sortIcon></th>
+        <th pSortableColumn="agent">Agent<p-sortIcon field="agent"></p-sortIcon></th>
+        <th>Action</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-obj>
-      <tr *ngIf="modelDetailTitle != 'new_lead'">
+      <tr [pSelectableRow]="obj" *ngIf="modelDetailTitle != 'new_lead'">
         <td>{{ obj?.name }}</td>
         <td>{{ obj?.email }}</td>
         <td>{{ obj?.mobile }}</td>
@@ -392,6 +350,10 @@
         <td>{{ obj?.planName }}</td>
         <td>{{ obj?.start_date }}</td>
         <td>{{ obj?.total_price }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalViewMobileDetails(obj?.mobile)"></p-button>
+        </td>
       </tr>
       <tr *ngIf="modelDetailTitle == 'new_lead'">
         <td>{{ obj?.date }}</td>
@@ -400,6 +362,10 @@
         <td>{{ obj?.customer_branch }}</td>
         <td>{{ obj?.emirate }}</td>
         <td>{{ obj?.agent }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openModalViewMobileDetails(obj?.mobile)"></p-button>
+        </td>
       </tr>
     </ng-template>
 

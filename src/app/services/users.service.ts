@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ApiConfigService } from '../core/api-config.service';
 
 @Injectable({
@@ -54,6 +54,9 @@ export class UsersService {
     return this._ApiConfigService.postReq3('getAgentTeams', '');
   }
 
+  private mobileReq = new Subject<string>();
+  mobileState$ = this.mobileReq.asObservable();
+
   getCustomerModels(phone_number: number): Observable<any> {
     return this._ApiConfigService.postReq3(`getCustomerModels`, {
       phone_number,
@@ -61,6 +64,12 @@ export class UsersService {
   }
 
   callgear(phone_number: number): Observable<any> {
-    return this._ApiConfigService.postReq3('getCallGearDetails',{phone_number});
+    return this._ApiConfigService.postReq3('getCallGearDetails', {
+      phone_number,
+    });
+  }
+
+  sendMobileData(mobile: any) {
+    this.mobileReq.next(mobile);
   }
 }
