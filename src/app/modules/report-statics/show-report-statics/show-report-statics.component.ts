@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import {
+  AccountStatusItem,
+  AccountStatusModel,
   BranchCount,
   CustomerData,
   DataRequests,
@@ -23,6 +25,7 @@ import { AppService } from 'src/app/services/app.service';
   providers: [NavbarComponent],
 })
 export class ShowReportStaticsComponent implements OnInit {
+  new: any;
   constructor(
     private _reportStaticsServices: ReportStaticsService,
     private confirmationService: ConfirmationService,
@@ -35,22 +38,58 @@ export class ShowReportStaticsComponent implements OnInit {
   isLoading: boolean = false;
   openBrachDetailModal: boolean = false;
   openDiffModal: boolean = false;
+  dateFrom: string = '';
   data: {
     data: CustomerData[];
     count_data: BranchCount[];
   } = { data: [], count_data: [] };
 
+  accountStatusAll: {
+    DEACTIVE: AccountStatusModel | null;
+    ACTIVE: AccountStatusModel | null;
+    RESTRICTED: AccountStatusModel | null;
+  } = {
+    DEACTIVE: null,
+    ACTIVE: null,
+    RESTRICTED: null,
+  };
+
   branchData: CustomerData[] = [];
+  s_branch_renew: number = 0;
+  s_online_renew: number = 0;
+  s_whatsapp_renew: number = 0;
+  s_call_renew: number = 0;
+
+  m_cs_s_renew: number = 0;
+  m_cs_un_renew: number = 0;
+  m_c_s_renew: number = 0;
+  m_c_un_renew: number = 0;
+
+  onModelChange(e:any){
+    this.s_branch_renew = 0;
+    this.s_online_renew = 0;
+    this.s_whatsapp_renew = 0;
+    this.s_call_renew = 0;
+    this.m_cs_s_renew = 0;
+    this.m_cs_un_renew = 0;
+    this.m_c_s_renew = 0;
+    this.m_c_un_renew = 0;
+    this.requestsData = []
+    this.subscriptionsData = []
+    this.newLeadData = {};
+  }
 
   requestsData: DataRequests[] = [];
   subscriptionsData: DataSubscription[] = [];
   title: string = '';
+  exportLink: string = '';
   modelDetailTitle: string = '';
 
   logicTabelWithModal: any[] = [
     'location',
     'update customer meal',
     'accounts_status',
+    'accounts_status_from_to',
   ];
   newLeadData!: NewLead;
 
@@ -62,12 +101,14 @@ export class ShowReportStaticsComponent implements OnInit {
   models: any[] = [
     { label: 'Location', value: 'location' },
     { label: 'Change Meal', value: 'update customer meal' },
-    { label: 'Accounts Status', value: 'accounts_status' },
+    { label: 'Accounts Status 3th', value: 'accounts_status' },
+    { label: 'Accounts Status', value: 'accounts_status_from_to' },
     { label: 'New Leads', value: 'new_lead' },
-    { label: 'New Subscriptions', value: 'new_subscriptions' },
+    { label: 'Total Subscriptions', value: 'new_subscriptions' },
     { label: 'Social Media', value: 'social_media' },
   ];
   accounts_status: any[] = [
+    { label: 'All', value: 'all' },
     { label: 'De Actvie', value: '0' },
     { label: 'Active', value: '1' },
     { label: 'Restricted', value: '2' },
@@ -96,6 +137,13 @@ export class ShowReportStaticsComponent implements OnInit {
     this.appliedFilters = null;
     this.filterForm.reset();
   }
+
+  getFormattedDate(dateString: string): Date {
+    var currentDate = new Date(dateString);
+    currentDate.setDate(currentDate.getDate() - 90);
+    return new Date(currentDate);
+  }
+
   filter(form: FormGroup) {
     this.isLoading = true;
     if (form.value.date) {
@@ -125,7 +173,6 @@ export class ShowReportStaticsComponent implements OnInit {
     }
 
     this.appliedFilters = form.value;
-    console.log(this.appliedFilters);
     this._reportStaticsServices.modelReport_filter.next(this.appliedFilters);
     if (
       form.value.model == 'new_lead' ||
@@ -136,7 +183,77 @@ export class ShowReportStaticsComponent implements OnInit {
         .getNewLeadFilteration(form.value)
         .subscribe((res) => {
           this.newLeadData = res.data;
+          if (form.value.model == 'new_subscriptions') {
+            this.s_branch_renew =
+              this.newLeadData.BranchSubscriptions?.filter((subscription) => {
+                return subscription.customer_type === 'renew';
+              }).length || 0;
+
+            this.s_call_renew =
+              this.newLeadData.CallSubscriptions?.filter((subscription) => {
+                return subscription.customer_type === 'renew';
+              }).length || 0;
+
+            this.s_whatsapp_renew =
+              this.newLeadData.WhatsappSubscriptions?.filter((subscription) => {
+                return subscription.customer_type === 'renew';
+              }).length || 0;
+
+            this.s_online_renew =
+              this.newLeadData.OnlineSubscriptions?.filter((subscription) => {
+                return subscription.customer_type === 'renew';
+              }).length || 0;
+          } else if (form.value.model == 'social_media') {
+            this.m_cs_s_renew =
+              this.newLeadData.CustomerServices_subscribeSubscriptions?.filter(
+                (subscription) => {
+                  return subscription.customer_type === 'renew';
+                }
+              ).length || 0;
+
+            this.m_cs_un_renew =
+              this.newLeadData.CustomerServices_unSubscribeSubscriptions?.filter(
+                (subscription) => {
+                  return subscription.customer_type === 'renew';
+                }
+              ).length || 0;
+
+            this.m_c_s_renew =
+              this.newLeadData.Clinic_subscribeSubscriptions?.filter(
+                (subscription) => {
+                  return subscription.customer_type === 'renew';
+                }
+              ).length || 0;
+
+            this.m_c_un_renew =
+              this.newLeadData.Clinic_unSubscribeSubscriptions?.filter(
+                (subscription) => {
+                  return subscription.customer_type === 'renew';
+                }
+              ).length || 0;
+          }
+
+          //           s_branch_renew
+          // s_online_renew
+          // s_whatsapp_renew
+          // s_call_renew
           this.isLoading = false;
+        });
+    } else if (form.get('status')?.value == 'all') {
+      this._reportStaticsServices
+        .getAccountStatusAllFilteration(form.value)
+        .subscribe((res) => {
+          if (
+            form.value.model == 'accounts_status' ||
+            form.value.model == 'accounts_status_from_to'
+          ) {
+            this.accountStatusAll = res.data;
+            this.sum =
+              (this.accountStatusAll['DEACTIVE']?.total || 0) +
+              (this.accountStatusAll['ACTIVE']?.total || 0) +
+              (this.accountStatusAll['RESTRICTED']?.total || 0);
+            this.isLoading = false;
+          }
         });
     } else {
       this._reportStaticsServices
@@ -145,7 +262,8 @@ export class ShowReportStaticsComponent implements OnInit {
           if (
             form.value.model == 'location' ||
             form.value.model == 'update customer meal' ||
-            form.value.model == 'accounts_status'
+            form.value.model == 'accounts_status' ||
+            form.value.model == 'accounts_status_from_to'
           ) {
             this.data = res.data;
             this.sum = this.data?.count_data?.reduce(
@@ -163,64 +281,202 @@ export class ShowReportStaticsComponent implements OnInit {
   openModal(branch: any) {
     this.branchData = this.data.data.filter((item) => item.branch === branch);
     this.openBrachDetailModal = true;
-    console.log(this.branchData);
   }
-  openModalDetails(model: string, type: string) {
+  openAccountStatusAllModal(branch: string, data: AccountStatusItem[]) {
+    this.branchData = data.filter((item) => item.branch === branch);
+    this.openBrachDetailModal = true;
+  }
+
+  openModalDetails(model: string, type: string, customerType: string = '') {
     if (type == 'social_media') {
       if (model == 'cs_s') {
-        this.title = 'Customer Services un Subscription';
-        this.subscriptionsData =
-          this.newLeadData?.CustomerServices_subscribeSubscriptions || [];
+        if (customerType == 'new') {
+          this.title = 'Customer Services New';
+          this.subscriptionsData =
+            this.newLeadData?.CustomerServices_subscribeSubscriptions?.filter(
+              (item) => item.customer_type == 'new'
+            ) || [];
+        } else if (customerType == 'renew') {
+          this.title = 'Customer Services Renew';
+          this.subscriptionsData =
+            this.newLeadData?.CustomerServices_subscribeSubscriptions?.filter(
+              (item) => item.customer_type == 'renew'
+            ) || [];
+        } else {
+          this.title = 'Customer Services Subscription';
+          this.subscriptionsData =
+            this.newLeadData?.CustomerServices_subscribeSubscriptions || [];
+        }
+
+        this.exportLink =
+          this.newLeadData?.CustomerServices_subscribeSubscriptions_export ||
+          '';
       } else if (model == 'cs_un') {
-        this.title = 'Customer Services un Subscription';
-        this.subscriptionsData =
-          this.newLeadData?.CustomerServices_unSubscribeSubscriptions || [];
+        if (customerType == 'new') {
+          this.title = 'Customer Services New';
+          this.subscriptionsData =
+            this.newLeadData?.CustomerServices_unSubscribeSubscriptions?.filter(
+              (item) => item.customer_type == 'new'
+            ) || [];
+        } else if (customerType == 'renew') {
+          this.title = 'Customer Services Renew';
+          this.subscriptionsData =
+            this.newLeadData?.CustomerServices_unSubscribeSubscriptions?.filter(
+              (item) => item.customer_type == 'renew'
+            ) || [];
+        } else {
+          this.title = 'Customer Services un Subscription';
+          this.subscriptionsData =
+            this.newLeadData?.CustomerServices_unSubscribeSubscriptions || [];
+        }
+
+        this.exportLink =
+          this.newLeadData?.CustomerServices_unSubscribeSubscriptions_export ||
+          '';
       } else if (model == 'c_s') {
-        this.title = 'Clinic Subscription';
-        this.subscriptionsData =
-          this.newLeadData?.Clinic_subscribeSubscriptions || [];
+        if (customerType == 'new') {
+          this.title = 'Clinic Subscription New';
+          this.subscriptionsData =
+            this.newLeadData?.Clinic_subscribeSubscriptions?.filter(
+              (item) => item.customer_type == 'new'
+            ) || [];
+        } else if (customerType == 'renew') {
+          this.title = 'Clinic Subscription Renew';
+          this.subscriptionsData =
+            this.newLeadData?.Clinic_subscribeSubscriptions?.filter(
+              (item) => item.customer_type == 'renew'
+            ) || [];
+        } else {
+          this.title = 'Clinic Subscription';
+          this.subscriptionsData =
+            this.newLeadData?.Clinic_subscribeSubscriptions || [];
+        }
+
+        this.exportLink =
+          this.newLeadData?.Clinic_subscribeSubscriptions_export || '';
       } else {
         // c_un
-        this.title = 'Clinic Un Subscription';
-        this.subscriptionsData =
-          this.newLeadData?.Clinic_unSubscribeSubscriptions || [];
+        if (customerType == 'new') {
+          this.title = 'Clinic Un Subscription New';
+          this.subscriptionsData =
+            this.newLeadData?.Clinic_unSubscribeSubscriptions?.filter(
+              (item) => item.customer_type == 'new'
+            ) || [];
+        } else if (customerType == 'renew') {
+          this.title = 'Clinic Un Subscription Renew';
+          this.subscriptionsData =
+            this.newLeadData?.Clinic_unSubscribeSubscriptions?.filter(
+              (item) => item.customer_type == 'renew'
+            ) || [];
+        } else {
+          this.title = 'Clinic Un Subscription';
+          this.subscriptionsData =
+            this.newLeadData?.Clinic_unSubscribeSubscriptions || [];
+        }
+
+        this.exportLink =
+          this.newLeadData?.Clinic_unSubscribeSubscriptions_export || '';
       }
       this.modelDetailTitle = 'social_media';
     } else if (type == 'new_lead') {
       if (model == 'social') {
         this.title = 'Social Media';
-        this.requestsData = this.newLeadData?.SocialRequests || [];
+        this.requestsData = this.newLeadData?.SocialMedia || [];
+        this.exportLink = this.newLeadData?.SocialMedia_export || '';
       } else if (model == 'calls') {
         this.title = 'Calls';
         this.requestsData = this.newLeadData?.CallRequests || [];
+        this.exportLink = this.newLeadData?.CallRequests_export || '';
       } else {
         this.title = 'WhatsApp';
         this.requestsData = this.newLeadData?.WhatsappRequests || [];
+        this.exportLink = this.newLeadData?.WhatsappRequests_export || '';
       }
       this.modelDetailTitle = 'new_lead';
     } else {
       if (model == 'branches') {
-        this.title = 'Branches';
-        this.subscriptionsData = this.newLeadData?.BranchSubscriptions || [];
+        if (customerType == 'new') {
+          this.title = 'Branches New';
+          this.subscriptionsData =
+            this.newLeadData?.BranchSubscriptions?.filter(
+              (item) => item.customer_type == 'new'
+            ) || [];
+        } else if (customerType == 'renew') {
+          this.title = 'Branches Renew';
+          this.subscriptionsData =
+            this.newLeadData?.BranchSubscriptions?.filter(
+              (item) => item.customer_type == 'renew'
+            ) || [];
+        } else {
+          this.title = 'Branches';
+          this.subscriptionsData = this.newLeadData?.BranchSubscriptions || [];
+        }
+        this.exportLink = this.newLeadData?.BranchSubscriptions_export || '';
       } else if (model == 'calls') {
-        this.title = 'Call Subscription';
-        this.subscriptionsData = this.newLeadData?.CallSubscriptions || [];
+        if (customerType == 'new') {
+          this.title = 'Call New';
+          this.subscriptionsData =
+            this.newLeadData?.CallSubscriptions?.filter(
+              (item) => item.customer_type == 'new'
+            ) || [];
+        } else if (customerType == 'renew') {
+          this.title = 'Call Renew';
+          this.subscriptionsData =
+            this.newLeadData?.CallSubscriptions?.filter(
+              (item) => item.customer_type == 'renew'
+            ) || [];
+        } else {
+          this.title = 'Call Subscription';
+          this.subscriptionsData = this.newLeadData?.CallSubscriptions || [];
+          this.exportLink = this.newLeadData?.CallSubscriptions_export || '';
+        }
       } else if (model == 'whatsapp') {
-        this.title = 'whatsapp Subscription';
-        this.subscriptionsData = this.newLeadData?.WhatsappSubscriptions || [];
+        if (customerType == 'new') {
+          this.title = 'whatsapp New';
+          this.subscriptionsData =
+            this.newLeadData?.WhatsappSubscriptions?.filter(
+              (item) => item.customer_type == 'new'
+            ) || [];
+        } else if (customerType == 'renew') {
+          this.title = 'whatsapp Renew';
+          this.subscriptionsData =
+            this.newLeadData?.WhatsappSubscriptions?.filter(
+              (item) => item.customer_type == 'renew'
+            ) || [];
+        } else {
+          this.title = 'whatsapp Subscription';
+          this.subscriptionsData =
+            this.newLeadData?.WhatsappSubscriptions || [];
+          this.exportLink =
+            this.newLeadData?.WhatsappSubscriptions_export || '';
+        }
+        this.exportLink = this.newLeadData?.WhatsappSubscriptions_export || '';
       } else {
         // c_un
-        this.title = 'online Subscription';
-        this.subscriptionsData = this.newLeadData?.OnlineSubscriptions || [];
+        if (customerType == 'new') {
+          this.title = 'online New';
+          this.subscriptionsData =
+            this.newLeadData?.OnlineSubscriptions?.filter(
+              (item) => item.customer_type == 'new'
+            ) || [];
+        } else if (customerType == 'renew') {
+          this.title = 'online Renew';
+          this.subscriptionsData =
+            this.newLeadData?.OnlineSubscriptions?.filter(
+              (item) => item.customer_type == 'renew'
+            ) || [];
+        } else {
+          this.title = 'online Subscription';
+          this.subscriptionsData = this.newLeadData?.OnlineSubscriptions || [];
+        }
+        this.exportLink = this.newLeadData?.OnlineSubscriptions_export || '';
       }
       this.modelDetailTitle = 'new_subscriptions';
     }
 
     this.openDiffModal = true;
-    console.log(model);
   }
   getStatusAsString(status: any) {
-    console.log(status);
     if (status == '0') {
       return 'De Active';
     } else if (status == '1') {
@@ -229,7 +485,12 @@ export class ShowReportStaticsComponent implements OnInit {
       return 'Restricted';
     }
   }
-
+  export(url: string) {
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = url;
+    link.click();
+  }
   onSelectDateRange(event: Calendar) {
     if (this.filterForm.value.date[1] != null) {
       event.hideOverlay();

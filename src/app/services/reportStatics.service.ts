@@ -21,6 +21,18 @@ export class ReportStaticsService {
     return this._ApiConfigService.postReq3(`getCountChangeLocationMeal`, body);
   }
 
+  getAccountStatusAllFilteration(body: any): Observable<{
+    data: {
+      DEACTIVE: AccountStatusModel | null;
+      ACTIVE: AccountStatusModel | null;
+      RESTRICTED: AccountStatusModel | null;
+    };
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(`getCountChangeLocationMeal`, body);
+  }
+
   getNewLeadFilteration(body: any): Observable<{
     data: NewLead;
     message: string;
@@ -51,29 +63,43 @@ export interface BranchCount {
 
 export interface NewLead {
   Calls?: number;
-  CallRequests?: DataRequests[];
-  CallSubscriptions?: DataSubscription[];
   Facebook?: number;
   Instagram?: number;
-  SocialRequests?: DataRequests[];
-  SocialSubscriptions?: DataSubscription[];
   Whatsapp?: number;
-  WhatsappRequests?: DataRequests[];
-  WhatsappSubscriptions?: DataSubscription[];
   Branches?: number;
-  BranchSubscriptions?: DataSubscription[];
   Web?: number;
   Mobile?: number;
+  CustomerServices_subscribe?: number;
+  CustomerServices_unSubscribe?: number;
+  Clinic_subscribe?: number;
+  Clinic_unSubscribe?: number;
+
+  SocialMedia_export?: string;
+  CallRequests_export?: string;
+  WhatsappRequests_export?: string;
+  OnlineSubscriptions_export?: string;
+  BranchSubscriptions_export?: string;
+  WhatsappSubscriptions_export?: string;
+  CallSubscriptions_export?: string;
+  CustomerServices_subscribeSubscriptions_export?: string;
+  CustomerServices_unSubscribeSubscriptions_export?: string;
+  Clinic_subscribeSubscriptions_export?: string;
+  Clinic_unSubscribeSubscriptions_export?: string;
+
+  Clinic_subscribeSubscriptions?: DataSubscription[];
+  Clinic_unSubscribeSubscriptions?: DataSubscription[];
+  CustomerServices_subscribeSubscriptions?: DataSubscription[];
+  CustomerServices_unSubscribeSubscriptions?: DataSubscription[];
+
+  CallSubscriptions?: DataSubscription[];
+  SocialSubscriptions?: DataSubscription[];
+  WhatsappSubscriptions?: DataSubscription[];
+  BranchSubscriptions?: DataSubscription[];
   OnlineSubscriptions?: DataSubscription[];
 
-  CustomerServices_subscribe?: number;
-  CustomerServices_subscribeSubscriptions?: DataSubscription[];
-  CustomerServices_unSubscribe?: number;
-  CustomerServices_unSubscribeSubscriptions?: DataSubscription[];
-  Clinic_subscribe?: number;
-  Clinic_subscribeSubscriptions?: DataSubscription[];
-  Clinic_unSubscribe?: number;
-  Clinic_unSubscribeSubscriptions?: DataSubscription[];
+  CallRequests?: DataRequests[];
+  SocialMedia?: DataRequests[];
+  WhatsappRequests?: DataRequests[];
 }
 
 export interface DataRequests {
@@ -96,6 +122,30 @@ export interface DataSubscription {
   start_date?: string;
   total_price?: any;
   name?: string;
+  customer_type?: string;
   mobile?: string;
   email?: string;
+}
+
+export interface AccountStatusItem {
+  CID: number;
+  branch: string;
+  dstart: string;
+  Cname: string;
+  actionHappened: string;
+  Agent: string;
+  deliveryName: string;
+  CustomerPhone: string;
+  CustomerEmail: string;
+  planName: string;
+  address: string;
+}
+export interface CountDataAccountStatusItem {
+  count: number;
+  Branch: string;
+}
+export interface AccountStatusModel {
+  data: AccountStatusItem[];
+  count_data: CountDataAccountStatusItem[];
+  total: number;
 }

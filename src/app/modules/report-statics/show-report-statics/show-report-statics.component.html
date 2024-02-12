@@ -7,7 +7,7 @@
     <div class="row mx-0">
       <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
         <label for="">Models Search</label>
-        <p-dropdown [options]="models" optionLabel="label" optionValue="value" formControlName='model' appendTo="body"
+        <p-dropdown [options]="models" optionLabel="label" optionValue="value" formControlName='model' appendTo="body"  (onChange)="onModelChange($event)"
           styleClass="w-100" [class]="{
             'ng-invalid' : filterForm.get('model')?.hasError('required'),
             'ng-dirty' : filterForm.get('model')?.hasError('required')
@@ -15,12 +15,14 @@
         </p-dropdown>
       </div>
 
-      <div *ngIf="filterForm.get('model')?.value == 'accounts_status' " class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
+      <div
+        *ngIf="filterForm.get('model')?.value == 'accounts_status' || filterForm.get('model')?.value == 'accounts_status_from_to' "
+        class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
         <label for="">Status</label>
         <p-dropdown [options]="accounts_status" optionLabel="label" optionValue="value" formControlName='status'
           appendTo="body" styleClass="w-100" [class]="{
-            'ng-invalid' : filterForm.get('model')?.value == 'accounts_status' && filterForm.get('status')?.value == null,
-            'ng-dirty' : filterForm.get('model')?.value == 'accounts_status' && filterForm.get('status')?.value == null
+            'ng-invalid' : (filterForm.get('model')?.value == 'accounts_status' || filterForm.get('model')?.value == 'accounts_status_from_to') && filterForm.get('status')?.value == null,
+            'ng-dirty' : (filterForm.get('model')?.value == 'accounts_status' || filterForm.get('model')?.value == 'accounts_status_from_to') && filterForm.get('status')?.value == null
           }" placeholder="Select Version" [filter]="true">
         </p-dropdown>
       </div>
@@ -49,7 +51,7 @@
             <p-button type="button" (click)="resetFilter()" styleClass="p-button-raised p-button-secondary mx-2"
               label="Reset" icon="pi pi-filter-slash"></p-button>
             <p-button type="submit" styleClass="p-button-raised p-button-success mx-2"
-              [disabled]="filterForm.value.model ==null || filterForm.value.date == null || (filterForm.get('model')?.value == 'accounts_status' && filterForm.get('status')?.value == null) "
+              [disabled]="filterForm.value.model ==null || filterForm.value.date == null || (filterForm.get('model')?.value == 'accounts_status' && filterForm.get('status')?.value == null)|| (filterForm.get('model')?.value == 'accounts_status_from_to' && filterForm.get('status')?.value == null) "
               label="Apply Filter" icon="pi pi-filter"></p-button>
           </div>
         </div>
@@ -57,10 +59,130 @@
     </div>
   </form>
 </div>
+<!-- For Account status in Case all -->
+
+<div *ngIf="filterForm.get('model')?.value != null &&  filterForm.get('model')?.value == 'accounts_status' ">
+  <h5 *ngIf="filterForm.get('date_from')?.value">Total is {{ sum }} Users From
+    {{ getFormattedDate(filterForm.get('date_from')?.value) | date:'dd-MM-yyyy' }}
+
+    To {{ filterForm.get('date_from')?.value }}</h5>
+
+
+</div>
+<!-- Case Active -->
+<div class="card "
+  *ngIf="filterForm.get('model')?.value != null && (logicTabelWithModal.includes(filterForm.get('model')?.value)  && filterForm.get('status')?.value == 'all' )">
+  <p-table [loading]="isLoading" [value]="accountStatusAll.ACTIVE?.count_data || []">
+    <ng-template pTemplate="caption">
+      <h5>Case ACTIVE</h5>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Branch</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-obj>
+      <tr>
+        <td>{{ obj?.Branch }}</td>
+        <td>{{ obj?.count }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openAccountStatusAllModal(obj?.Branch,accountStatusAll.ACTIVE?.data||[])"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ accountStatusAll.ACTIVE?.total || 0 }} Users.
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="">No Records Found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<!-- Case De-Active -->
+<div class="card mt-5 "
+  *ngIf="filterForm.get('model')?.value != null && (logicTabelWithModal.includes(filterForm.get('model')?.value)  && filterForm.get('status')?.value == 'all' )">
+  <p-table [loading]="isLoading" [value]="accountStatusAll.DEACTIVE?.count_data || []">
+    <ng-template pTemplate="caption">
+      <h5>Case DEACTIVE</h5>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Branch</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-obj>
+      <tr>
+        <td>{{ obj?.Branch }}</td>
+        <td>{{ obj?.count }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openAccountStatusAllModal(obj?.Branch,accountStatusAll.DEACTIVE?.data||[])"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ accountStatusAll.DEACTIVE?.total || 0 }} Users.
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="">No Records Found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<!-- Case RESTRICTED -->
+<div class="card mt-5 "
+  *ngIf="filterForm.get('model')?.value != null && (logicTabelWithModal.includes(filterForm.get('model')?.value)  && filterForm.get('status')?.value == 'all' )">
+  <p-table [loading]="isLoading" [value]="accountStatusAll.RESTRICTED?.count_data || []">
+    <ng-template pTemplate="caption">
+      <h5>Case RESTRICTED</h5>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Branch</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-obj>
+      <tr>
+        <td>{{ obj?.Branch }}</td>
+        <td>{{ obj?.count }}</td>
+        <td>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+            (click)="openAccountStatusAllModal(obj?.Branch,accountStatusAll.RESTRICTED?.data||[])"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ accountStatusAll.RESTRICTED?.total || 0 }} Users.
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="">No Records Found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
 
 
 <div class="card mt-5 "
-  *ngIf="filterForm.get('model')?.value != null && (logicTabelWithModal.includes(filterForm.get('model')?.value) ) ">
+  *ngIf="filterForm.get('model')?.value != null && (logicTabelWithModal.includes(filterForm.get('model')?.value)  && filterForm.get('status')?.value != 'all' ) ">
   <p-table [loading]="isLoading" [value]="data?.count_data || []">
     <ng-template pTemplate="header">
       <tr>
@@ -152,42 +274,73 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Model</th>
-        <th>Count</th>
+        <th>New</th>
+        <th>Renew</th>
         <th>Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body">
       <tr>
         <td>Branches</td>
-        <td>{{ ((newLeadData?.Branches) || 0) }}</td>
+        <td>{{ ((newLeadData?.Branches || 0) - s_branch_renew) }}</td>
+        <td>{{ s_branch_renew }}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="New" icon="pi pi-eye"
+            (click)="openModalDetails('branches','new_subscriptions','new')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Renew" icon="pi pi-eye"
+            (click)="openModalDetails('branches','new_subscriptions','renew')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="All" icon="pi pi-eye"
             (click)="openModalDetails('branches','new_subscriptions')"></p-button>
         </td>
       </tr>
       <tr>
         <td>Calls</td>
-        <td>{{((newLeadData?.Calls) || 0) }}</td>
+        <td>{{((newLeadData?.Calls) || 0) - s_call_renew }}</td>
+        <td>{{ s_call_renew }}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="New" icon="pi pi-eye"
+            (click)="openModalDetails('calls','new_subscriptions','new')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Renew" icon="pi pi-eye"
+            (click)="openModalDetails('calls','new_subscriptions','renew')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="All" icon="pi pi-eye"
             (click)="openModalDetails('calls','new_subscriptions')"></p-button>
         </td>
       </tr>
       <tr>
         <td>Whatsapp</td>
-        <td>{{((newLeadData?.Whatsapp) || 0) }}</td>
+        <td>{{((newLeadData?.Whatsapp) || 0) - s_whatsapp_renew }}</td>
+        <td>{{ s_whatsapp_renew }}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="New" icon="pi pi-eye"
+            (click)="openModalDetails('whatsapp','new_subscriptions','new')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Renew" icon="pi pi-eye"
+            (click)="openModalDetails('whatsapp','new_subscriptions','renew')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="All" icon="pi pi-eye"
             (click)="openModalDetails('whatsapp','new_subscriptions')"></p-button>
         </td>
       </tr>
       <tr>
         <td>Online</td>
-        <td>{{ (newLeadData?.Web || 0) + (newLeadData?.Mobile || 0)}}</td>
+        <td>{{ (newLeadData?.Web || 0) + (newLeadData?.Mobile || 0) - s_online_renew }}</td>
+        <td>{{s_online_renew}}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="New" icon="pi pi-eye"
+            (click)="openModalDetails('online','new_subscriptions','new')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Renew" icon="pi pi-eye"
+            (click)="openModalDetails('online','new_subscriptions','renew')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="All" icon="pi pi-eye"
             (click)="openModalDetails('online','new_subscriptions')"></p-button>
         </td>
+      </tr>
+
+      <tr style="background: #ccc!important;">
+        <td>Summary</td>
+        <td>{{ ((newLeadData?.Web || 0) + (newLeadData?.Mobile || 0) - s_online_renew) + (((newLeadData?.Whatsapp) || 0)
+          - s_whatsapp_renew ) + (((newLeadData?.Calls) || 0) - s_call_renew) +(((newLeadData?.Branches || 0) -
+          s_branch_renew)) }}</td>
+        <td>{{ s_whatsapp_renew + s_online_renew+ s_branch_renew +s_call_renew }}</td>
+        <td></td>
+        <td></td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
@@ -209,42 +362,76 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Model</th>
-        <th>Count</th>
+        <th>New</th>
+        <th>Renew</th>
         <th>Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body">
       <tr>
         <td>Customer Services Subscribe</td>
-        <td>{{ ((newLeadData?.CustomerServices_subscribe) || 0) }}</td>
+        <td>{{ ((newLeadData?.CustomerServices_subscribe) || 0) - m_cs_s_renew }}</td>
+        <td>{{ m_cs_s_renew }}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="New" icon="pi pi-eye"
+            (click)="openModalDetails('cs_s','social_media','new')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Renew" icon="pi pi-eye"
+            (click)="openModalDetails('cs_s','social_media','renew')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="ALL" icon="pi pi-eye"
             (click)="openModalDetails('cs_s','social_media')"></p-button>
         </td>
       </tr>
       <tr>
         <td>Customer Services Not Subscribe</td>
-        <td>{{((newLeadData?.CustomerServices_unSubscribe) || 0) }}</td>
+        <td>{{((newLeadData?.CustomerServices_unSubscribe) || 0) - m_cs_un_renew }}</td>
+        <td>{{ m_cs_un_renew }}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="New" icon="pi pi-eye"
+            (click)="openModalDetails('cs_un','social_media','new')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Renew" icon="pi pi-eye"
+            (click)="openModalDetails('cs_un','social_media','renew')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="ALL" icon="pi pi-eye"
             (click)="openModalDetails('cs_un','social_media')"></p-button>
         </td>
       </tr>
       <tr>
         <td>Clinic Subscribe</td>
-        <td>{{((newLeadData?.Clinic_subscribe) || 0) }}</td>
+        <td>{{((newLeadData?.Clinic_subscribe) || 0) - m_c_s_renew}}</td>
+        <td>{{ m_c_s_renew }}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="New" icon="pi pi-eye"
+            (click)="openModalDetails('c_s','social_media','new')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Renew" icon="pi pi-eye"
+            (click)="openModalDetails('c_s','social_media','renew')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="ALL" icon="pi pi-eye"
             (click)="openModalDetails('c_s','social_media')"></p-button>
         </td>
       </tr>
       <tr>
         <td>Clinic Not Subscribe</td>
-        <td>{{ (newLeadData?.Clinic_unSubscribe || 0)}}</td>
+        <td>{{ (newLeadData?.Clinic_unSubscribe || 0) - m_c_un_renew}}</td>
+        <td>{{ m_c_un_renew }}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="New" icon="pi pi-eye"
+            (click)="openModalDetails('c_un','social_media','new')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Renew" icon="pi pi-eye"
+            (click)="openModalDetails('c_un','social_media','renew')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="ALL" icon="pi pi-eye"
             (click)="openModalDetails('c_un','social_media')"></p-button>
         </td>
+      </tr>
+
+      <tr style="background: #ccc!important;">
+        <td>Summary</td>
+        <td>{{ ((newLeadData?.CustomerServices_subscribe || 0) - m_cs_s_renew) +
+          (((newLeadData?.CustomerServices_unSubscribe) || 0)
+          - m_cs_un_renew ) + (((newLeadData?.Clinic_subscribe) || 0) - m_c_s_renew) +(((newLeadData?.Clinic_unSubscribe
+          || 0) -
+          m_c_un_renew)) }}</td>
+
+        <td>{{ m_cs_s_renew + m_cs_un_renew+ m_c_s_renew +m_c_un_renew }}</td>
+        <td></td>
+        <td></td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
@@ -272,16 +459,16 @@
 
         <th pSortableColumn="CID">CID <p-sortIcon field="CID"></p-sortIcon></th>
         <th pSortableColumn="Cname">name <p-sortIcon field="Cname"></p-sortIcon></th>
-        <th *ngIf="filterForm.get('model')?.value != 'accounts_status'" pSortableColumn="CustomerEmail">Customer Email+
+        <!-- <th *ngIf="filterForm.get('model')?.value != 'accounts_status'" pSortableColumn="CustomerEmail">Customer Email
           <p-sortIcon field="CustomerEmail"></p-sortIcon>
-        </th>
+        </th> -->
         <th pSortableColumn="CustomerPhone">Mobile <p-sortIcon field="CustomerPhone"></p-sortIcon></th>
         <th pSortableColumn="planName">planName <p-sortIcon field="planName"></p-sortIcon></th>
         <th pSortableColumn="deliveryName">deliveryName <p-sortIcon field="deliveryName"></p-sortIcon></th>
-        <th pSortableColumn="Agent" *ngIf="filterForm.get('model')?.value != 'accounts_status'">Agent <p-sortIcon
-            field="Agent"></p-sortIcon></th>
-        <th pSortableColumn="status" *ngIf="filterForm.get('model')?.value == 'accounts_status'">Status <p-sortIcon
-            field="status"></p-sortIcon></th>
+        <!-- <th pSortableColumn="Agent" *ngIf="filterForm.get('model')?.value != 'accounts_status'">Agent <p-sortIcon
+            field="Agent"></p-sortIcon></th> -->
+        <!-- <th pSortableColumn="status" *ngIf="filterForm.get('model')?.value == 'accounts_status'">Status <p-sortIcon
+            field="status"></p-sortIcon></th> -->
         <th pSortableColumn="actionHappened" *ngIf="filterForm.get('model')?.value != 'accounts_status'">Log <p-sortIcon
             field="actionHappened"></p-sortIcon></th>
         <th>Action</th>
@@ -292,12 +479,12 @@
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.dstart?.split('T')[0] }}</td>
         <td>{{ obj.CID }}</td>
         <td>{{ obj.Cname }}</td>
-        <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.CustomerEmail }}</td>
+        <!-- <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.CustomerEmail }}</td> -->
         <td>{{ obj.CustomerPhone }}</td>
         <td>{{ obj.planName }}</td>
         <td>{{ obj.deliveryName }}</td>
-        <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.Agent }}</td>
-        <td *ngIf="filterForm.get('model')?.value == 'accounts_status'">{{ getStatusAsString(obj.status) }}</td>
+        <!-- <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.Agent }}</td> -->
+        <!-- <td *ngIf="filterForm.get('model')?.value == 'accounts_status'">{{ getStatusAsString(obj.status) }}</td> -->
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.actionHappened }}</td>
         <td>
           <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
@@ -305,28 +492,34 @@
         </td>
       </tr>
     </ng-template>
-
-
   </p-table>
 </p-dialog>
 
 <p-dialog header="Show {{ title }} Details " [(visible)]="openDiffModal" [modal]="true" [style]="{width: '75vw'}"
   [draggable]="false" [resizable]="false">
+  <div class="d-flex justify-content-end  align-content-center pb-2 ">
+    <!-- [disabled]="!exportPermission" -->
+    <p-button [disabled]="exportLink == '' " class="mx-1" icon="pi pi-file" label="Export All as Excel"
+      (click)="export(exportLink)">
+    </p-button>
+  </div>
   <p-table [value]=" modelDetailTitle != 'new_lead' ? subscriptionsData: requestsData">
     <ng-template pTemplate="header">
 
       <tr *ngIf="modelDetailTitle != 'new_lead'">
         <th pSortableColumn="name">name <p-sortIcon field="name"></p-sortIcon></th>
 
-        <th pSortableColumn="email">email <p-sortIcon field="email"></p-sortIcon></th>
+        <th pSortableColumn="email">customer type <p-sortIcon field="customer_type"></p-sortIcon></th>
         <th pSortableColumn="mobile">mobile <p-sortIcon field="mobile"></p-sortIcon></th>
         <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
-        <th pSortableColumn="supscription_from">Supscription From <p-sortIcon field="supscription_from"></p-sortIcon>
-        </th>
+        <!-- <th pSortableColumn="supscription_from">Supscription From <p-sortIcon field="supscription_from"></p-sortIcon>
+        </th> -->
         <th pSortableColumn="invoice_no">invoice_no <p-sortIcon field="invoice_no"></p-sortIcon></th>
         <th pSortableColumn="planName">Plan <p-sortIcon field="planName"></p-sortIcon></th>
         <th pSortableColumn="start_date">Start Date <p-sortIcon field="start_date"></p-sortIcon></th>
         <th pSortableColumn="total_price">Total Price <p-sortIcon field="total_price"></p-sortIcon></th>
+        <th *ngIf="title == 'Branches'" pSortableColumn="agent">Agent<p-sortIcon field="agent"></p-sortIcon></th>
+
         <th>Action</th>
       </tr>
       <tr *ngIf="modelDetailTitle == 'new_lead'">
@@ -335,21 +528,22 @@
         <th pSortableColumn="mobile">Mobile<p-sortIcon field="mobile"></p-sortIcon></th>
         <th pSortableColumn="customer_branch">Branch<p-sortIcon field="customer_branch"></p-sortIcon></th>
         <th pSortableColumn="emirate">Emirate<p-sortIcon field="emirate"></p-sortIcon></th>
-        <th pSortableColumn="agent">Agent<p-sortIcon field="agent"></p-sortIcon></th>
         <th>Action</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-obj>
       <tr [pSelectableRow]="obj" *ngIf="modelDetailTitle != 'new_lead'">
         <td>{{ obj?.name }}</td>
-        <td>{{ obj?.email }}</td>
+        <td>{{ obj?.customer_type }}</td>
         <td>{{ obj?.mobile }}</td>
         <td>{{ obj?.status }}</td>
-        <td>{{ obj?.supscription_from }}</td>
+        <!-- <td>{{ obj?.supscription_from }}</td> -->
         <td>{{ obj?.invoice_no }}</td>
         <td>{{ obj?.planName }}</td>
         <td>{{ obj?.start_date }}</td>
         <td>{{ obj?.total_price }}</td>
+        <td *ngIf="title == 'Branches'">{{ obj?.agent }}</td>
+
         <td>
           <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
             (click)="openModalViewMobileDetails(obj?.mobile)"></p-button>
@@ -361,7 +555,7 @@
         <td>{{ obj?.mobile }}</td>
         <td>{{ obj?.customer_branch }}</td>
         <td>{{ obj?.emirate }}</td>
-        <td>{{ obj?.agent }}</td>
+
         <td>
           <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
             (click)="openModalViewMobileDetails(obj?.mobile)"></p-button>
