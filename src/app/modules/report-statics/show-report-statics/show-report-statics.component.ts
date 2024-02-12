@@ -101,8 +101,8 @@ export class ShowReportStaticsComponent implements OnInit {
   models: any[] = [
     { label: 'Location', value: 'location' },
     { label: 'Change Meal', value: 'update customer meal' },
-    { label: 'Accounts Status 3th', value: 'accounts_status' },
     { label: 'Accounts Status', value: 'accounts_status_from_to' },
+    { label: 'Accounts Status 3th', value: 'accounts_status' },
     { label: 'New Leads', value: 'new_lead' },
     { label: 'Total Subscriptions', value: 'new_subscriptions' },
     { label: 'Social Media', value: 'social_media' },
