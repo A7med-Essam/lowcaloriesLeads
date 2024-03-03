@@ -8,9 +8,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
+import { FilterData } from './filter-data.pipe';
 
 @NgModule({
-  declarations: [ShowReportStaticsComponent],
+  declarations: [ShowReportStaticsComponent, FilterData],
   imports: [
     CommonModule,
     ReactiveFormsModule,

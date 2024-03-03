@@ -57,8 +57,7 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     this.getFormAnalytics();
 
   }
-  
-  analytics: any[] = [];
+
   currentNumber: string = '';
   getCustomerCID(e: HTMLInputElement) {
     if (this.selectedState != 'Chef Gourmet') {
@@ -103,16 +102,6 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
     
   }
 
-  currentRow: any;
-  detailsModal: boolean = false;
-  showRow(log: any) {
-    this.currentRow = log;
-    this.detailsModal = true;
-    this._AnalysisService.getFiles(log.id).subscribe(res=>{
-      this.currentRow.files = res.data.files;
-    })
-  }
-
   isLead:boolean = false;
   checkCustomerExsist(number: any) {
     this._AnalysisService.checkPhoneNumberExist(number).subscribe((res) => {
@@ -141,7 +130,6 @@ export class CreateAnalysis2Component implements OnInit, OnDestroy {
       .filterAnalyticsByMobile({ mobile })
       .subscribe((res) => {
         if (res.data.length) {
-          this.analytics = res.data
           this.analysisForm.patchValue({
             customer_name: res.data[0].customer_name,
             emirate_id: res.data[0].emirate_id,

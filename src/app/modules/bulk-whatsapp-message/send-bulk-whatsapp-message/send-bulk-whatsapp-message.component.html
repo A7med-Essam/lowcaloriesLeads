@@ -1,0 +1,136 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Send Bulk Whatsapp Messages</h2>
+</div>
+<hr>
+
+<div class="row mx-0">
+  <div class="col-md-6 my-2">
+    <label for="">Whatsapp Options<span class="text-danger">*</span></label>
+    <p-dropdown [options]="whatsappFilterOptions" #options appendTo="body" styleClass="w-100"
+      (onChange)="onOptionsChange(options.value)" placeholder="Select Option"></p-dropdown>
+  </div>
+
+  <div class="col-md-6 my-2">
+    <label for="">Whatsapp Message Template<span class="text-danger">*</span></label>
+    <p-dropdown [options]="templates" optionLabel="case" #SelectedTemplateDropDown appendTo="body" styleClass="w-100"
+      placeholder="Select Template" [(ngModel)]="selectedTemplate"></p-dropdown>
+  </div>
+
+  <div class="col-12" *ngIf="SelectedTemplateDropDown.value">
+    <label for="">Message</label>
+    <textarea pInputTextarea ngClass="w-100" [(ngModel)]="SelectedTemplateDropDown.value.message"></textarea>
+  </div>
+
+  <div class="col-12">
+    <div class="my-2" *ngIf="options.value == 'lastDays'">
+      <label for="range">Date Range</label>
+      <p-calendar selectionMode="range" [touchUI]="true" #dateRange appendTo="body"
+        (onClose)="onCalendarClose(dateRange)"></p-calendar>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="my-2" *ngIf="options.value == 'query'">
+      <label for="range">Query</label>
+
+      <p-dropdown [options]="queries" optionLabel="query_name" #query_dropdowm appendTo="body" styleClass="w-100"
+        placeholder="Select Query" [filter]="true"></p-dropdown>
+
+      <div class="my-2" [innerHTML]="query_dropdowm.value?.query_string | highlightWordsStartingWithDollar"></div>
+
+      <div class=" my-2" *ngFor="let item of query_dropdowm.value?.params">
+        <label for="range">{{item?.name}}</label>
+        
+        <div *ngIf="item?.type == 'string'; else isDate">
+          <input pInputText ngClass="w-100" type="text" [(ngModel)]="item.value">
+        </div>
+        <ng-template #isDate>
+          <p-calendar [readonlyInput]="true" [(ngModel)]="item.value" ngClass="w-100" appendTo="body"></p-calendar>
+        </ng-template>
+      </div>
+
+      <div class="text-end">
+        <button pButton type="button" class="m-1 p-button-primary" (click)="checkQuery(query_dropdowm.value)">
+          Check Query
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="numbers?.length">
+  <p-table [value]="numbers" dataKey="id" editMode="row">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:20%">#</th>
+        <th style="width:20%">Mobile Number</th>
+        <th style="width:20%"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-number let-editing="editing" let-ri="rowIndex">
+      <tr [pEditableRow]="number">
+        <td>
+          {{ri + 1}}
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="number.value">
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{number?.value}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+              (click)="onRowEditInit(number)" class="p-button-rounded p-button-text"></button>
+            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+              (click)="onRowEditSave(number,ri)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+              (click)="onRowEditCancel(number, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            <button *ngIf="!editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+              (click)="deleteRow(ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="d-flex align-items-center justify-content-between">
+        <span>In total there are {{ numbers.length }} Numbers.</span>
+        <div>
+          <button class="btn btn-primary" (click)="sendBulk()">Send message to this numbers</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="">No Records Found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
+  [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+
+  <ng-template pTemplate="footer">
+    <div class="upload-btn-wrapper mx-2">
+      <a class="btn btn-primary" target="_blank" download href="https://api.lowcalories.ae/samples/Numbers.csv">Download
+        Sample</a>
+    </div>
+    <div class="upload-btn-wrapper">
+      <button class="btn btn-primary">Upload a file</button>
+      <input type="file" name="myfile" (change)="onFileSelected($event)" />
+    </div>
+  </ng-template>
+</p-dialog>
+
+<div class="loader-container" *ngIf="isLoading">
+  <div class="i-loader-inf-horizontal-container">
+    <div class="i-loader-inf-horizontal"></div>
+    <div class="pt-8px">
+      <span>Processing data</span>
+    </div>
+  </div>
+</div>

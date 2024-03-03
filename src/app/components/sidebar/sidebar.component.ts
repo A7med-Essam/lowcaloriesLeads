@@ -31,6 +31,8 @@ export class SidebarComponent implements OnInit {
   showGiftcodePermission: boolean = false;
   showMailServicePermission: boolean = false;
   showReportStaticsServicePermission: boolean = false;
+  showQueryModuleServicePermission: boolean = false;
+  sendBulkWhatsappMessagePermission: boolean = false;
   showRedirectPermission: boolean = false;
   showUploadPermission: boolean = false;
   showAnalysisPermission: boolean = false;
@@ -97,6 +99,10 @@ export class SidebarComponent implements OnInit {
       this._GuardService.getPermissionStatus('show_mailService');
     this.showReportStaticsServicePermission =
       this._GuardService.getPermissionStatus('show_reportStaticService');
+    this.showQueryModuleServicePermission =
+      this._GuardService.getPermissionStatus('show_queryModuleService');
+    this.sendBulkWhatsappMessagePermission =
+      this._GuardService.getPermissionStatus('send_bulkWhatsapp');
     this.showRedirectPermission =
       this._GuardService.getPermissionStatus('show_redirect');
     this.showUploadPermission =

@@ -7,8 +7,8 @@
     <div class="row mx-0">
       <div class="col-xl-3 col-lg-6 col-md-6 col-12 my-2">
         <label for="">Models Search</label>
-        <p-dropdown [options]="models" optionLabel="label" optionValue="value" formControlName='model' appendTo="body"  (onChange)="onModelChange($event)"
-          styleClass="w-100" [class]="{
+        <p-dropdown [options]="models" optionLabel="label" optionValue="value" formControlName='model' appendTo="body"
+          (onChange)="onModelChange($event)" styleClass="w-100" [class]="{
             'ng-invalid' : filterForm.get('model')?.hasError('required'),
             'ng-dirty' : filterForm.get('model')?.hasError('required')
           }" placeholder="Select Version" [filter]="true">
@@ -222,33 +222,55 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Model</th>
-        <th>Count</th>
+        <th>Total Subscribe</th>
+        <th>Total Un Subscribe</th>
+        <th>Total Leads</th>
         <th>Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body">
       <tr>
         <td>Social Media</td>
-        <td>{{ ((newLeadData?.Facebook) || 0) + ((newLeadData?.Instagram) || 0) }}</td>
+        <td>{{ (newLeadData.SocialMedia || [] | filterData:"totalSubscribe").length}}</td>
+        <td>{{ (newLeadData.SocialMedia || [] | filterData:"totalUnSubscribe").length }}</td>
+        <td>{{ (newLeadData.SocialMedia || [] | filterData:"totals").length}}</td>
+
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
-            (click)="openModalDetails('social','new_lead')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Subscribed" icon="pi pi-eye"
+            (click)="openModalDetails('social','new_lead','totalSubscribe')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="unSubscribed"
+            icon="pi pi-eye" (click)="openModalDetails('social','new_lead','totalUnSubscribe')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Total" icon="pi pi-eye"
+            (click)="openModalDetails('social','new_lead','totals' )"></p-button>
         </td>
       </tr>
       <tr>
         <td>Calls Team</td>
-        <td>{{ newLeadData?.Calls || 0 }}</td>
+        <td>{{ (newLeadData.CallRequests || [] | filterData:"totalSubscribe").length}}</td>
+        <td>{{ (newLeadData.CallRequests || [] | filterData:"totalUnSubscribe").length }}</td>
+        <td>{{ (newLeadData.CallRequests || [] | filterData:"totals").length}}</td>
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
-            (click)="openModalDetails('calls','new_lead')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Subscribed" icon="pi pi-eye"
+            (click)="openModalDetails('calls','new_lead','totalSubscribe')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="unSubscribed"
+            icon="pi pi-eye" (click)="openModalDetails('calls','new_lead','totalUnSubscribe')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Total" icon="pi pi-eye"
+            (click)="openModalDetails('calls','new_lead','totals' )"></p-button>
         </td>
       </tr>
       <tr>
         <td>Whatsapp Team</td>
-        <td>{{ newLeadData?.Whatsapp || 0}}</td>
+        <td>{{ (newLeadData.WhatsappRequests || [] | filterData:"totalSubscribe").length}}</td>
+        <td>{{ (newLeadData.WhatsappRequests || [] | filterData:"totalUnSubscribe").length }}</td>
+        <td>{{ (newLeadData.WhatsappRequests || [] | filterData:"totals").length}}</td>
+
         <td>
-          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="View" icon="pi pi-eye"
-            (click)="openModalDetails('whatsapp','new_lead')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Subscribed" icon="pi pi-eye"
+            (click)="openModalDetails('whatsapp','new_lead','totalSubscribe')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="unSubscribed"
+            icon="pi pi-eye" (click)="openModalDetails('whatsapp','new_lead','totalUnSubscribe')"></p-button>
+          <p-button type="submit" styleClass="p-button-raised p-button-primary mx-2" label="Total" icon="pi pi-eye"
+            (click)="openModalDetails('whatsapp','new_lead','totals' )"></p-button>
         </td>
       </tr>
     </ng-template>
@@ -452,6 +474,7 @@
   <p-table [value]="branchData" (onLazyLoad)="sort($event,branchData)">
     <ng-template pTemplate="header">
       <tr>
+        <th>#</th>
         <th *ngIf="filterForm.get('model')?.value != 'accounts_status'" class="text-center" pSortableColumn="dstart">
           Date
           <p-sortIcon field="dstart"></p-sortIcon>
@@ -474,8 +497,9 @@
         <th>Action</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-obj>
+    <ng-template pTemplate="body" let-obj let-ri="rowIndex">
       <tr [pSelectableRow]="obj">
+        <td>{{ ri+1 }}</td>
         <td *ngIf="filterForm.get('model')?.value != 'accounts_status'">{{ obj.dstart?.split('T')[0] }}</td>
         <td>{{ obj.CID }}</td>
         <td>{{ obj.Cname }}</td>
@@ -507,8 +531,8 @@
     <ng-template pTemplate="header">
 
       <tr *ngIf="modelDetailTitle != 'new_lead'">
+        <th>#</th>
         <th pSortableColumn="name">name <p-sortIcon field="name"></p-sortIcon></th>
-
         <th pSortableColumn="email">customer type <p-sortIcon field="customer_type"></p-sortIcon></th>
         <th pSortableColumn="mobile">mobile <p-sortIcon field="mobile"></p-sortIcon></th>
         <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
@@ -523,6 +547,7 @@
         <th>Action</th>
       </tr>
       <tr *ngIf="modelDetailTitle == 'new_lead'">
+        <th>#</th>
         <th pSortableColumn="date">Date<p-sortIcon field="date"></p-sortIcon></th>
         <th pSortableColumn="customer_name">Name<p-sortIcon field="customer_name"></p-sortIcon></th>
         <th pSortableColumn="mobile">Mobile<p-sortIcon field="mobile"></p-sortIcon></th>
@@ -531,8 +556,9 @@
         <th>Action</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-obj>
+    <ng-template pTemplate="body" let-obj let-ri="rowIndex">
       <tr [pSelectableRow]="obj" *ngIf="modelDetailTitle != 'new_lead'">
+        <td>{{ ri +1 }}</td>
         <td>{{ obj?.name }}</td>
         <td>{{ obj?.customer_type }}</td>
         <td>{{ obj?.mobile }}</td>
@@ -550,6 +576,7 @@
         </td>
       </tr>
       <tr *ngIf="modelDetailTitle == 'new_lead'">
+        <td>{{ ri +1 }}</td>
         <td>{{ obj?.date }}</td>
         <td>{{ obj?.customer_name ?? "--" }}</td>
         <td>{{ obj?.mobile }}</td>

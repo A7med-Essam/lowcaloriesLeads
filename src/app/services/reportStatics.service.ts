@@ -112,6 +112,7 @@ export interface DataRequests {
   mobile?: string;
   emirate?: string;
   agent?: string;
+  subscribed?: number;
 }
 
 export interface DataSubscription {

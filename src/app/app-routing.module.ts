@@ -195,6 +195,28 @@ const routes: Routes = [
     },
   },
   {
+    path: 'queryModule',
+    loadChildren: () =>
+      import('./modules/query-module/query-module.module').then(
+        (m) => m.QueryModuleModule
+      ),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_queryModuleService'],
+    },
+  },
+  {
+    path: 'bulk-whatsapp-messages',
+    loadChildren: () =>
+      import(
+        './modules/bulk-whatsapp-message/bulk-whatsapp-message.module'
+      ).then((m) => m.BulkWhatsappMessageModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['send_bulkWhatsapp'],
+    },
+  },
+  {
     path: 'redirect',
     loadChildren: () =>
       import('./modules/redirect/redirect.module').then(

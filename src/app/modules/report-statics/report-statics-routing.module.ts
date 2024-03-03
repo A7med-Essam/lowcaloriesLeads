@@ -13,14 +13,6 @@ const routes: Routes = [
       permission: ['show_reportStaticService'],
     },
   },
-  // {
-  //   path: 'show/:id',
-  //   component: MailDetailsComponent,
-  //   canActivate: [PermissionGuard],
-  //   data: {
-  //     permission: ['show_reportStaticService'],
-  //   },
-  // },
 ];
 
 @NgModule({

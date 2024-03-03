@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-show-giftcode',
   templateUrl: './show-giftcode.component.html',
-  styleUrls: ['./show-giftcode.component.scss']
+  styleUrls: ['./show-giftcode.component.scss'],
 })
 export class ShowGiftcodeComponent implements OnInit, OnDestroy {
   giftCodes: any[] = [];
@@ -24,8 +24,8 @@ export class ShowGiftcodeComponent implements OnInit, OnDestroy {
 
   constructor(
     private _Router: Router,
-    private _GuardService:GuardService,
-    private _GiftcodeService:GiftcodeService
+    private _GuardService: GuardService,
+    private _GiftcodeService: GiftcodeService
   ) {}
 
   ngOnDestroy(): void {
@@ -34,18 +34,20 @@ export class ShowGiftcodeComponent implements OnInit, OnDestroy {
   }
 
   getPermission() {
-    this.createPermission = this._GuardService.getPermissionStatus('create_giftcode');
-    this.updatePermission = this._GuardService.getPermissionStatus('update_giftcode');
+    this.createPermission =
+      this._GuardService.getPermissionStatus('create_giftcode');
+    this.updatePermission =
+      this._GuardService.getPermissionStatus('update_giftcode');
   }
 
   ngOnInit(): void {
     this._GiftcodeService.giftcode_filter
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res=>{
-      if (res) {
-        this.appliedFilters = res
-      }
-    })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.appliedFilters = res;
+        }
+      });
     this.createFilterForm();
     this.getPermission();
     this.getGiftCodes();
@@ -104,7 +106,7 @@ export class ShowGiftcodeComponent implements OnInit, OnDestroy {
     { name: 'version', status: true },
     { name: 'user_uses', status: true },
   ];
-  
+
   getFilterColumns() {
     this.columns.forEach((element) => {
       element.status = false;
@@ -151,78 +153,85 @@ export class ShowGiftcodeComponent implements OnInit, OnDestroy {
     if (input.checked) {
       this.specificRows = this.giftCodes.map((obj: any) => obj.id);
     } else {
-      this.specificRows = []
+      this.specificRows = [];
     }
   }
 
-    // ========================================================sort========================================================
+  // ========================================================sort========================================================
   sort(event: any) {
     const sortField = event.sortField;
     const sortOrder = event.sortOrder === 1 ? 1 : -1;
     this.giftCodes?.sort((a: any, b: any) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
-      if (typeof aValue === 'string' && Date.parse(aValue) && typeof bValue === 'string' && Date.parse(bValue)) {
+      if (
+        typeof aValue === 'string' &&
+        Date.parse(aValue) &&
+        typeof bValue === 'string' &&
+        Date.parse(bValue)
+      ) {
         const aDate = new Date(aValue);
         const bDate = new Date(bValue);
-        return (aDate.getTime() - bDate.getTime()) * sortOrder; 
-      }
-      else if (!isNaN(parseFloat(aValue)) && typeof parseFloat(aValue) === 'number' && !isNaN(parseFloat(bValue)) && typeof parseFloat(bValue) === 'number') {
+        return (aDate.getTime() - bDate.getTime()) * sortOrder;
+      } else if (
+        !isNaN(parseFloat(aValue)) &&
+        typeof parseFloat(aValue) === 'number' &&
+        !isNaN(parseFloat(bValue)) &&
+        typeof parseFloat(bValue) === 'number'
+      ) {
         return (aValue - bValue) * sortOrder;
       } else if (typeof aValue === 'string' && typeof bValue === 'string') {
         return aValue.localeCompare(bValue) * sortOrder;
-      }
-      else if (Array.isArray(aValue) && Array.isArray(bValue)) {
+      } else if (Array.isArray(aValue) && Array.isArray(bValue)) {
         return (aValue.length - bValue.length) * sortOrder;
-      } 
-      else {
+      } else {
         return 0;
       }
     });
   }
-   // ****************************************************filter************************************************************************
+  // ****************************************************filter************************************************************************
 
-   filterModal: boolean = false;
-   appliedFilters: any = null;
-   filterForm!: FormGroup;
-   createFilterForm() {
-     this.filterForm = new FormGroup({
-       code: new FormControl(null),
-       flag: new FormControl(null),
-       status: new FormControl(null),
-       percentage: new FormControl(null),
-     });
-   }
- 
-   insertRow(form: FormGroup) {
-     this.appliedFilters = form.value;
-     this._GiftcodeService.giftcode_filter.next(this.appliedFilters)
-     this._GiftcodeService.filterGiftCodes(1, form.value).subscribe((res) => {
-       this.giftCodes = res.data.data;
-       this.PaginationInfo = res.data;
-       this.filterModal = false;
-     });
-   }
- 
-   getOldFilters(page: number) {
-     this._GiftcodeService
-       .filterGiftCodes(page, this.appliedFilters)
-       .subscribe((res) => {
-         this.giftCodes = res.data.data;
-         this.PaginationInfo = res.data;
-         this.filterModal = false;
-       });
-   }
- 
-   resetFilter() {
-     this.appliedFilters = null;
-     this.filterModal = false;
-     this.filterForm.reset();
-     this.getGiftCodes();
-     this._GiftcodeService.giftcode_filter.next(null)
-   }
- 
-   resetFields() {
-     this.filterForm.reset();
-   }
+  filterModal: boolean = false;
+  appliedFilters: any = null;
+  filterForm!: FormGroup;
+  createFilterForm() {
+    this.filterForm = new FormGroup({
+      code: new FormControl(null),
+      flag: new FormControl(null),
+      status: new FormControl(null),
+      percentage: new FormControl(null),
+    });
+  }
+
+  insertRow(form: FormGroup) {
+    this.appliedFilters = form.value;
+    this._GiftcodeService.giftcode_filter.next(this.appliedFilters);
+    this._GiftcodeService.filterGiftCodes(1, form.value).subscribe((res) => {
+      this.giftCodes = res.data.data;
+      this.PaginationInfo = res.data;
+      this.filterModal = false;
+    });
+  }
+
+  getOldFilters(page: number) {
+    this._GiftcodeService
+      .filterGiftCodes(page, this.appliedFilters)
+      .subscribe((res) => {
+        this.giftCodes = res.data.data;
+        this.PaginationInfo = res.data;
+        this.filterModal = false;
+      });
+  }
+
+  resetFilter() {
+    this.appliedFilters = null;
+    this.filterModal = false;
+    this.filterForm.reset();
+    this.getGiftCodes();
+    this._GiftcodeService.giftcode_filter.next(null);
+  }
+
+  resetFields() {
+    this.filterForm.reset();
+  }
 }

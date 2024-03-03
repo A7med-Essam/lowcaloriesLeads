@@ -273,6 +273,50 @@
       </li>
       <hr>
     </ul>
+    <!-- ================================================Query Module================================================== -->
+    <div class="menu-header mt-3 mb-2" *ngIf="showReportStaticsServicePermission">
+      Query Module
+    </div>
+    <ul class="menu-items" *ngIf="showQueryModuleServicePermission">
+      <li>
+        <a routerLink="/queryModule/show" routerLinkActive="active">
+          <i class="fas fa-code"></i>
+          <span>query Module </span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/queryModule/execute" routerLinkActive="active">
+          <i class="fas fa-bolt"></i>
+          <span>Execute Query </span>
+        </a>
+      </li>
+      <hr>
+    </ul>
+    <!-- ================================================Bulk Whatsapp Sender================================================== -->
+    <div class="menu-header mt-3 mb-2" *ngIf="showReportStaticsServicePermission">
+      Bulk Whatsapp
+    </div>
+    <ul class="menu-items" *ngIf="sendBulkWhatsappMessagePermission">
+      <li>
+        <a routerLink="/bulk-whatsapp-messages/query" routerLinkActive="active">
+          <i class="fas fa-code"></i>
+          <span>Whatsapp Query</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/bulk-whatsapp-messages/templates" routerLinkActive="active">
+          <i class="far fa-comment-dots"></i>
+          <span>Whatsapp Templates</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/bulk-whatsapp-messages/send" routerLinkActive="active">
+          <i class="fab fa-whatsapp"></i>
+          <span>Bulk Whatsapp </span>
+        </a>
+      </li>
+      <hr>
+    </ul>
     <!-- ================================================REDIRECTS================================================== -->
     <div class="menu-header mt-3 mb-2" *ngIf="showRedirectPermission">
       Redirect Components

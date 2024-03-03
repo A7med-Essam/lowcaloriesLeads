@@ -1,0 +1,45 @@
+<div class="col-12">
+  <div class="my-2">
+    <label for="range">Query</label>
+
+    <p-dropdown [options]="queries" optionLabel="query_name" #query_dropdowm appendTo="body" styleClass="w-100"
+      placeholder="Select Query" [filter]="true"></p-dropdown>
+
+    <div class="my-2" [innerHTML]="query_dropdowm.value?.query_string | highlightWordsStartingWithDollar"></div>
+
+    <div class=" my-2" *ngFor="let item of query_dropdowm.value?.params">
+      <label for="range">{{item?.name}}</label>
+
+      <div *ngIf="item?.type == 'string'; else isDate">
+        <input pInputText ngClass="w-100" type="text" [(ngModel)]="item.value">
+      </div>
+      <ng-template #isDate>
+        <p-calendar [readonlyInput]="true" [(ngModel)]="item.value" ngClass="w-100" appendTo="body"></p-calendar>
+      </ng-template>
+    </div>
+
+    <div class="text-end">
+      <button pButton type="button" class="m-1 p-button-primary" (click)="checkQuery(query_dropdowm.value)">
+        Check Query
+      </button>
+    </div>
+  </div>
+
+  <p-table *ngIf="sqlData.length != 0" [lazy]="false" [value]="sqlData" [tableStyle]="{'min-width': '60rem'}">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>#</th>
+        <th *ngFor="let col of captionColumns" [pSortableColumn]="col" style="width:20%">{{ col }} <p-sortIcon
+            [field]="col"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-ri="rowIndex">
+      <tr [pSelectableRow]="row">
+        <td>{{ri +1}}</td>
+        <td *ngFor="let col of captionColumns">{{ row[col] }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+
+</div>

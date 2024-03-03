@@ -17,6 +17,7 @@ import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
 import { inject } from '@angular/core/testing';
 import { UsersService } from 'src/app/services/users.service';
 import { AppService } from 'src/app/services/app.service';
+import { FilterData } from '../filter-data.pipe';
 
 @Component({
   selector: 'app-show-report-statics',
@@ -53,6 +54,7 @@ export class ShowReportStaticsComponent implements OnInit {
     ACTIVE: null,
     RESTRICTED: null,
   };
+  filterDataPipe = new FilterData();
 
   branchData: CustomerData[] = [];
   s_branch_renew: number = 0;
@@ -64,20 +66,6 @@ export class ShowReportStaticsComponent implements OnInit {
   m_cs_un_renew: number = 0;
   m_c_s_renew: number = 0;
   m_c_un_renew: number = 0;
-
-  onModelChange(e:any){
-    this.s_branch_renew = 0;
-    this.s_online_renew = 0;
-    this.s_whatsapp_renew = 0;
-    this.s_call_renew = 0;
-    this.m_cs_s_renew = 0;
-    this.m_cs_un_renew = 0;
-    this.m_c_s_renew = 0;
-    this.m_c_un_renew = 0;
-    this.requestsData = []
-    this.subscriptionsData = []
-    this.newLeadData = {};
-  }
 
   requestsData: DataRequests[] = [];
   subscriptionsData: DataSubscription[] = [];
@@ -101,8 +89,8 @@ export class ShowReportStaticsComponent implements OnInit {
   models: any[] = [
     { label: 'Location', value: 'location' },
     { label: 'Change Meal', value: 'update customer meal' },
-    { label: 'Accounts Status', value: 'accounts_status_from_to' },
-    { label: 'Accounts Status 3th', value: 'accounts_status' },
+    { label: 'Accounts Status', value: 'accounts_status' },
+    { label: 'Accounts Status 3th', value: 'accounts_status_from_to' },
     { label: 'New Leads', value: 'new_lead' },
     { label: 'Total Subscriptions', value: 'new_subscriptions' },
     { label: 'Social Media', value: 'social_media' },
@@ -115,7 +103,19 @@ export class ShowReportStaticsComponent implements OnInit {
   ];
 
   ngOnInit(): void {}
-
+  onModelChange(e: any) {
+    this.s_branch_renew = 0;
+    this.s_online_renew = 0;
+    this.s_whatsapp_renew = 0;
+    this.s_call_renew = 0;
+    this.m_cs_s_renew = 0;
+    this.m_cs_un_renew = 0;
+    this.m_c_s_renew = 0;
+    this.m_c_un_renew = 0;
+    this.requestsData = [];
+    this.subscriptionsData = [];
+    this.newLeadData = {};
+  }
   appliedFilters: any = null;
   filterForm!: FormGroup;
 
@@ -307,7 +307,6 @@ export class ShowReportStaticsComponent implements OnInit {
           this.subscriptionsData =
             this.newLeadData?.CustomerServices_subscribeSubscriptions || [];
         }
-
         this.exportLink =
           this.newLeadData?.CustomerServices_subscribeSubscriptions_export ||
           '';
@@ -379,17 +378,29 @@ export class ShowReportStaticsComponent implements OnInit {
       }
       this.modelDetailTitle = 'social_media';
     } else if (type == 'new_lead') {
+      this.title =
+        model == 'social'
+          ? 'Social Media'
+          : model == 'calls'
+          ? 'Calls'
+          : 'WhatsApp';
       if (model == 'social') {
-        this.title = 'Social Media';
-        this.requestsData = this.newLeadData?.SocialMedia || [];
+        this.requestsData = this.filterDataPipe.transform(
+          this.newLeadData.SocialMedia || [],
+          customerType
+        );
         this.exportLink = this.newLeadData?.SocialMedia_export || '';
       } else if (model == 'calls') {
-        this.title = 'Calls';
-        this.requestsData = this.newLeadData?.CallRequests || [];
+        this.requestsData = this.filterDataPipe.transform(
+          this.newLeadData.CallRequests || [],
+          customerType
+        );
         this.exportLink = this.newLeadData?.CallRequests_export || '';
       } else {
-        this.title = 'WhatsApp';
-        this.requestsData = this.newLeadData?.WhatsappRequests || [];
+        this.requestsData = this.filterDataPipe.transform(
+          this.newLeadData.WhatsappRequests || [],
+          customerType
+        );
         this.exportLink = this.newLeadData?.WhatsappRequests_export || '';
       }
       this.modelDetailTitle = 'new_lead';

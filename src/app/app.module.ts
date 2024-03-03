@@ -60,7 +60,7 @@ const APP_PRIMENG_MODULE = [
   ToastModule,
   TabViewModule,
   TagModule,
-  OrganizationChartModule
+  OrganizationChartModule,
 ];
 
 @NgModule({
