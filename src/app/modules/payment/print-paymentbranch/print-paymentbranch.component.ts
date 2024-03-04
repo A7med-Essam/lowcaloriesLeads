@@ -108,7 +108,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
       if (res.status == 1) {
-        this.currentPrice = res.data.toFixed(2);
+        this.currentPrice = Math.round(res.data.toFixed(2));
       }
     });
   }
@@ -228,7 +228,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       if (this.enableEdit) {
         this.paymentForm.addControl(
           'paid_price',
-          new FormControl(this.currentPrice)
+          new FormControl(Math.round(this.currentPrice))
         );
       }
       const filteredData = Object.keys(form.value)
@@ -711,7 +711,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   }
 
   editCurrentPrice(newPrice: HTMLInputElement) {
-    this.currentPrice = Number(newPrice.value);
+    this.currentPrice = Math.round(Number(newPrice.value));
   }
   // ==================================calendar==================================
 

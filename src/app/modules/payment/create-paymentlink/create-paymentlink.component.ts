@@ -144,7 +144,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
       if (res.status == 1) {
-        this.currentPrice = res.data.toFixed(2);
+        this.currentPrice = Math.round(res.data.toFixed(2));
       }
     });
   }
@@ -203,7 +203,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
       });
       if (this.enableEdit) {
-        this.paymentForm.addControl('paid_price', new FormControl(this.currentPrice))
+        this.paymentForm.addControl('paid_price', new FormControl(Math.round(this.currentPrice)))
       }
       const filteredData = Object.keys(form.value)
         .filter(
@@ -625,7 +625,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
   }
 
   editCurrentPrice(newPrice:HTMLInputElement){
-    this.currentPrice = Number(newPrice.value);
+    this.currentPrice = Math.round(Number(newPrice.value));
   }
 
   // ==================================calendar==================================

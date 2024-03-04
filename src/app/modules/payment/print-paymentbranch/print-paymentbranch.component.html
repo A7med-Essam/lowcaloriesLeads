@@ -144,24 +144,36 @@
                 <label for="">DAYS OF PLAN <span class="text-danger">*</span></label>
                 <div class="d-flex flex-wrap">
                     <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="subscription_days" [value]="7" inputId="subscription_days_7">
+                        <p-radioButton formControlName="subscription_days"
+                            value="{{paymentForm.value.program_type == 'Ramadan Plans' ? 6 : 7}}"
+                            inputId="subscription_days_7">
                         </p-radioButton>
-                        <label class="mx-1" for="subscription_days_7">7 Days</label>
+                        <label class="mx-1" for="subscription_days_7">{{paymentForm.value.program_type == "Ramadan
+                            Plans" ? '6 Days' : '7 Days'}}</label>
                     </div>
                     <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="subscription_days" [value]="14" inputId="subscription_days_14">
+                        <p-radioButton formControlName="subscription_days"
+                            value="{{paymentForm.value.program_type == 'Ramadan Plans' ? 12 : 14}}"
+                            inputId="subscription_days_14">
                         </p-radioButton>
-                        <label class="mx-1" for="subscription_days_14">14 Days</label>
+                        <label class="mx-1" for="subscription_days_14">{{paymentForm.value.program_type == "Ramadan
+                            Plans" ? '12 Days' : '14 Days'}}</label>
                     </div>
                     <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="subscription_days" [value]="21" inputId="subscription_days_21">
+                        <p-radioButton formControlName="subscription_days"
+                            value="{{paymentForm.value.program_type == 'Ramadan Plans' ? 18 : 21}}"
+                            inputId="subscription_days_21">
                         </p-radioButton>
-                        <label class="mx-1" for="subscription_days_21">21 Days</label>
+                        <label class="mx-1" for="subscription_days_21">{{paymentForm.value.program_type == "Ramadan
+                            Plans" ? '18 Days' : '21 Days'}}</label>
                     </div>
                     <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="subscription_days" [value]="28" inputId="subscription_days_28">
+                        <p-radioButton formControlName="subscription_days"
+                            value="{{paymentForm.value.program_type == 'Ramadan Plans' ? 24 : 28}}"
+                            inputId="subscription_days_28">
                         </p-radioButton>
-                        <label class="mx-1" for="subscription_days_28">28 Days</label>
+                        <label class="mx-1" for="subscription_days_28">{{paymentForm.value.program_type == "Ramadan
+                            Plans" ? '24 Days' : '28 Days'}}</label>
                     </div>
                 </div>
                 <small class="text-danger ms-1" *ngIf="
