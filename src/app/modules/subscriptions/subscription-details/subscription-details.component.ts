@@ -352,24 +352,24 @@ export class SubscriptionDetailsComponent implements OnInit {
       // Replace the meal names based on the specified rules
       switch (mealsArray[i]) {
         case 'Meal 1':
-          this.sub.program_id == 10 || this.sub.program_id == 11
+          this.sub.full_plan_name.toLowerCase().includes("ramadan")
             ? updatedMeals.push('Iftar')
             : updatedMeals.push('Breakfast');
           break;
         case 'Meal 2':
           // updatedMeals.push('Lunch');
-          this.sub.program_id == 10 || this.sub.program_id == 11
+          this.sub.full_plan_name.toLowerCase().includes("ramadan")
             ? updatedMeals.push('Meal 2')
             : updatedMeals.push('Lunch');
           break;
         case 'Meal 3':
           // updatedMeals.push('Dinner');
-          this.sub.program_id == 10 || this.sub.program_id == 11
+          this.sub.full_plan_name.toLowerCase().includes("ramadan")
             ? updatedMeals.push('Meal 3')
             : updatedMeals.push('Dinner');
           break;
         case 'Meal 4':
-          this.sub.program_id == 10 || this.sub.program_id == 11
+          this.sub.full_plan_name.toLowerCase().includes("ramadan")
             ? updatedMeals.push('Sohor')
             : updatedMeals.push('Meal 4');
           break;
