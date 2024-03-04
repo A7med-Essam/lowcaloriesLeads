@@ -643,6 +643,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   types: string[] = ['percentage', 'value'];
   giftcodeModal: boolean = false;
   tomorrow: Date = new Date(new Date().setDate(new Date().getDate() + 2));
+  ramadanDate: Date = new Date('2024-03-11T00:00:00.000Z');
 
   displayGiftcodeModal() {
     if (this.createGiftCodePermission) {
