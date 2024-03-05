@@ -18,9 +18,17 @@ import { ShowOfferComponent } from './offer-setting/show-offer/show-offer.compon
 import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
+import { RamadanMealTypesPipe } from 'src/app/core/pipes/ramadan-meal-types.pipe';
 
 @NgModule({
-  declarations: [CreatePaymentlinkComponent, PrintPaymentbranchComponent, UpdateOfferComponent, CreateOfferComponent, ShowOfferComponent],
+  declarations: [
+    CreatePaymentlinkComponent,
+    PrintPaymentbranchComponent,
+    UpdateOfferComponent,
+    CreateOfferComponent,
+    ShowOfferComponent,
+    RamadanMealTypesPipe
+  ],
   imports: [
     CommonModule,
     PaymentRoutingModule,
@@ -34,7 +42,7 @@ import { TagModule } from 'primeng/tag';
     InputTextareaModule,
     TableModule,
     ConfirmDialogModule,
-    TagModule
+    TagModule,
   ],
 })
 export class PaymentModule {}

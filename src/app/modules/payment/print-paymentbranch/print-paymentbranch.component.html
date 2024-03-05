@@ -118,7 +118,7 @@
                         <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
                             (onChange)="onCheckboxChange($event,'snack_types',meal)">
                         </p-checkbox>
-                        <label class="mx-1" [for]="meal">{{meal}}</label>
+                        <label class="mx-1" [for]="meal">{{meal| ramadanMealTypes:paymentForm.value.program_type == "Ramadan Plans"}}</label>
                     </div>
                 </div>
                 <small class="text-danger ms-1" *ngIf="
@@ -183,7 +183,7 @@
             <div class="col-12 my-3">
                 <label for="">Days Of Delivery <span class="text-danger">*</span></label>
                 <div class="d-flex flex-wrap">
-                    <div class="field-checkbox m-3" *ngFor="let day of days">
+                    <div class="field-checkbox m-3" *ngFor="let day of days | slice:0: paymentForm.value.program_type == 'Ramadan Plans' ? 6 : 7">
                         <p-checkbox [value]="day.value" [inputId]="day.name" #checkbox #deliveryDaysBox
                             (onChange)="onCheckboxChange($event,'delivery_days',day.value)">
                         </p-checkbox>
