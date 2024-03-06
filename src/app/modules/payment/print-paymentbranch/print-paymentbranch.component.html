@@ -3,7 +3,7 @@
         <h2>Create Payment Branch</h2>
     </div>
     <hr>
-    <form [formGroup]="paymentForm" (ngSubmit)='createPaymentLink(paymentForm)'>
+    <form [formGroup]="paymentForm">
         <div class="row mx-0">
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">First Name <span class="text-danger">*</span></label>
@@ -311,7 +311,7 @@
                 </div>
             </div>
             <div class="col-12 my-3">
-                <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
+                <button class="btn btn-primary w-100" (click)="beforeSubmitModal = true" [disabled]="paymentForm.invalid || creatingStatus">
                     <span *ngIf="!creatingStatus">Print Invoice</span>
                     <span *ngIf="creatingStatus">Printing...<i class="fas fa-spinner fa-spin"></i></span>
                 </button>
@@ -358,4 +358,17 @@
             </div>
         </div>
     </form>
+</p-dialog>
+
+<p-dialog header="Complete Invoice" [(visible)]="beforeSubmitModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false" [closable]="false">
+    <div class="row mx-0">
+        <div class="col-12 my-3">
+            <label for="">Agent Name</label>
+            <input type="text" pInputText ngClass="w-100" #agentNameInput />
+        </div>
+        <div class="col-12 my-3">
+            <button class="btn btn-success w-100" (click)='createPaymentLink(paymentForm,agentNameInput.value)'>Create</button>
+        </div>
+    </div>
 </p-dialog>

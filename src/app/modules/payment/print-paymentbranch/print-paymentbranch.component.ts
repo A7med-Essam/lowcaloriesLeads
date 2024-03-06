@@ -223,64 +223,68 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     return ['7', '14', '21', '28'];
   }
 
-  createPaymentLink(form: FormGroup) {
-    if (form.valid) {
-      this.creatingStatus = true;
-      form.patchValue({
-        birthday: new Date(form.value.birthday).toLocaleDateString('en-CA'),
-        start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
-      });
-      if (this.enableEdit) {
-        this.paymentForm.addControl(
-          'paid_price',
-          new FormControl(Math.round(this.currentPrice))
-        );
-      }
-      const filteredData = Object.keys(form.value)
-        .filter(
-          (key) =>
-            form.value[key] !== null &&
-            !(Array.isArray(form.value[key]) && form.value[key].length === 0)
-        )
-        .reduce((obj: any, key) => {
-          obj[key] = form.value[key];
-          return obj;
-        }, {});
-      if (filteredData.dislike) {
-        filteredData.dislike = filteredData.dislike.join(',');
-      }
-      this._PaymentlinkService.print_payment_link(filteredData).subscribe({
-        next: (res) => {
-          if (res.status == 1) {
-            this.print(res.data);
-            this.creatingStatus = false;
-            this.enableEdit = false;
-            this.currentPrice = 0;
-            this.paymentForm.reset();
-            this.createPaymentForm();
-            this.selectAllDeliveryDays();
-            this.uncheckAllCheckboxes();
-            this._MessageService.add({
-              severity: 'success',
-              summary: 'Payment Branch',
-              detail: res.message,
-            });
-          } else {
+  createPaymentLink(form: FormGroup, agentName:string) {
+    if (agentName != '') {
+      if (form.valid) {
+        this.creatingStatus = true;
+        form.patchValue({
+          birthday: new Date(form.value.birthday).toLocaleDateString('en-CA'),
+          start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
+        });
+        if (this.enableEdit) {
+          this.paymentForm.addControl(
+            'paid_price',
+            new FormControl(Math.round(this.currentPrice))
+          );
+        }
+        const filteredData = Object.keys(form.value)
+          .filter(
+            (key) =>
+              form.value[key] !== null &&
+              !(Array.isArray(form.value[key]) && form.value[key].length === 0)
+          )
+          .reduce((obj: any, key) => {
+            obj[key] = form.value[key];
+            return obj;
+          }, {});
+        if (filteredData.dislike) {
+          filteredData.dislike = filteredData.dislike.join(',');
+        }
+        filteredData.agent_name = agentName;
+        this._PaymentlinkService.print_payment_link(filteredData).subscribe({
+          next: (res) => {
+            if (res.status == 1) {
+              this.print(res.data);
+              this.creatingStatus = false;
+              this.enableEdit = false;
+              this.beforeSubmitModal = false;
+              this.currentPrice = 0;
+              this.paymentForm.reset();
+              this.createPaymentForm();
+              this.selectAllDeliveryDays();
+              this.uncheckAllCheckboxes();
+              this._MessageService.add({
+                severity: 'success',
+                summary: 'Payment Branch',
+                detail: res.message,
+              });
+            } else {
+              this.creatingStatus = false;
+              this.paymentForm.patchValue({
+                start_date: new Date(filteredData.start_date),
+                birthday: new Date(filteredData.birthday),
+              });
+            }
+          },
+          error: (err) => {
             this.creatingStatus = false;
             this.paymentForm.patchValue({
               start_date: new Date(filteredData.start_date),
               birthday: new Date(filteredData.birthday),
             });
-          }
-        },
-        error: (err) => {
-          this.creatingStatus = false;
-          this.paymentForm.patchValue({
-            start_date: new Date(filteredData.start_date),
-            birthday: new Date(filteredData.birthday),
-          });
-        },
-      });
+          },
+        });
+      }
     }
   }
 
@@ -569,7 +573,8 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
       { title: 'Address', dataKey: res?.location?.area_id },
       { title: 'Emirate', dataKey: res?.location?.emirate?.en_name },
 
-      { title: 'Agent', dataKey: res?.agent?.name },
+      { title: 'Agent Account', dataKey: res?.agent?.name },
+      { title: 'Agent Name', dataKey: res?.agent_name },
       {
         title: 'Client Name',
         dataKey: res?.user?.first_name + ' ' + res?.user?.last_name,
@@ -747,4 +752,6 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
   onClearClick() {
     this.calendar.view = 'year';
   }
+
+  beforeSubmitModal:boolean = false;
 }
