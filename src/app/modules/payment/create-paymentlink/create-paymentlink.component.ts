@@ -52,7 +52,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     if (
       this.valueChangesSubscription1 &&
       this.valueChangesSubscription2 &&
-      this.valueChangesSubscription3 && 
+      this.valueChangesSubscription3 &&
       this.valueChangesSubscription4
     ) {
       this.valueChangesSubscription1.unsubscribe();
@@ -89,6 +89,11 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.DeliveryCheckboxElements.forEach((checkbox: Checkbox) => {
         checkbox.updateModel(true);
+        this.DeliveryCheckboxElements.last.updateModel(false);
+        if (checkbox.model?.length == 0) {
+          checkbox.updateModel(true);
+          this.DeliveryCheckboxElements.last.updateModel(false);
+        }
       });
     }, 1);
   }
@@ -127,7 +132,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
 
   currentPrice: number = 0;
   calculate_payment_link() {
-    const data:any = {
+    const data: any = {
       program_id: this.paymentForm.value.program_id,
       plan_id: this.paymentForm.value.plan_id,
       subscription_days: this.paymentForm.value.subscription_days,
@@ -135,11 +140,11 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       bag: this.paymentForm.value.bag,
     };
     if (this.paymentForm.value.meal_types) {
-      data.meal_types=this.paymentForm.value.meal_types
+      data.meal_types = this.paymentForm.value.meal_types;
     }
     if (this.paymentForm.value.snack_types) {
       if (this.paymentForm.value.snack_types.length > 0) {
-        data.snack_types=this.paymentForm.value.snack_types
+        data.snack_types = this.paymentForm.value.snack_types;
       }
     }
     this._PaymentlinkService.calculate_payment_link(data).subscribe((res) => {
@@ -192,7 +197,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       result.push(i.toString());
     }
     // return result;
-    return ['7','14','21','28'];
+    return ['7', '14', '21', '28'];
   }
 
   createPaymentLink(form: FormGroup) {
@@ -203,7 +208,10 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
       });
       if (this.enableEdit) {
-        this.paymentForm.addControl('paid_price', new FormControl(Math.round(this.currentPrice)))
+        this.paymentForm.addControl(
+          'paid_price',
+          new FormControl(Math.round(this.currentPrice))
+        );
       }
       const filteredData = Object.keys(form.value)
         .filter(
@@ -332,7 +340,8 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       });
     }
 
-   const onlySnack = this.paymentForm.get('only_snack')?.value == 'yes' ? true : false;
+    const onlySnack =
+      this.paymentForm.get('only_snack')?.value == 'yes' ? true : false;
     if (type != 'dislike') {
       if (onlySnack) {
         if (type == 'snack_types') {
@@ -341,32 +350,38 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
           } else {
             this.paymentForm.get(type)?.setErrors({ required: true });
           }
-        }else{
+        } else {
           if (formArray.length > 0) {
             this.paymentForm.get(type)?.setErrors(null);
           } else {
             this.paymentForm.get(type)?.setErrors({ required: true });
           }
-          if (type == 'meal_types' && this.paymentForm.value.program_type == 'Chef Gourmet') {
+          if (
+            type == 'meal_types' &&
+            this.paymentForm.value.program_type == 'Chef Gourmet'
+          ) {
             if (formArray.length < 2) {
               this.paymentForm.get(type)?.setErrors({ required: true });
             }
           }
         }
-       } else {
-          if (type != 'snack_types') {
-            if (formArray.length > 0) {
-              this.paymentForm.get(type)?.setErrors(null);
-            } else {
+      } else {
+        if (type != 'snack_types') {
+          if (formArray.length > 0) {
+            this.paymentForm.get(type)?.setErrors(null);
+          } else {
+            this.paymentForm.get(type)?.setErrors({ required: true });
+          }
+          if (
+            type == 'meal_types' &&
+            this.paymentForm.value.program_type == 'Chef Gourmet'
+          ) {
+            if (formArray.length < 2) {
               this.paymentForm.get(type)?.setErrors({ required: true });
             }
-            if (type == 'meal_types' && this.paymentForm.value.program_type == 'Chef Gourmet') {
-              if (formArray.length < 2) {
-                this.paymentForm.get(type)?.setErrors({ required: true });
-              }
-            }
           }
-       }
+        }
+      }
     }
   }
 
@@ -400,6 +415,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         if (value) {
           this.paymentDetails.emirates = this.customEmirateFilter(value);
           this.handleProgramTypeChange(value);
+          this.selectAllDeliveryDays();
         }
       });
     this.valueChangesSubscription2 = this.paymentForm
@@ -418,12 +434,12 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.valueChangesSubscription4 = this.paymentForm
+    this.valueChangesSubscription4 = this.paymentForm
       .get('only_snack')
       ?.valueChanges.subscribe((value) => {
         if (value) {
           this.checkboxElements.forEach((checkbox: Checkbox) => {
-            if (checkbox.name == "group1") {
+            if (checkbox.name == 'group1') {
               checkbox.writeValue(false);
             }
           });
@@ -434,16 +450,17 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
             this.paymentForm.addControl('snack_types', new FormArray([]));
             this.paymentForm.get('snack_types')?.setErrors({ required: true });
           } else {
-              this.paymentForm.addControl('meal_types',new FormArray([], [Validators.required]));
-              this.paymentForm.removeControl('snack_types');
-              this.paymentForm.addControl('snack_types', new FormArray([]));
-              this.paymentForm.get('snack_types')?.setErrors(null);
+            this.paymentForm.addControl(
+              'meal_types',
+              new FormArray([], [Validators.required])
+            );
+            this.paymentForm.removeControl('snack_types');
+            this.paymentForm.addControl('snack_types', new FormArray([]));
+            this.paymentForm.get('snack_types')?.setErrors(null);
           }
         }
       });
   }
-
-
 
   handleProgramTypeChange(value: any) {
     this.handelMealTypes();
@@ -539,14 +556,14 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     this.mealTypes = [];
     this.snackTypes = [];
     this.paymentForm.removeControl('meal_types');
-     this.paymentForm.addControl(
-       'meal_types',
-       new FormArray([], [Validators.required])
-     );
+    this.paymentForm.addControl(
+      'meal_types',
+      new FormArray([], [Validators.required])
+    );
     this.paymentForm.removeControl('snack_types');
     this.paymentForm.addControl('snack_types', new FormArray([]));
     this.checkboxElements.forEach((checkbox: Checkbox) => {
-      if (checkbox.name == "group1") {
+      if (checkbox.name == 'group1') {
         checkbox.writeValue(false);
       }
     });
@@ -556,7 +573,7 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
   giftcodeForm!: FormGroup;
   types: string[] = ['percentage', 'value'];
   giftcodeModal: boolean = false;
-  tomorrow:Date = new Date(new Date().setDate(new Date().getDate() + 2))
+  tomorrow: Date = new Date(new Date().setDate(new Date().getDate() + 2));
   ramadanDate: Date = new Date('2024-03-11T00:00:00.000Z');
 
   displayGiftcodeModal() {
@@ -620,19 +637,19 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
     });
   }
   // ==================================enableEdit==================================
-  enableEdit:boolean = false;
-  toggleEdit(){
-    this.enableEdit = !this.enableEdit
+  enableEdit: boolean = false;
+  toggleEdit() {
+    this.enableEdit = !this.enableEdit;
   }
 
-  editCurrentPrice(newPrice:HTMLInputElement){
+  editCurrentPrice(newPrice: HTMLInputElement) {
     this.currentPrice = Math.round(Number(newPrice.value));
   }
 
   // ==================================calendar==================================
 
-  maxBirthdate: Date= new Date('2020-12-31');
-  minBirthdate: Date= new Date('1950-01-01');
+  maxBirthdate: Date = new Date('2020-12-31');
+  minBirthdate: Date = new Date('1950-01-01');
 
   @ViewChild('calendar') calendar!: Calendar;
   onDateChange(e: any) {

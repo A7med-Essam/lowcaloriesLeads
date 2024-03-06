@@ -146,6 +146,11 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.DeliveryCheckboxElements.forEach((checkbox: Checkbox) => {
         checkbox.updateModel(true);
+        this.DeliveryCheckboxElements.last.updateModel(false);
+        if (checkbox.model?.length == 0) {
+          checkbox.updateModel(true);
+          this.DeliveryCheckboxElements.last.updateModel(false);
+        }
       });
     }, 1);
   }
@@ -322,8 +327,6 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
     return meals;
   }
 
-
-
   // ====================================================================Checkbox==========================================================================
   onCheckboxChange(event: any, type: string, value: string) {
     let formArray: FormArray = this.paymentForm.get(type) as FormArray;
@@ -414,6 +417,7 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
         if (value) {
           this.paymentDetails.emirates = this.customEmirateFilter(value);
           this.handleProgramTypeChange(value);
+          this.selectAllDeliveryDays();
         }
       });
     this.valueChangesSubscription2 = this.paymentForm
@@ -440,18 +444,17 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
             this.paymentForm.addControl('snack_types', new FormArray([]));
             this.paymentForm.get('snack_types')?.setErrors({ required: true });
           } else {
-              this.paymentForm.addControl('meal_types',new FormArray([], [Validators.required]));
-              this.paymentForm.removeControl('snack_types');
-              this.paymentForm.addControl('snack_types', new FormArray([]));
-              this.paymentForm.get('snack_types')?.setErrors(null);
+            this.paymentForm.addControl(
+              'meal_types',
+              new FormArray([], [Validators.required])
+            );
+            this.paymentForm.removeControl('snack_types');
+            this.paymentForm.addControl('snack_types', new FormArray([]));
+            this.paymentForm.get('snack_types')?.setErrors(null);
           }
         }
       });
-
- 
   }
-
-
 
   handleProgramTypeChange(value: any) {
     this.handelMealTypes();
