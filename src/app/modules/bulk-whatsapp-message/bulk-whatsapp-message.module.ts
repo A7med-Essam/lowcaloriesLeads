@@ -16,6 +16,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { WhatsappQueryComponent } from './whatsapp-query/whatsapp-query.component';
 import { HighlightWordsStartingWithDollarPipe } from './highlight.pipe';
 import { PaginatorModule } from 'primeng/paginator';
+import { WhatsappSenderComponent } from './whatsapp-sender/whatsapp-sender.component';
+import { WhatsappSenderShowComponent } from './whatsapp-sender-show/whatsapp-sender-show.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { PaginatorModule } from 'primeng/paginator';
     WhatsappTemplatesComponent,
     WhatsappQueryComponent,
     HighlightWordsStartingWithDollarPipe,
+    WhatsappSenderComponent,
+    WhatsappSenderShowComponent,
   ],
   imports: [
     CommonModule,

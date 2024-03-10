@@ -136,6 +136,27 @@ export class SendBulkWhatsappService {
           }
     );
   }
+
+  // =====================================================================
+
+  getSenders(): Observable<{ data: any; message: string; status: number }> {
+    return this._ApiConfigService.postReq3(`getSenders`, '');
+  }
+  addSenders(
+    row: any
+  ): Observable<{ data: any; message: string; status: number }> {
+    return this._ApiConfigService.postReq3(`addSenders`, row);
+  }
+  updateSenders(
+    row: any
+  ): Observable<{ data: any; message: string; status: number }> {
+    return this._ApiConfigService.postReq3(`updateSenders`, row);
+  }
+  deleteSenders(
+    sender_id: number
+  ): Observable<{ data: any; message: string; status: number }> {
+    return this._ApiConfigService.postReq3(`deleteSenders`, { sender_id });
+  }
 }
 
 export interface IWhatsAppSenderMessages {

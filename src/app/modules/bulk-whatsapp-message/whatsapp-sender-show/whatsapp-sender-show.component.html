@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Whatsapp Senders</h2>
+    <button class="btn btn-success" routerLink="../create-sender">Create Sender</button>
+</div>
+<hr>
+<div class="card">
+    <p-table [value]="rows" dataKey="id" editMode="row">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:20%">#</th>
+                <th style="width:20%">Name</th>
+                <th style="width:20%">Mobile</th>
+                <th style="width:20%">App Key</th>
+                <th style="width:20%">Auth Key</th>
+                <th style="width:20%">Base Url</th>
+                <th style="width:20%"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="row">
+                <td>{{ ri+1 }}</td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [(ngModel)]="row.name">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{row.name}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <textarea pInputTextarea ngClass="w-100" [(ngModel)]="row.mobile"></textarea>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{row.mobile}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <textarea pInputTextarea ngClass="w-100" [(ngModel)]="row.app_key"></textarea>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{row.app_key}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <textarea pInputTextarea ngClass="w-100" [(ngModel)]="row.auth_key"></textarea>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{row.auth_key}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <textarea pInputTextarea ngClass="w-100" [(ngModel)]="row.base_url"></textarea>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{row.base_url}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                            (click)="onRowEditInit(row)" class="p-button-rounded p-button-text"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                            (click)="onRowEditSave(row,ri)"
+                            class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                            (click)="onRowEditCancel(row, ri)"
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+
+                        <button *ngIf="!editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                            (click)="confirm(row.id)"
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

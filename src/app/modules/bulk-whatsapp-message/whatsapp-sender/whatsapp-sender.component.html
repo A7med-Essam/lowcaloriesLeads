@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Create Sender</h2>
+    </div>
+    <hr>
+    <form [formGroup]="insertForm" (ngSubmit)='onSubmit(insertForm)'>
+        <div class="row mx-0">
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Name</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='name' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('name')?.touched &&
+                insertForm.get('name')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Mobile</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='mobile' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('mobile')?.touched &&
+                insertForm.get('mobile')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">App Key</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='app_key' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('app_key')?.touched &&
+                insertForm.get('app_key')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Auth Key</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='auth_key' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('auth_key')?.touched &&
+                insertForm.get('auth_key')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-md-6 col-12 my-3">
+                <label for="">Base Url</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='base_url' />
+                <small class="text-danger ms-1" *ngIf="insertForm.get('base_url')?.touched &&
+                insertForm.get('base_url')?.hasError('required')">This field is required.</small>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100">Add Number</button>
+            </div>
+        </div>
+    </form>
+</div>
