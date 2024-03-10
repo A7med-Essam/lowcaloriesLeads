@@ -27,6 +27,7 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
   ngOnInit(): void {
     this.getTemps();
     this.getQueries();
+    this.getSenders();
   }
 
   templates: IWhatsAppSenderMessages[] = [];
@@ -46,6 +47,16 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
     this._sendWhatsappServices.getWhatsAppSenderMessages().subscribe({
       next: (res) => {
         this.templates = res.data;
+      },
+    });
+  }
+
+  senders: any[] = [];
+
+  getSenders() {
+    this._sendWhatsappServices.getSenders().subscribe({
+      next: (res) => {
+        this.senders = res.data;
       },
     });
   }
@@ -136,7 +147,7 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
     this.numbers[index] = { value: Object.keys(this.clonedTemp)[0] };
     this.clonedTemp = {};
   }
-
+  selectedSender:any;
   sendBulk() {
     if (this.selectedTemplate) {
       this.isLoading = true;
@@ -145,6 +156,7 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
         .sendBulkMessage({
           message: this.selectedTemplate.message,
           numbers: nums,
+          sender_id:this.selectedSender
         })
         .subscribe((res) => {
           this._MessageService.add({

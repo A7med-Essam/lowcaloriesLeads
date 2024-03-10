@@ -4,21 +4,27 @@
 <hr>
 
 <div class="row mx-0">
-  <div class="col-md-6 my-2">
+  <div class="col-md-4 my-2">
     <label for="">Whatsapp Options<span class="text-danger">*</span></label>
     <p-dropdown [options]="whatsappFilterOptions" #options appendTo="body" styleClass="w-100"
       (onChange)="onOptionsChange(options.value)" placeholder="Select Option"></p-dropdown>
   </div>
 
-  <div class="col-md-6 my-2">
+  <div class="col-md-4 my-2">
     <label for="">Whatsapp Message Template<span class="text-danger">*</span></label>
     <p-dropdown [options]="templates" optionLabel="case" #SelectedTemplateDropDown appendTo="body" styleClass="w-100"
       placeholder="Select Template" [(ngModel)]="selectedTemplate"></p-dropdown>
   </div>
 
+  <div class="col-md-4 my-2">
+    <label for="">Whatsapp Sender<span class="text-danger">*</span></label>
+    <p-dropdown [options]="senders" optionLabel="name" optionValue="id" appendTo="body" styleClass="w-100"
+      placeholder="Select Template" [(ngModel)]="selectedSender"></p-dropdown>
+  </div>
+
   <div class="col-12" *ngIf="SelectedTemplateDropDown.value">
     <label for="">Message</label>
-    <textarea pInputTextarea ngClass="w-100" [(ngModel)]="SelectedTemplateDropDown.value.message"></textarea>
+    <textarea pInputTextarea rows="5" ngClass="w-100" [(ngModel)]="SelectedTemplateDropDown.value.message"></textarea>
   </div>
 
   <div class="col-12">
@@ -39,7 +45,7 @@
 
       <div class=" my-2" *ngFor="let item of query_dropdowm.value?.params">
         <label for="range">{{item?.name}}</label>
-        
+
         <div *ngIf="item?.type == 'string'; else isDate">
           <input pInputText ngClass="w-100" type="text" [(ngModel)]="item.value">
         </div>
