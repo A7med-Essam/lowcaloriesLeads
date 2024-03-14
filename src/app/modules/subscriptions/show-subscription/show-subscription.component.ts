@@ -110,7 +110,8 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
   showRow(sub: any) {
     if (sub) {
       this._SubscriptionsService.subscription.next(sub);
-      this._Router.navigate(['subscriptions/details']);
+      // this._Router.navigate(['subscriptions/details']);
+      window.open(`/subscriptions/details?id=${sub.id}`, '_blank');
     }
   }
 

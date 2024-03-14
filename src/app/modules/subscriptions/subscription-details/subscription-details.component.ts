@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
@@ -20,6 +20,7 @@ export class SubscriptionDetailsComponent implements OnInit {
 
   constructor(
     private _Router: Router,
+    private _ActivatedRoute: ActivatedRoute,
     private _SubscriptionsService: SubscriptionsService,
     private _GuardService: GuardService
   ) {}
@@ -27,18 +28,29 @@ export class SubscriptionDetailsComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
 
   ngOnInit(): void {
-    this._SubscriptionsService.subscription
+    this._ActivatedRoute.queryParams
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (res) => {
-          if (res == null) {
-            this._Router.navigate(['subscriptions/show']);
-          } else {
-            this.getSubscriptionDetails(res.id);
-            this.getPermission();
-          }
-        },
+      .subscribe((params) => {
+        const id = params['id'];
+        if (id) {
+          this.getSubscriptionDetails(id);
+          this.getPermission();
+        } else {
+          this._Router.navigate(['subscriptions/show']);
+        }
       });
+    // this._SubscriptionsService.subscription
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe({
+    //     next: (res) => {
+    //       if (res == null) {
+    //         this._Router.navigate(['subscriptions/show']);
+    //       } else {
+    //         this.getSubscriptionDetails(res.id);
+    //         this.getPermission();
+    //       }
+    //     },
+    //   });
   }
   printPermission: boolean = false;
   getPermission() {
@@ -352,24 +364,24 @@ export class SubscriptionDetailsComponent implements OnInit {
       // Replace the meal names based on the specified rules
       switch (mealsArray[i]) {
         case 'Meal 1':
-          this.sub.full_plan_name.toLowerCase().includes("ramadan")
+          this.sub.full_plan_name.toLowerCase().includes('ramadan')
             ? updatedMeals.push('Iftar')
             : updatedMeals.push('Breakfast');
           break;
         case 'Meal 2':
           // updatedMeals.push('Lunch');
-          this.sub.full_plan_name.toLowerCase().includes("ramadan")
+          this.sub.full_plan_name.toLowerCase().includes('ramadan')
             ? updatedMeals.push('Meal 2')
             : updatedMeals.push('Lunch');
           break;
         case 'Meal 3':
           // updatedMeals.push('Dinner');
-          this.sub.full_plan_name.toLowerCase().includes("ramadan")
+          this.sub.full_plan_name.toLowerCase().includes('ramadan')
             ? updatedMeals.push('Meal 3')
             : updatedMeals.push('Dinner');
           break;
         case 'Meal 4':
-          this.sub.full_plan_name.toLowerCase().includes("ramadan")
+          this.sub.full_plan_name.toLowerCase().includes('ramadan')
             ? updatedMeals.push('Sohor')
             : updatedMeals.push('Meal 4');
           break;
