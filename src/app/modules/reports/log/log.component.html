@@ -52,10 +52,7 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Leads</h5>
                                     <div>
-                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllTargets(logs.targets.data)">
-                                        </p-button> -->
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.leads.data,'leads')">
                                         </p-button>
                                     </div>
@@ -81,9 +78,6 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <!-- <button pButton type="button" icon="pi pi-print"
-                                            class="m-1 p-button-sm p-button-secondary"
-                                            (click)="printCall(log)"></button> -->
                                     </td>
                                 </tr>
                             </ng-template>
@@ -100,10 +94,10 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Targets</h5>
                                     <div>
-                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf" [disabled]="!exportReportPermission"
                                             (click)="printAllTargets(logs.targets.data)">
                                         </p-button>
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.targets.data,'targets')">
                                         </p-button>
                                     </div>
@@ -132,7 +126,7 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <button pButton type="button" icon="pi pi-print"
+                                        <button pButton type="button" icon="pi pi-print" [disabled]="!exportReportPermission"
                                             class="m-1 p-button-sm p-button-secondary"
                                             (click)="printTarget(log)"></button>
                                     </td>
@@ -151,10 +145,10 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Calls</h5>
                                     <div>
-                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf" [disabled]="!exportReportPermission"
                                             (click)="printAllCalls(logs.calls.data)">
                                         </p-button>
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export Excel"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export Excel" [disabled]="!exportReportPermission"
                                             (click)="export(logs.calls.data,'calls')">
                                         </p-button>
                                     </div>
@@ -180,7 +174,7 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <button pButton type="button" icon="pi pi-print"
+                                        <button pButton type="button" icon="pi pi-print" [disabled]="!exportReportPermission"
                                             class="m-1 p-button-sm p-button-secondary"
                                             (click)="printCall(log)"></button>
                                     </td>
@@ -199,10 +193,10 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Refunds</h5>
                                     <div>
-                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf" [disabled]="!exportReportPermission"
                                             (click)="printAllRefunds(logs.refunds.data)">
                                         </p-button>
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.refunds.data,'refunds')">
                                         </p-button>
                                     </div>
@@ -236,7 +230,7 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <button pButton type="button" icon="pi pi-print"
+                                        <button pButton type="button" icon="pi pi-print" [disabled]="!exportReportPermission"
                                             class="m-1 p-button-sm p-button-secondary"
                                             (click)="printRefund(log)"></button>
                                     </td>
@@ -255,10 +249,10 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Complaints</h5>
                                     <div>
-                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf" [disabled]="!exportReportPermission"
                                             (click)="printAllComplaint(logs.issues.data)">
                                         </p-button>
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.issues.data,'complaints')">
                                         </p-button>
                                     </div>
@@ -286,7 +280,7 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <button pButton type="button" icon="pi pi-print"
+                                        <button pButton type="button" icon="pi pi-print" [disabled]="!exportReportPermission"
                                             class="m-1 p-button-sm p-button-secondary"
                                             (click)="printComplaint(log)"></button>
                                     </td>
@@ -305,10 +299,10 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Dislikes</h5>
                                     <div>
-                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
+                                        <p-button class="mx-1" icon="pi pi-print" label="Export Pdf" [disabled]="!exportReportPermission"
                                             (click)="printAllDislikes(logs.Dislikes.data)">
                                         </p-button>
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.Dislikes.data,'dislikes')">
                                         </p-button>
                                     </div>
@@ -337,7 +331,7 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <button pButton type="button" icon="pi pi-print"
+                                        <button pButton type="button" icon="pi pi-print" [disabled]="!exportReportPermission"
                                             class="m-1 p-button-sm p-button-secondary"
                                             (click)="printDislike(log)"></button>
                                     </td>
@@ -357,10 +351,7 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Payment Links</h5>
                                     <div>
-                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllTargets(logs.paymentLinks.data)">
-                                        </p-button> -->
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.paymentLinks.data,'paymentlink')">
                                         </p-button>
                                     </div>
@@ -387,7 +378,7 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <button pButton type="button" icon="pi pi-print"
+                                        <button pButton type="button" icon="pi pi-print" [disabled]="!exportReportPermission"
                                             class="m-1 p-button-sm p-button-secondary"
                                             (click)="printCall(log)"></button>
                                     </td>
@@ -408,10 +399,7 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Payment Branch</h5>
                                     <div>
-                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllTargets(logs.paymentBranches.data)">
-                                        </p-button> -->
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.paymentBranches.data,'paymentbranch')">
                                         </p-button>
                                     </div>
@@ -438,7 +426,7 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <button pButton type="button" icon="pi pi-print"
+                                        <button pButton type="button" icon="pi pi-print" [disabled]="!exportReportPermission"
                                             class="m-1 p-button-sm p-button-secondary"
                                             (click)="printCall(log)"></button>
                                     </td>
@@ -457,10 +445,7 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Clinic</h5>
                                     <div>
-                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllTargets(logs.Clinic.data)">
-                                        </p-button> -->
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.Clinic.data,'clinic')">
                                         </p-button>
                                     </div>
@@ -482,7 +467,7 @@
                                     <td class="text-center">
                                         <button pButton type="button" icon="pi pi-eye" (click)="showRow(log)"
                                             class="m-1 p-button-sm"></button>
-                                        <button pButton type="button" icon="pi pi-print"
+                                        <button pButton type="button" icon="pi pi-print" [disabled]="!exportReportPermission"
                                             class="m-1 p-button-sm p-button-secondary"
                                             (click)="printCall(log)"></button>
                                     </td>
@@ -501,10 +486,7 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center">
                                     <h5 class="mb-0">Analytics</h5>
                                     <div>
-                                        <!-- <p-button class="mx-1" icon="pi pi-print" label="Export Pdf"
-                                            (click)="printAllTargets(logs.targets.data)">
-                                        </p-button> -->
-                                        <p-button class="mx-1" icon="pi pi-upload" label="Export"
+                                        <p-button class="mx-1" icon="pi pi-upload" label="Export" [disabled]="!exportReportPermission"
                                             (click)="export(logs.dataAnalytics.data,'dataAnalytics')">
                                         </p-button>
                                     </div>
@@ -564,7 +546,7 @@
                                     <td [width]="200">
                                         {{ item.key }}
                                     </td>
-                                    <td>{{ currentRow.emirate.en_name }}</td>
+                                    <td>{{ currentRow.emirate?.en_name }}</td>
                                 </ng-container>
                                 <ng-container *ngSwitchCase="'file'">
                                 </ng-container>

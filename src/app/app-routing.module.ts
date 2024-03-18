@@ -33,7 +33,7 @@ const routes: Routes = [
       import('./modules/reports/reports.module').then((m) => m.ReportsModule),
     canActivate: [PermissionGuard],
     data: {
-      permission: [''],
+      permission: ['show_AgentReport'],
     },
   },
   {

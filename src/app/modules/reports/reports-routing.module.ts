@@ -10,7 +10,7 @@ const routes: Routes = [
     component: LogComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: [''],
+      permission: ['show_AgentReport'],
     },
   },
 ];
