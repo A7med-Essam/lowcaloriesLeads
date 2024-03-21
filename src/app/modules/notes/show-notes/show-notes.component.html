@@ -48,18 +48,23 @@
         <div class="card" *ngIf="notes.length">
             <p-table [value]="notes" [paginator]="true" [rows]="PaginationInfo?.per_page"
                 [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)"
-                [showCurrentPageReport]="true" responsiveLayout="scroll"
+                [showCurrentPageReport]="true" responsiveLayout="scroll" (onLazyLoad)="sort($event)"
                 currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th class="text-center">Note</th>
-                        <th class="text-center">Mobile</th>
-                        <th class="text-center">Agent</th>
+                        <th class="text-center" pSortableColumn="created_at">Date <p-sortIcon
+                                field="created_at"></p-sortIcon></th>
+                        <th class="text-center" pSortableColumn="note">Note <p-sortIcon field="note"></p-sortIcon></th>
+                        <th class="text-center" pSortableColumn="mobile">Mobile <p-sortIcon field="mobile"></p-sortIcon>
+                        </th>
+                        <th class="text-center" pSortableColumn="agent_id">Agent <p-sortIcon
+                                field="agent_id"></p-sortIcon></th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
-                    <tr>
+                    <tr [pSelectableRow]="row">
+                        <td class="text-center">{{row?.created_at | date:'M/d/yyyy'}}</td>
                         <td class="text-center">{{row?.note}}</td>
                         <td class="text-center">{{row?.mobile}}</td>
                         <td class="text-center">{{row?.agent?.name}}</td>

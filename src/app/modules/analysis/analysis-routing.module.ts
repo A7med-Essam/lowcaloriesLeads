@@ -33,7 +33,7 @@ const routes: Routes = [
     component: ShowAnalysisComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: [''],
+      permission: ['v1_analysis'],
     },
   },
   {
