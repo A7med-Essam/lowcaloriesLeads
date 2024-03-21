@@ -1,0 +1,129 @@
+<section>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Notes</h2>
+            <button class="btn btn-success px-4 mx-1" [disabled]="!createPermission" (click)="showCreate()">
+                <b>Create Note</b>
+            </button>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-12 my-2" *ngIf="isSuperAdmin">
+                <div class="form-group">
+                    <p-dropdown [options]="analyticOptions?.teams" [(ngModel)]="selectedTeam"
+                        (onChange)="handleAgent(selectedTeam)" appendTo="body" styleClass="w-100"
+                        placeholder="Select Team" [filter]="true">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12 my-2" *ngIf="isSuperAdmin">
+                <div class="form-group">
+                    <p-dropdown [options]="agents" optionLabel="name" optionValue="id" [(ngModel)]="selectedAgent"
+                        appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12 my-2">
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="selectedMobile" placeholder="Enter Mobile"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+            </div>
+            <div class="col-lg-3 col-md-6 col-12 my-2">
+                <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" ngClass="w-100" appendTo="body"
+                    placeholder="Select Date Range" [(ngModel)]="selectedDate">
+                </p-calendar>
+            </div>
+            <div class="col-12">
+                <div class="text-end mt-3">
+                    <button class="btn btn-secondary px-4 mx-1" (click)="reset()">
+                        <b>Reset</b>
+                    </button>
+                    <button class="btn btn-success px-4 mx-1" (click)="filter()"
+                        [disabled]="!selectedAgent && !selectedDate && !selectedMobile">
+                        <b>Get Notes</b>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr *ngIf="notes.length">
+        <div class="card" *ngIf="notes.length">
+            <p-table [value]="notes" [paginator]="true" [rows]="PaginationInfo?.per_page"
+                [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)"
+                [showCurrentPageReport]="true" responsiveLayout="scroll"
+                currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Note</th>
+                        <th class="text-center">Mobile</th>
+                        <th class="text-center">Agent</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td class="text-center">{{row?.note}}</td>
+                        <td class="text-center">{{row?.mobile}}</td>
+                        <td class="text-center">{{row?.agent?.name}}</td>
+                        <td class="text-center">
+                            <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
+                                (click)="showUpdate(row)" class="m-1 p-button-sm p-button-warning"></button>
+                            <button pButton type="button" icon="pi pi-trash" [disabled]="!deletePermission"
+                                (click)="confirm(row?.id)" class="m-1 p-button-danger p-button-sm"></button>
+                        </td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</section>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+
+<p-dialog header="Update Modal" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="">Note</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentNote" placeholder="Enter Note" />
+            </div>
+            <div class="col-12 my-2">
+                <label for="">Mobile</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentMobile" placeholder="Enter Mobile"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div>
+            <button class="btn btn-primary" (click)="updateRow()" [disabled]="!currentNote || !currentMobile">
+                Update
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Create Modal" [(visible)]="createModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="">Note</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentNote" placeholder="Enter Note" />
+            </div>
+            <div class="col-12 my-2">
+                <label for="">Mobile</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentMobile" placeholder="Enter Mobile"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div>
+            <button class="btn btn-primary" (click)="createRow()" [disabled]="!currentNote || !currentMobile">
+                Create
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>

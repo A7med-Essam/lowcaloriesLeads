@@ -37,6 +37,15 @@ const routes: Routes = [
     },
   },
   {
+    path: 'notes',
+    loadChildren: () =>
+      import('./modules/notes/notes.module').then((m) => m.NotesModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_notes'],
+    },
+  },
+  {
     path: 'leadControls',
     loadChildren: () =>
       import('./modules/survey/survey.module').then((m) => m.SurveyModule),

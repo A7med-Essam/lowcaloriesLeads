@@ -1,0 +1,30 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiConfigService } from '../core/api-config.service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class NotesService {
+  constructor(private _ApiConfigService: ApiConfigService) {}
+
+  getStickyNotes(page: number): Observable<any> {
+    return this._ApiConfigService.postReq3(`getStickyNotes?page=${page}`, '');
+  }
+
+  addStickyNote(row: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`addStickyNote`, row);
+  }
+
+  updateStickyNote(row: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`updateStickyNote`, row);
+  }
+
+  deleteStickyNote(sticky_id: number): Observable<any> {
+    return this._ApiConfigService.postReq3(`deleteStickyNote`, { sticky_id });
+  }
+
+  filterNotes(page: number, filter: any) {
+    return this._ApiConfigService.postReq3(`getStickyNotes?page=${page}`, filter);
+  }
+}

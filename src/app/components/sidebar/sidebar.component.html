@@ -49,11 +49,11 @@
     </ul>
     <!-- ================================================SUBSCRIPTIONS================================================== -->
     <div class="menu-header mt-3 mb-2"
-      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission || showReportPermission">
+      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission || showReportPermission || showReportStaticsServicePermission">
       Report Components
     </div>
     <ul class="menu-items"
-      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission || showReportPermission">
+      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission || showReportPermission || showReportStaticsServicePermission">
       <li *ngIf="showSubscriptionPermission">
         <a routerLink="/subscriptions/show" routerLinkActive="active">
           <i class="fas fa-bookmark"></i>
@@ -83,6 +83,12 @@
           <!-- <i class="fas fa-search-plus"></i> -->
           <i class="fas fa-tachometer-alt"></i>
           <span>Dashboard</span>
+        </a>
+      </li>
+      <li *ngIf="showReportStaticsServicePermission">
+        <a routerLink="/reportStatics/show" routerLinkActive="active">
+          <i class="fas fa-chart-line"></i>
+          <span>Report Statics</span>
         </a>
       </li>
       <hr>
@@ -254,19 +260,6 @@
       </li>
       <hr>
     </ul>
-    <!-- ================================================NumberStatics SERVICE================================================== -->
-    <div class="menu-header mt-3 mb-2" *ngIf="showReportStaticsServicePermission">
-      Report Statics
-    </div>
-    <ul class="menu-items" *ngIf="showReportStaticsServicePermission">
-      <li>
-        <a routerLink="/reportStatics/show" routerLinkActive="active">
-          <i class="fas fa-chart-pie"></i>
-          <span>Report Statics</span>
-        </a>
-      </li>
-      <hr>
-    </ul>
     <!-- ================================================Query Module================================================== -->
     <div class="menu-header mt-3 mb-2" *ngIf="showReportStaticsServicePermission">
       Query Module
@@ -317,28 +310,28 @@
       </li>
       <hr>
     </ul>
-    <!-- ================================================REDIRECTS================================================== -->
-    <div class="menu-header mt-3 mb-2" *ngIf="showRedirectPermission">
-      Redirect Components
+
+    <!-- ================================================OTHER================================================== -->
+    <div class="menu-header mt-3 mb-2" *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission">
+      Other Components
     </div>
-    <ul class="menu-items" *ngIf="showRedirectPermission">
-      <li>
-        <a routerLink="/redirect/show" routerLinkActive="active">
-          <i class="fas fa-link"></i>
-          <span>Urls</span>
+    <ul class="menu-items" *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission">
+      <li *ngIf="showNotesPermission">
+        <a routerLink="/notes/show" routerLinkActive="active">
+          <i class="fas fa-sticky-note"></i>
+          <span>Sticky Notes</span>
         </a>
       </li>
-      <hr>
-    </ul>
-    <!-- ================================================UPLOADS================================================== -->
-    <div class="menu-header mt-3 mb-2" *ngIf="showUploadPermission">
-      Upload Components
-    </div>
-    <ul class="menu-items" *ngIf="showUploadPermission">
-      <li>
+      <li *ngIf="showUploadPermission">
         <a routerLink="/upload/show" routerLinkActive="active">
           <i class="fas fa-cloud-upload-alt"></i>
           <span>Uploads</span>
+        </a>
+      </li>
+      <li *ngIf="showRedirectPermission">
+        <a routerLink="/redirect/show" routerLinkActive="active">
+          <i class="fas fa-link"></i>
+          <span>Urls</span>
         </a>
       </li>
       <hr>
