@@ -41,6 +41,7 @@ export class SidebarComponent implements OnInit {
   showCustomerPlanPermission: boolean = false;
   showReportPermission: boolean = false;
   showNotesPermission: boolean = false;
+  manageAnalysisPermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -121,6 +122,8 @@ export class SidebarComponent implements OnInit {
     this._GuardService.getPermissionStatus('show_AgentReport');
     this.showNotesPermission =
     this._GuardService.getPermissionStatus('show_notes');
+    this.manageAnalysisPermission =
+    this._GuardService.getPermissionStatus('manage_analysis');
     // this._GuardService.getPermissionStatus('show_customerPlan');
   }
 

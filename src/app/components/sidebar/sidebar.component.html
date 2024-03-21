@@ -39,21 +39,15 @@
           <span>Roles</span>
         </a>
       </li>
-      <li>
-        <a routerLink="/analysis/manage" routerLinkActive="active">
-          <i class="fas fa-sitemap"></i>
-          <span>Manage Analytics</span>
-        </a>
-      </li>
       <hr>
     </ul>
     <!-- ================================================SUBSCRIPTIONS================================================== -->
     <div class="menu-header mt-3 mb-2"
-      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission || showReportPermission || showReportStaticsServicePermission">
+      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission || showReportPermission || showReportStaticsServicePermission || manageAnalysisPermission">
       Report Components
     </div>
     <ul class="menu-items"
-      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission || showReportPermission || showReportStaticsServicePermission">
+      *ngIf="showSubscriptionPermission || showAnalysisPermission || showEnquiryPermission || showCustomerPlanPermission || showReportPermission || showReportStaticsServicePermission || manageAnalysisPermission">
       <li *ngIf="showSubscriptionPermission">
         <a routerLink="/subscriptions/show" routerLinkActive="active">
           <i class="fas fa-bookmark"></i>
@@ -64,6 +58,12 @@
         <a routerLink="/reports/details" routerLinkActive="active">
           <i class="fas fa-chart-pie"></i>
           <span>Reports</span>
+        </a>
+      </li>
+      <li *ngIf="manageAnalysisPermission">
+        <a routerLink="/analysis/manage" routerLinkActive="active">
+          <i class="fas fa-sitemap"></i>
+          <span>Manage Analytics</span>
         </a>
       </li>
       <li *ngIf="showAnalysisPermission">
