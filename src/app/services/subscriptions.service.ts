@@ -284,6 +284,7 @@ export interface SubscriptionDetails {
   agent:                             Agent;
   user:                              User;
   gift_code:                              any;
+  agent_name                          :string;
 }
 
 

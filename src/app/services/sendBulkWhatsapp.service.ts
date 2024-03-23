@@ -11,7 +11,7 @@ export class SendBulkWhatsappService {
   constructor(private _ApiConfigService: ApiConfigService) {}
 
   sendBulkMessage(body: any): Observable<{
-    data: string[];
+    data: number;
     message: string;
     status: number;
   }> {
@@ -156,6 +156,13 @@ export class SendBulkWhatsappService {
     sender_id: number
   ): Observable<{ data: any; message: string; status: number }> {
     return this._ApiConfigService.postReq3(`deleteSenders`, { sender_id });
+  }
+
+  checkWhatsAppServices(): Observable<{ data: boolean; message: string; status: number }> {
+    return this._ApiConfigService.postReq3(`checkWhatsAppServices`, '');
+  }
+  stopWhatsAppBulkServices(): Observable<{ data: boolean; message: string; status: number }> {
+    return this._ApiConfigService.postReq3(`stopWhatsAppBulkServices`, '');
   }
 }
 

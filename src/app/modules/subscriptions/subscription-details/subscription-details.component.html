@@ -129,6 +129,15 @@
                                     <span>{{ sub.agent.name }}</span>
                                 </td>
                             </tr>
+                            <tr *ngIf="sub?.agent_name">
+                                <td class="no">09</td>
+                                <td class="text-center">
+                                    <h3>Created Branch Agent</h3>
+                                </td>
+                                <td colspan="6" class="text-right" style="padding-right: 50px;font-size: 15px;">
+                                    <span>{{ sub?.agent_name }}</span>
+                                </td>
+                            </tr>
                             <tr *ngIf="sub.program_id == 50 || sub.program_id < 15">
                                 <td class="no">{{sub.agent? '09': '08'}}</td>
                                 <td class="text-center">

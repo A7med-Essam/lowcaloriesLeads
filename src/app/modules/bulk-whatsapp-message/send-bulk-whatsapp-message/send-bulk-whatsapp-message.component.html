@@ -105,7 +105,13 @@
       <div class="d-flex align-items-center justify-content-between">
         <span>In total there are {{ numbers.length }} Numbers.</span>
         <div>
-          <button class="btn btn-primary" (click)="sendBulk()">Send message to this numbers</button>
+          <button class="btn btn-secondary mx-1" (click)="stopWhatsAppBulkServices()">
+            Stop
+          </button>
+          <button class="btn btn-primary mx-1" (click)="sendBulk()">
+            Send message to this numbers
+            <i *ngIf="isSending | async" class="fas fa-circle-notch fa-spin p-0"></i>
+          </button>
         </div>
       </div>
     </ng-template>

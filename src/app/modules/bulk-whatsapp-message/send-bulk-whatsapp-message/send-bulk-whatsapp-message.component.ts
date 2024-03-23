@@ -6,6 +6,7 @@ import {
 import { MessageService } from 'primeng/api';
 import { Calendar } from 'primeng/calendar';
 import { PaginatorModule } from 'primeng/paginator';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-send-bulk-whatsapp-message',
@@ -28,7 +29,31 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
     this.getTemps();
     this.getQueries();
     this.getSenders();
+
+    this.isSending.subscribe((res) => {
+      if (res) {
+        this.serviceTimer = setTimeout(() => {
+          this.checkJobService();
+          // this.serviceDelay = 1;
+        }, 1000 * this.serviceDelay);
+      }
+    });
   }
+
+  checkJobService() {
+    this._sendWhatsappServices.checkWhatsAppServices().subscribe((res) => {
+      this.isSending.next(res.data);
+      // if (!res.data) {
+      //   clearTimeout(this.serviceTimer);
+      // }
+    });
+  }
+  stopWhatsAppBulkServices() {
+    this._sendWhatsappServices.stopWhatsAppBulkServices().subscribe((res) => {
+      this.isSending.next(false);
+    });
+  }
+
 
   templates: IWhatsAppSenderMessages[] = [];
   selectedTemplate: IWhatsAppSenderMessages | null = null;
@@ -147,30 +172,45 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
     this.numbers[index] = { value: Object.keys(this.clonedTemp)[0] };
     this.clonedTemp = {};
   }
-  selectedSender:any;
+  selectedSender: any;
+  isSending: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  serviceDelay: number = 0;
+  serviceTimer: any;
   sendBulk() {
-    if (this.selectedTemplate) {
-      this.isLoading = true;
-      const nums = this.numbers.map((res) => res.value);
-      this._sendWhatsappServices
-        .sendBulkMessage({
-          message: this.selectedTemplate.message,
-          numbers: nums,
-          sender_id:this.selectedSender
-        })
-        .subscribe((res) => {
-          this._MessageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Messages sent',
+    if (!this.isSending.value) {
+      if (this.selectedTemplate) {
+        this.isLoading = true;
+        const nums = this.numbers.map((res) => res.value);
+        this._sendWhatsappServices
+          .sendBulkMessage({
+            message: this.selectedTemplate.message,
+            numbers: nums,
+            sender_id: this.selectedSender,
+          })
+          .subscribe((res) => {
+            if (res.status == 1) {
+              this.serviceDelay = res.data;
+              this.isSending.next(true);
+            }
+            this._MessageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Messages sent',
+            });
+            this.isLoading = false;
           });
-          this.isLoading = false;
+      } else {
+        this._MessageService.add({
+          severity: 'warn',
+          summary: 'Message is required!',
+          detail: 'Please select a message',
         });
+      }
     } else {
       this._MessageService.add({
         severity: 'warn',
-        summary: 'Message is required!',
-        detail: 'Please select a message',
+        summary: 'Service is busy',
+        detail: 'Please wait...',
       });
     }
   }
