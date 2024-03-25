@@ -115,8 +115,8 @@ export class ShowNotesComponent implements OnInit {
   filter() {
     this.isLoading = true;
     const data = {
-      from: this.selectedDate?.[0] ? this.selectedDate?.[0] : null,
-      to: this.selectedDate?.[1] ? this.selectedDate?.[1] : null,
+      from: this.selectedDate?.[0] ? this.selectedDate?.[0].toLocaleDateString('en-CA') : null,
+      to: this.selectedDate?.[1] ? this.selectedDate?.[1].toLocaleDateString('en-CA') : null,
       agent_id: this.selectedAgent || null,
       mobile: this.selectedMobile || null,
     };
