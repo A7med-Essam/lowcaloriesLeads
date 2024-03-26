@@ -1,0 +1,82 @@
+<section>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Inquiry</h2>
+            <button class="btn btn-success px-4 mx-1" [disabled]="!createPermission" (click)="showCreate()">
+                <b>Create Inquiry</b>
+            </button>
+        </div>
+        <hr>
+        <div class="card mt-5">
+            <p-table [value]="inquiry" [paginator]="true" [rows]="PaginationInfo?.per_page"
+                [totalRecords]="PaginationInfo?.total" [lazy]="true" (onPage)="paginate($event)"
+                [showCurrentPageReport]="true" responsiveLayout="scroll" (onLazyLoad)="sort($event)"
+                currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center" pSortableColumn="created_at">Date <p-sortIcon
+                                field="created_at"></p-sortIcon></th>
+                        <th class="text-center" pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr [pSelectableRow]="row">
+                        <td class="text-center">{{row?.created_at | date:'M/d/yyyy'}}</td>
+                        <td class="text-center">{{row?.name}}</td>
+                        <td class="text-center">
+                            <button pButton type="button" icon="pi pi-pencil" [disabled]="!updatePermission"
+                                (click)="showUpdate(row)" class="m-1 p-button-sm p-button-warning"></button>
+                            <button pButton type="button" icon="pi pi-trash" [disabled]="!deletePermission"
+                                (click)="confirm(row?.id)" class="m-1 p-button-danger p-button-sm"></button>
+                        </td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</section>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+
+<p-dialog header="Update Modal" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="">Name</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentInquiryNote"
+                    placeholder="Enter Name" />
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div>
+            <button class="btn btn-primary" (click)="updateRow()" [disabled]="!currentInquiryNote">
+                Update
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Create Modal" [(visible)]="createModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="">Name</label>
+                <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentInquiryNote"
+                    placeholder="Enter Name" />
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div>
+            <button class="btn btn-primary" (click)="createRow()" [disabled]="!currentInquiryNote">
+                Create
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>

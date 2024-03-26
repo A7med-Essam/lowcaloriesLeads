@@ -312,14 +312,20 @@
     </ul>
 
     <!-- ================================================OTHER================================================== -->
-    <div class="menu-header mt-3 mb-2" *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission">
+    <div class="menu-header mt-3 mb-2" *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission">
       Other Components
     </div>
-    <ul class="menu-items" *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission">
+    <ul class="menu-items" *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission">
       <li *ngIf="showNotesPermission">
         <a routerLink="/notes/show" routerLinkActive="active">
           <i class="fas fa-sticky-note"></i>
           <span>Sticky Notes</span>
+        </a>
+      </li>
+      <li *ngIf="showInquiryNotePermission">
+        <a routerLink="/notes/inquiry" routerLinkActive="active">
+          <i class="fas fa-file-signature"></i>
+          <span>Inquiry Notes</span>
         </a>
       </li>
       <li *ngIf="showUploadPermission">

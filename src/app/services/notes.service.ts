@@ -25,6 +25,27 @@ export class NotesService {
   }
 
   filterNotes(page: number, filter: any) {
-    return this._ApiConfigService.postReq3(`getStickyNotes?page=${page}`, filter);
+    return this._ApiConfigService.postReq3(
+      `getStickyNotes?page=${page}`,
+      filter
+    );
+  }
+
+  // ================================== Inquiry ====================================
+
+  getInquiryNotes(page: number): Observable<any> {
+    return this._ApiConfigService.postReq3(`getInquiry?page=${page}`, '');
+  }
+
+  addInquiryNote(row: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`addInquiry`, row);
+  }
+
+  updateInquiryNote(row: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`updateInquiry`, row);
+  }
+
+  deleteInquiryNote(inquiry_id: number): Observable<any> {
+    return this._ApiConfigService.postReq3(`deleteInquiry`, { inquiry_id });
   }
 }

@@ -11,9 +11,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InquiryNoteComponent } from './inquiry-note/inquiry-note.component';
 
 @NgModule({
-  declarations: [ShowNotesComponent],
+  declarations: [ShowNotesComponent, InquiryNoteComponent],
   imports: [
     CommonModule,
     NotesRoutingModule,

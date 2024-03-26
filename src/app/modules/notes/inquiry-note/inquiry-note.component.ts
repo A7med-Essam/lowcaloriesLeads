@@ -6,12 +6,12 @@ import { NotesService } from 'src/app/services/notes.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
-  selector: 'app-show-notes',
-  templateUrl: './show-notes.component.html',
-  styleUrls: ['./show-notes.component.scss'],
+  selector: 'app-inquiry-note',
+  templateUrl: './inquiry-note.component.html',
+  styleUrls: ['./inquiry-note.component.scss'],
   providers: [ConfirmationService],
 })
-export class ShowNotesComponent implements OnInit {
+export class InquiryNoteComponent implements OnInit {
   selectedDate: any;
   selectedAgent: any;
   selectedTeam: any;
@@ -22,29 +22,22 @@ export class ShowNotesComponent implements OnInit {
 
   agents: any[] = [];
   agents_clone: any[] = [];
-  notes: any[] = [];
+  inquiry: any[] = [];
   isLoading: boolean = false;
   createModal: boolean = false;
   updateModal: boolean = false;
 
-  currentNote: any;
-  currentMobile: any;
-  currentInquiry: any;
+  currentInquiryNote: any;
   currentRow: any;
 
   constructor(
-    private _AnalysisService: AnalysisService,
-    private _SurveyService: SurveyService,
     private confirmationService: ConfirmationService,
     private _NotesService: NotesService,
     private _GuardService: GuardService
   ) {}
 
   ngOnInit(): void {
-    this.getNotes();
-    this.getInquiry();
-    this.getFormAnalytics();
-    this.getAgents();
+    this.getInquiryNotes();
     this.getPermission();
   }
   createPermission: boolean = false;
@@ -53,26 +46,21 @@ export class ShowNotesComponent implements OnInit {
   isSuperAdmin: boolean = false;
 
   getPermission() {
-    this.createPermission =
-      this._GuardService.getPermissionStatus('create_notes');
-    this.updatePermission =
-      this._GuardService.getPermissionStatus('update_notes');
-    this.deletePermission =
-      this._GuardService.getPermissionStatus('delete_notes');
+    this.createPermission = this._GuardService.getPermissionStatus(
+      'createInquiry_notes'
+    );
+    this.updatePermission = this._GuardService.getPermissionStatus(
+      'updateInquiry_notes'
+    );
+    this.deletePermission = this._GuardService.getPermissionStatus(
+      'deleteInquiry_notes'
+    );
     this.isSuperAdmin = this._GuardService.isSuperAdmin();
-  }
-
-  getAgents() {
-    this._SurveyService.getAllAgents().subscribe({
-      next: (res) => {
-        this.agents = this.agents_clone = res.data;
-      },
-    });
   }
 
   paginate(e: any) {
     this.currentPage = e.first / e.rows + 1;
-    this.getNotes(e.first / e.rows + 1);
+    this.getInquiryNotes(e.first / e.rows + 1);
   }
 
   confirm(id: any) {
@@ -87,78 +75,34 @@ export class ShowNotesComponent implements OnInit {
   }
 
   deleteRow(id: number) {
-    this._NotesService.deleteStickyNote(id).subscribe((res) => {
-      this.getNotes();
+    this._NotesService.deleteInquiryNote(id).subscribe((res) => {
+      this.getInquiryNotes();
     });
   }
 
-  inquiry:any[]=[]
-  getInquiry(page: number = 1) {
+  getInquiryNotes(page: number = 1) {
+    this.isLoading = true;
     this._NotesService.getInquiryNotes(page).subscribe({
       next: (res) => {
         this.inquiry = res?.data;
-      },
-    });
-  }
-  getNotes(page: number = 1) {
-    this.isLoading = true;
-    this._NotesService.getStickyNotes(page).subscribe({
-      next: (res) => {
-        this.notes = res?.data?.data;
+        // this.inquiry = res?.data?.data;
         this.PaginationInfo = res.data;
         this.isLoading = false;
       },
     });
   }
 
-  handleAgent(value: string) {
-    this.agents = this.agents_clone;
-    this.agents = this.agents.filter((agent) => agent?.team === value);
-  }
-
-  getFormAnalytics() {
-    this._AnalysisService.getFormAnalytics().subscribe((res) => {
-      this.analyticOptions = res.data;
-    });
-  }
-
-  filter() {
-    this.isLoading = true;
-    const data = {
-      from: this.selectedDate?.[0] ? this.selectedDate?.[0].toLocaleDateString('en-CA') : null,
-      to: this.selectedDate?.[1] ? this.selectedDate?.[1].toLocaleDateString('en-CA') : null,
-      agent_id: this.selectedAgent || null,
-      mobile: this.selectedMobile || null,
-    };
-    this._NotesService.filterNotes(1, data).subscribe((res) => {
-      this.notes = res.data.data;
-      this.PaginationInfo = res.data;
-      this.isLoading = false;
-    });
-  }
-
-  reset() {
-    this.selectedDate = null;
-    this.selectedAgent = null;
-    this.selectedTeam = null;
-    this.selectedMobile = null;
-    this.getNotes();
-  }
-
   updateRow() {
     this.isLoading = true;
     const data = {
-      mobile: this.currentMobile,
-      note: this.currentNote,
-      sticky_id: this.currentRow.id,
-      inquiry: this.currentInquiry,
+      name: this.currentInquiryNote,
+      inquiry_id: this.currentRow.id,
     };
-    this._NotesService.updateStickyNote(data).subscribe((res) => {
-      this.getNotes();
+    this._NotesService.updateInquiryNote(data).subscribe((res) => {
+      this.getInquiryNotes();
       this.isLoading = false;
       this.updateModal = false;
-      this.currentNote = '';
-      this.currentMobile = '';
+      this.currentInquiryNote = '';
       this.currentRow = null;
     });
   }
@@ -166,16 +110,13 @@ export class ShowNotesComponent implements OnInit {
   createRow() {
     this.isLoading = true;
     const data = {
-      mobile: this.currentMobile,
-      note: this.currentNote,
-      inquiry: this.currentInquiry,
+      name: this.currentInquiryNote,
     };
-    this._NotesService.addStickyNote(data).subscribe((res) => {
-      this.getNotes();
+    this._NotesService.addInquiryNote(data).subscribe((res) => {
+      this.getInquiryNotes();
       this.isLoading = false;
       this.createModal = false;
-      this.currentNote = '';
-      this.currentMobile = '';
+      this.currentInquiryNote = '';
       this.currentRow = null;
     });
   }
@@ -183,9 +124,7 @@ export class ShowNotesComponent implements OnInit {
   showUpdate(row: any) {
     if (this.updatePermission) {
       this.updateModal = true;
-      this.currentNote = row.note;
-      this.currentMobile = row.mobile;
-      this.currentInquiry = row.inquiry;
+      this.currentInquiryNote = row.name;
       this.currentRow = row;
     }
   }
@@ -199,7 +138,7 @@ export class ShowNotesComponent implements OnInit {
   sort(event: any) {
     const sortField = event.sortField;
     const sortOrder = event.sortOrder === 1 ? 1 : -1;
-    this.notes?.sort((a: any, b: any) => {
+    this.inquiry?.sort((a: any, b: any) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
       if (

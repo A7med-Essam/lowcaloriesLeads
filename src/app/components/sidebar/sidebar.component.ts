@@ -42,6 +42,7 @@ export class SidebarComponent implements OnInit {
   showReportPermission: boolean = false;
   showNotesPermission: boolean = false;
   manageAnalysisPermission: boolean = false;
+  showInquiryNotePermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -124,6 +125,8 @@ export class SidebarComponent implements OnInit {
     this._GuardService.getPermissionStatus('show_notes');
     this.manageAnalysisPermission =
     this._GuardService.getPermissionStatus('manage_analysis');
+    this.showInquiryNotePermission =
+    this._GuardService.getPermissionStatus('showInquiry_notes');
     // this._GuardService.getPermissionStatus('show_customerPlan');
   }
 

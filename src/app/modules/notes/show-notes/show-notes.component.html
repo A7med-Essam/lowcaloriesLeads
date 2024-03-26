@@ -54,6 +54,8 @@
                     <tr>
                         <th class="text-center" pSortableColumn="created_at">Date <p-sortIcon
                                 field="created_at"></p-sortIcon></th>
+                        <th class="text-center" pSortableColumn="inquiry">inquiry <p-sortIcon
+                                field="inquiry"></p-sortIcon></th>
                         <th class="text-center" pSortableColumn="note">Note <p-sortIcon field="note"></p-sortIcon></th>
                         <th class="text-center" pSortableColumn="mobile">Mobile <p-sortIcon field="mobile"></p-sortIcon>
                         </th>
@@ -65,6 +67,7 @@
                 <ng-template pTemplate="body" let-row>
                     <tr [pSelectableRow]="row">
                         <td class="text-center">{{row?.created_at | date:'M/d/yyyy'}}</td>
+                        <td class="text-center">{{row?.inquiry}}</td>
                         <td class="text-center">{{row?.note}}</td>
                         <td class="text-center">{{row?.mobile}}</td>
                         <td class="text-center">{{row?.agent?.name}}</td>
@@ -94,6 +97,12 @@
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentNote" placeholder="Enter Note" />
             </div>
             <div class="col-12 my-2">
+                <label for="">Inquiry</label>
+                <p-dropdown [options]="inquiry" [(ngModel)]="currentInquiry" placeholder="Select Inquiry"
+                    styleClass="w-100" appendTo="body" optionValue="name" optionLabel="name" [filter]="true">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-2">
                 <label for="">Mobile</label>
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentMobile" placeholder="Enter Mobile"
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
@@ -102,7 +111,8 @@
     </div>
     <ng-template pTemplate="footer">
         <div>
-            <button class="btn btn-primary" (click)="updateRow()" [disabled]="!currentNote || !currentMobile">
+            <button class="btn btn-primary" (click)="updateRow()"
+                [disabled]="!currentNote || !currentMobile || !currentInquiry">
                 Update
             </button>
         </div>
@@ -118,6 +128,12 @@
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentNote" placeholder="Enter Note" />
             </div>
             <div class="col-12 my-2">
+                <label for="">Inquiry</label>
+                <p-dropdown [options]="inquiry" [(ngModel)]="currentInquiry" placeholder="Select Inquiry"
+                    styleClass="w-100" appendTo="body" optionValue="name" optionLabel="name" [filter]="true">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-2">
                 <label for="">Mobile</label>
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="currentMobile" placeholder="Enter Mobile"
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
@@ -126,7 +142,8 @@
     </div>
     <ng-template pTemplate="footer">
         <div>
-            <button class="btn btn-primary" (click)="createRow()" [disabled]="!currentNote || !currentMobile">
+            <button class="btn btn-primary" (click)="createRow()"
+                [disabled]="!currentNote || !currentMobile || !currentInquiry">
                 Create
             </button>
         </div>
