@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
 import { GuardService } from 'src/app/services/guard.service';
+import { LocalService } from 'src/app/services/local.service';
 import { NotesService } from 'src/app/services/notes.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
@@ -11,7 +14,8 @@ import { SurveyService } from 'src/app/services/survey.service';
   styleUrls: ['./show-notes.component.scss'],
   providers: [ConfirmationService],
 })
-export class ShowNotesComponent implements OnInit {
+export class ShowNotesComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   selectedDate: any;
   selectedAgent: any;
   selectedTeam: any;
@@ -37,11 +41,32 @@ export class ShowNotesComponent implements OnInit {
     private _SurveyService: SurveyService,
     private confirmationService: ConfirmationService,
     private _NotesService: NotesService,
-    private _GuardService: GuardService
+    private _GuardService: GuardService,
+    private _LocalService:LocalService
   ) {}
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   ngOnInit(): void {
-    this.getNotes();
+
+    const filterTab = this._LocalService.getJsonValue('notes_filter');
+    if (filterTab) {
+      this._NotesService.notes_filter.next(filterTab)
+    }
+    this._NotesService.notes_filter
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.selectedMobile = res.mobile
+          this.filter();
+        }else{
+          this.getNotes();
+        }
+      });
+
     this.getInquiry();
     this.getFormAnalytics();
     this.getAgents();
@@ -143,6 +168,7 @@ export class ShowNotesComponent implements OnInit {
     this.selectedTeam = null;
     this.selectedMobile = null;
     this.getNotes();
+    this._NotesService.notes_filter.next(null);
   }
 
   updateRow() {

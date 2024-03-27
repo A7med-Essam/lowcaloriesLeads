@@ -717,6 +717,39 @@
           </button>
         </p-tabPanel>
       </ng-container>
+      <ng-container *ngIf="customerModels?.sticky_notes">
+        <p-tabPanel header="sticky_notes ({{customerModels?.sticky_notes}})">
+          <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center" pSortableColumn="agent.name">agent name
+                  <p-sortIcon field="agent.name"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="date">date
+                  <p-sortIcon field="date"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="note">note
+                  <p-sortIcon field="note"></p-sortIcon>
+                </th>
+                <th class="text-center" pSortableColumn="inquiry">inquiry
+                  <p-sortIcon field="inquiry"></p-sortIcon>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr [pSelectableRow]="row">
+                <td class="text-center">{{row?.agent?.name}}</td>
+                <td class="text-center">{{row?.created_at | date:'M/d/yyyy'}}</td>
+                <td class="text-center">{{row?.note}}</td>
+                <td class="text-center">{{row?.inquiry}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button class="btn btn-success px-4 mt-3" (click)="viewTab('sticky_notes')">
+            <b>Notes in details</b>
+          </button>
+        </p-tabPanel>
+      </ng-container>
       <ng-container *ngIf="system.length">
         <p-tabPanel header="systemSubscription ({{system.length}})">
           <p-table [value]="filter" (onLazyLoad)="sort($event)">

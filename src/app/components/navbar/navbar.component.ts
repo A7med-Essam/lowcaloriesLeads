@@ -17,6 +17,7 @@ import { SubscriptionsService } from 'src/app/services/subscriptions.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import { UsersService } from 'src/app/services/users.service';
 import { HttpClient } from '@angular/common/http';
+import { NotesService } from 'src/app/services/notes.service';
 
 @Component({
   selector: 'app-navbar',
@@ -41,6 +42,7 @@ export class NavbarComponent implements OnInit {
     private _AnalysisService: AnalysisService,
     private _SubscriptionsService: SubscriptionsService,
     private _MessageService: MessageService,
+    private _NotesService: NotesService,
     private http: HttpClient,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -299,6 +301,9 @@ export class NavbarComponent implements OnInit {
       case 'callGear':
         this.filter = this.callGear;
         break;
+      case 'sticky_notes':
+        this.filter = this.loadNotes(client);
+        break;
     }
   }
 
@@ -373,6 +378,11 @@ export class NavbarComponent implements OnInit {
         break;
       case 'Dislikes':
         this.redirectWithFilter('dislike', 'dislike_filter', {
+          mobile: this.currentCustomerMobile,
+        });
+        break;
+      case 'sticky_notes':
+        this.redirectWithFilter('notes/show', 'notes_filter', {
           mobile: this.currentCustomerMobile,
         });
         break;
@@ -454,6 +464,22 @@ export class NavbarComponent implements OnInit {
           this.loadingTable = false;
           if (this.currentModel == 'refunds') {
             this.filter = this.refunds = res.data.data;
+          }
+        });
+    }
+  }
+  notes: any[] = [];
+  loadNotes(client: any) {
+    if (this.notes.length) {
+      this.filter = this.notes;
+    } else {
+      this.loadingTable = true;
+      this._NotesService
+        .filterNotes(1, { mobile: client, paginate: 10 })
+        .subscribe((res) => {
+          this.loadingTable = false;
+          if (this.currentModel == 'sticky_notes') {
+            this.filter = this.notes = res.data.data;
           }
         });
     }
