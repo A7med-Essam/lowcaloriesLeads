@@ -18,6 +18,7 @@ export class ShowNotesComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   selectedDate: any;
   selectedAgent: any;
+  selectedInquiry: any;
   selectedTeam: any;
   selectedMobile: any;
   analyticOptions: any;
@@ -154,6 +155,7 @@ export class ShowNotesComponent implements OnInit, OnDestroy {
       to: this.selectedDate?.[1] ? this.selectedDate?.[1].toLocaleDateString('en-CA') : null,
       agent_id: this.selectedAgent || null,
       mobile: this.selectedMobile || null,
+      inquiry: this.selectedInquiry || null,
     };
     this._NotesService.filterNotes(1, data).subscribe((res) => {
       this.notes = res.data.data;
@@ -165,6 +167,7 @@ export class ShowNotesComponent implements OnInit, OnDestroy {
   reset() {
     this.selectedDate = null;
     this.selectedAgent = null;
+    this.selectedInquiry = null;
     this.selectedTeam = null;
     this.selectedMobile = null;
     this.getNotes();

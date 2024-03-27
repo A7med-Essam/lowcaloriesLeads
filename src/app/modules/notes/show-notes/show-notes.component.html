@@ -8,7 +8,7 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-lg-3 col-md-6 col-12 my-2" *ngIf="isSuperAdmin">
+            <div class="col-lg-4 col-md-6 col-12 my-2" *ngIf="isSuperAdmin">
                 <div class="form-group">
                     <p-dropdown [options]="analyticOptions?.teams" [(ngModel)]="selectedTeam"
                         (onChange)="handleAgent(selectedTeam)" appendTo="body" styleClass="w-100"
@@ -16,18 +16,23 @@
                     </p-dropdown>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-12 my-2" *ngIf="isSuperAdmin">
+            <div class="col-lg-4 col-md-6 col-12 my-2" *ngIf="isSuperAdmin">
                 <div class="form-group">
                     <p-dropdown [options]="agents" optionLabel="name" optionValue="id" [(ngModel)]="selectedAgent"
                         appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
                     </p-dropdown>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-12 my-2">
+            <div class="col-lg-4 col-md-6 col-12 my-2">
+                <p-dropdown [options]="inquiry" optionLabel="name" optionValue="name" [(ngModel)]="selectedInquiry"
+                    appendTo="body" styleClass="w-100" placeholder="Select inquiry" [filter]="true">
+                </p-dropdown>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 my-2">
                 <input type="text" pInputText ngClass="w-100" [(ngModel)]="selectedMobile" placeholder="Enter Mobile"
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
             </div>
-            <div class="col-lg-3 col-md-6 col-12 my-2">
+            <div class="col-lg-4 col-md-6 col-12 my-2">
                 <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" ngClass="w-100" appendTo="body"
                     placeholder="Select Date Range" [(ngModel)]="selectedDate">
                 </p-calendar>
@@ -38,7 +43,7 @@
                         <b>Reset</b>
                     </button>
                     <button class="btn btn-success px-4 mx-1" (click)="filter()"
-                        [disabled]="!selectedAgent && !selectedDate && !selectedMobile">
+                        [disabled]="!selectedAgent && !selectedDate && !selectedMobile && !selectedInquiry">
                         <b>Get Notes</b>
                     </button>
                 </div>
