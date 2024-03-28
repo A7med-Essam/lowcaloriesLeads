@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
@@ -43,7 +43,8 @@ export class ShowNotesComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private _NotesService: NotesService,
     private _GuardService: GuardService,
-    private _LocalService:LocalService
+    private _LocalService: LocalService,
+    private _MessageService: MessageService
   ) {}
 
   ngOnDestroy(): void {
@@ -52,18 +53,17 @@ export class ShowNotesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     const filterTab = this._LocalService.getJsonValue('notes_filter');
     if (filterTab) {
-      this._NotesService.notes_filter.next(filterTab)
+      this._NotesService.notes_filter.next(filterTab);
     }
     this._NotesService.notes_filter
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
         if (res) {
-          this.selectedMobile = res.mobile
+          this.selectedMobile = res.mobile;
           this.filter();
-        }else{
+        } else {
           this.getNotes();
         }
       });
@@ -118,7 +118,7 @@ export class ShowNotesComponent implements OnInit, OnDestroy {
     });
   }
 
-  inquiry:any[]=[]
+  inquiry: any[] = [];
   getInquiry(page: number = 1) {
     this._NotesService.getInquiryNotes(page).subscribe({
       next: (res) => {
@@ -151,8 +151,12 @@ export class ShowNotesComponent implements OnInit, OnDestroy {
   filter() {
     this.isLoading = true;
     const data = {
-      from: this.selectedDate?.[0] ? this.selectedDate?.[0].toLocaleDateString('en-CA') : null,
-      to: this.selectedDate?.[1] ? this.selectedDate?.[1].toLocaleDateString('en-CA') : null,
+      from: this.selectedDate?.[0]
+        ? this.selectedDate?.[0].toLocaleDateString('en-CA')
+        : null,
+      to: this.selectedDate?.[1]
+        ? this.selectedDate?.[1].toLocaleDateString('en-CA')
+        : null,
       agent_id: this.selectedAgent || null,
       mobile: this.selectedMobile || null,
       inquiry: this.selectedInquiry || null,
@@ -224,6 +228,35 @@ export class ShowNotesComponent implements OnInit, OnDestroy {
       this.createModal = true;
     }
   }
+
+  isExporting:boolean = false;
+  export() {
+    this.isExporting = true;
+    this._NotesService.exportStickyNote().subscribe({
+      next: (res) => {
+        this.isExporting = false;
+        this._MessageService.add({
+          severity: 'success',
+          summary: 'Export Excel',
+          detail: 'Note Exported Successfully',
+        });
+
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
+      },
+      error: (err) => {
+        this.isExporting = false;
+        this._MessageService.add({
+          severity: 'error',
+          summary: 'Export Excel',
+          detail: 'Failed to Export Notes',
+        });
+      },
+    });
+  }
+
   // ========================================================sort========================================================
   sort(event: any) {
     const sortField = event.sortField;

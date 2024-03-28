@@ -13,6 +13,11 @@ export class AnalysisService {
   filtered_Reminder: BehaviorSubject<any> = new BehaviorSubject(null);
   analysisV2: BehaviorSubject<any> = new BehaviorSubject(null);
 
+
+  exportDataAnalyticMobiles(): Observable<any> {
+    return this._ApiConfigService.postReq3(`exportDataAnalyticMobiles`, '');
+  }
+
   getAnalytics(page: number): Observable<any> {
     return this._ApiConfigService.postReq3(
       `dataAnalyticRequests?page=${page}`,

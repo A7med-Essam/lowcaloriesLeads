@@ -33,6 +33,9 @@ export class NotesService {
     );
   }
 
+  exportStickyNote(): Observable<any> {
+    return this._ApiConfigService.postReq3(`exportStickyNoteMobiles`, '');
+  }
   // ================================== Inquiry ====================================
 
   getInquiryNotes(page: number): Observable<any> {

@@ -769,5 +769,33 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  isExporting:boolean = false;
+  exportMobile() {
+    this.isExporting = true;
+    this._SubscriptionsService.exportManagerMobiles().subscribe({
+      next: (res) => {
+        this.isExporting = false;
+        this._MessageService.add({
+          severity: 'success',
+          summary: 'Export Excel',
+          detail: 'Subscription Mobile Exported Successfully',
+        });
+
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
+      },
+      error: (err) => {
+        this.isExporting = false;
+        this._MessageService.add({
+          severity: 'error',
+          summary: 'Export Excel',
+          detail: 'Failed to Export Subscriptions',
+        });
+      },
+    });
+  }
   
 }

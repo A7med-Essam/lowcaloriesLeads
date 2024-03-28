@@ -30,7 +30,7 @@ export class ShowAnalysis2Component implements OnInit {
     private _Router: Router,
     private _RefundService: RefundService,
     private fb: FormBuilder,
-    private _LocalService:LocalService
+    private _LocalService: LocalService
   ) {}
 
   isLoading: boolean = false;
@@ -46,7 +46,7 @@ export class ShowAnalysis2Component implements OnInit {
   ngOnInit(): void {
     const filterTab = this._LocalService.getJsonValue('analysis_filter');
     if (filterTab) {
-      this._AnalysisService.filter.next(filterTab)
+      this._AnalysisService.filter.next(filterTab);
     }
     this._AnalysisService.filter
       .pipe(takeUntil(this.unsubscribe$))
@@ -90,12 +90,9 @@ export class ShowAnalysis2Component implements OnInit {
     this.superAdminPermission = this._GuardService.getPermissionStatus(
       'superadmin_analysis'
     );
-    this.uploadFilesPermission = this._GuardService.getPermissionStatus(
-      'upload_analysis'
-    );
-    this.v1Permission = this._GuardService.getPermissionStatus(
-      'v1_analysis'
-    );
+    this.uploadFilesPermission =
+      this._GuardService.getPermissionStatus('upload_analysis');
+    this.v1Permission = this._GuardService.getPermissionStatus('v1_analysis');
 
     // this.isSuperAdmin = this._GuardService.isSuperAdmin();
   }
@@ -293,13 +290,12 @@ export class ShowAnalysis2Component implements OnInit {
     this.getAnalytics();
     this._AnalysisService.filter.next(null);
     this.getFormAnalytics();
-    this.agents = this.agents_clone
-
+    this.agents = this.agents_clone;
   }
 
   resetFields() {
     this.getFormAnalytics();
-    this.agents = this.agents_clone
+    this.agents = this.agents_clone;
     this.filterForm.reset();
   }
 
@@ -309,9 +305,9 @@ export class ShowAnalysis2Component implements OnInit {
   showRow(log: any) {
     this.currentRow = log;
     this.detailsModal = true;
-    this._AnalysisService.getFiles(log.id).subscribe(res=>{
+    this._AnalysisService.getFiles(log.id).subscribe((res) => {
       this.currentRow.files = res.data.files;
-    })
+    });
   }
 
   updateRow(row: any) {
@@ -388,8 +384,8 @@ export class ShowAnalysis2Component implements OnInit {
       } else {
         this.isLoadingFilter = true;
         this._AnalysisService
-        .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
-        .subscribe((res) => {
+          .getAnalyticsChildrenById(this.options[index][selectedIndex].id)
+          .subscribe((res) => {
             this.isLoadingFilter = false;
             this.options[index][selectedIndex].children = res.data;
             this.options.push(this.options[index][selectedIndex].children);
@@ -557,14 +553,14 @@ export class ShowAnalysis2Component implements OnInit {
     this.appliedFilters = null;
     this.filterModal1 = false;
     this.filterForm1.reset();
-    this.agents = this.agents_clone
+    this.agents = this.agents_clone;
     this.getAnalytics();
     this._AnalysisService.filter.next(null);
   }
 
   resetFields1() {
     this.filterForm1.reset();
-    this.agents = this.agents_clone
+    this.agents = this.agents_clone;
   }
 
   analyticOptions1: any;
@@ -597,7 +593,7 @@ export class ShowAnalysis2Component implements OnInit {
         }
       });
 
-      this.filterForm
+    this.filterForm
       .get('team')
       ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
       .subscribe((value) => {
@@ -605,7 +601,7 @@ export class ShowAnalysis2Component implements OnInit {
           this.handleAgent(value);
         }
       });
-      this.filterForm1
+    this.filterForm1
       .get('team')
       ?.valueChanges.pipe(takeUntil(this.unsubscribe$))
       .subscribe((value) => {
@@ -615,9 +611,9 @@ export class ShowAnalysis2Component implements OnInit {
       });
   }
 
-  handleAgent(value:string){
-    this.agents = this.agents_clone
-    this.agents=this.agents.filter(agent => agent.team === value)
+  handleAgent(value: string) {
+    this.agents = this.agents_clone;
+    this.agents = this.agents.filter((agent) => agent.team === value);
   }
 
   platformOptions: [] = [];
@@ -661,70 +657,100 @@ export class ShowAnalysis2Component implements OnInit {
     }
   }
 
-    // ****************************************************upload File Modal************************************************************************
-    uploadFilesModal: boolean = false;
-    uploadingStatus: boolean = false;
-    uploadForm!: FormGroup;
-  
-    displayUploadFilesModal(id: number) {
-      if (this.uploadFilesPermission) {
-        this.uploadForm.patchValue({
-          data_analytic_request_id: id,
+  // ****************************************************upload File Modal************************************************************************
+  uploadFilesModal: boolean = false;
+  uploadingStatus: boolean = false;
+  uploadForm!: FormGroup;
+
+  displayUploadFilesModal(id: number) {
+    if (this.uploadFilesPermission) {
+      this.uploadForm.patchValue({
+        data_analytic_request_id: id,
+      });
+      this.uploadFilesModal = true;
+    }
+  }
+
+  getUploadedFile(event: any) {
+    if (
+      event.target.files &&
+      event.target.files.length &&
+      this.uploadFilesPermission
+    ) {
+      const files = event.target.files;
+      const readFile = (file: any) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = (event: any) => resolve(event.target.result);
+          fileReader.onerror = (error) => reject(error);
+          fileReader.readAsDataURL(file);
         });
-        this.uploadFilesModal = true;
-      }
-    }
-  
-    getUploadedFile(event: any) {
-      if (
-        event.target.files &&
-        event.target.files.length &&
-        this.uploadFilesPermission
-        ) {
-        const files = event.target.files;
-        const readFile = (file: any) => {
-          return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.onload = (event: any) => resolve(event.target.result);
-            fileReader.onerror = (error) => reject(error);
-            fileReader.readAsDataURL(file);
+      };
+
+      const readFiles = async () => {
+        try {
+          const base64Strings = await Promise.all(
+            Array.from(files).map(readFile)
+          );
+          const fileTypes = base64Strings.map((base64String: any) => {
+            const type = base64String.split(',')[0].split(':')[1].split(';')[0];
+            return { [type]: base64String };
           });
-        };
-  
-        const readFiles = async () => {
-          try {
-            const base64Strings = await Promise.all(
-              Array.from(files).map(readFile)
-            );
-            const fileTypes = base64Strings.map((base64String: any) => {
-              const type = base64String.split(',')[0].split(':')[1].split(';')[0];
-              return { [type]: base64String };
-            });
-            this.uploadForm.patchValue({
-              files: fileTypes,
-            });
-          } catch (error) {
-            console.error(error);
-          }
-        };
-        readFiles();
-      }
+          this.uploadForm.patchValue({
+            files: fileTypes,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      readFiles();
     }
-  
-    createUploadingForm() {
-      this.uploadForm = new FormGroup({
-        data_analytic_request_id: new FormControl(null, [Validators.required]),
-        files: new FormControl(null, [Validators.required]),
+  }
+
+  createUploadingForm() {
+    this.uploadForm = new FormGroup({
+      data_analytic_request_id: new FormControl(null, [Validators.required]),
+      files: new FormControl(null, [Validators.required]),
+    });
+  }
+
+  uploadFiles(form: FormGroup) {
+    if (form.valid && this.uploadFilesPermission) {
+      this.uploadingStatus = true;
+      this._AnalysisService.uploadFiles(form.value).subscribe((res) => {
+        this.uploadingStatus = false;
+        this.uploadFilesModal = false;
       });
     }
-  
-    uploadFiles(form: FormGroup) {
-      if (form.valid && this.uploadFilesPermission) {
-        this.uploadingStatus = true;
-        this._AnalysisService.uploadFiles(form.value).subscribe((res) => {
-          this.uploadingStatus = false;
-          this.uploadFilesModal = false;
-        });
-      }
+  }
+
+  isExporting: boolean = false;
+  exportMobile() {
+    if (this.exportPermission) {
+      this.isExporting = true;
+      this._AnalysisService.exportDataAnalyticMobiles().subscribe({
+        next: (res) => {
+          this.isExporting = false;
+          this._MessageService.add({
+            severity: 'success',
+            summary: 'Export Excel',
+            detail: 'Data Analytic Exported Successfully',
+          });
+
+          const link = document.createElement('a');
+          link.target = '_blank';
+          link.href = res.data;
+          link.click();
+        },
+        error: (err) => {
+          this.isExporting = false;
+          this._MessageService.add({
+            severity: 'error',
+            summary: 'Export Excel',
+            detail: 'Failed to Export Data Analytic',
+          });
+        },
+      });
     }
+  }
 }

@@ -37,8 +37,13 @@
                     placeholder="Select Date Range" [(ngModel)]="selectedDate">
                 </p-calendar>
             </div>
-            <div class="col-12">
-                <div class="text-end mt-3">
+            <div class="col-12 mt-3 d-flex justify-content-between">
+                <div class="text-start">
+                    <button class="btn btn-primary px-4 mx-1" [disabled]="isExporting" (click)="export()">
+                        <b>Export Mobile <i *ngIf="isExporting" class="fas fa-circle-notch fa-spin p-0"></i></b>
+                    </button>
+                </div>
+                <div class="text-end">
                     <button class="btn btn-secondary px-4 mx-1" (click)="reset()">
                         <b>Reset</b>
                     </button>

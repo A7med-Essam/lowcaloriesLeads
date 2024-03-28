@@ -13,6 +13,10 @@ export class SubscriptionsService {
     private _ApiConfigService: ApiConfigService
   )  { }
 
+  exportManagerMobiles(): Observable<any> {
+    return this._ApiConfigService.postReq3(`exportManagerMobiles`, '');
+  }
+
   getSubscriptions(page: number): Observable<ISubscriptionsResponse> {
     return this._ApiConfigService.postReq3(`getSubscriptions?page=${page}`, '');
   }

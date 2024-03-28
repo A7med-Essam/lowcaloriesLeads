@@ -1,15 +1,20 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="m-3">
 
-        <p-button  [disabled]="!exportPermission" class="mx-1" icon="pi pi-file"
-        label="Export current page" (click)="export2()"></p-button>
+        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export current page"
+            (click)="export2()"></p-button>
 
-        <p-button *ngIf="allFilteredSubscriptions.length && !specificRows.length" [disabled]="!exportPermission" class="mx-1" icon="pi pi-file"
-            label="Export by filter" (click)="export()"></p-button>
+        <p-button *ngIf="allFilteredSubscriptions.length && !specificRows.length" [disabled]="!exportPermission"
+            class="mx-1" icon="pi pi-file" label="Export by filter" (click)="export()"></p-button>
 
         <p-button *ngIf="specificRows.length" [disabled]="!exportPermission" class="mx-1" icon="pi pi-file"
             label="Export by specific rows" (click)="export()"></p-button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
+        </p-button>
+
+        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export Mobile"
+            (click)="exportMobile()">
+            <b class="me-1"><i *ngIf="isExporting" class="fas fa-circle-notch fa-spin p-0"></i></b>
         </p-button>
     </div>
 </div>
@@ -172,8 +177,8 @@
                         class="m-1 p-button-sm"></button>
                     <button *ngIf="!sub.cids" [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil"
                         (click)="displayUpdateModal(sub)" class="m-1 p-button-sm p-button-warning"></button>
-                    <button pButton type="button" icon="pi pi-key"
-                        (click)="displayUpdatePasswordModal(sub)" class="m-1 p-button-sm p-button-success"></button>
+                    <button pButton type="button" icon="pi pi-key" (click)="displayUpdatePasswordModal(sub)"
+                        class="m-1 p-button-sm p-button-success"></button>
                     <button pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary"
                         [disabled]="!printPermission" (click)="print(sub)"></button>
                 </td>

@@ -16,6 +16,10 @@
         <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export V2"
             (click)="export()">
         </p-button>
+        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file"
+            label="Export Mobile" (click)="exportMobile()">
+            <b class="me-1"><i *ngIf="isExporting" class="fas fa-circle-notch fa-spin p-0"></i></b>
+        </p-button>
     </div>
 </div>
 
@@ -26,8 +30,7 @@
             icon="pi pi-plus" routerLink="../create"></button>
         <p-button class="mb-3 mx-2" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export"
-            (click)="export()">
+        <p-button [disabled]="!exportPermission" class="mb-3 mx-2" icon="pi pi-file" label="Export" (click)="export()">
         </p-button>
     </div>
 </div>
@@ -87,7 +90,7 @@
                         appendTo="body">
                     </p-dropdown>
                 </div>
-           
+
                 <!-- <div class="col-xl-4 col-lg-4 col-md-6 col-12 my-1" *ngIf="superAdminPermission">
                     <label for="">Agent</label>
                     <p-dropdown [options]="agents" formControlName="agent_id" placeholder="Select Agent"
