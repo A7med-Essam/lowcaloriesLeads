@@ -260,11 +260,16 @@ const routes: Routes = [
       import('./modules/customer-plan/customer-plan.module').then(
         (m) => m.CustomerPlanModule
       ),
-    // canActivate: [PermissionGuard],
-    // data: {
-    //   permission: ['show_customerPlan'],
-    // },
   },
+  // {
+  //   path: 'franchise',
+  //   loadChildren: () =>
+  //     import('./modules/franchise/franchise.module').then((m) => m.FranchiseModule),
+  //   canActivate: [PermissionGuard],
+  //   data: {
+  //     permission: ['show_franchise'],
+  //   },
+  // },
   { path: '**', component: Error404Component },
 ];
 

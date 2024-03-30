@@ -1,0 +1,23 @@
+<div class="card">
+    <p-table [value]="agents">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
+            <tr>
+                <td>{{rowIndex + 1}}</td>
+                <td>{{user.name}}</td>
+                <td>
+                    <div>
+                        <button pButton type="button" icon="pi pi-eye" (click)="showRow(user.id)"
+                            class="m-1 p-button-sm"></button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
