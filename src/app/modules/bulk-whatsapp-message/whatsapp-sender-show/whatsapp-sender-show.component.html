@@ -81,8 +81,10 @@
                             class="p-button-rounded p-button-text p-button-danger"></button>
 
                         <button *ngIf="!editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                            (click)="confirm(row.id)"
-                            class="p-button-rounded p-button-text p-button-danger"></button>
+                            (click)="confirm(row.id)" class="p-button-rounded p-button-text p-button-danger"></button>
+
+                        <button pButton pRipple type="button" icon="pi pi-user" (click)="assign(row)"
+                            class="p-button-rounded p-button-text p-button-success"></button>
                     </div>
                 </td>
             </tr>
@@ -92,3 +94,13 @@
 
 <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
 </p-confirmDialog>
+
+<p-dialog header="Assign Modal" [(visible)]="assignModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <p-multiSelect [options]="agents" optionValue="id" optionLabel="name" appendTo="body" defaultLabel="Select Agent"
+        styleClass="w-100" display="chip" [(ngModel)]="selectedAgent"></p-multiSelect>
+    <div class="text-end">
+        <button pButton pRipple type="button" (click)="assignAgent()"
+            class="p-button-rounded p-button-text p-button-success mt-3">Assign</button>
+    </div>
+</p-dialog>

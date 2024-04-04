@@ -18,6 +18,7 @@ import { HighlightWordsStartingWithDollarPipe } from './highlight.pipe';
 import { PaginatorModule } from 'primeng/paginator';
 import { WhatsappSenderComponent } from './whatsapp-sender/whatsapp-sender.component';
 import { WhatsappSenderShowComponent } from './whatsapp-sender-show/whatsapp-sender-show.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { WhatsappSenderShowComponent } from './whatsapp-sender-show/whatsapp-sen
     FormsModule,
     InputTextModule,
     ConfirmDialogModule,
+    MultiSelectModule
   ],
 })
 export class BulkWhatsappMessageModule {}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SendBulkWhatsappService } from 'src/app/services/sendBulkWhatsapp.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-whatsapp-sender-show',
@@ -12,11 +13,13 @@ export class WhatsappSenderShowComponent implements OnInit {
   constructor(
     private _SendBulkWhatsappService: SendBulkWhatsappService,
     private _ConfirmationService: ConfirmationService,
-    private _MessageService: MessageService
+    private _MessageService: MessageService,
+    private _SurveyService: SurveyService
   ) {}
   clonedSender: { [s: string]: any } = {};
 
   ngOnInit(): void {
+    this.getAgents();
     this.getData();
   }
 
@@ -88,5 +91,36 @@ export class WhatsappSenderShowComponent implements OnInit {
         this.getData();
       },
     });
+  }
+
+  assignModal: boolean = false;
+  selectedAgent: number[] = [];
+  selectedSender: any = null;
+  assign(data: any) {
+    this.assignModal = true;
+    this.selectedAgent = data.agent_ids;
+    this.selectedSender = data;
+  }
+
+  agents: any[] = [];
+  getAgents() {
+    this._SurveyService.getAllAgents().subscribe({
+      next: (res) => {
+        this.agents = res.data.filter((e: any) => e.role_name != 'super_admin');
+      },
+    });
+  }
+
+  assignAgent() {
+    this._SendBulkWhatsappService
+      .updateSenders({
+        ...this.selectedSender,
+        sender_id: this.selectedSender.id,
+        agent_ids: this.selectedAgent,
+      })
+      .subscribe((res) => {
+        this.getData();
+        this.assignModal = false;
+      });
   }
 }

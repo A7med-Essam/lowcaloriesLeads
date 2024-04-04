@@ -22,7 +22,7 @@ const routes: Routes = [
     component: WhatsappTemplatesComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['send_bulkWhatsapp'],
+      permission: ['template_bulkWhatsapp'],
     },
   },
   {
@@ -30,7 +30,7 @@ const routes: Routes = [
     component: WhatsappQueryComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['send_bulkWhatsapp'],
+      permission: ['query_bulkWhatsapp'],
     },
   },
   {
@@ -38,7 +38,7 @@ const routes: Routes = [
     component: WhatsappSenderComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['send_bulkWhatsapp'],
+      permission: ['sender_bulkWhatsapp'],
     },
   },
   {
@@ -46,7 +46,7 @@ const routes: Routes = [
     component: WhatsappSenderShowComponent,
     canActivate: [PermissionGuard],
     data: {
-      permission: ['send_bulkWhatsapp'],
+      permission: ['sender_bulkWhatsapp'],
     },
   },
 ];

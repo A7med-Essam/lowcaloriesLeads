@@ -33,6 +33,9 @@ export class SidebarComponent implements OnInit {
   showReportStaticsServicePermission: boolean = false;
   showQueryModuleServicePermission: boolean = false;
   sendBulkWhatsappMessagePermission: boolean = false;
+  senderBulkWhatsappMessagePermission: boolean = false;
+  templateBulkWhatsappMessagePermission: boolean = false;
+  queryBulkWhatsappMessagePermission: boolean = false;
   showRedirectPermission: boolean = false;
   showUploadPermission: boolean = false;
   showAnalysisPermission: boolean = false;
@@ -108,6 +111,12 @@ export class SidebarComponent implements OnInit {
       this._GuardService.getPermissionStatus('show_queryModuleService');
     this.sendBulkWhatsappMessagePermission =
       this._GuardService.getPermissionStatus('send_bulkWhatsapp');
+    this.senderBulkWhatsappMessagePermission =
+      this._GuardService.getPermissionStatus('sender_bulkWhatsapp');
+    this.templateBulkWhatsappMessagePermission =
+      this._GuardService.getPermissionStatus('template_bulkWhatsapp');
+    this.queryBulkWhatsappMessagePermission =
+      this._GuardService.getPermissionStatus('query_bulkWhatsapp');
     this.showRedirectPermission =
       this._GuardService.getPermissionStatus('show_redirect');
     this.showUploadPermission =
