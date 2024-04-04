@@ -4,24 +4,31 @@
 <hr>
 
 <div class="row mx-0">
-  <div class="col-md-4 my-2">
+  <div class="col-xl-3 col-lg-6 col-12 my-2">
     <label for="">Whatsapp Options<span class="text-danger">*</span></label>
     <p-dropdown [options]="whatsappFilterOptions" #options appendTo="body" styleClass="w-100"
       (onChange)="onOptionsChange(options.value)" placeholder="Select Option"></p-dropdown>
   </div>
 
-  <div class="col-md-4 my-2">
+  <div class="col-xl-3 col-lg-6 col-12 my-2">
     <label for="">Whatsapp Message Template<span class="text-danger">*</span></label>
     <p-dropdown [options]="templates" optionLabel="case" #SelectedTemplateDropDown appendTo="body" styleClass="w-100"
       placeholder="Select Template" [(ngModel)]="selectedTemplate"></p-dropdown>
   </div>
 
-  <div class="col-md-4 my-2">
+  <div class="col-xl-3 col-lg-6 col-12 my-2">
     <label for="">Whatsapp Sender<span class="text-danger">*</span></label>
     <p-dropdown [options]="senders" optionLabel="name" optionValue="id" appendTo="body" styleClass="w-100"
       placeholder="Select Template" [(ngModel)]="selectedSender"></p-dropdown>
   </div>
-
+  <div class="col-xl-3 col-lg-6 col-12 my-2">
+    <div class="d-flex justify-content-between">
+      <label for="">Sender Type<span class="text-danger">*</span></label>
+      <span *ngIf="selectedSenderType == 'schedule'">{{scheduleTime | date:'dd/MM/yyyy'}}</span>
+    </div>
+    <p-dropdown [options]="SenderTypes" appendTo="body" styleClass="w-100" placeholder="Select Template"
+      [(ngModel)]="selectedSenderType" (ngModelChange)="changeSenderType()"></p-dropdown>
+  </div>
   <div class="col-12" *ngIf="SelectedTemplateDropDown.value">
     <label for="">Message</label>
     <textarea pInputTextarea rows="5" ngClass="w-100" [(ngModel)]="SelectedTemplateDropDown.value.message"></textarea>
@@ -136,6 +143,16 @@
       <input type="file" name="myfile" (change)="onFileSelected($event)" />
     </div>
   </ng-template>
+</p-dialog>
+
+<p-dialog header="Sender type modal" [(visible)]="senderTypeModal" [modal]="true" [style]="{width: '50vw'}"
+  [draggable]="false" [resizable]="false">
+  <p-calendar [readonlyInput]="true" [(ngModel)]="scheduleTime" ngClass="w-100" appendTo="body" [touchUI]="true"
+    [showTime]="true" [minDate]="today" (ngModelChange)="onSelectedScheduleTime($event)"></p-calendar>
+
+  <div class="text-end mt-4">
+    <button class="btn btn-secondary" (click)="senderTypeModal = false;">Close</button>
+  </div>
 </p-dialog>
 
 <div class="loader-container" *ngIf="isLoading">

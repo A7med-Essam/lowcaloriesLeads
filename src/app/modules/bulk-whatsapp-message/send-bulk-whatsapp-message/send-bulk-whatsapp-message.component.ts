@@ -54,7 +54,6 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
     });
   }
 
-
   templates: IWhatsAppSenderMessages[] = [];
   selectedTemplate: IWhatsAppSenderMessages | null = null;
   numbers: any[] = [];
@@ -186,6 +185,8 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
             message: this.selectedTemplate.message,
             numbers: nums,
             sender_id: this.selectedSender,
+            delayInSeconds: this.delayInSeconds,
+            delayInDate: this.delayInDate,
           })
           .subscribe((res) => {
             if (res.status == 1) {
@@ -233,10 +234,48 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
       model: 'query',
     });
   }
+
+  selectedSenderType: string = senderTypeEnum.now;
+  senderTypeModal: boolean = false;
+  delayInSeconds: number = 0;
+  delayInDate: string = '';
+  scheduleTime: Date = new Date();
+  today: Date = new Date();
+  changeSenderType() {
+    switch (this.selectedSenderType) {
+      case senderTypeEnum.schedule:
+        this.senderTypeModal = true;
+        break;
+    }
+  }
+  onSelectedScheduleTime(event: any) {
+    this.scheduleTime = event;
+    this.getScheduleTime();
+  }
+  public get SenderTypes(): senderTypeEnum[] {
+    return Object.values(senderTypeEnum);
+  }
+
+  getScheduleTime() {
+    const today = new Date();
+    const diff = this.scheduleTime.getTime() - today.getTime();
+    this.delayInSeconds = Math.floor(diff / 1000);
+    const ScheduleDate = new Date(this.scheduleTime);
+    ScheduleDate.setHours(ScheduleDate.getHours() + 2);
+    const selectedScheduleDate = ScheduleDate.toISOString().split('T');
+    this.delayInDate = `${selectedScheduleDate[0]} ${
+      selectedScheduleDate[1].split('.')[0]
+    }`;
+  }
 }
 
 enum whatsappOptionsEnum {
   file = 'file',
   lastDays = 'lastDays',
   query = 'query',
+}
+
+enum senderTypeEnum {
+  now = 'now',
+  schedule = 'schedule',
 }
