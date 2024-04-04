@@ -1,199 +1,214 @@
 <div class="d-flex justify-content-end align-items-center table-buttons-container">
-    <div class="m-3">
-        <button [disabled]="!createPermission" pButton pRipple label="Add Clinic Target" class="p-button-success mx-1" icon="pi pi-plus"
-            routerLink="../create-clinic"></button>
-        <button [disabled]="!createPermission" pButton pRipple label="Add Target" class="p-button-success mx-1" icon="pi pi-plus"
-        routerLink="../create"></button>
-        <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
-        </p-button>
-        <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
-        </p-button>
-        <p-button [disabled]="!printPermission" class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()" *ngIf="allTargets.length">
-        </p-button>
-        <p-button (click)="filterColumns = true" class="mb-3 mx-1" icon="pi pi-sliders-v" label="Select Columns">
-        </p-button>
-        <p-button (click)="displayUploadModal()" class="mb-3 mx-1" icon="pi pi-external-link" [disabled]="!downloadSamplePermission"
-        label="Upload"></p-button>
-    </div>
+  <div class="m-3">
+    <button [disabled]="!createPermission" pButton pRipple label="Add Clinic Target" class="p-button-success mx-1"
+      icon="pi pi-plus" routerLink="../create-clinic"></button>
+    <button [disabled]="!createPermission" pButton pRipple label="Add Target" class="p-button-success mx-1"
+      icon="pi pi-plus" routerLink="../create"></button>
+    <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
+    </p-button>
+    <p-button [disabled]="!exportPermission" class="mx-1" icon="pi pi-file" label="Export as Excel" (click)="export()">
+    </p-button>
+    <p-button [disabled]="!printPermission" class="mx-1" icon="pi pi-file" label="Export as PDF" (click)="exportAsPDF()"
+      *ngIf="allTargets.length">
+    </p-button>
+    <p-button (click)="filterColumns = true" class="mb-3 mx-1" icon="pi pi-sliders-v" label="Select Columns">
+    </p-button>
+    <p-button (click)="displayUploadModal()" class="mb-3 mx-1" icon="pi pi-external-link"
+      [disabled]="!downloadSamplePermission" label="Upload"></p-button>
+  </div>
 </div>
 
 <div class="card">
-    <p-table [value]="targets" [lazy]="true" [paginator]="true" [rows]="PaginationInfo?.per_page"
-    (onLazyLoad)="sort($event)"
-        [totalRecords]="PaginationInfo?.total"  (onPage)="paginate($event)" [showCurrentPageReport]="true"
-        responsiveLayout="scroll"
-        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
-        <ng-template pTemplate="header">
-            <tr>
-                <th class="text-center">
-                    <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)" [pSelectableRow]="targets"></p-tableHeaderCheckbox>
-                </th>
-                <th class="text-center"*ngIf="columns[0].status" pSortableColumn="id">id  <p-sortIcon field="id"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[1].status" pSortableColumn="team">team  <p-sortIcon field="team"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[2].status" pSortableColumn="type">type  <p-sortIcon field="type"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[3].status" pSortableColumn="agent.name">agent_name  <p-sortIcon field="agent.name"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[4].status" pSortableColumn="date">date  <p-sortIcon field="date"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[5].status" pSortableColumn="client_number">client_number  <p-sortIcon field="client_number"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[6].status" pSortableColumn="client_cid">client_cid  <p-sortIcon field="client_cid"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[7].status" pSortableColumn="branch">branch  <p-sortIcon field="branch"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[8].status" pSortableColumn="customer_type">customer_type  <p-sortIcon field="customer_type"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[9].status" pSortableColumn="paid_by">paid_by  <p-sortIcon field="paid_by"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[10].status" pSortableColumn="status">status  <p-sortIcon field="status"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[11].status" pSortableColumn="invoice_number">invoice_number  <p-sortIcon field="invoice_number"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[12].status" pSortableColumn="created_at">created_at  <p-sortIcon field="created_at"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[13].status" pSortableColumn="client_name">client_name  <p-sortIcon field="client_name"></p-sortIcon></th>
-                <th class="text-center"*ngIf="columns[14].status" pSortableColumn="amount_paid">amount_paid  <p-sortIcon field="amount_paid"></p-sortIcon></th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-agent>
-            <tr [pSelectableRow]="agent">
-                <td class="text-center">
-                    <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="agent"></p-tableCheckbox>
-                </td>
-                <td class="text-center" *ngIf="columns[0].status">{{agent.id}}</td>
-                <td class="text-center" *ngIf="columns[1].status">{{agent.team}}</td>
-                <td class="text-center" *ngIf="columns[2].status">{{agent.type}}</td>
-                <td class="text-center" *ngIf="columns[3].status">{{agent.agent?.name}}</td>
-                <td class="text-center" *ngIf="columns[4].status">{{agent.date}}</td>
-                <td class="text-center" *ngIf="columns[5].status">{{agent.client_number}}</td>
-                <td class="text-center" *ngIf="columns[6].status">{{agent.client_cid}}</td>
-                <td class="text-center" *ngIf="columns[7].status">{{agent.branch}}</td>
-                <td class="text-center" *ngIf="columns[8].status">{{agent.customer_type}}</td>
-                <td class="text-center" *ngIf="columns[9].status">{{agent.paid_by}}</td>
-                <td class="text-center" *ngIf="columns[10].status">{{agent.status}}</td>
-                <td class="text-center" *ngIf="columns[11].status">{{agent.invoice_number}}</td>
-                <td class="text-center" *ngIf="columns[12].status">{{agent.created_at|date}}</td>
-                <td class="text-center" *ngIf="columns[13].status">{{agent.client_name}}</td>
-                <td class="text-center" *ngIf="columns[14].status">{{agent.amount_paid}}</td>
+  <p-table [value]="targets" [lazy]="true" [paginator]="true" [rows]="PaginationInfo?.per_page"
+    (onLazyLoad)="sort($event)" [totalRecords]="PaginationInfo?.total" (onPage)="paginate($event)"
+    [showCurrentPageReport]="true" responsiveLayout="scroll"
+    currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">
+          <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)"
+            [pSelectableRow]="targets"></p-tableHeaderCheckbox>
+        </th>
+        <th class="text-center" *ngIf="columns[0].status" pSortableColumn="id">id <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th class="text-center" *ngIf="columns[1].status" pSortableColumn="team">team <p-sortIcon
+            field="team"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[2].status" pSortableColumn="type">type <p-sortIcon
+            field="type"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[3].status" pSortableColumn="agent.name">agent_name <p-sortIcon
+            field="agent.name"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[4].status" pSortableColumn="date">date <p-sortIcon
+            field="date"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[5].status" pSortableColumn="client_number">client_number <p-sortIcon
+            field="client_number"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[6].status" pSortableColumn="client_cid">client_cid <p-sortIcon
+            field="client_cid"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[7].status" pSortableColumn="branch">branch <p-sortIcon
+            field="branch"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[8].status" pSortableColumn="customer_type">customer_type <p-sortIcon
+            field="customer_type"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[9].status" pSortableColumn="paid_by">paid_by <p-sortIcon
+            field="paid_by"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[10].status" pSortableColumn="status">status <p-sortIcon
+            field="status"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[11].status" pSortableColumn="invoice_number">invoice_number <p-sortIcon
+            field="invoice_number"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[12].status" pSortableColumn="created_at">created_at <p-sortIcon
+            field="created_at"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[13].status" pSortableColumn="client_name">client_name <p-sortIcon
+            field="client_name"></p-sortIcon></th>
+        <th class="text-center" *ngIf="columns[14].status" pSortableColumn="amount_paid">amount_paid <p-sortIcon
+            field="amount_paid"></p-sortIcon></th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-agent>
+      <tr [pSelectableRow]="agent">
+        <td class="text-center">
+          <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="agent"></p-tableCheckbox>
+        </td>
+        <td class="text-center" *ngIf="columns[0].status">{{agent.id}}</td>
+        <td class="text-center" *ngIf="columns[1].status">{{agent.team}}</td>
+        <td class="text-center" *ngIf="columns[2].status">{{agent.type}}</td>
+        <td class="text-center" *ngIf="columns[3].status">{{agent.agent?.name}}</td>
+        <td class="text-center" *ngIf="columns[4].status">{{agent.date}}</td>
+        <td class="text-center" *ngIf="columns[5].status">{{agent.client_number}}</td>
+        <td class="text-center" *ngIf="columns[6].status">{{agent.client_cid}}</td>
+        <td class="text-center" *ngIf="columns[7].status">{{agent.branch}}</td>
+        <td class="text-center" *ngIf="columns[8].status">{{agent.customer_type}}</td>
+        <td class="text-center" *ngIf="columns[9].status">{{agent.paid_by}}</td>
+        <td class="text-center" *ngIf="columns[10].status">{{agent.status}}</td>
+        <td class="text-center" *ngIf="columns[11].status">{{agent.invoice_number}}</td>
+        <td class="text-center" *ngIf="columns[12].status">{{agent.created_at|date}}</td>
+        <td class="text-center" *ngIf="columns[13].status">{{agent.client_name}}</td>
+        <td class="text-center" *ngIf="columns[14].status">{{agent.amount_paid}}</td>
 
-                <td class="text-center">
-                    <button *ngIf="agent.type.toLowerCase() != 'clinic'"  [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil" (click)="displayUpdate(agent)"
-                    class="m-1 p-button-sm p-button-warning"></button>
-                    <button *ngIf="agent.hasNullValues && agent.type.toLowerCase() != 'clinic'" [disabled]="!fixPermission" pButton type="button" icon="pi pi-exclamation-triangle" (click)="displayFix(agent)"
-                    class="m-1 p-button-sm p-button-help"></button>
-                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)"
-                        class="m-1 p-button-sm"></button>
-                    <button [disabled]="!printPermission"
-                     pButton type="button" icon="pi pi-print" class="m-1 p-button-sm p-button-secondary" (click)="print(agent)"></button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+        <td class="text-center">
+          <button *ngIf="agent.type.toLowerCase() != 'clinic'" [disabled]="!updatePermission" pButton type="button"
+            icon="pi pi-pencil" (click)="displayUpdate(agent)" class="m-1 p-button-sm p-button-warning"></button>
+          <button *ngIf="agent.hasNullValues && agent.type.toLowerCase() != 'clinic'" [disabled]="!fixPermission"
+            pButton type="button" icon="pi pi-exclamation-triangle" (click)="displayFix(agent)"
+            class="m-1 p-button-sm p-button-help"></button>
+          <button pButton type="button" icon="pi pi-eye" (click)="showRow(agent)" class="m-1 p-button-sm"></button>
+          <button [disabled]="!printPermission" pButton type="button" icon="pi pi-print"
+            class="m-1 p-button-sm p-button-secondary" (click)="print(agent)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
 
 <p-dialog header="Filter Targets Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
-    [draggable]="false" [resizable]="false">
-    <div class="container">
-        <form [formGroup]="filterForm" #myForm="ngForm">
-            <div class="row mx-0">
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">client_number</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='client_number' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">client_cid</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='client_cid' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">Invoice Number</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='invoice_number' />
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">Agent</label>
-                    <p-dropdown [options]="agents" optionLabel="name" optionValue="agent_id" formControlName='agent_id'
-                        appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">Paid by</label>
-                    <p-dropdown [options]="paid_by" formControlName='paid_by' optionLabel="name" optionValue="name"
-                        styleClass="w-100" placeholder="Select Method" appendTo="body" [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">Teams</label>
-                    <p-dropdown [options]="teams" formControlName='team' optionLabel="name" optionValue="name"
-                        styleClass="w-100" placeholder="Select Team" appendTo="body" [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">Customer types</label>
-                    <p-dropdown [options]="customer_types" formControlName='customer_type' optionLabel="name"
-                        optionValue="name" styleClass="w-100" placeholder="Select Customer Type" appendTo="body"
-                        [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">Status</label>
-                    <p-dropdown [options]="status" formControlName='status' optionLabel="name" optionValue="name"
-                        styleClass="w-100" placeholder="Select Status" appendTo="body" [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">Type</label>
-                    <p-dropdown [options]="types" optionLabel="name" formControlName='type' appendTo="body"
-                        optionValue="name" styleClass="w-100" placeholder="Select Type" [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="range">Date Range</label>
-                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
-                        ngClass="w-100" appendTo="body">
-                    </p-calendar>
-                </div>
-            </div>
-        </form>
-    </div>
-    <ng-template pTemplate="footer">
-        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
-            <div>
-                <button class="btn btn-secondary" (click)="resetFields()">
-                    Reset Fields
-                </button>
-            </div>
-            <div>
-                <button class="btn btn-primary" (click)="insertRow(filterForm)">
-                    Apply Filter
-                </button>
-                <button class="btn btn-secondary" (click)="resetFilter()">
-                    Reset Filter
-                </button>
-            </div>
+  [draggable]="false" [resizable]="false">
+  <div class="container">
+    <form [formGroup]="filterForm" #myForm="ngForm">
+      <div class="row mx-0">
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">client_number</label>
+          <input type="text" pInputText ngClass="w-100" formControlName='client_number' />
         </div>
-    </ng-template>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">client_cid</label>
+          <input type="text" pInputText ngClass="w-100" formControlName='client_cid' />
+        </div>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">Invoice Number</label>
+          <input type="text" pInputText ngClass="w-100" formControlName='invoice_number' />
+        </div>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">Agent</label>
+          <p-dropdown [options]="agents" optionLabel="name" optionValue="agent_id" formControlName='agent_id'
+            appendTo="body" styleClass="w-100" placeholder="Select Agent" [filter]="true">
+          </p-dropdown>
+        </div>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">Paid by</label>
+          <p-dropdown [options]="paid_by" formControlName='paid_by' optionLabel="name" optionValue="name"
+            styleClass="w-100" placeholder="Select Method" appendTo="body" [filter]="true">
+          </p-dropdown>
+        </div>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">Teams</label>
+          <p-dropdown [options]="teams" formControlName='team' optionLabel="name" optionValue="name" styleClass="w-100"
+            placeholder="Select Team" appendTo="body" [filter]="true">
+          </p-dropdown>
+        </div>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">Customer types</label>
+          <p-dropdown [options]="customer_types" formControlName='customer_type' optionLabel="name" optionValue="name"
+            styleClass="w-100" placeholder="Select Customer Type" appendTo="body" [filter]="true">
+          </p-dropdown>
+        </div>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">Status</label>
+          <p-dropdown [options]="status" formControlName='status' optionLabel="name" optionValue="name"
+            styleClass="w-100" placeholder="Select Status" appendTo="body" [filter]="true">
+          </p-dropdown>
+        </div>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="">Type</label>
+          <p-dropdown [options]="types" optionLabel="name" formControlName='type' appendTo="body" optionValue="name"
+            styleClass="w-100" placeholder="Select Type" [filter]="true">
+          </p-dropdown>
+        </div>
+        <div class="col-lg-6 col-12 my-2">
+          <label for="range">Date Range</label>
+          <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+            ngClass="w-100" appendTo="body">
+          </p-calendar>
+        </div>
+      </div>
+    </form>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+      <div>
+        <button class="btn btn-secondary" (click)="resetFields()">
+          Reset Fields
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-primary" (click)="insertRow(filterForm)">
+          Apply Filter
+        </button>
+        <button class="btn btn-secondary" (click)="resetFilter()">
+          Reset Filter
+        </button>
+      </div>
+    </div>
+  </ng-template>
 </p-dialog>
 
 <p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
-    [draggable]="false" [resizable]="false">
-    <div class="container" #checkboxContainer>
-        <div class="field-checkbox my-3" *ngFor="let obj of columns">
-            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name"></p-checkbox>
-            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
-        </div>
-        <div class="field-checkbox my-3">
-            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
-                value="selectAll" inputId="c100"></p-checkbox>
-            <label class="mx-3" for="c100">Select All</label>
-        </div>
+  [draggable]="false" [resizable]="false">
+  <div class="container" #checkboxContainer>
+    <div class="field-checkbox my-3" *ngFor="let obj of columns">
+      <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name"></p-checkbox>
+      <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
     </div>
-    <ng-template pTemplate="footer">
-        <div class="upload-btn-wrapper">
-            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
-        </div>
-    </ng-template>
+    <div class="field-checkbox my-3">
+      <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
+        value="selectAll" inputId="c100"></p-checkbox>
+      <label class="mx-3" for="c100">Select All</label>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="upload-btn-wrapper">
+      <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
+    </div>
+  </ng-template>
 </p-dialog>
 
 <p-dialog header="Please upload a file included all properties" [(visible)]="uploadModal" [modal]="true"
-    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+  [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
 
-    <ng-template pTemplate="footer">
-        <div class="upload-btn-wrapper">
-            <button class="btn btn-primary" (click)="getSample()">Download Sample</button>
-        </div>
-        <div class="upload-btn-wrapper">
-            <button class="btn btn-primary">Upload a file</button>
-            <input type="file" name="myfile" (change)="onFileSelected($event)" />
-        </div>
-    </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="upload-btn-wrapper">
+      <button class="btn btn-primary" (click)="getSample()">Download Sample</button>
+    </div>
+    <div class="upload-btn-wrapper">
+      <button class="btn btn-primary">Upload a file</button>
+      <input type="file" name="myfile" (change)="onFileSelected($event)" />
+    </div>
+  </ng-template>
 </p-dialog>

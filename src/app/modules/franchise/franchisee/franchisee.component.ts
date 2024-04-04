@@ -22,6 +22,12 @@ export class FranchiseeComponent implements OnInit {
   }
 
   showRow(id: number) {
+    let user = {
+      name: 'Ali',
+      mobile: 'Ali',
+      address: 'Ali',
+      age: 'Ali',
+    };
     this._Router.navigate(['franchise/contracts/' + id]);
   }
 }

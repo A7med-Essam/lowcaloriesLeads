@@ -18,13 +18,50 @@ export class ShowOfferComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private _Router: Router,
     private _SurveyService: SurveyService,
-    private _MessageService:MessageService
+    private _MessageService: MessageService
   ) {}
 
   createPermission: boolean = false;
   deletePermission: boolean = false;
   updatePermission: boolean = false;
 
+  uploadFile(offerId: any) {
+    let input: HTMLInputElement = document.createElement('input');
+    input.type = 'file';
+    input.accept = '*/*';
+    input.addEventListener('change', (event) => {
+      const files: FileList | null = (event.target as HTMLInputElement).files;
+      if (files && files.length > 0) {
+        const file: File = files[0];
+        const type = file.type.split('/')[0];
+        if (type != 'video' && type != 'image') {
+          this._MessageService.add({
+            severity: 'error',
+            summary: 'Error ',
+            detail: 'This Type Of File Not Supported',
+          });
+        } else {
+          this.updateOfferFile(file, type, offerId);
+        }
+      }
+    });
+    input.click();
+  }
+  updateOfferFile(file: File, type: string, offerId: any) {
+    let formData = new FormData();
+    formData.append('offer_id', offerId);
+    formData.append('content_type', type);
+    formData.append('content_url', file);
+    this._PaymentlinkService.updateOfferFile(formData).subscribe((res) => {
+      this.getOfferSettings();
+      this.detailsModal = false;
+      this._MessageService.add({
+        severity: 'success',
+        summary: 'Upload File',
+        detail: 'File Uploaded Successfully',
+      });
+    });
+  }
   getPermission() {
     this.createPermission =
       this._GuardService.getPermissionStatus('create_offer');
@@ -89,7 +126,7 @@ export class ShowOfferComponent implements OnInit {
   }
 
   agentLinkModal: boolean = false;
-  currentRow2:any;
+  currentRow2: any;
   showRow2(row: any) {
     this.currentRow2 = row;
     this.agentLinkModal = true;
@@ -99,18 +136,20 @@ export class ShowOfferComponent implements OnInit {
   getAgents() {
     this._SurveyService.getAllAgents().subscribe({
       next: (res) => {
-        this.agents = res.data.filter((f:any)=>f.team != "Management" && f.team != "Branches");
+        this.agents = res.data.filter(
+          (f: any) => f.team != 'Management' && f.team != 'Branches'
+        );
       },
     });
   }
 
-  copyMessage(link:string,id:string) {
+  copyMessage(link: string, id: string) {
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = link+"/"+id;
+    selBox.value = link + '/' + id;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();

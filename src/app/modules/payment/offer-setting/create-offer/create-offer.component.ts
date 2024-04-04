@@ -29,6 +29,7 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
   creatingStatus: boolean = false;
   isLoading: boolean = false;
   offer: any;
+  selectedFile: any;
   valueChangesSubscription1!: Subscription | undefined;
   valueChangesSubscription2!: Subscription | undefined;
   tomorrow: Date = new Date(new Date().setDate(new Date().getDate()));
@@ -43,7 +44,7 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
   constructor(
     private _PaymentlinkService: PaymentlinkService,
     private _MessageService: MessageService,
-    private _Router:Router
+    private _Router: Router
   ) {}
 
   ngOnInit(): void {
@@ -66,7 +67,7 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
       program_type: new FormControl(null, [Validators.required]),
       program: new FormControl(null, [Validators.required]),
       program_id: new FormControl(null, [Validators.required]),
-      plan_id: new FormControl(null),
+      plan_id: new FormControl(''),
       meal_types: new FormArray([], [Validators.required]),
       snack_types: new FormArray([]),
       subscription_days: new FormControl(null, [Validators.required]),
@@ -80,8 +81,9 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
       name: new FormControl(null, [Validators.required]),
       url_name: new FormControl(null),
       menu: new FormControl(null),
+      content_type: new FormControl(null),
     });
-    this.valueChanges()
+    this.valueChanges();
   }
 
   getNumberOfDays(min: number, max: number): string[] {
@@ -101,6 +103,7 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
         end_date: new Date(form.value.end_date).toLocaleDateString('en-CA'),
       });
+
       const filteredData = Object.keys(form.value)
         .filter(
           (key) =>
@@ -111,8 +114,19 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
           obj[key] = form.value[key];
           return obj;
         }, {});
+      let formData = new FormData();
+      formData.append('content_url', this.selectedFile);
+      Object.entries(form.value).forEach(([key, value]: any) => {
+        if (Array.isArray(value)) {
+          value.forEach((val) => {
+            formData.append(`${key}[]`, val);
+          });
+        } else {
+          formData.append(key, value);
+        }
+      });
 
-      this._PaymentlinkService.updateOfferSettings(filteredData).subscribe({
+      this._PaymentlinkService.updateOfferSettings(formData).subscribe({
         next: (res) => {
           if (res.status == 1) {
             this.creatingStatus = false;
@@ -154,6 +168,73 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
     }
     return meals;
   }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      if (
+        file.type.split('/')[0] != 'video' &&
+        file.type.split('/')[0] != 'image'
+      ) {
+        // not supported type of the file
+        this._MessageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'This Type Of File Not Supported',
+        });
+      } else {
+        this.selectedFile = file;
+        this.paymentForm.patchValue({
+          content_type: file.type.split('/')[0],
+        });
+      }
+    }
+  }
+  // uploadFile() {
+  //   let input: HTMLInputElement = document.createElement('input');
+  //   input.type = 'file';
+  //   input.accept = '*/*';
+  //   input.multiple = true;
+  //   input.click();
+  //   input.onchange = (e) => {
+  //     this.onFileChange(e);
+  //   };
+  // }
+  // onFileChange(event: any) {
+  //   if (event.target.files && event.target.files.length) {
+  //     const files = event.target.files;
+  //     const readFile = (file: any) => {
+  //       return new Promise((resolve, reject) => {
+  //         const fileReader = new FileReader();
+  //         fileReader.onload = (event: any) => resolve(event.target.result);
+  //         fileReader.onerror = (error) => reject(error);
+  //         fileReader.readAsDataURL(file);
+  //       });
+  //     };
+
+  //     const readFiles = async () => {
+  //       try {
+  //         const base64Strings = await Promise.all(
+  //           Array.from(files).map(readFile)
+  //         );
+
+  //         let type: string = '';
+  //         const [file] = base64Strings.map((base64String: any) => {
+  //           type = base64String.split(',')[0].split(':')[1].split(';')[0];
+  //           return base64String;
+  //         });
+  //         this.paymentForm.patchValue({
+  //           content_type: type.split('/')[0],
+  //           content_url: file,
+  //         });
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     };
+
+  //     readFiles();
+  //   }
+  // }
 
   // ====================================================================Checkbox==========================================================================
   onCheckboxChange(event: any, type: string, value: string) {

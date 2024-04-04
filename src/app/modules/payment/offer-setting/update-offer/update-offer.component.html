@@ -1,203 +1,205 @@
 <div class="container">
-    <div class="d-flex justify-content-between align-items-center">
-        <h2>Offer Settings</h2>
-    </div>
-    <hr>
-    <form [formGroup]="paymentForm" (ngSubmit)='updateOffer(paymentForm)'>
-        <div class="row mx-0">
-            <div class="col-12 my-3"  [class.col-md-6]="paymentForm.get('program_type')?.value">
-                <label for="">SELECT YOUR PROGRAM TYPE <span class="text-danger">*</span></label>
-                <div class="d-flex flex-wrap">
-                    <div class="flex align-items-center m-3" *ngFor="let obj of paymentDetails?.Programs | keyvalue">
-                        <p-radioButton formControlName="program_type" [value]="obj.key" [inputId]="obj.key">
-                        </p-radioButton>
-                        <label class="mx-1" [for]="obj.key">{{obj.key | titlecase}}</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('program_type')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-md-6 col-12 my-3" *ngIf="paymentForm.get('program_type')?.value">
-                <label for="">SELECT YOUR PROGRAM <span class="text-danger">*</span></label>
-                <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name"
-                    styleClass="w-100" placeholder="Select Program">
-                </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-12 my-3" *ngIf="isCustom && paymentForm.get('program_id')?.value">
-                <label for="">SELECT NUMBER OF DAYS <span class="text-danger">*</span></label>
-                <p-dropdown [options]="numberOfDays" formControlName='subscription_days' appendTo="body"
-                    styleClass="w-100" placeholder="Select Number Of Days">
-                </p-dropdown>
-                <small class="text-danger ms-1" *ngIf="
-            paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
-            </div>
-            <hr>
-            <div class="col-12 my-3" *ngIf="mealTypes.length">
-                <label for="">Type Meals <span class="text-danger">*</span></label>
-                <div class="d-flex flex-wrap">
-                    <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
-                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox #mealTypeBoxes
-                            (onChange)="onCheckboxChange($event,'meal_types',meal)">
-                        </p-checkbox>
-                        <label class="mx-1" [for]="meal">{{meal}}</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('meal_types')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-md-8 col-12 my-3" *ngIf="snackTypes.length">
-                <label for="">Type Snack</label>
-                <div class="d-flex flex-wrap">
-                    <div class="field-checkbox m-3" *ngFor="let meal of snackTypes">
-                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox #mealTypeBoxes
-                            (onChange)="onCheckboxChange($event,'snack_types',meal)">
-                        </p-checkbox>
-                        <label class="mx-1" [for]="meal">{{meal}}</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="
-            paymentForm.get('snack_types')?.hasError('required')">This field is required.</small>
-            </div>
-            <hr *ngIf="mealTypes.length && !isCustom">
-            <div class="col-12 my-3" *ngIf="!isCustom">
-                <label for="">DAYS OF PLAN <span class="text-danger">*</span></label>
-                <div class="d-flex flex-wrap">
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="subscription_days" [value]="7" inputId="subscription_days_7">
-                        </p-radioButton>
-                        <label class="mx-1" for="subscription_days_7">7 Days</label>
-                    </div>
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="subscription_days" [value]="14" inputId="subscription_days_14">
-                        </p-radioButton>
-                        <label class="mx-1" for="subscription_days_14">14 Days</label>
-                    </div>
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="subscription_days" [value]="21" inputId="subscription_days_21">
-                        </p-radioButton>
-                        <label class="mx-1" for="subscription_days_21">21 Days</label>
-                    </div>
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="subscription_days" [value]="28" inputId="subscription_days_28">
-                        </p-radioButton>
-                        <label class="mx-1" for="subscription_days_28">28 Days</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
-            </div>
-            <hr *ngIf="mealTypes.length">
-            <div class="col-lg-4 col-md-6 col-12 my-3">
-                <label for="">SAFTY BAG?</label>
-                <div class="d-flex flex-wrap">
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="bag_option" value="yes" inputId="BAG_YES">
-                        </p-radioButton>
-                        <label class="mx-1" for="BAG_YES">YES</label>
-                    </div>
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="bag_option" value="no" inputId="BAG_NO">
-                        </p-radioButton>
-                        <label class="mx-1" for="BAG_NO">NO</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('bag')?.touched &&
-                paymentForm.get('bag')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-lg-4 col-md-6 col-12 my-3">
-                <label for="">NEED CUTLERY?</label>
-                <div class="d-flex flex-wrap">
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="cutlery_option" value="yes" inputId="CUTLERY_YES">
-                        </p-radioButton>
-                        <label class="mx-1" for="CUTLERY_YES">YES</label>
-                    </div>
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="cutlery_option" value="no" inputId="CUTLERY_NO">
-                        </p-radioButton>
-                        <label class="mx-1" for="CUTLERY_NO">NO</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('cutlery_option')?.touched &&
-                paymentForm.get('cutlery_option')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-lg-4 col-md-6 col-12 my-3">
-                <label for="">OFFER STATUS?</label>
-                <div class="d-flex flex-wrap">
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="status" value="active" inputId="STATUS_YES">
-                        </p-radioButton>
-                        <label class="mx-1" for="STATUS_YES">ACTIVE</label>
-                    </div>
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="status" value="notActive" inputId="STATUS_NO">
-                        </p-radioButton>
-                        <label class="mx-1" for="STATUS_NO">NOT ACTIVE</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="paymentForm.get('status')?.touched &&
-                paymentForm.get('status')?.hasError('required')">This field is required.</small>
-            </div>
-            <hr>
-            <div class="col-xl-3 col-md-6 col-12 my-3">
-                <label for="">Start Date <span class="text-danger">*</span></label>
-                <p-calendar  [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='start_date' [minDate]="tomorrow">
-                </p-calendar>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('start_date')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-md-6 col-12 my-3">
-                <label for="">End Date <span class="text-danger">*</span></label>
-                <p-calendar  [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='end_date' [minDate]="tomorrow">
-                </p-calendar>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('end_date')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-md-6 col-12 my-3">
-                <label for="">Plan Price <span class="text-danger">*</span></label>
-                <input type="text" pInputText ngClass="w-100" formControlName='plan_price'  maxlength="6"
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('plan_price')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-md-6 col-12 my-3">
-                <label for="">Offer Name <span class="text-danger">*</span></label>
-                <input type="text" pInputText ngClass="w-100" formControlName='name' />
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('name')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-xl-3 col-md-6 col-12 my-3">
-                <label for="">Url Name</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='url_name' />
-            </div>
-            <div class="col-xl-3 col-md-6 col-12 my-3">
-                <label for="">Menu</label>
-                <input type="text" pInputText ngClass="w-100" formControlName='menu' />
-            </div>
-            <hr>
-            <div class="col-12 my-1">
-                <label for="">Note</label>
-                <textarea pInputTextarea ngClass="w-100" formControlName='notes'></textarea>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('notes')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-12 my-3">
-                <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
-                    <span *ngIf="!creatingStatus">Update</span>
-                    <span *ngIf="creatingStatus">Updating...<i class="fas fa-spinner fa-spin"></i></span>
-                </button>
-            </div>
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Offer Settings</h2>
+  </div>
+  <hr>
+  <form [formGroup]="paymentForm" (ngSubmit)='updateOffer(paymentForm)'>
+    <div class="row mx-0">
+      <div class="col-12 my-3" [class.col-md-6]="paymentForm.get('program_type')?.value">
+        <label for="">SELECT YOUR PROGRAM TYPE <span class="text-danger">*</span></label>
+        <div class="d-flex flex-wrap">
+          <div class="flex align-items-center m-3" *ngFor="let obj of paymentDetails?.Programs | keyvalue">
+            <p-radioButton formControlName="program_type" [value]="obj.key" [inputId]="obj.key">
+            </p-radioButton>
+            <label class="mx-1" [for]="obj.key">{{obj.key | titlecase}}</label>
+          </div>
         </div>
-    </form>
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('program_type')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-md-6 col-12 my-3" *ngIf="paymentForm.get('program_type')?.value">
+        <label for="">SELECT YOUR PROGRAM <span class="text-danger">*</span></label>
+        <p-dropdown [options]="plans" formControlName='program' appendTo="body" optionLabel="name" styleClass="w-100"
+          placeholder="Select Program">
+        </p-dropdown>
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('program_id')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-12 my-3" *ngIf="isCustom && paymentForm.get('program_id')?.value">
+        <label for="">SELECT NUMBER OF DAYS <span class="text-danger">*</span></label>
+        <p-dropdown [options]="numberOfDays" formControlName='subscription_days' appendTo="body" styleClass="w-100"
+          placeholder="Select Number Of Days">
+        </p-dropdown>
+        <small class="text-danger ms-1" *ngIf="
+            paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
+      </div>
+      <hr>
+      <div class="col-12 my-3" *ngIf="mealTypes.length">
+        <label for="">Type Meals <span class="text-danger">*</span></label>
+        <div class="d-flex flex-wrap">
+          <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
+            <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox #mealTypeBoxes
+              (onChange)="onCheckboxChange($event,'meal_types',meal)">
+            </p-checkbox>
+            <label class="mx-1" [for]="meal">{{meal}}</label>
+          </div>
+        </div>
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('meal_types')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-md-8 col-12 my-3" *ngIf="snackTypes.length">
+        <label for="">Type Snack</label>
+        <div class="d-flex flex-wrap">
+          <div class="field-checkbox m-3" *ngFor="let meal of snackTypes">
+            <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox #mealTypeBoxes
+              (onChange)="onCheckboxChange($event,'snack_types',meal)">
+            </p-checkbox>
+            <label class="mx-1" [for]="meal">{{meal}}</label>
+          </div>
+        </div>
+        <small class="text-danger ms-1" *ngIf="
+            paymentForm.get('snack_types')?.hasError('required')">This field is required.</small>
+      </div>
+      <hr *ngIf="mealTypes.length && !isCustom">
+      <div class="col-12 my-3" *ngIf="!isCustom">
+        <label for="">DAYS OF PLAN <span class="text-danger">*</span></label>
+        <div class="d-flex flex-wrap">
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="subscription_days" [value]="7" inputId="subscription_days_7">
+            </p-radioButton>
+            <label class="mx-1" for="subscription_days_7">7 Days</label>
+          </div>
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="subscription_days" [value]="14" inputId="subscription_days_14">
+            </p-radioButton>
+            <label class="mx-1" for="subscription_days_14">14 Days</label>
+          </div>
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="subscription_days" [value]="21" inputId="subscription_days_21">
+            </p-radioButton>
+            <label class="mx-1" for="subscription_days_21">21 Days</label>
+          </div>
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="subscription_days" [value]="28" inputId="subscription_days_28">
+            </p-radioButton>
+            <label class="mx-1" for="subscription_days_28">28 Days</label>
+          </div>
+        </div>
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
+      </div>
+      <hr *ngIf="mealTypes.length">
+      <div class="col-lg-4 col-md-6 col-12 my-3">
+        <label for="">SAFTY BAG?</label>
+        <div class="d-flex flex-wrap">
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="bag_option" value="yes" inputId="BAG_YES">
+            </p-radioButton>
+            <label class="mx-1" for="BAG_YES">YES</label>
+          </div>
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="bag_option" value="no" inputId="BAG_NO">
+            </p-radioButton>
+            <label class="mx-1" for="BAG_NO">NO</label>
+          </div>
+        </div>
+        <small class="text-danger ms-1" *ngIf="paymentForm.get('bag')?.touched &&
+                paymentForm.get('bag')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 my-3">
+        <label for="">NEED CUTLERY?</label>
+        <div class="d-flex flex-wrap">
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="cutlery_option" value="yes" inputId="CUTLERY_YES">
+            </p-radioButton>
+            <label class="mx-1" for="CUTLERY_YES">YES</label>
+          </div>
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="cutlery_option" value="no" inputId="CUTLERY_NO">
+            </p-radioButton>
+            <label class="mx-1" for="CUTLERY_NO">NO</label>
+          </div>
+        </div>
+        <small class="text-danger ms-1" *ngIf="paymentForm.get('cutlery_option')?.touched &&
+                paymentForm.get('cutlery_option')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 my-3">
+        <label for="">OFFER STATUS?</label>
+        <div class="d-flex flex-wrap">
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="status" value="active" inputId="STATUS_YES">
+            </p-radioButton>
+            <label class="mx-1" for="STATUS_YES">ACTIVE</label>
+          </div>
+          <div class="flex align-items-center m-3">
+            <p-radioButton formControlName="status" value="notActive" inputId="STATUS_NO">
+            </p-radioButton>
+            <label class="mx-1" for="STATUS_NO">NOT ACTIVE</label>
+          </div>
+        </div>
+        <small class="text-danger ms-1" *ngIf="paymentForm.get('status')?.touched &&
+                paymentForm.get('status')?.hasError('required')">This field is required.</small>
+      </div>
+      <hr>
+      <div class="col-xl-3 col-md-6 col-12 my-3">
+        <label for="">Start Date <span class="text-danger">*</span></label>
+        <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='start_date'
+          [minDate]="tomorrow">
+        </p-calendar>
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('start_date')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-xl-3 col-md-6 col-12 my-3">
+        <label for="">End Date <span class="text-danger">*</span></label>
+        <p-calendar [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='end_date'
+          [minDate]="tomorrow">
+        </p-calendar>
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('end_date')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-xl-3 col-md-6 col-12 my-3">
+        <label for="">Plan Price <span class="text-danger">*</span></label>
+        <input type="text" pInputText ngClass="w-100" formControlName='plan_price' maxlength="6"
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('plan_price')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-xl-3 col-md-6 col-12 my-3">
+        <label for="">Offer Name <span class="text-danger">*</span></label>
+        <input type="text" pInputText ngClass="w-100" formControlName='name' />
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('name')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-xl-3 col-md-6 col-12 my-3">
+        <label for="">Url Name</label>
+        <input type="text" pInputText ngClass="w-100" formControlName='url_name' />
+      </div>
+      <div class="col-xl-3 col-md-6 col-12 my-3">
+        <label for="">Menu</label>
+        <input type="text" pInputText ngClass="w-100" formControlName='menu' />
+      </div>
+      <hr>
+      <div class="col-12 my-1">
+        <label for="">Note</label>
+        <textarea pInputTextarea ngClass="w-100" formControlName='notes'></textarea>
+        <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('notes')?.hasError('required')">This field is required.</small>
+      </div>
+      <div class="col-12 my-3">
+        <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
+          <span *ngIf="!creatingStatus">Update</span>
+          <span *ngIf="creatingStatus">Updating...<i class="fas fa-spinner fa-spin"></i></span>
+        </button>
+      </div>
+    </div>
+  </form>
 </div>
 
 <div class="loader-container" *ngIf="isLoading">
-    <div class="i-loader-inf-horizontal-container">
-        <div class="i-loader-inf-horizontal"></div>
-        <div class="pt-8px">
-            <span>Processing data</span>
-        </div>
+  <div class="i-loader-inf-horizontal-container">
+    <div class="i-loader-inf-horizontal"></div>
+    <div class="pt-8px">
+      <span>Processing data</span>
     </div>
+  </div>
 </div>

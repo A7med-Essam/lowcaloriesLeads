@@ -3,80 +3,78 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiConfigService } from '../core/api-config.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PaymentlinkService {
   offer: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  constructor(
-    private _ApiConfigService: ApiConfigService
-  )  { }
+  constructor(private _ApiConfigService: ApiConfigService) {}
 
-  createGiftCode(code:any): Observable<any> {
-    return this._ApiConfigService.postReq3(`createCodeOnManager`,code);
+  createGiftCode(code: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`createCodeOnManager`, code);
   }
 
   getPaymentDetails(): Observable<PaymentDetailsResponse> {
     return this._ApiConfigService.postReq3(`getPaymentDetails`, '');
   }
 
-  create_payment_link(payment:PaymentData): Observable<{
-    status:  number;
+  create_payment_link(payment: PaymentData): Observable<{
+    status: number;
     message: string;
-    data:    string;
+    data: string;
   }> {
     return this._ApiConfigService.postReq3(`create_payment_link`, payment);
   }
 
-  print_payment_link(payment:PaymentData): Observable<{
-    status:  number;
+  print_payment_link(payment: PaymentData): Observable<{
+    status: number;
     message: string;
-    data:    any;
+    data: any;
   }> {
     return this._ApiConfigService.postReq3(`create_payment_complete`, payment);
   }
 
-  checkMobileEmails(mobile:string): Observable<any>{
-    return this._ApiConfigService.postReq3(`getEmailsByMobile`, {mobile});
+  checkMobileEmails(mobile: string): Observable<any> {
+    return this._ApiConfigService.postReq3(`getEmailsByMobile`, { mobile });
   }
 
-  calculate_payment_link(data:any): Observable<any>{
+  calculate_payment_link(data: any): Observable<any> {
     return this._ApiConfigService.postReq3(`calculate_payment_link`, data);
   }
 
   getOfferSettings(): Observable<any> {
-    return this._ApiConfigService.postReq3(`getOfferSettings`,'');
+    return this._ApiConfigService.postReq3(`getOfferSettings`, '');
   }
-
-  updateOfferSettings(offer:any): Observable<any> {
-    return this._ApiConfigService.postReq3(`offerSettings`,offer);
+  updateOfferFile(data: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`updateOfferFile`, data);
+  }
+  updateOfferSettings(offer: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`offerSettings`, offer);
   }
 }
 
-
-
 export interface PaymentDetailsResponse {
-  status:  number;
+  status: number;
   message: string;
-  data:    PaymentDetails;
+  data: PaymentDetails;
 }
 
 export interface PaymentDetails {
-  Programs:  Programs;
+  Programs: Programs;
   GiftCodes: GiftCode[];
-  disLikes:  Branch[];
-  emirates:  Emirate[];
-  branches:  Branch[];
-  allGiftCodes: any[]
+  disLikes: Branch[];
+  emirates: Emirate[];
+  branches: Branch[];
+  allGiftCodes: any[];
 }
 
 export interface GiftCode {
-  id:         number;
-  code:       string;
+  id: number;
+  code: string;
   percentage: string;
-  type:       string;
-  value:      string;
-  flag:      string;
+  type: string;
+  value: string;
+  flag: string;
 }
 
 export interface Programs {
@@ -84,99 +82,98 @@ export interface Programs {
 }
 
 export interface Program {
-  id:             number;
-  company:        string;
-  name:           string;
-  max_meals:      number;
-  no_snacks:      number;
-  bag_price:      number;
-  snack_price:    number;
-  shortcut_name:  string;
-  plans:          Plan[];
+  id: number;
+  company: string;
+  name: string;
+  max_meals: number;
+  no_snacks: number;
+  bag_price: number;
+  snack_price: number;
+  shortcut_name: string;
+  plans: Plan[];
 }
 
 export interface Plan {
-  id:          number;
-  program_id:  number;
-  name:        string;
-  name_ar:     string;
-  no_meals:    number;
+  id: number;
+  program_id: number;
+  name: string;
+  name_ar: string;
+  no_meals: number;
   plan_prices: PlanPrices;
-  details:     Details;
-  myprogram:   Myprogram;
+  details: Details;
+  myprogram: Myprogram;
 }
 
 export interface Details {
-  max_meal:  number;
+  max_meal: number;
   max_snack: number;
-  max_days:  number;
-  min_days:  number;
+  max_days: number;
+  min_days: number;
 }
 
 export interface Myprogram {
-  id:             number;
-  active:         number;
-  type:           string;
-  company:        string;
-  name:           string;
-  name_ar:        string;
-  description:    string;
+  id: number;
+  active: number;
+  type: string;
+  company: string;
+  name: string;
+  name_ar: string;
+  description: string;
   description_ar: string;
-  image:          string;
-  order_number:   number;
-  max_meals:      number;
-  no_snacks:      number;
-  shortcut_name:  null;
-  image_new:      string;
-  bag_price:      number;
-  snack_price:    number;
+  image: string;
+  order_number: number;
+  max_meals: number;
+  no_snacks: number;
+  shortcut_name: null;
+  image_new: string;
+  bag_price: number;
+  snack_price: number;
 }
 
 export interface PlanPrices {
-  one_meal:   number;
-  two_meal:   number;
+  one_meal: number;
+  two_meal: number;
   three_meal: number;
-  four_meal:  number;
-  five_meal:  number;
-  six_meal:   number;
+  four_meal: number;
+  five_meal: number;
+  six_meal: number;
 }
 
 export interface Branch {
-  id:   number;
+  id: number;
   name: string;
 }
 
 export interface Emirate {
-  id:           number;
-  en_name:      string;
-  ar_name:      string;
+  id: number;
+  en_name: string;
+  ar_name: string;
   inbody_price: number;
-  type:         string;
+  type: string;
 }
 
-
 export interface PaymentData {
-  first_name:           string;
-  last_name:            string;
-  phone_number:         string;
-  email:                string;
-  gender:               string;
-  height:               number;
-  Weight:               number;
-  birthday:             Date;
-  program_id:           number;
-  plan_id:              number;
-  meal_types:           string[];
-  snack_types:          string[];
-  subscription_days:    number;
-  start_date:           Date;
-  delivery_days:        string[];
-  emirate_id:           number;
-  area:                 string;
-  address:              string;
-  code_id:              number;
-  bag:                  string;
-  cutlery:              string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  email: string;
+  gender: string;
+  height: number;
+  Weight: number;
+  birthday: Date;
+  program_id: number;
+  plan_id: number;
+  meal_types: string[];
+  snack_types: string[];
+  subscription_days: number;
+  start_date: Date;
+  delivery_days: string[];
+  emirate_id: number;
+  area: string;
+  address: string;
+  code_id: number;
+  bag: string;
+  cutlery: string;
   exchange_paymentLink: string;
-  dislike:              string;
+  dislike: string;
 }
