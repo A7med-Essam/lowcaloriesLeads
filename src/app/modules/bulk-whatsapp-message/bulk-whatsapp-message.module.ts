@@ -19,6 +19,9 @@ import { PaginatorModule } from 'primeng/paginator';
 import { WhatsappSenderComponent } from './whatsapp-sender/whatsapp-sender.component';
 import { WhatsappSenderShowComponent } from './whatsapp-sender-show/whatsapp-sender-show.component';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ShowScheduleJobsComponent } from './show-schedule-jobs/show-schedule-jobs.component';
+import { RecordsScheduleJobsComponent } from './records-schedule-jobs/records-schedule-jobs.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
@@ -28,9 +31,12 @@ import { MultiSelectModule } from 'primeng/multiselect';
     HighlightWordsStartingWithDollarPipe,
     WhatsappSenderComponent,
     WhatsappSenderShowComponent,
+    ShowScheduleJobsComponent,
+    RecordsScheduleJobsComponent,
   ],
   imports: [
     CommonModule,
+    TooltipModule,
     ReactiveFormsModule,
     CalendarModule,
     PaginatorModule,
@@ -43,7 +49,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
     FormsModule,
     InputTextModule,
     ConfirmDialogModule,
-    MultiSelectModule
+    MultiSelectModule,
   ],
 })
 export class BulkWhatsappMessageModule {}

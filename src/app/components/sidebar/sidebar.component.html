@@ -281,41 +281,51 @@
     </ul>
     <!-- ================================================Bulk Whatsapp Sender================================================== -->
     <div class="menu-header mt-3 mb-2" *ngIf="showReportStaticsServicePermission">
-      Bulk Whatsapp
+      Whatsapp
     </div>
-    <ul class="menu-items" *ngIf="sendBulkWhatsappMessagePermission || senderBulkWhatsappMessagePermission || templateBulkWhatsappMessagePermission || queryBulkWhatsappMessagePermission">
+    <ul class="menu-items"
+      *ngIf="sendBulkWhatsappMessagePermission || senderBulkWhatsappMessagePermission || templateBulkWhatsappMessagePermission || queryBulkWhatsappMessagePermission">
       <li *ngIf="queryBulkWhatsappMessagePermission">
         <a routerLink="/bulk-whatsapp-messages/query" routerLinkActive="active">
           <i class="fas fa-code"></i>
-          <span>Whatsapp Query</span>
+          <span>Queries</span>
         </a>
       </li>
       <li *ngIf="templateBulkWhatsappMessagePermission">
         <a routerLink="/bulk-whatsapp-messages/templates" routerLinkActive="active">
           <i class="far fa-comment-dots"></i>
-          <span>Whatsapp Templates</span>
-        </a>
-      </li>
-      <li *ngIf="sendBulkWhatsappMessagePermission">
-        <a routerLink="/bulk-whatsapp-messages/send" routerLinkActive="active">
-          <i class="fab fa-whatsapp"></i>
-          <span>Bulk Whatsapp </span>
+          <span>Templates</span>
         </a>
       </li>
       <li *ngIf="senderBulkWhatsappMessagePermission">
         <a routerLink="/bulk-whatsapp-messages/whatsapp-sender" routerLinkActive="active">
           <i class="fab fa-line"></i>
-          <span>Whatsapp Sender</span>
+          <span>Senders</span>
+        </a>
+      </li>
+      <li *ngIf="sendBulkWhatsappMessagePermission">
+        <a routerLink="/bulk-whatsapp-messages/send" routerLinkActive="active">
+          <i class="fab fa-whatsapp"></i>
+          <span>Send Bulk </span>
+        </a>
+      </li>
+
+      <li *ngIf="trackBulkWhatsappMessagePermission">
+        <a routerLink="/bulk-whatsapp-messages/track" routerLinkActive="active">
+          <i class="fa fa-rocket"></i>
+          <span>Track Bulks</span>
         </a>
       </li>
       <hr>
     </ul>
 
     <!-- ================================================OTHER================================================== -->
-    <div class="menu-header mt-3 mb-2" *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission">
+    <div class="menu-header mt-3 mb-2"
+      *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission">
       Other Components
     </div>
-    <ul class="menu-items" *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission">
+    <ul class="menu-items"
+      *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission">
       <li *ngIf="showNotesPermission">
         <a routerLink="/notes/show" routerLinkActive="active">
           <i class="fas fa-sticky-note"></i>

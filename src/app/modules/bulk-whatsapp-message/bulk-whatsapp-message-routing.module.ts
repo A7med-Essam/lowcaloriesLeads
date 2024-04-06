@@ -6,6 +6,8 @@ import { WhatsappTemplatesComponent } from './whatsapp-templates/whatsapp-templa
 import { WhatsappQueryComponent } from './whatsapp-query/whatsapp-query.component';
 import { WhatsappSenderComponent } from './whatsapp-sender/whatsapp-sender.component';
 import { WhatsappSenderShowComponent } from './whatsapp-sender-show/whatsapp-sender-show.component';
+import { ShowScheduleJobsComponent } from './show-schedule-jobs/show-schedule-jobs.component';
+import { RecordsScheduleJobsComponent } from './records-schedule-jobs/records-schedule-jobs.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'send', pathMatch: 'full' },
@@ -15,6 +17,22 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       permission: ['send_bulkWhatsapp'],
+    },
+  },
+  {
+    path: 'track',
+    component: ShowScheduleJobsComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['track_bulkWhatsapp'],
+    },
+  },
+  {
+    path: 'trackNumbers/:id',
+    component: RecordsScheduleJobsComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['track_bulkWhatsapp'],
     },
   },
   {

@@ -117,6 +117,81 @@ export class SendBulkWhatsappService {
           }
     );
   }
+
+  exportSchedualNumbers(schedual_id: number, status = 'all') {
+    this.exportScheduleJobNumbers(schedual_id, status).subscribe((res) => {
+      const link = document.createElement('a');
+      link.target = '_blank';
+      link.href = res.data;
+      link.click();
+    });
+  }
+
+  getScheduleJobs(
+    page: number = 0,
+    rows: number = 0
+  ): Observable<{
+    data: any;
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(
+      `getScheduleJobs${page == 0 ? '' : '?page=' + page}`,
+      rows == 0
+        ? {
+            withoutPagination: true,
+          }
+        : {
+            paginate: rows,
+          }
+    );
+  }
+  exportScheduleJobNumbers(
+    schedule_job_id: number,
+    status: string
+  ): Observable<{
+    data: any;
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(`exportSchedualNumbers`, {
+      schedule_job_id,
+      status,
+    });
+  }
+  deleteSchedualNumbers(schedule_job_id: number): Observable<{
+    data: any;
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(`deleteScheduleNumbers`, {
+      schedule_job_id,
+    });
+  }
+
+  getScheduleNumbers(
+    schedule_job_id: number,
+    page: number = 0,
+    rows: number = 0
+  ): Observable<{
+    data: any;
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(
+      `getScheduleJobRecords${page == 0 ? '' : '?page=' + page}`,
+      rows == 0
+        ? {
+            withoutPagination: true,
+            schedule_job_id,
+          }
+        : {
+            paginate: rows,
+            schedule_job_id,
+          }
+    );
+  }
+
   getQueryService(
     page: number = 0,
     rows: number = 0
@@ -158,10 +233,18 @@ export class SendBulkWhatsappService {
     return this._ApiConfigService.postReq3(`deleteSenders`, { sender_id });
   }
 
-  checkWhatsAppServices(): Observable<{ data: boolean; message: string; status: number }> {
+  checkWhatsAppServices(): Observable<{
+    data: boolean;
+    message: string;
+    status: number;
+  }> {
     return this._ApiConfigService.postReq3(`checkWhatsAppServices`, '');
   }
-  stopWhatsAppBulkServices(): Observable<{ data: boolean; message: string; status: number }> {
+  stopWhatsAppBulkServices(): Observable<{
+    data: boolean;
+    message: string;
+    status: number;
+  }> {
     return this._ApiConfigService.postReq3(`stopWhatsAppBulkServices`, '');
   }
 }

@@ -225,6 +225,7 @@ const routes: Routes = [
       permission: ['send_bulkWhatsapp'],
     },
   },
+
   {
     path: 'redirect',
     loadChildren: () =>
