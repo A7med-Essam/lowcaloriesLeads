@@ -169,6 +169,25 @@ export class SendBulkWhatsappService {
     });
   }
 
+  pauseScheduleJob(schedule_job_id: number): Observable<{
+    data: any;
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(`pauseScheduleJob`, {
+      schedule_job_id,
+    });
+  }
+
+  returnPlayScheduleJob(schedule_job_id: number): Observable<{
+    data: any;
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(`returnPlayScheduleJob`, {
+      schedule_job_id,
+    });
+  }
   getScheduleNumbers(
     schedule_job_id: number,
     page: number = 0,

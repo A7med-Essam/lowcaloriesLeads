@@ -192,12 +192,12 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
             if (res.status == 1) {
               this.serviceDelay = res.data;
               this.isSending.next(true);
+              this._MessageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Messages sent',
+              });
             }
-            this._MessageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Messages sent',
-            });
             this.isLoading = false;
           });
       } else {

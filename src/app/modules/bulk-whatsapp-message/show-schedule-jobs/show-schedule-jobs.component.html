@@ -4,14 +4,17 @@
       <tr>
         <th style="width:5%">#</th>
         <th pSortableColumn="sender" style="width:20%">Sender <p-sortIcon field="sender"></p-sortIcon></th>
-        <th pSortableColumn="status" style="width:10%">Status <p-sortIcon field="status"></p-sortIcon></th>
-        <th pSortableColumn="record_counts" style="width:10%">Sent Rate <p-sortIcon field="record_counts"></p-sortIcon>
+        <th pSortableColumn="status" style="width:6%">Status <p-sortIcon field="status"></p-sortIcon></th>
+        <th pSortableColumn="record_counts" style="width:7%">Sent Rate <p-sortIcon field="record_counts"></p-sortIcon>
         </th>
-        <th pSortableColumn="message" style="width:20%">Message <p-sortIcon field="message"></p-sortIcon></th>
+        <th pSortableColumn="message" style="width:15%">Message <p-sortIcon field="message"></p-sortIcon></th>
         <th pSortableColumn="format_started_at" style="width:10%">Start At <p-sortIcon
             field="format_started_at"></p-sortIcon></th>
         <th pSortableColumn="format_expected_end_at" style="width:10%">Expect End At <p-sortIcon
             field="format_expected_end_at"></p-sortIcon></th>
+        <th pSortableColumn="last_mobile_received_message" style="width:10%">Last Received <p-sortIcon
+            field="last_mobile_received_message"></p-sortIcon></th>
+
         <th style="width:20%">Actions</th>
       </tr>
     </ng-template>
@@ -24,13 +27,16 @@
         <td> {{ row.message | slice:0:100 }} </td>
         <td> {{ row.format_started_at }}</td>
         <td> {{ row.format_expected_end_at }}</td>
+        <td> {{ row.last_mobile_received_message }}</td>
         <td>
           <a style="text-decoration: none;" pButton pTooltip="See All Numbers" tooltipPosition="top" type="button"
             icon="pi pi-eye" class="m-1 p-button-success p-button-sm"
             routerLink="/bulk-whatsapp-messages/trackNumbers/{{ row.id }}"></a>
-          <button pButton pTooltip="Pause Schedual" disabled tooltipPosition="top" type="button" icon="pi pi-pause"
-            class="m-1 p-button-secondary p-button-sm"></button>
-          <button pButton pTooltip="Play Schedual" disabled tooltipPosition="top" type="button" icon="pi pi-play"
+          <button pButton pTooltip="Pause Schedual" (click)="pauseScheduleJob(row.id)"
+            *ngIf="row.status == 'pending' || row.status == 'playing'" tooltipPosition="top" type="button"
+            icon="pi pi-pause" class="m-1 p-button-secondary p-button-sm"></button>
+          <button pButton pTooltip="Play Schedual" (click)="returnPlayScheduleJob(row.id)"
+            *ngIf="row.status == 'paused'" tooltipPosition="top" type="button" icon="pi pi-play"
             class="m-1 p-button-help p-button-sm"></button>
           <button pButton pTooltip="Export Numbers" (click)="exportSchedualNumbers(row.id,SchedualJobStatus.all)"
             tooltipPosition="top" type="button" icon="pi pi-file" class="m-1 p-button-primary p-button-sm"></button>

@@ -49,6 +49,30 @@ export class ShowScheduleJobsComponent implements OnInit {
   exportSchedualNumbers(schedual_id: number, status = SchedualJobStatus.all) {
     this._SendBulkWhatsappService.exportSchedualNumbers(schedual_id, status);
   }
+  returnPlayScheduleJob(schedual_id: number) {
+    this._SendBulkWhatsappService
+      .returnPlayScheduleJob(schedual_id)
+      .subscribe((res) => {
+        this.getScheduleJobs();
+        this._MessageService.add({
+          severity: 'success',
+          summary: 'Schedual Job',
+          detail: res.message,
+        });
+      });
+  }
+  pauseScheduleJob(schedual_id: number) {
+    this._SendBulkWhatsappService
+      .pauseScheduleJob(schedual_id)
+      .subscribe((res) => {
+        this.getScheduleJobs();
+        this._MessageService.add({
+          severity: 'success',
+          summary: 'Schedual Job',
+          detail: res.message,
+        });
+      });
+  }
   deleteSchedualNumbers(schedual_id: number) {
     this._SendBulkWhatsappService
       .deleteSchedualNumbers(schedual_id)
