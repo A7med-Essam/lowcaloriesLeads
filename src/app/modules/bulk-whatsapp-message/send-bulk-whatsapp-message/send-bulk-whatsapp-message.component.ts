@@ -171,7 +171,38 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
     this.numbers[index] = { value: Object.keys(this.clonedTemp)[0] };
     this.clonedTemp = {};
   }
+  uploadFile(e: Event) {
+    this.onFileChange(e);
+  }
+
+  onFileChange(event: any) {
+    if (event.target.files && event.target.files.length) {
+      const files = event.target.files;
+      const readFile = (file: any) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = (event: any) => resolve(event.target.result);
+          fileReader.onerror = (error) => reject(error);
+          fileReader.readAsDataURL(file);
+        });
+      };
+
+      const readFiles = async () => {
+        try {
+          const [base64Strings] = await Promise.all(
+            Array.from(files).map(readFile)
+          );
+          this.fileName = base64Strings;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      readFiles();
+    }
+  }
   selectedSender: any;
+  fileName: any = null;
   isSending: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   serviceDelay: number = 0;
   serviceTimer: any;
@@ -180,11 +211,13 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
       if (this.selectedTemplate) {
         this.isLoading = true;
         const nums = this.numbers.map((res) => res.value);
+        console.log(this.fileName);
         this._sendWhatsappServices
           .sendBulkMessage({
             message: this.selectedTemplate.message,
             numbers: nums,
             sender_id: this.selectedSender,
+            file: this.fileName,
             delayInSeconds: this.delayInSeconds,
             delayInDate: this.delayInDate,
           })

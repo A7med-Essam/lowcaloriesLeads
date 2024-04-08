@@ -33,7 +33,11 @@
     <label for="">Message</label>
     <textarea pInputTextarea rows="5" ngClass="w-100" [(ngModel)]="SelectedTemplateDropDown.value.message"></textarea>
   </div>
-
+  <div class="col-12 p-2" *ngIf="SelectedTemplateDropDown.value">
+    <input (change)="uploadFile($event)"
+      class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+      id="file_input" type="file" accept="image/*, video/*">
+  </div>
   <div class="col-12">
     <div class="my-2" *ngIf="options.value == 'lastDays'">
       <label for="range">Date Range</label>
