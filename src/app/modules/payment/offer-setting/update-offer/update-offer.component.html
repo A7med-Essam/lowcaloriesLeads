@@ -185,6 +185,186 @@
         <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('notes')?.hasError('required')">This field is required.</small>
       </div>
+      <div formGroupName="style">
+        <hr>
+        <div formGroupName="offer_title" class="d-flex align-items-center">
+          <label for="offerTitle">Offer Title</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <input pInputText class="mx-1" type="number" id="offerTitleFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+        <hr>
+        <div class="d-flex align-items-center" formGroupName="offer_price">
+          <label for="offerPrice">Offer Price</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <input pInputText class="mx-1" type="number" id="offerPriceFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
+            placeholder="Font Family">
+          </p-dropdown>
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+        <hr>
+        <div class="d-flex align-items-center" formGroupName="plan_title">
+          <label for="planTitle">Plan Title</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+          <input pInputText class="mx-1" type="number" id="planTitleFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Background Color</label>
+            <p-colorPicker formControlName="backgroundColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+        <hr>
+        <div class="d-flex align-items-center" formGroupName="days_count">
+          <label for="daysCount">Days Count</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <input pInputText class="mx-1" type="number" id="daysCountFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+          <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
+            placeholder="Font Family">
+          </p-dropdown>
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Background Color</label>
+            <p-colorPicker formControlName="backgroundColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+
+        <hr>
+        <div class="d-flex align-items-center" formGroupName="snacks_count">
+          <label for="snacksCount">Snacks Count</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <input pInputText class="mx-1" type="number" id="snacksCountFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+          <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
+            placeholder="Font Family">
+          </p-dropdown>
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Background Color</label>
+            <p-colorPicker formControlName="backgroundColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+        <hr>
+        <div class="d-flex align-items-center" formGroupName="meals_count">
+          <label for="mealsCount">Meals Count</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <input pInputText class="mx-1" type="number" id="mealsCountFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+          <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
+            placeholder="Font Family">
+          </p-dropdown>
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Background Color</label>
+            <p-colorPicker formControlName="backgroundColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+        <hr>
+        <div class="d-flex align-items-center" formGroupName="remaining_days">
+          <label for="remainingDays">Remaining Days</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <input pInputText class="mx-1" type="number" id="remainingDaysFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
+            placeholder="Font Family">
+          </p-dropdown>
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+        <hr>
+        <div class="d-flex align-items-center" formGroupName="show_menu_title">
+          <label for="showMenuTitle">Show Menu Title</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <input pInputText class="mx-1" type="number" id="showMenuTitleFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
+            placeholder="Font Family">
+          </p-dropdown>
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+        <hr>
+        <div class="d-flex align-items-center" formGroupName="subscribe_button">
+          <label for="subscribeButton">Subscribe Button</label>
+          <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+            placeholder="Font Weight">
+          </p-dropdown>
+          <input pInputText class="mx-1" type="number" id="subscribeButtonFontSize" formControlName="fontSize"
+            placeholder="Font Size" />
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Font Color</label>
+            <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+          </div>
+          <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
+            placeholder="Font Family">
+          </p-dropdown>
+          <div class="d-flex my-2 flex-column">
+            <label for="offerTitle">Background Color</label>
+            <p-colorPicker formControlName="backgroundColor" class="mx-1"></p-colorPicker>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="d-flex align-items-center" formGroupName="tabsStyle">
+        <label for="subscribeButton">Tabs Style</label>
+        <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
+          placeholder="Font Weight">
+        </p-dropdown>
+        <input pInputText class="mx-1" type="number" formControlName="fontSize" placeholder="Font Size" />
+        <div class="d-flex my-2 flex-column">
+          <label for="offerTitle">Font Color</label>
+          <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
+        </div>
+        <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
+          placeholder="Font Family">
+        </p-dropdown>
+        <div class="d-flex my-2 flex-column">
+          <label for="offerTitle">Background Color</label>
+          <p-colorPicker formControlName="backgroundColor" class="mx-1"></p-colorPicker>
+        </div>
+      </div>
       <div class="col-12 my-3">
         <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
           <span *ngIf="!creatingStatus">Update</span>

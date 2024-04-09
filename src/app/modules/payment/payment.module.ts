@@ -19,6 +19,7 @@ import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { RamadanMealTypesPipe } from 'src/app/core/pipes/ramadan-meal-types.pipe';
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { RamadanMealTypesPipe } from 'src/app/core/pipes/ramadan-meal-types.pipe
     TableModule,
     ConfirmDialogModule,
     TagModule,
+    ColorPickerModule
   ],
 })
 export class PaymentModule {}
