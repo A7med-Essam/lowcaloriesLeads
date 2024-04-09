@@ -93,8 +93,7 @@ export class UpdateOfferComponent implements OnInit, OnDestroy {
     const program = this.paymentDetails.Programs[type].filter(
       (p) => p.id == data.program_id
     )[0];
-    console.log(data.style, data.tabsStyle);
-    this.patchStyles(data.style, data.tabsStyle);
+    this.patchStyles(data.style);
     this.paymentForm.patchValue({
       offer_id: data.id,
       name: data.name,
@@ -129,17 +128,7 @@ export class UpdateOfferComponent implements OnInit, OnDestroy {
     this.valueChanges();
   }
 
-  patchStyles(style: any, tabsStyle: any) {
-    this.paymentForm.patchValue({
-      tabsStyle: {
-        backgroundColor: tabsStyle?.backgroundColor,
-        fontColor: tabsStyle?.fontColor,
-        fontWight: tabsStyle?.fontWight,
-        fontSize: tabsStyle?.fontSize,
-        fontFamily: tabsStyle?.fontFamily,
-      },
-    });
-
+  patchStyles(style: any) {
       this.paymentForm.patchValue({
         style: {
           offer_title: {
@@ -303,13 +292,6 @@ export class UpdateOfferComponent implements OnInit, OnDestroy {
           fontSize: [null, [Validators.required]],
           fontFamily: [null, [Validators.required]],
         }),
-      }),
-      tabsStyle: this._fb.group({
-        backgroundColor: ['#09c', [Validators.required]],
-        fontColor: ['#000', [Validators.required]],
-        fontWight: ['bold'],
-        fontSize: [null, [Validators.required]],
-        fontFamily: [null, [Validators.required]],
       }),
     });
   }

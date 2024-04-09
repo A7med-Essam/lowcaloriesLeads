@@ -148,13 +148,6 @@ export class CreateOfferComponent implements OnInit, OnDestroy {
           fontFamily: [null, [Validators.required]],
         }),
       }),
-      tabsStyle: this._fb.group({
-        backgroundColor: ['#09c', [Validators.required]],
-        fontColor: ['#000', [Validators.required]],
-        fontWight: ['bold'],
-        fontSize: [null, [Validators.required]],
-        fontFamily: [null, [Validators.required]],
-      }),
     });
     this.valueChanges();
   }

@@ -352,24 +352,6 @@
         </div>
         <hr>
       </div>
-      <div class="d-flex align-items-center" formGroupName="tabsStyle">
-        <label for="subscribeButton">Tabs Style</label>
-        <p-dropdown [options]="['normal','bold']" formControlName='fontWight' appendTo="body" class="mx-1"
-          placeholder="Font Weight">
-        </p-dropdown>
-        <input pInputText class="mx-1" type="number" formControlName="fontSize" placeholder="Font Size" />
-        <div class="d-flex my-2 flex-column">
-          <label for="offerTitle">Font Color</label>
-          <p-colorPicker formControlName="fontColor" class="mx-1"></p-colorPicker>
-        </div>
-        <p-dropdown [options]="fonts" [filter]="true" formControlName='fontFamily' appendTo="body" class="mx-1"
-          placeholder="Font Family">
-        </p-dropdown>
-        <div class="d-flex my-2 flex-column">
-          <label for="offerTitle">Background Color</label>
-          <p-colorPicker formControlName="backgroundColor" class="mx-1"></p-colorPicker>
-        </div>
-      </div>
       <div class="col-12 my-3">
         <button class="btn btn-primary w-100" [disabled]="paymentForm.invalid || creatingStatus">
           <span *ngIf="!creatingStatus">Create</span>
