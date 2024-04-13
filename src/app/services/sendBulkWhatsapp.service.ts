@@ -168,6 +168,15 @@ export class SendBulkWhatsappService {
       schedule_job_id,
     });
   }
+  resendWhatsappBulk(schedule_job_id: number): Observable<{
+    data: any;
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(`resendBulkWhatsapp`, {
+      schedule_job_id,
+    });
+  }
 
   pauseScheduleJob(schedule_job_id: number): Observable<{
     data: any;

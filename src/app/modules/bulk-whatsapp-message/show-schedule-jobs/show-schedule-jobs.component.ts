@@ -36,7 +36,16 @@ export class ShowScheduleJobsComponent implements OnInit {
         this.pagination.rows = res.data.per_page;
       });
   }
-
+  resendWhatsappBulk(id: number) {
+    this._SendBulkWhatsappService.resendWhatsappBulk(id).subscribe((res) => {
+      this.getScheduleJobs();
+      this._MessageService.add({
+        severity: 'success',
+        summary: 'Resend Send Bulk Done Successfully',
+        detail: res.message,
+      });
+    });
+  }
   onPageChange(event: any) {
     console.log(event);
     this.page = event.page + 1;

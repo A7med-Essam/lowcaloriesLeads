@@ -29,6 +29,10 @@
         <td> {{ row.format_expected_end_at }}</td>
         <td> {{ row.last_mobile_received_message }}</td>
         <td>
+          <button pButton pTooltip="Resend Bulk" (click)="resendWhatsappBulk(row.id)" tooltipPosition="top"
+            type="button" icon="pi pi-replay" class="m-1 p-button-info p-button-sm"></button>
+
+
           <a style="text-decoration: none;" pButton pTooltip="See All Numbers" tooltipPosition="top" type="button"
             icon="pi pi-eye" class="m-1 p-button-success p-button-sm"
             routerLink="/bulk-whatsapp-messages/trackNumbers/{{ row.id }}"></a>
