@@ -1955,16 +1955,16 @@
               <td style="vertical-align: middle;">#{{i+1}}</td>
               <td>
                 <audio controls>
-                  <source
-                    src="https://app.callgear.com/system/media/talk/{{current_callGear.communication_id}}/{{call}}/"
-                    type="audio/mpeg">
+                  <source [src]="current_callGear.call_records" type="audio/mpeg">
                 </audio>
               </td>
               <td style="vertical-align: middle;">
-                <button class="btn btn-primary rounded-pill b1"
+                <!-- <button class="btn btn-primary rounded-pill b1"
                   (click)="convertAudioToBase64('https://app.callgear.com/system/media/talk/',current_callGear.communication_id,call)">
                   Download Call
-                </button>
+                </button> -->
+                <a class="btn btn-primary rounded-pill b1" target="_blank"
+                  [href]="current_callGear.call_records">Download Call</a>
               </td>
             </tr>
           </tbody>
