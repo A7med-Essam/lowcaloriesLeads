@@ -7,7 +7,8 @@
         <th pSortableColumn="status" style="width:6%">Status <p-sortIcon field="status"></p-sortIcon></th>
         <th pSortableColumn="record_counts" style="width:7%">Sent Rate <p-sortIcon field="record_counts"></p-sortIcon>
         </th>
-        <th pSortableColumn="message" style="width:15%">Message <p-sortIcon field="message"></p-sortIcon></th>
+        <th pSortableColumn="template_name" style="width:15%">Tempelete <p-sortIcon field="template_name"></p-sortIcon>
+        </th>
         <th pSortableColumn="format_started_at" style="width:10%">Start At <p-sortIcon
             field="format_started_at"></p-sortIcon></th>
         <th pSortableColumn="format_expected_end_at" style="width:10%">Expect End At <p-sortIcon
@@ -24,7 +25,8 @@
         <td> {{row.sender}} </td>
         <td> {{ row.status }}</td>
         <td> {{ row.record_counts }}</td>
-        <td> {{ row.message | slice:0:100 }} </td>
+        <td> {{ (row.template_name == '' || row.template_name == null ) ? (row.message | slice:0:100 ) :
+          row.template_name}} </td>
         <td> {{ row.format_started_at }}</td>
         <td> {{ row.format_expected_end_at }}</td>
         <td> {{ row.last_mobile_received_message }}</td>
