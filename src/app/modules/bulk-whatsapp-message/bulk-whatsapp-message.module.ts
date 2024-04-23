@@ -22,6 +22,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ShowScheduleJobsComponent } from './show-schedule-jobs/show-schedule-jobs.component';
 import { RecordsScheduleJobsComponent } from './records-schedule-jobs/records-schedule-jobs.component';
 import { TooltipModule } from 'primeng/tooltip';
+import { CronComponent } from './cron/cron.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TooltipModule } from 'primeng/tooltip';
     WhatsappSenderShowComponent,
     ShowScheduleJobsComponent,
     RecordsScheduleJobsComponent,
+    CronComponent,
   ],
   imports: [
     CommonModule,

@@ -280,11 +280,12 @@
       <hr>
     </ul>
     <!-- ================================================Bulk Whatsapp Sender================================================== -->
-    <div class="menu-header mt-3 mb-2" *ngIf="showReportStaticsServicePermission">
+    <div class="menu-header mt-3 mb-2"
+      *ngIf="sendBulkWhatsappMessagePermission || senderBulkWhatsappMessagePermission || templateBulkWhatsappMessagePermission || queryBulkWhatsappMessagePermission || cronBulkWhatsappMessagePermission">
       Whatsapp
     </div>
     <ul class="menu-items"
-      *ngIf="sendBulkWhatsappMessagePermission || senderBulkWhatsappMessagePermission || templateBulkWhatsappMessagePermission || queryBulkWhatsappMessagePermission">
+      *ngIf="sendBulkWhatsappMessagePermission || senderBulkWhatsappMessagePermission || templateBulkWhatsappMessagePermission || queryBulkWhatsappMessagePermission || cronBulkWhatsappMessagePermission">
       <li *ngIf="queryBulkWhatsappMessagePermission">
         <a routerLink="/bulk-whatsapp-messages/query" routerLinkActive="active">
           <i class="fas fa-code"></i>
@@ -314,6 +315,13 @@
         <a routerLink="/bulk-whatsapp-messages/track" routerLinkActive="active">
           <i class="fa fa-rocket"></i>
           <span>Track Bulks</span>
+        </a>
+      </li>
+
+      <li *ngIf="cronBulkWhatsappMessagePermission">
+        <a routerLink="/bulk-whatsapp-messages/cron" routerLinkActive="active">
+          <i class="fa fa-play"></i>
+          <span>Cron Jobs</span>
         </a>
       </li>
       <hr>

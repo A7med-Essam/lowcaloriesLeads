@@ -275,6 +275,21 @@ export class SendBulkWhatsappService {
   }> {
     return this._ApiConfigService.postReq3(`stopWhatsAppBulkServices`, '');
   }
+
+  getAllCrons(): Observable<{
+    data: any[];
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(`getAllCrons`, { withoutPagination: true});
+  }
+  updateCron(request: any): Observable<{
+    data: any;
+    message: string;
+    status: number;
+  }> {
+    return this._ApiConfigService.postReq3(`updateCron`, request);
+  }
 }
 
 export interface IWhatsAppSenderMessages {

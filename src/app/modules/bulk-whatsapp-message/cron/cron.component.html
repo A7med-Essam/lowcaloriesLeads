@@ -1,0 +1,89 @@
+<div class="card">
+    <p-table [value]="crones" dataKey="id" editMode="row">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Number Execution</th>
+                <th>Query</th>
+                <th>Every Minutes</th>
+                <th>last_execute_at</th>
+                <th>created_at</th>
+                <th>updated_at</th>
+                <th>Sender Name</th>
+                <th>Template Name</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-ri="rowIndex">
+            <tr>
+                <td>
+                    {{row?.name}}
+                </td>
+                <td>
+                    {{row?.status}}
+                </td>
+                <td>
+                    {{row?.number_execution}}
+                </td>
+                <td>
+                    {{row?.query}}
+                </td>
+                <td>
+                    {{row?.every_minutes}}
+                </td>
+                <td>
+                    {{row?.last_execute_at}}
+                </td>
+                <td>
+                    {{row?.created_at | date}}
+                </td>
+                <td>
+                    {{row?.updated_at | date}}
+                </td>
+                <td>
+                    {{row?.sender_name}}
+                </td>
+                <td>
+                    {{row?.template_name}}
+                </td>
+                <td>
+                    <button pButton type="button" icon="pi pi-pencil" (click)="updateRow(row)"
+                        class="m-1 p-button-sm p-button-warning"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Update Cron" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <form [formGroup]="updateForm" (ngSubmit)='onSubmit(updateForm)'>
+            <div class="row mx-0">
+                <div class="col-md-12 col-12 my-3">
+                    <label for="">Every Minutes</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='every_minutes' />
+                </div>
+                <div class="col-md-12 col-12 my-3">
+                    <label for="">Status</label>
+                    <p-dropdown [options]="['stop','running']" formControlName='status' appendTo="body"
+                        styleClass="w-100" placeholder="Select Status"></p-dropdown>
+                </div>
+                <div class="col-md-12 col-12 my-3">
+                    <label for="">Template</label>
+                    <p-dropdown [options]="templates" formControlName='template_id' appendTo="body" styleClass="w-100"
+                        placeholder="Select Template" optionValue="id" optionLabel="case"></p-dropdown>
+                </div>
+                <div class="col-md-12 col-12 my-3">
+                    <label for="">Sender</label>
+                    <p-dropdown [options]="senders" formControlName='sender_id' appendTo="body" styleClass="w-100"
+                        placeholder="Select Sender" optionValue="id" optionLabel="name"></p-dropdown>
+                </div>
+                <div class="col-12 my-3">
+                    <button class="btn btn-primary w-100" [disabled]="updateForm.invalid">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</p-dialog>

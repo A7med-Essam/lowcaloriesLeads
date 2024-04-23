@@ -8,6 +8,7 @@ import { WhatsappSenderComponent } from './whatsapp-sender/whatsapp-sender.compo
 import { WhatsappSenderShowComponent } from './whatsapp-sender-show/whatsapp-sender-show.component';
 import { ShowScheduleJobsComponent } from './show-schedule-jobs/show-schedule-jobs.component';
 import { RecordsScheduleJobsComponent } from './records-schedule-jobs/records-schedule-jobs.component';
+import { CronComponent } from './cron/cron.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'send', pathMatch: 'full' },
@@ -65,6 +66,14 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       permission: ['sender_bulkWhatsapp'],
+    },
+  },
+  {
+    path: 'cron',
+    component: CronComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['cron_bulkWhatsapp'],
     },
   },
 ];
