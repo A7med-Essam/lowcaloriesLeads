@@ -1029,6 +1029,9 @@
           <p-table [value]="filter" (onLazyLoad)="sort($event)" [loading]="loadingTable">
             <ng-template pTemplate="header">
               <tr>
+                <th class="text-center" pSortableColumn="total_duration">From
+                  <p-sortIcon field="type"></p-sortIcon>
+                </th>
                 <th class="text-center" pSortableColumn="total_duration">Total Duration
                   <p-sortIcon field="total_duration"></p-sortIcon>
                 </th>
@@ -1046,6 +1049,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-callGear>
               <tr [pSelectableRow]="callGear">
+                <td class="text-center">{{callGear?.type}}</td>
                 <td class="text-center">{{callGear?.total_duration}}s</td>
                 <td class="text-center">{{callGear?.start_time| date: 'dd/MM/yyyy hh:mm a'}}</td>
                 <td class="text-center">{{callGear?.direction}}</td>
@@ -1954,16 +1958,22 @@
             <tr *ngFor="let call of current_callGear?.call_records;let i = index">
               <td style="vertical-align: middle;">#{{i+1}}</td>
               <td>
-                <audio controls>
+                <audio *ngIf="current_callGear.type=='maxum'" controls>
                   <source [src]="current_callGear.call_records" type="audio/mpeg">
+                </audio>
+                <audio *ngIf="current_callGear.type!='maxum'" controls>
+                  <source
+                    src="https://app.callgear.com/system/media/talk/{{current_callGear.communication_id}}/{{call}}/"
+                    type="audio/mpeg">
                 </audio>
               </td>
               <td style="vertical-align: middle;">
-                <!-- <button class="btn btn-primary rounded-pill b1"
+
+                <button *ngIf="current_callGear.type!='maxum'" class="btn btn-primary rounded-pill b1"
                   (click)="convertAudioToBase64('https://app.callgear.com/system/media/talk/',current_callGear.communication_id,call)">
                   Download Call
-                </button> -->
-                <a class="btn btn-primary rounded-pill b1" target="_blank"
+                </button>
+                <a *ngIf="current_callGear.type=='maxum'" class="btn btn-primary rounded-pill b1" target="_blank"
                   [href]="current_callGear.call_records">Download Call</a>
               </td>
             </tr>
