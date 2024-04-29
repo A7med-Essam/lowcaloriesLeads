@@ -152,7 +152,7 @@ export class SidebarComponent implements OnInit {
   }
 
   logOut() {
-    this._PusherService.firePusher(true);
+    // this._PusherService.firePusher(true);
     this._AuthService.logOut();
   }
 }

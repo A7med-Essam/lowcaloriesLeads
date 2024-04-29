@@ -15,7 +15,7 @@ export class AppComponent {
     private _AppService: AppService,
     private _PusherService:PusherService
   ) { 
-    _PusherService.firePusher();
+    // _PusherService.firePusher();
    }
 
   getClasses() {

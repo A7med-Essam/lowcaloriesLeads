@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
           this.signInStatus = false;
           if (res.status === 1) {
             this._AuthService.saveUser(res.data);
-            this._PusherService.firePusher();
+            // this._PusherService.firePusher();
             const returnUrl = this._AuthService.returnUrl.value;
             const navigationUrl = returnUrl ? returnUrl : '/home';
             this._AuthService.returnUrl.next(null);

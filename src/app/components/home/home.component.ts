@@ -31,29 +31,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     customer_name: new FormControl(null),
   });
   ngOnInit(): void {
-    this._AuthService.currentUser
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((data: any) => {
-        this.isSuperAdmin = data?.role_name === 'super_admin';
-        if (this.isSuperAdmin) {
-          this.getAgents();
-          this.getLabels();
-          this._AnalysisService
-          .getStatics([{label:"from",name:new Date()},{label:"to",name:new Date()}])
-          .subscribe((res) => {
-            if (this.chart) {
-              this.chart.destroy();
-            }
-            this.statics = res.data;
-            this.statics[0].name = "Analytics"
-            this.statics[0].label = "Analytics Count"
-            this.displayChart = true;
-            setTimeout(() => {
-              this.createChart(this.statics);
-            }, 1);
-          });
-        }
-      });
+    // this._AuthService.currentUser
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe((data: any) => {
+    //     this.isSuperAdmin = data?.role_name === 'super_admin';
+    //     if (this.isSuperAdmin) {
+    //       this.getAgents();
+    //       this.getLabels();
+    //       this._AnalysisService
+    //       .getStatics([{label:"from",name:new Date()},{label:"to",name:new Date()}])
+    //       .subscribe((res) => {
+    //         if (this.chart) {
+    //           this.chart.destroy();
+    //         }
+    //         this.statics = res.data;
+    //         this.statics[0].name = "Analytics"
+    //         this.statics[0].label = "Analytics Count"
+    //         this.displayChart = true;
+    //         setTimeout(() => {
+    //           this.createChart(this.statics);
+    //         }, 1);
+    //       });
+    //     }
+    //   });
   }
 
   ngOnDestroy(): void {
