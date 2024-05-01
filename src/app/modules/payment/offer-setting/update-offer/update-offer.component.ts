@@ -108,7 +108,6 @@ export class UpdateOfferComponent implements OnInit, OnDestroy {
       url_name: data.url_name,
       menu: data.menu,
     });
-    console.log(this.paymentForm.value);
     this.handleProgramTypeChange(type);
     this.handleProgramIdChange(
       this.isCustom

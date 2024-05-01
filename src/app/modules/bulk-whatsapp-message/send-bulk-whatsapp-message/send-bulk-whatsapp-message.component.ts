@@ -211,7 +211,6 @@ export class SendBulkWhatsappMessageComponent implements OnInit {
       if (this.selectedTemplate) {
         this.isLoading = true;
         const nums = this.numbers.map((res) => res.value);
-        console.log(this.fileName);
         this._sendWhatsappServices
           .sendBulkMessage({
             message: this.selectedTemplate.message,

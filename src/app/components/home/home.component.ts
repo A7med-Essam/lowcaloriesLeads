@@ -1,10 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Chart } from 'chart.js/auto';
+import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AnalysisService } from 'src/app/services/analysis.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { SubscriptionsService } from 'src/app/services/subscriptions.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -20,7 +23,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     // private _SurveyService:SurveyService,
     private _AnalysisService: AnalysisService,
     private _AuthService: AuthService,
-    private _SurveyService: SurveyService
+    private _SurveyService: SurveyService,
+    private _DashboardService: DashboardService,
+    private _SubscriptionsService: SubscriptionsService,
+    private _MessageService: MessageService
   ) {}
   staticsForm: FormGroup = new FormGroup({
     date: new FormControl(null),
@@ -31,6 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     customer_name: new FormControl(null),
   });
   ngOnInit(): void {
+    this.getDashboardCards();
     // this._AuthService.currentUser
     //   .pipe(takeUntil(this.unsubscribe$))
     //   .subscribe((data: any) => {
@@ -271,6 +278,159 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.agents = res.data;
       },
     });
+  }
+
+  cards: any[] = [];
+  getDashboardCards() {
+    this._DashboardService.getDashboardCards().subscribe({
+      next: (res) => {
+        this.cards = res.data;
+      },
+    });
+  }
+
+  invoices: any[] = [];
+  getInvoices(key: string) {
+    this._DashboardService.getInvoices(key).subscribe({
+      next: (res) => {
+        this.invoices = res.data;
+      },
+    });
+  }
+
+  cardModal: boolean = false;
+  employeeCardModal: boolean = false;
+  paymentCardModal: boolean = false;
+  getCardDetails(key: string) {
+    this.cardModal = true;
+    this.getInvoices(key);
+  }
+
+  // ======= Employee Card Modal =======
+  getEmployeeCardDetails(key: string) {
+    this.employeeCardModal = true;
+    this.invoices = [];
+    this._DashboardService.getInvoices(key).subscribe({
+      next: (res) => {
+        this.invoices = res.data;
+        this.getSortedEmps(res.data);
+      },
+    });
+  }
+  getPaymentCardDetails(key: string) {
+    this.paymentCardModal = true;
+    this.invoices = [];
+    this._DashboardService.getInvoices(key).subscribe({
+      next: (res) => {
+        this.invoices = res.data;
+        this.getSortedPayments(res.data);
+      },
+    });
+  }
+  getSortedEmps(data: any) {
+    const count: any = {};
+    data.forEach((d: any) => {
+      count[d.agent] = (count[d.agent] || 0) + 1;
+    });
+    const order: any = {};
+    Object.keys(count)
+      .sort((a: any, b: any) => count[b] - count[a])
+      .forEach((agent, index) => {
+        order[agent] = index;
+      });
+    Object.entries(count).forEach(([key, value]) => {
+      let obj: any = {};
+      obj['name'] = key;
+      obj['value'] = value;
+      obj['children'] = this.invoices.filter(
+        (e: any) => e.agent == key
+      );
+      this.subscriptionAgents.push(obj);
+    });
+    let newArray: any = [];
+    for (let i = 0; i < Object.keys(order).length; i++) {
+      const key = Object.keys(order).find((key) => order[key] == i);
+      newArray.push(data.filter((e: any) => e.agent == key));
+    }
+    return newArray.flat();
+  }
+  paymentMethods: any[] = [];
+  subscriptionAgents: any[] = [];
+  getSortedPayments(data: any) {
+    const count: any = {};
+    data.forEach((d: any) => {
+      count[d.supscription_from] = (count[d.supscription_from] || 0) + 1;
+    });
+    const order: any = {};
+    Object.keys(count)
+      .sort((a: any, b: any) => count[b] - count[a])
+      .forEach((supscription_from, index) => {
+        order[supscription_from] = index;
+      });
+    Object.entries(count).forEach(([key, value]) => {
+      let obj: any = {};
+      obj['name'] = key;
+      obj['value'] = value;
+      obj['children'] = this.invoices.filter(
+        (e: any) => e.supscription_from == key
+      );
+      this.paymentMethods.push(obj);
+    });
+    let newArray: any = [];
+    for (let i = 0; i < Object.keys(order).length; i++) {
+      const key = Object.keys(order).find((key) => order[key] == i);
+      newArray.push(data.filter((e: any) => e.supscription_from == key));
+    }
+    return newArray.flat();
+  }
+  calculateTotalAgent(name: string) {
+    let total = 0;
+
+    if (this.invoices) {
+      for (let invoice of this.invoices) {
+        if (invoice.agent === name) {
+          total++;
+        }
+      }
+    }
+
+    return total;
+  }
+  calculateTotalPayment(name: string) {
+    let total = 0;
+
+    if (this.invoices) {
+      for (let invoice of this.invoices) {
+        if (invoice.supscription_from === name) {
+          total++;
+        }
+      }
+    }
+
+    return total;
+  }
+
+  export(rows:any){
+    let exportObservable;
+    exportObservable = this._SubscriptionsService.exportByIds(rows.map((e:any)=>e.id));
+    exportObservable.subscribe({
+      next: (res) => {
+        this.handleExportSuccess(res.data);
+      },
+    });
+  }
+
+  private handleExportSuccess(data: any) {
+    this._MessageService.add({
+      severity: 'success',
+      summary: 'Export Excel',
+      detail: 'Subscriptions Exported Successfully',
+    });
+
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = data;
+    link.click();
   }
 }
 

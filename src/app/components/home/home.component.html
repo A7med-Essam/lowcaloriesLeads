@@ -1,106 +1,42 @@
 <div class="row">
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
+  <div class="col-xl-3 col-lg-6 col-md-6 my-2" *ngFor="let card of cards; let i = index;">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
-              <i class="fa fa-star text-warning"></i>
+              <i class="text-muted" [class]="card?.icon"></i>
             </div>
           </div>
           <div class="col-7 col-md-8">
             <div class="numbers">
-              <p class="card-category">Total Leads</p>
-              <p class="card-title">{{totalLeads}}</p>
+              <p class="card-category">{{card?.label}}</p>
+              <p class="card-title">{{card?.value}}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="card-footer">
-        <hr>
-        <div class="stats">
-          <i class="fas fa-sync-alt"></i> Update Now
+        <div class="stats pointer" *ngIf="i === 0 || i === 1" (click)="getCardDetails(card.key)">
+          <hr>
+          <i class="fas fa-sync-alt"></i> More Details
+        </div>
+        <div class="stats pointer" *ngIf="i === 2" (click)="getPaymentCardDetails(card.key)">
+          <hr>
+          <i class="fas fa-sync-alt"></i> More Details
+        </div>
+        <div class="stats pointer" *ngIf="i === 3" (click)="getEmployeeCardDetails(card.key)">
+          <hr>
+          <i class="fas fa-sync-alt"></i> More Details
+        </div>
+        <div class="stats" *ngIf="i === 4">
+          <hr>
+          <i class="fas fa-sync-alt"></i> Target Details
         </div>
       </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="fas fa-headset text-success"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Calls</p>
-              <p class="card-title">{{reminded}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fas fa-sync-alt"></i> Update Now
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="fas fa-user-tag text-main"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Total Targets</p>
-              <p class="card-title">{{oldLeads}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fas fa-sync-alt"></i> Update Now
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-lg-6 col-md-6 my-2">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="far fa-comment-dots text-danger"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Reminder Messages</p>
-              <p class="card-title">{{leadsMessages}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fas fa-sync-alt"></i> Update Now
-        </div>
-      </div>
-    </div>
-  </div>
 
-
+    </div>
+  </div>
 </div>
 
 <!-- <div *ngIf="isSuperAdmin">
@@ -233,3 +169,175 @@
 </div>
 
 
+<p-dialog header="Card Details" [(visible)]="cardModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false"
+  [resizable]="false">
+  <p-table [value]="invoices">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">Supscription From</th>
+        <th class="text-center">Invoice No</th>
+        <th class="text-center">Start Date</th>
+        <th class="text-center">Total Price</th>
+        <th class="text-center">Plan Name</th>
+        <th class="text-center">Name</th>
+        <th class="text-center">Mobile</th>
+        <th class="text-center">Agent</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-i="rowIndex">
+      <tr>
+        <td class="text-center">{{row?.supscription_from}}</td>
+        <td class="text-center">{{row?.invoice_no}}</td>
+        <td class="text-center">{{row?.start_date}}</td>
+        <td class="text-center">{{row?.total_price}}</td>
+        <td class="text-center">{{row?.planName}}</td>
+        <td class="text-center">{{row?.name}}</td>
+        <td class="text-center">{{row?.mobile}}</td>
+        <td class="text-center">{{row?.agent}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <ng-template pTemplate="footer">
+    <div class="upload-btn-wrapper mt-3">
+      <button class="btn btn-primary" (click)="cardModal = false;">Close</button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Payment Details" [(visible)]="paymentCardModal" [modal]="true" [draggable]="false" [resizable]="false"
+  [style]="{width: '75vw'}">
+  <div class="card" *ngIf="paymentMethods?.length">
+    <p-table [value]="paymentMethods" sortField="value" sortMode="single" dataKey="value" rowGroupMode="subheader"
+      groupRowsBy="value" [sortOrder]="-1">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center">Invoice No</th>
+          <th class="text-center">Start Date</th>
+          <th class="text-center">Total Price</th>
+          <th class="text-center">Plan Name</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">Mobile</th>
+          <th class="text-center">Agent</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupheader" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr>
+          <td colspan="11">
+            <div class="d-flex justify-content-between">
+              <div class="d-flex justify-content-start align-items-center">
+                <button type="button" pButton pRipple [pRowToggler]="row"
+                  class="p-button-text p-button-rounded p-button-plain me-4"
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                <span class="font-bold ml-2" style="    display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;">
+                  {{row.name}}
+                  <div
+                    style="border-radius: 50%;width: 50px;height: 50px;background-color: #09c;display: flex; justify-content: center;align-items: center;color: #fff;">
+                    {{row.value}}
+                  </div>
+                </span>
+              </div>
+              <div>
+                <p-button class="mx-1" icon="pi pi-file" label="Export" (click)="export(row.children)">
+                </p-button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupfooter" let-row>
+        <tr class="p-rowgroup-footer" style="background-color: antiquewhite;">
+          <td colspan="10" style="text-align: right">Total Rows</td>
+          <td>{{row.value}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-row>
+        <tr *ngFor="let item of row?.children">
+          <td class="text-center">{{item.invoice_no}}</td>
+          <td class="text-center">{{item.start_date}}</td>
+          <td class="text-center">{{item.total_price}}</td>
+          <td class="text-center">{{item.planName}}</td>
+          <td class="text-center">{{item.name}}</td>
+          <td class="text-center">{{item.mobile}}</td>
+          <td class="text-center">{{item.agent}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="upload-btn-wrapper mt-3">
+      <button class="btn btn-primary" (click)="paymentCardModal = false;">Close</button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Agent Details" [(visible)]="employeeCardModal" [modal]="true" [draggable]="false" [resizable]="false"
+  [style]="{width: '75vw'}">
+  <div class="card" *ngIf="invoices?.length">
+    <p-table [value]="subscriptionAgents" sortField="value" sortMode="single" dataKey="value" rowGroupMode="subheader"
+      groupRowsBy="value" [sortOrder]="-1">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center">Supscription From</th>
+          <th class="text-center">Invoice No</th>
+          <th class="text-center">Start Date</th>
+          <th class="text-center">Total Price</th>
+          <th class="text-center">Plan Name</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">Mobile</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupheader" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr>
+          <td colspan="11">
+            <div class="d-flex justify-content-between">
+              <div class="d-flex justify-content-start align-items-center">
+                <button type="button" pButton pRipple [pRowToggler]="row"
+                  class="p-button-text p-button-rounded p-button-plain me-4"
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                <span class="font-bold ml-2" style="    display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;">
+                  {{row.name}}
+                  <div
+                    style="border-radius: 50%;width: 50px;height: 50px;background-color: #09c;display: flex; justify-content: center;align-items: center;color: #fff;">
+                    {{row.value}}
+                  </div>
+                </span>
+              </div>
+              <div>
+                <p-button class="mx-1" icon="pi pi-file" label="Export" (click)="export(row.children)">
+                </p-button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupfooter" let-row>
+        <tr class="p-rowgroup-footer" style="background-color: antiquewhite;">
+          <td colspan="10" style="text-align: right">Total Rows</td>
+          <td> {{row.value}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-row>
+        <tr *ngFor="let item of row?.children">
+          <td class="text-center">{{item?.supscription_from}}</td>
+          <td class="text-center">{{item?.invoice_no}}</td>
+          <td class="text-center">{{item?.start_date}}</td>
+          <td class="text-center">{{item?.total_price}}</td>
+          <td class="text-center">{{item?.planName}}</td>
+          <td class="text-center">{{item?.name}}</td>
+          <td class="text-center">{{item?.mobile}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="upload-btn-wrapper mt-3">
+      <button class="btn btn-primary" (click)="employeeCardModal = false;">Close</button>
+    </div>
+  </ng-template>
+</p-dialog>

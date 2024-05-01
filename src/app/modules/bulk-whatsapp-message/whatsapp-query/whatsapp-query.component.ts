@@ -124,7 +124,6 @@ export class WhatsappQueryComponent implements OnInit, OnDestroy {
       });
   }
   onPageChange(event: any) {
-    console.log(event);
     this.page = event.page + 1;
     this.pagination.rows = event.rows;
     this.getQueries();

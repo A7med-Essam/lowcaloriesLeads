@@ -25,7 +25,6 @@ export class RecordsScheduleJobsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getScheduleNumbers(this.schedualId);
-    // console.log(this.schedualId);
   }
   getScheduleNumbers(schedual_id: number) {
     this._SendBulkWhatsappService
