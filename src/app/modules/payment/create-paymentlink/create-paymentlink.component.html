@@ -41,6 +41,8 @@
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('height')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="
+                    paymentForm.get('height')?.hasError('min')">Height must be greater than 100</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Weight <span class="text-danger">*</span></label>
@@ -48,6 +50,8 @@
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('Weight')?.hasError('required')">This field is required.</small>
+                <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('Weight')?.hasError('min')">Weight must be greater than 30</small>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
                 <label for="">Birthday <span class="text-danger">*</span></label>
@@ -183,7 +187,8 @@
             <div class="col-12 my-3">
                 <label for="">Days Of Delivery <span class="text-danger">*</span></label>
                 <div class="d-flex flex-wrap">
-                    <div class="field-checkbox m-3" *ngFor="let day of days | slice:0: paymentForm.value.program_type == 'Ramadan Plans' ? 6 : 7">
+                    <div class="field-checkbox m-3"
+                        *ngFor="let day of days | slice:0: paymentForm.value.program_type == 'Ramadan Plans' ? 6 : 7">
                         <p-checkbox [value]="day.value" [inputId]="day.name" #checkbox #deliveryDaysBox
                             (onChange)="onCheckboxChange($event,'delivery_days',day.value)">
                         </p-checkbox>
@@ -267,8 +272,8 @@
             </div>
             <div class="col-xl-3 col-md-6 col-12 my-3">
                 <label for="">Start Date <span class="text-danger">*</span></label>
-                <p-calendar [minDate]="paymentForm.value.program_type == 'Ramadan Plans'? tomorrow:tomorrow" [readonlyInput]="true" ngClass="w-100" appendTo="body"
-                    formControlName='start_date'>
+                <p-calendar [minDate]="paymentForm.value.program_type == 'Ramadan Plans'? tomorrow:tomorrow"
+                    [readonlyInput]="true" ngClass="w-100" appendTo="body" formControlName='start_date'>
                 </p-calendar>
                 <small class="text-danger ms-1" *ngIf="
                 paymentForm.get('start_date')?.hasError('required')">This field is required.</small>

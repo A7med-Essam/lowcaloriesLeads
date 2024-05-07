@@ -164,8 +164,8 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       ]),
       email: new FormControl(null, [Validators.required, Validators.email]),
       gender: new FormControl(null, [Validators.required]),
-      height: new FormControl(null, [Validators.required]),
-      Weight: new FormControl(null, [Validators.required]),
+      height: new FormControl(null, [Validators.required, Validators.min(100)]),
+      Weight: new FormControl(null, [Validators.required, Validators.min(30)]),
       birthday: new FormControl(null, [Validators.required]),
       program_type: new FormControl(null, [Validators.required]),
       program: new FormControl(null, [Validators.required]),
@@ -380,6 +380,12 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
               this.paymentForm.get(type)?.setErrors({ required: true });
             }
           }
+
+          if (this.paymentForm.value.program && this.paymentForm.value.program.shortcut_name == 'SLW') {
+            if (formArray.length < 3) {
+              this.paymentForm.get(type)?.setErrors({ required: true });
+            }
+          }
         }
       }
     }
@@ -423,6 +429,10 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       ?.valueChanges.subscribe((value) => {
         if (value) {
           this.handleProgramIdChange(value);
+          if (this.paymentForm.value.program && this.paymentForm.value.program.shortcut_name == 'SLW') {
+            this.paymentForm.get('snack_types')?.setValidators(Validators.required);
+            this.paymentForm.get('snack_types')?.setErrors({ required: true });
+          }
         }
       });
 
