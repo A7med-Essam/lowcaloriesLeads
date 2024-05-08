@@ -438,6 +438,13 @@ export class PrintPaymentbranchComponent implements OnInit, OnDestroy {
           if (this.paymentForm.value.program && this.paymentForm.value.program.shortcut_name == 'SLW') {
             this.paymentForm.get('snack_types')?.setValidators(Validators.required);
             this.paymentForm.get('snack_types')?.setErrors({ required: true });
+
+            let meal_types: FormArray = this.paymentForm.get('meal_types') as FormArray;
+            ['Meal 1', 'Meal 2', 'Meal 3'].forEach((m) => {
+              meal_types.push(new FormControl(m));
+            });
+            let snack_types: FormArray = this.paymentForm.get('snack_types') as FormArray;
+            snack_types.push(new FormControl('Snack 1'));
           }
         }
       });

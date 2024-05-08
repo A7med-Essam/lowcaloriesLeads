@@ -100,49 +100,52 @@
                 <small class="text-danger ms-1" *ngIf="
             paymentForm.get('subscription_days')?.hasError('required')">This field is required.</small>
             </div>
-            <hr>
-            <div class="col-12 my-3" *ngIf="mealTypes.length && paymentForm.get('only_snack')?.value == 'no'">
-                <label for="">Type Meals <span class="text-danger">*</span></label>
-                <div class="d-flex flex-wrap">
-                    <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
-                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
-                            (onChange)="onCheckboxChange($event,'meal_types',meal)">
-                        </p-checkbox>
-                        <label class="mx-1" [for]="meal">{{meal}}</label>
+            <div *ngIf="paymentForm.get('program_id')?.value != 12" class="row">
+                <hr>
+                <div class="col-12 my-3" *ngIf="mealTypes.length && paymentForm.get('only_snack')?.value == 'no'">
+                    <label for="">Type Meals <span class="text-danger">*</span></label>
+                    <div class="d-flex flex-wrap">
+                        <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
+                            <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
+                                (onChange)="onCheckboxChange($event,'meal_types',meal)">
+                            </p-checkbox>
+                            <label class="mx-1" [for]="meal">{{meal}}</label>
+                        </div>
+                    </div>
+                    <small class="text-danger ms-1" *ngIf="
+                    paymentForm.get('meal_types')?.hasError('required')">This field is required.</small>
+                </div>
+                <div class="col-md-8 col-12 my-3" *ngIf="snackTypes.length">
+                    <label for="">Type Snack</label>
+                    <div class="d-flex flex-wrap">
+                        <div class="field-checkbox m-3" *ngFor="let meal of snackTypes">
+                            <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
+                                (onChange)="onCheckboxChange($event,'snack_types',meal)">
+                            </p-checkbox>
+                            <label class="mx-1" [for]="meal">{{meal| ramadanMealTypes:paymentForm.value.program_type ==
+                                "Ramadan Plans"}}</label>
+                        </div>
+                    </div>
+                    <small class="text-danger ms-1" *ngIf="
+                paymentForm.get('snack_types')?.hasError('required')">This field is required.</small>
+                </div>
+                <div class="col-md-4 col-12 my-3" *ngIf="snackTypes.length">
+                    <label for="">ONLY SNACK?</label>
+                    <div class="d-flex flex-wrap">
+                        <div class="flex align-items-center m-3">
+                            <p-radioButton formControlName="only_snack" value="yes" inputId="SNACK_YES">
+                            </p-radioButton>
+                            <label class="mx-1" for="SNACK_YES">YES</label>
+                        </div>
+                        <div class="flex align-items-center m-3">
+                            <p-radioButton formControlName="only_snack" value="no" inputId="SNACK_NO">
+                            </p-radioButton>
+                            <label class="mx-1" for="SNACK_NO">NO</label>
+                        </div>
                     </div>
                 </div>
-                <small class="text-danger ms-1" *ngIf="
-                paymentForm.get('meal_types')?.hasError('required')">This field is required.</small>
             </div>
-            <div class="col-md-8 col-12 my-3" *ngIf="snackTypes.length">
-                <label for="">Type Snack</label>
-                <div class="d-flex flex-wrap">
-                    <div class="field-checkbox m-3" *ngFor="let meal of snackTypes">
-                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
-                            (onChange)="onCheckboxChange($event,'snack_types',meal)">
-                        </p-checkbox>
-                        <label class="mx-1" [for]="meal">{{meal| ramadanMealTypes:paymentForm.value.program_type ==
-                            "Ramadan Plans"}}</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="
-            paymentForm.get('snack_types')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-md-4 col-12 my-3" *ngIf="snackTypes.length">
-                <label for="">ONLY SNACK?</label>
-                <div class="d-flex flex-wrap">
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="only_snack" value="yes" inputId="SNACK_YES">
-                        </p-radioButton>
-                        <label class="mx-1" for="SNACK_YES">YES</label>
-                    </div>
-                    <div class="flex align-items-center m-3">
-                        <p-radioButton formControlName="only_snack" value="no" inputId="SNACK_NO">
-                        </p-radioButton>
-                        <label class="mx-1" for="SNACK_NO">NO</label>
-                    </div>
-                </div>
-            </div>
+
             <hr *ngIf="mealTypes.length">
             <div class="col-12 my-3" *ngIf="!isCustom">
                 <label for="">DAYS OF PLAN <span class="text-danger">*</span></label>

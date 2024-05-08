@@ -381,7 +381,10 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
             }
           }
 
-          if (this.paymentForm.value.program && this.paymentForm.value.program.shortcut_name == 'SLW') {
+          if (
+            this.paymentForm.value.program &&
+            this.paymentForm.value.program.shortcut_name == 'SLW'
+          ) {
             if (formArray.length < 3) {
               this.paymentForm.get(type)?.setErrors({ required: true });
             }
@@ -429,9 +432,21 @@ export class CreatePaymentlinkComponent implements OnInit, OnDestroy {
       ?.valueChanges.subscribe((value) => {
         if (value) {
           this.handleProgramIdChange(value);
-          if (this.paymentForm.value.program && this.paymentForm.value.program.shortcut_name == 'SLW') {
-            this.paymentForm.get('snack_types')?.setValidators(Validators.required);
+          if (
+            this.paymentForm.value.program &&
+            this.paymentForm.value.program.shortcut_name == 'SLW'
+          ) {
+            this.paymentForm
+              .get('snack_types')
+              ?.setValidators(Validators.required);
             this.paymentForm.get('snack_types')?.setErrors({ required: true });
+
+            let meal_types: FormArray = this.paymentForm.get('meal_types') as FormArray;
+            ['Meal 1', 'Meal 2', 'Meal 3'].forEach((m) => {
+              meal_types.push(new FormControl(m));
+            });
+            let snack_types: FormArray = this.paymentForm.get('snack_types') as FormArray;
+            snack_types.push(new FormControl('Snack 1'));
           }
         }
       });
