@@ -215,6 +215,17 @@ const routes: Routes = [
     },
   },
   {
+    path: 'logs',
+    loadChildren: () =>
+      import('./modules/log-activities/log-activities.module').then(
+        (m) => m.LogActivitiesModule
+      ),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['read_logs'],
+    },
+  },
+  {
     path: 'bulk-whatsapp-messages',
     loadChildren: () =>
       import(

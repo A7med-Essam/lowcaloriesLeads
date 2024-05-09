@@ -1,18 +1,15 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="m-3">
-        <button [disabled]="!createPermission" pButton pRipple label="Add GiftCode" class="p-button-success mx-1"
-            icon="pi pi-plus" routerLink="../create"></button>
+
         <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-        <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
-        </p-button>
+
     </div>
 </div>
 
 <div class="card">
-    <p-table [value]="giftCodes" [paginator]="true" [rows]="PaginationInfo?.per_page"
-        [totalRecords]="PaginationInfo?.total" [lazy]="true" (onLazyLoad)="sort($event)" (onPage)="paginate($event)"
-        [showCurrentPageReport]="true" responsiveLayout="scroll"
+    <p-table [value]="logs" [paginator]="true" [rows]="PaginationInfo?.per_page" [totalRecords]="PaginationInfo?.total"
+        [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
@@ -53,59 +50,36 @@
                 <td class="text-center">
                     <button pButton type="button" icon="pi pi-eye" (click)="showRow(code)"
                         class="m-1 p-button-sm"></button>
-                    <button [disabled]="!updatePermission" pButton type="button" icon="pi pi-pencil"
-                        (click)="displayUpdate(code)" class="m-1 p-button-sm p-button-warning"></button>
+
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
-<p-dialog header="Select Your Columns" [(visible)]="filterColumns" [modal]="true" [style]="{width: '50vw'}"
-    [draggable]="false" [resizable]="false">
-    <div class="container" #checkboxContainer>
-        <div class="field-checkbox my-3" *ngFor="let obj of columns">
-            <p-checkbox name="group1" [value]="obj.name" [(ngModel)]="selectedColumns" [inputId]="obj.name">
-            </p-checkbox>
-            <label class="mx-3" [for]="obj.name">{{obj.name}}</label>
-        </div>
-        <div class="field-checkbox my-3">
-            <p-checkbox name="group1" #currentCheckbox (click)="selectAllColumns(checkboxContainer,currentCheckbox)"
-                value="selectAll" inputId="c100"></p-checkbox>
-            <label class="mx-3" for="c100">Select All</label>
-        </div>
-    </div>
-    <ng-template pTemplate="footer">
-        <div class="upload-btn-wrapper">
-            <button class="btn btn-primary" (click)="filterColumns = false;getFilterColumns()">Apply</button>
-        </div>
-    </ng-template>
-</p-dialog>
 
-<p-dialog header="Filter Targets Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}"
-    [draggable]="false" [resizable]="false">
+
+<p-dialog header="Filter  Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
     <div class="container">
-        <form [formGroup]="filterForm" #myForm="ngForm">
+        <!-- [formGroup]="filterForm" #myForm="ngForm" -->
+        <form>
             <div class="row mx-0">
                 <div class="col-lg-6 col-12 my-2">
-                    <label for="">Code</label>
+                    <label for="">Agent Name</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='code' />
                 </div>
+
                 <div class="col-lg-6 col-12 my-2">
-                    <label for="">Percentage</label>
+                    <label for="">Model</label>
                     <input type="text" pInputText ngClass="w-100" formControlName='percentage' />
                 </div>
+
                 <div class="col-lg-6 col-12 my-2">
-                    <label for="">Flag</label>
-                    <p-dropdown [options]="flag" formControlName='flag' appendTo="body" styleClass="w-100"
-                        placeholder="Select Flag" [filter]="true">
-                    </p-dropdown>
-                </div>
-                <div class="col-lg-6 col-12 my-2">
-                    <label for="">Status</label>
-                    <p-dropdown [options]="status" formControlName='status' appendTo="body" styleClass="w-100"
-                        placeholder="Select Status" [filter]="true">
-                    </p-dropdown>
+                    <label for="">Operation</label>
+                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
+                        ngClass="w-100" appendTo="body">
+                    </p-calendar>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Date</label>
@@ -113,7 +87,6 @@
                         ngClass="w-100" appendTo="body">
                     </p-calendar>
                 </div>
-
             </div>
         </form>
     </div>
@@ -125,7 +98,7 @@
                 </button>
             </div>
             <div>
-                <button class="btn btn-primary" (click)="insertRow(filterForm)">
+                <button class="btn btn-primary">
                     Apply Filter
                 </button>
                 <button class="btn btn-secondary" (click)="resetFilter()">

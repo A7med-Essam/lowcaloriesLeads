@@ -200,11 +200,22 @@ export class ShowGiftcodeComponent implements OnInit, OnDestroy {
       flag: new FormControl(null),
       status: new FormControl(null),
       percentage: new FormControl(null),
+      date: new FormControl(null),
+      from: new FormControl(null),
+      to: new FormControl(null),
     });
   }
 
   insertRow(form: FormGroup) {
     this.appliedFilters = form.value;
+    this.filterForm.patchValue({
+      from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+      to:
+        form.value.date[1] == null
+          ? null
+          : new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+    });
+    console.log(this.appliedFilters);
     this._GiftcodeService.giftcode_filter.next(this.appliedFilters);
     this._GiftcodeService.filterGiftCodes(1, form.value).subscribe((res) => {
       this.giftCodes = res.data.data;

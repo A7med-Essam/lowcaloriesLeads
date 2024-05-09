@@ -14,6 +14,7 @@ export class SidebarComponent implements OnInit {
   user!: User;
 
   showLeadsPermission: boolean = false;
+  showLogsPermission: boolean = false;
   showCallsPermission: boolean = false;
   showRefundPermission: boolean = false;
   showTargetPermission: boolean = false;
@@ -75,6 +76,8 @@ export class SidebarComponent implements OnInit {
   getPermission() {
     this.showLeadsPermission =
       this._GuardService.getPermissionStatus('show_leads');
+    this.showLogsPermission =
+      this._GuardService.getPermissionStatus('read_logs');
     this.showCallsPermission =
       this._GuardService.getPermissionStatus('show_calls');
     this.showRefundPermission =
@@ -148,7 +151,7 @@ export class SidebarComponent implements OnInit {
     // this._GuardService.getPermissionStatus('show_customerPlan');
 
     this.cronBulkWhatsappMessagePermission =
-    this._GuardService.getPermissionStatus('cron_bulkWhatsapp');
+      this._GuardService.getPermissionStatus('cron_bulkWhatsapp');
   }
 
   logOut() {
