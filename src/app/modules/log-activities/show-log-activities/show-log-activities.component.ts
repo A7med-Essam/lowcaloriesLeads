@@ -26,7 +26,6 @@ export class ShowLogActivitiesComponent implements OnInit {
   ];
 
   constructor(
-    private _Router: Router,
     private _logServices: LogsService,
     private _GuardService: GuardService
   ) {}
@@ -43,10 +42,9 @@ export class ShowLogActivitiesComponent implements OnInit {
   }
   createFilterForm() {
     this.filterForm = new FormGroup({
-      code: new FormControl(null),
-      flag: new FormControl(null),
-      status: new FormControl(null),
-      percentage: new FormControl(null),
+      agent_name: new FormControl(null),
+      model: new FormControl(null),
+      operation: new FormControl(null),
       date: new FormControl(null),
       from: new FormControl(null),
       to: new FormControl(null),
@@ -54,10 +52,10 @@ export class ShowLogActivitiesComponent implements OnInit {
   }
   showRow(code: any) {
     if (code) {
-      // this._GiftcodeService.giftcode.next(code);
-      // this._Router.navigate(['giftcode/details']);
     }
   }
+
+  filters: any;
 
   currentPage: number = 1;
   paginate(e: any) {
@@ -72,6 +70,12 @@ export class ShowLogActivitiesComponent implements OnInit {
         next: (res: any) => {
           this.logs = res?.data?.data;
           this.PaginationInfo = res.data;
+
+          this.filters = {
+            agents: [...new Set(this.logs.map((e) => e.agent_name))],
+            model: [...new Set(this.logs.map((e) => e.model))],
+            operations: [...new Set(this.logs.map((e) => e.operation_type))],
+          };
         },
       });
     }
@@ -84,6 +88,40 @@ export class ShowLogActivitiesComponent implements OnInit {
         this.PaginationInfo = res.data;
         this.filterModal = false;
       });
+  }
+
+  filter(form: FormGroup) {
+    if (form.value.date) {
+      if (form.value.date[1]) {
+        form.patchValue({
+          from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+          to: new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+          date: null,
+        });
+      } else {
+        form.patchValue({
+          date: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+        });
+      }
+    }
+
+    for (const prop in form.value) {
+      if (form.value[prop] === null) {
+        delete form.value[prop];
+      }
+    }
+
+    this.appliedFilters = form.value;
+    this._logServices.filterLogActivities(1, form.value).subscribe((res) => {
+      this.logs = res.data.data;
+      this.PaginationInfo = res.data;
+      this.filterModal = false;
+      // this.filterForm.patchValue({
+      //   date: null,
+      //   from: null,
+      //   to: null,
+      // });
+    });
   }
 
   resetFilter() {

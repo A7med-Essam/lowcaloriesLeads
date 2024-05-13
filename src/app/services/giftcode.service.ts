@@ -3,33 +3,34 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiConfigService } from '../core/api-config.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GiftcodeService {
   giftcode: BehaviorSubject<any> = new BehaviorSubject(null);
   giftcode_filter: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  constructor(
-    private _ApiConfigService: ApiConfigService
-  )  { }
+  constructor(private _ApiConfigService: ApiConfigService) {}
 
-  getGiftCodes(page:number): Observable<any> {
-    return this._ApiConfigService.postReq3(`giftCodes?page=${page}`,'');
+  getGiftCodes(page: number): Observable<any> {
+    return this._ApiConfigService.postReq3(`giftCodes?page=${page}`, '');
   }
 
-  createGiftCode(code:any): Observable<any> {
-    return this._ApiConfigService.postReq3(`addGiftCode`,code);
+  createGiftCode(code: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`addGiftCode`, code);
   }
 
-  updateGiftCode(code:any): Observable<any> {
-    return this._ApiConfigService.postReq3(`updateGiftCode`,code);
+  updateGiftCode(code: any): Observable<any> {
+    return this._ApiConfigService.postReq3(`updateGiftCode`, code);
   }
 
-  getPrograms(): Observable<any>{
-    return this._ApiConfigService.postReq2(`programs`,'');
+  getPrograms(): Observable<any> {
+    return this._ApiConfigService.postReq2(`programs`, '');
   }
 
-  filterGiftCodes(page: number,filter:any){
+  filterGiftCodes(page: number, filter: any) {
     return this._ApiConfigService.postReq3(`giftCodes?page=${page}`, filter);
+  }
+  exportFilteredGiftCodes(filter: any) {
+    return this._ApiConfigService.postReq3(`exportGiftCodes`, filter);
   }
 }

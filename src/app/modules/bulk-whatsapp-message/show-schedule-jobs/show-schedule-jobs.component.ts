@@ -23,7 +23,7 @@ export class ShowScheduleJobsComponent implements OnInit {
   page = 1;
   pagination: any = {
     first: 1,
-    rows: 50,
+    rows: 10,
   };
   total!: number;
 

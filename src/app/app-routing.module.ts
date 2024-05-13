@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NodeTreeComponent } from './components/node-tree/node-tree.component';
 import { PermissionGuard } from './core/permission.guard';
+import { LogGuard } from './core/log.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -220,7 +221,7 @@ const routes: Routes = [
       import('./modules/log-activities/log-activities.module').then(
         (m) => m.LogActivitiesModule
       ),
-    canActivate: [PermissionGuard],
+    canActivate: [PermissionGuard,LogGuard],
     data: {
       permission: ['read_logs'],
     },

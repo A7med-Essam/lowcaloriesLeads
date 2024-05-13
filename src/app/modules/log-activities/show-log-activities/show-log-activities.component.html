@@ -62,24 +62,27 @@
 <p-dialog header="Filter  Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
     [resizable]="false">
     <div class="container">
-        <!-- [formGroup]="filterForm" #myForm="ngForm" -->
-        <form>
+        <form [formGroup]="filterForm" #myForm="ngForm">
             <div class="row mx-0">
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Agent Name</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='code' />
+                    <p-dropdown [options]="filters?.agents" formControlName="agent_name" styleClass="w-100" appendTo="body"
+                        [filter]="true" placeholder="Select Option">
+                    </p-dropdown>
                 </div>
 
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Model</label>
-                    <input type="text" pInputText ngClass="w-100" formControlName='percentage' />
+                    <p-dropdown [options]="filters?.model" formControlName="model" styleClass="w-100" appendTo="body" placeholder="Select Option"
+                        [filter]="true">
+                    </p-dropdown>
                 </div>
 
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Operation</label>
-                    <p-calendar selectionMode="range" [readonlyInput]="true" inputId="range" formControlName="date"
-                        ngClass="w-100" appendTo="body">
-                    </p-calendar>
+                    <p-dropdown [options]="filters?.operations" formControlName="operation" styleClass="w-100" appendTo="body"
+                        [filter]="true" placeholder="Select Option">
+                    </p-dropdown>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Date</label>
@@ -98,7 +101,7 @@
                 </button>
             </div>
             <div>
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" (click)="filter(filterForm)">
                     Apply Filter
                 </button>
                 <button class="btn btn-secondary" (click)="resetFilter()">

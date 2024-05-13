@@ -661,7 +661,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     this.subscriptions?.sort((a: any, b: any) => {
       const getValue = (obj: any, key: string) => {
         if (hasBrackets) {
-          const [keyWithoutBrackets] = key.match(/\[(.*?)\]/) || [];
+          const [keyWithoutBrackets] :any = key.match(/\[(.*?)\]/) || [];
           return obj?.[key.replace(/\s*\[.*?\]/, '')]?.[
             keyWithoutBrackets?.replace(/\[|\]/g, '')
           ];

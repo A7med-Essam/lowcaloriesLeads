@@ -4,6 +4,9 @@
             icon="pi pi-plus" routerLink="../create"></button>
         <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
+        <p-button *ngIf="appliedFilters" class="mb-3 mx-1" icon="pi pi-file" label="Export Filtered"
+            (click)="exportFilteredGiftCodes(filterForm)">
+        </p-button>
         <p-button (click)="filterColumns = true" class="mb-3 mx-2" icon="pi pi-sliders-v" label="Select Columns">
         </p-button>
     </div>

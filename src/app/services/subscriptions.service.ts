@@ -18,7 +18,7 @@ export class SubscriptionsService {
   }
 
   getSubscriptions(page: number): Observable<ISubscriptionsResponse> {
-    return this._ApiConfigService.postReq3(`getSubscriptions?page=${page}`, '');
+    return this._ApiConfigService.postReq3(`getSubscriptions?page=${page}`, {paginate:100});
   }
 
   
@@ -32,6 +32,7 @@ export class SubscriptionsService {
 
   filterSubscriptionsWithoutPagination(page: number,filter:any): Observable<any>{
     filter.withoutPagination = true;
+    filter.paginate = 100;
     return this._ApiConfigService.postReq3(`getSubscriptions`, filter);
   }
 

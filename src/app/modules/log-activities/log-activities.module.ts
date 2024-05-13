@@ -12,6 +12,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ShowLogActivitiesComponent],
@@ -27,6 +28,7 @@ import { TabViewModule } from 'primeng/tabview';
     CheckboxModule,
     MultiSelectModule,
     TabViewModule,
+    ReactiveFormsModule
   ],
 })
 export class LogActivitiesModule {}

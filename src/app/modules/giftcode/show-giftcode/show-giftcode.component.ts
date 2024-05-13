@@ -209,13 +209,15 @@ export class ShowGiftcodeComponent implements OnInit, OnDestroy {
   insertRow(form: FormGroup) {
     this.appliedFilters = form.value;
     this.filterForm.patchValue({
-      from: new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+      from:
+        form.value.date?.[0] == null
+          ? null
+          : new Date(form.value.date[0]).toLocaleDateString('en-CA'),
       to:
-        form.value.date[1] == null
+        form.value.date?.[1] == null
           ? null
           : new Date(form.value.date[1]).toLocaleDateString('en-CA'),
     });
-    console.log(this.appliedFilters);
     this._GiftcodeService.giftcode_filter.next(this.appliedFilters);
     this._GiftcodeService.filterGiftCodes(1, form.value).subscribe((res) => {
       this.giftCodes = res.data.data;
@@ -231,6 +233,26 @@ export class ShowGiftcodeComponent implements OnInit, OnDestroy {
         this.giftCodes = res.data.data;
         this.PaginationInfo = res.data;
         this.filterModal = false;
+      });
+  }
+  exportFilteredGiftCodes(form: FormGroup) {
+    this.filterForm.patchValue({
+      from:
+        form.value.date?.[0] == null
+          ? null
+          : new Date(form.value.date[0]).toLocaleDateString('en-CA'),
+      to:
+        form.value.date?.[1] == null
+          ? null
+          : new Date(form.value.date[1]).toLocaleDateString('en-CA'),
+    });
+    this._GiftcodeService
+      .exportFilteredGiftCodes(this.filterForm.value)
+      .subscribe((res) => {
+        const link = document.createElement('a');
+        link.target = '_blank';
+        link.href = res.data;
+        link.click();
       });
   }
 
