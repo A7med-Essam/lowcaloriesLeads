@@ -111,18 +111,18 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
       program: new FormControl(null, [Validators.required]),
       program_id: new FormControl(null, [Validators.required]),
       plan_id: new FormControl(null),
-      // meal_types: new FormArray([], [Validators.required]),
-      // snack_types: new FormArray([]),
+      meal_types: new FormArray([], [Validators.required]),
+      snack_types: new FormArray([]),
 
-      meal_types: new FormControl(null),
-      snack_types: new FormControl(null),
+      // meal_types: new FormControl(null),
+      // snack_types: new FormControl(null),
       subscription_days: new FormControl(null, [Validators.required]),
       delivery_days: new FormArray([], [Validators.required]),
       start_date: new FormControl(null, [Validators.required]),
       code_id: new FormControl(null),
       bag: new FormControl('no', [Validators.required]),
       only_snack: new FormControl('no'),
-      no_meals: new FormControl(null, [Validators.required]),
+      no_meals: new FormControl(0),
       no_snacks: new FormControl(0),
     });
     this.valueChanges();
@@ -143,8 +143,10 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
       this.creatingStatus = true;
       form.patchValue({
         start_date: new Date(form.value.start_date).toLocaleDateString('en-CA'),
-        meal_types:  this.getTypes(form.value.no_meals,'meal'),
-        snack_types: this.getTypes(form.value.no_snacks,'snack'),
+        // meal_types:  this.getTypes(form.value.no_meals,'meal'),
+        // snack_types: this.getTypes(form.value.no_snacks,'snack'),
+        no_meals: form.value.meal_types.length,
+        no_snacks: form.value.snack_types.length,
       });
 
       const filteredData = Object.keys(form.value)
@@ -265,6 +267,14 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
               // this.inquiryForm.get(type)?.setErrors({ required: true });
             }
           }
+          if (
+            this.inquiryForm.value.program &&
+            this.inquiryForm.value.program.shortcut_name == 'SLW'
+          ) {
+            if (formArray.length < 3) {
+              this.inquiryForm.get(type)?.setErrors({ required: true });
+            }
+          }
         }
       }
     }
@@ -293,6 +303,27 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
       ?.valueChanges.subscribe((value) => {
         if (value) {
           this.handleProgramIdChange(value);
+          if (
+            this.inquiryForm.value.program &&
+            this.inquiryForm.value.program.shortcut_name == 'SLW'
+          ) {
+            this.inquiryForm
+              .get('snack_types')
+              ?.setValidators(Validators.required);
+            this.inquiryForm.get('snack_types')?.setErrors({ required: true });
+
+            let meal_types: FormArray = this.inquiryForm.get(
+              'meal_types'
+            ) as FormArray;
+            ['Meal 1', 'Meal 2', 'Meal 3'].forEach((m) => {
+              meal_types.push(new FormControl(m));
+            });
+            let snack_types: FormArray = this.inquiryForm.get(
+              'snack_types'
+            ) as FormArray;
+            snack_types.push(new FormControl('Snack 1'));
+
+          }
         }
       });
 
@@ -309,19 +340,19 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
             this.inquiryForm.removeControl('meal_types');
             this.inquiryForm.get('meal_types')?.setErrors(null);
             this.inquiryForm.removeControl('snack_types');
-            // this.inquiryForm.addControl('snack_types', new FormArray([]));
-            this.inquiryForm.addControl('snack_types', new FormControl(null));
+            this.inquiryForm.addControl('snack_types', new FormArray([]));
+            // this.inquiryForm.addControl('snack_types', new FormControl(null));
             this.inquiryForm.get('snack_types')?.setErrors({ required: true });
           } else {
             this.inquiryForm.addControl(
-              // 'meal_types',
-              // new FormArray([], [Validators.required])
               'meal_types',
-              new FormControl(null)
+              new FormArray([], [Validators.required])
+              // 'meal_types',
+              // new FormControl(null)
             );
             this.inquiryForm.removeControl('snack_types');
-            // this.inquiryForm.addControl('snack_types', new FormArray([]));
-            this.inquiryForm.addControl('snack_types', new FormControl(null));
+            this.inquiryForm.addControl('snack_types', new FormArray([]));
+            // this.inquiryForm.addControl('snack_types', new FormControl(null));
             this.inquiryForm.get('snack_types')?.setErrors(null);
           }
         }
@@ -393,17 +424,17 @@ export class ShowEnquiryComponent implements OnInit, OnDestroy {
     this.mealTypes = [];
     this.snackTypes = [];
     this.inquiryForm.removeControl('meal_types');
-    // this.inquiryForm.addControl(
-    //   'meal_types',
-    //   new FormArray([], [Validators.required])
-    // );
     this.inquiryForm.addControl(
       'meal_types',
-      new FormControl(null)
+      new FormArray([], [Validators.required])
     );
+    // this.inquiryForm.addControl(
+    //   'meal_types',
+    //   new FormControl(null)
+    // );
     this.inquiryForm.removeControl('snack_types');
-    // this.inquiryForm.addControl('snack_types', new FormArray([]));
-    this.inquiryForm.addControl('snack_types', new FormControl(null));
+    this.inquiryForm.addControl('snack_types', new FormArray([]));
+    // this.inquiryForm.addControl('snack_types', new FormControl(null));
     this.checkboxElements.forEach((checkbox: Checkbox) => {
       if (checkbox.name == 'group1') {
         checkbox.writeValue(false);

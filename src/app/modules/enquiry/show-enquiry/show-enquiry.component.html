@@ -33,8 +33,7 @@
                 <small class="text-danger ms-1" *ngIf="
             inquiryForm.get('subscription_days')?.hasError('required')">This field is required.</small>
             </div>
-            <hr>
-            <div class="col-md-12 col-lg-6 my-3" *ngIf="mealTypes.length">
+            <!-- <div class="col-md-12 col-lg-6 my-3" *ngIf="mealTypes.length">
                 <label for="">Type Meals <span class="text-danger">*</span></label>
                 <p-dropdown [options]="mealTypes" formControlName='no_meals' appendTo="body" optionLabel="label" optionValue="value"
                     styleClass="w-100" placeholder="Select Meal Types">
@@ -49,33 +48,37 @@
                 </p-dropdown>
                 <small class="text-danger ms-1" *ngIf="
                 inquiryForm.get('no_snacks')?.hasError('required')">This field is required.</small>
-            </div>
-            <!-- <div class="col-12 my-3" *ngIf="mealTypes.length && inquiryForm.get('only_snack')?.value == 'no'">
-                <label for="">Type Meals <span class="text-danger">*</span></label>
-                <div class="d-flex flex-wrap">
-                    <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
-                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
-                            (onChange)="onCheckboxChange($event,'meal_types',meal)">
-                        </p-checkbox>
-                        <label class="mx-1" [for]="meal">{{meal}}</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="
-                inquiryForm.get('meal_types')?.hasError('required')">This field is required.</small>
-            </div>
-            <div class="col-md-8 col-12 my-3" *ngIf="snackTypes.length">
-                <label for="">Type Snack</label>
-                <div class="d-flex flex-wrap">
-                    <div class="field-checkbox m-3" *ngFor="let meal of snackTypes">
-                        <p-checkbox name="group1" [value]="meal" [inputId]="meal" #checkbox
-                            (onChange)="onCheckboxChange($event,'snack_types',meal)">
-                        </p-checkbox>
-                        <label class="mx-1" [for]="meal">{{meal}}</label>
-                    </div>
-                </div>
-                <small class="text-danger ms-1" *ngIf="
-                inquiryForm.get('snack_types')?.hasError('required')">This field is required.</small>
             </div> -->
+
+            <div class="" *ngIf="inquiryForm.get('program_id')?.value != 12">
+                <hr>
+                <div class="col-12 my-3" *ngIf="mealTypes.length && inquiryForm.get('only_snack')?.value == 'no'">
+                    <label for="">Type Meals <span class="text-danger">*</span></label>
+                    <div class="d-flex flex-wrap">
+                        <div class="field-checkbox m-3" *ngFor="let meal of mealTypes">
+                            <p-checkbox name="group1" [value]="meal.label" [inputId]="meal.label" #checkbox
+                                (onChange)="onCheckboxChange($event,'meal_types',meal)">
+                            </p-checkbox>
+                            <label class="mx-1" [for]="meal">{{meal.label}}</label>
+                        </div>
+                    </div>
+                    <small class="text-danger ms-1" *ngIf="
+                    inquiryForm.get('meal_types')?.hasError('required')">This field is required.</small>
+                </div>
+                <div class="col-md-8 col-12 my-3" *ngIf="snackTypes.length">
+                    <label for="">Type Snack</label>
+                    <div class="d-flex flex-wrap">
+                        <div class="field-checkbox m-3" *ngFor="let meal of snackTypes">
+                            <p-checkbox name="group1" [value]="meal.label" [inputId]="meal.label" #checkbox
+                                (onChange)="onCheckboxChange($event,'snack_types',meal)">
+                            </p-checkbox>
+                            <label class="mx-1" [for]="meal">{{meal.label}}</label>
+                        </div>
+                    </div>
+                    <small class="text-danger ms-1" *ngIf="
+                    inquiryForm.get('snack_types')?.hasError('required')">This field is required.</small>
+                </div>
+            </div>
             <!-- <div class="col-md-4 col-12 my-3" *ngIf="snackTypes.length">
                 <label for="">ONLY SNACK?</label>
                 <div class="d-flex flex-wrap">
