@@ -223,7 +223,7 @@ const routes: Routes = [
       ),
     canActivate: [PermissionGuard,LogGuard],
     data: {
-      permission: ['read_logs'],
+      permission: ['show_logs'],
     },
   },
   {
@@ -265,6 +265,15 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       permission: ['show_enquiry'],
+    },
+  },
+  {
+    path: 'items',
+    loadChildren: () =>
+      import('./modules/items/items.module').then((m) => m.ItemsModule),
+    canActivate: [PermissionGuard],
+    data: {
+      permission: ['show_items'],
     },
   },
   {

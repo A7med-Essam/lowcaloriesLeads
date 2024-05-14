@@ -1,0 +1,274 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <p-button class="mb-3 mx-1" icon="pi pi-thumbs-down" label="Dislikes" (click)="dislikeModal = true;"></p-button>
+        <p-button class="mb-3 mx-1" icon="pi pi-star" label="Category" (click)="categoryModal = true;"></p-button>
+    </div>
+    <div>
+        <p-button [disabled]="!optionPermission" class="mb-3 mx-1 p-button-success" icon="pi pi-plus"
+            label="Create Dislike" (click)="createDislikeModal = true;"></p-button>
+        <p-button [disabled]="!optionPermission" class="mb-3 mx-1 p-button-success" icon="pi pi-plus"
+            label="Create Category" (click)="createCategoryModal = true;"></p-button>
+        <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;"></p-button>
+    </div>
+</div>
+<div class="card">
+    <p-table [value]="items" [paginator]="true" [rows]="PaginationInfo?.per_page" [totalRecords]="PaginationInfo?.total"
+        [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">{{'item' | titlecase}}</th>
+                <th class="text-center">{{'category' | titlecase}}</th>
+                <th class="text-center">{{'disLikes' | titlecase}}</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="text-center">{{row.item}}</td>
+                <td class="text-center">{{row.category}}</td>
+                <td class="text-center">{{row.disLikes}}</td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(row)"
+                        class="m-1 p-button-sm"></button>
+                    <button pButton type="button" icon="pi pi-pencil" (click)="showUpdate(row)"
+                        [disabled]="!updatePermission" class="m-1 p-button-sm p-button-warning"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Filter Modal" [(visible)]="filterModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="container">
+        <form [formGroup]="filterForm" #myForm="ngForm">
+            <div class="row mx-0">
+                <div class="col-lg-4 col-12 my-2">
+                    <label for="">Items</label>
+                    <input type="text" pInputText ngClass="w-100" formControlName='item'
+                        placeholder="Enter Item Name" />
+                </div>
+                <div class="col-lg-4 col-12 my-2">
+                    <label for="">Category</label>
+                    <p-dropdown [options]="cateogries" optionLabel="name" optionValue="name" formControlName='category'
+                        appendTo="body" styleClass="w-100" placeholder="Select Option" [filter]="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-lg-4 col-12 my-2">
+                    <label for="">Dislikes</label>
+                    <p-multiSelect [options]="dislikes" appendTo="body" defaultLabel="Select Option" optionLabel="name"
+                        optionValue="name" styleClass="w-100" display="chip" formControlName='disLikes'
+                        [filter]="true"></p-multiSelect>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="upload-btn-wrapper d-flex justify-content-between mt-3">
+            <div>
+                <button class="btn btn-secondary" (click)="resetFields()">
+                    Reset Fields
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="filter(filterForm)">
+                    Apply Filter
+                </button>
+                <button class="btn btn-secondary" (click)="resetFilter()">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Update Form" [(visible)]="updateModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <form [formGroup]="updateForm" (ngSubmit)='update(updateForm)'>
+        <div class="row mx-0">
+            <div class="col-lg-6 col-12 my-2">
+                <label for="">Category</label>
+                <p-dropdown [options]="cateogries" optionLabel="name" optionValue="name" formControlName='category'
+                    appendTo="body" styleClass="w-100" placeholder="Select Option" [filter]="true">
+                </p-dropdown>
+            </div>
+            <div class="col-lg-6 col-12 my-2">
+                <label for="">Dislikes</label>
+                <p-multiSelect [options]="dislikes" appendTo="body" defaultLabel="Select Option" optionLabel="name"
+                    optionValue="name" styleClass="w-100" display="chip" formControlName='disLikes'
+                    [filter]="true"></p-multiSelect>
+            </div>
+            <div class="col-12 my-2">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload
+                    Image</label>
+                <input (change)="getUploadedFile($event)"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="file_input" type="file" [multiple]="true" accept="image/*">
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100" [disabled]="updateForm.invalid">
+                    Update
+                </button>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="true"
+    [resizable]="true">
+    <div class="card">
+        <div class="card-header">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 200px;">Title</h6>
+                <h6 class="m-0">Description</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive overflow-auto">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let item of currentRow | keyvalue">
+                            <ng-container [ngSwitch]="item.key">
+                                <ng-container *ngSwitchCase="'data_options'">
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'emirate'">
+                                    <td [width]="200">
+                                        {{ item.key }}
+                                    </td>
+                                    <td>{{ currentRow.emirate?.en_name }}</td>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'files'">
+                                    <td [width]="200">
+                                        Files
+                                    </td>
+                                    <td class="d-flex justify-content-between align-items-center"
+                                        *ngIf="currentRow.files?.length">
+                                        <span>
+                                            <small *ngFor="let f of currentRow.files" style="display: block;"
+                                                class="my-2">
+                                                <span class="mx-2" *ngIf="f?.agent?.name">{{f?.agent?.name}}
+                                                    Upload =></span>
+                                                <span *ngIf="f.type.includes('image')">
+                                                    <p-image [src]="f?.file" alt="Uploaded Image" width="70"
+                                                        [preview]="true">
+                                                    </p-image>
+                                                    <button pButton type="button" icon="pi pi-trash"
+                                                        [disabled]="!deletePermission" (click)="confirm(f?.id)"
+                                                        class="m-1 p-button-danger p-button-sm"></button>
+                                                </span>
+                                            </small>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'created_at'">
+                                    <td [width]="200">
+                                        {{ item.key }}
+                                    </td>
+                                    <td>{{ currentRow.created_at | date }}</td>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'updated_at'">
+                                    <td [width]="200">
+                                        {{ item.key }}
+                                    </td>
+                                    <td>{{ currentRow.updated_at | date }}</td>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    <td [width]="200">
+                                        {{ item.key }}
+                                    </td>
+                                    <td>{{ item.value }}</td>
+                                </ng-container>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+
+<p-dialog header="Dislikes" [(visible)]="dislikeModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <p-table [value]="dislikes">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">{{'name' | titlecase}}</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="text-center">{{row.name}}</td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-trash" [disabled]="!deletePermission"
+                        (click)="confirmDislike(row.id)" class="m-1 p-button-danger p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<p-dialog header="Categories" [(visible)]="categoryModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <p-table [value]="cateogries">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center">{{'name' | titlecase}}</th>
+                <th class="text-center">{{'type' | titlecase}}</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="text-center">{{row.name}}</td>
+                <td class="text-center">{{row.type}}</td>
+                <td class="text-center">
+                    <button pButton type="button" icon="pi pi-trash" [disabled]="!deletePermission"
+                        (click)="confirmCategory(row.id)" class="m-1 p-button-danger p-button-sm"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+
+<p-dialog header="Create Form" [(visible)]="createCategoryModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <form [formGroup]="createCategoryForm" (ngSubmit)='createCategory(createCategoryForm)'>
+        <div class="row mx-0">
+            <div class="col-lg-6 col-12 my-2">
+                <label for="">Category</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='name' placeholder="Enter Name" />
+            </div>
+            <div class="col-lg-6 col-12 my-2">
+                <label for="">Type</label>
+                <p-dropdown [options]="['meal', 'snack']" formControlName='type' appendTo="body" styleClass="w-100"
+                    placeholder="Select Option" [filter]="true">
+                </p-dropdown>
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100" [disabled]="createCategoryForm.invalid">
+                    Create
+                </button>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+<p-dialog header="Create Form" [(visible)]="createDislikeModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <form [formGroup]="createDislikeForm" (ngSubmit)='createDislike(createDislikeForm)'>
+        <div class="row mx-0">
+            <div class="col-12 my-2">
+                <label for="">Dislike Item</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='name' placeholder="Enter Name" />
+            </div>
+            <div class="col-12 my-3">
+                <button class="btn btn-primary w-100" [disabled]="createDislikeForm.invalid">
+                    Create
+                </button>
+            </div>
+        </div>
+    </form>
+</p-dialog>

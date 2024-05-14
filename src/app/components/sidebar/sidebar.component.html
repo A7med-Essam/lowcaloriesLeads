@@ -329,11 +329,11 @@
 
     <!-- ================================================OTHER================================================== -->
     <div class="menu-header mt-3 mb-2"
-      *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission">
+      *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission || mealItemsPermission || logActivityPermission">
       Other Components
     </div>
     <ul class="menu-items"
-      *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission">
+      *ngIf="showUploadPermission || showRedirectPermission||showNotesPermission || showInquiryNotePermission || mealItemsPermission || logActivityPermission">
       <li *ngIf="showNotesPermission">
         <a routerLink="/notes/show" routerLinkActive="active">
           <i class="fas fa-sticky-note"></i>
@@ -358,6 +358,18 @@
           <span>Urls</span>
         </a>
       </li>
+      <li *ngIf="mealItemsPermission">
+        <a routerLink="/items/show" routerLinkActive="active">
+          <i class="fas fa-dice-d20"></i>
+          <span>Low Calories Items</span>
+        </a>
+      </li>
+      <li *ngIf="logActivityPermission">
+        <a routerLink="/logs/show" routerLinkActive="active">
+          <i class="fas fa-splotch"></i>
+          <span>Log Activities</span>
+        </a>
+      </li>
       <hr>
     </ul>
     <!--================================================FRANCHISE================================================== -->
@@ -375,12 +387,6 @@
     </ul> -->
     <!-- ================================================LOGOUT================================================== -->
     <ul class="menu-items">
-      <li>
-        <a routerLink="/logs/show" routerLinkActive="active">
-          <i class="fas fa-star"></i>
-          <span>Log Activities</span>
-        </a>
-      </li>
       <li (click)="logOut()">
         <a style="cursor: pointer;">
           <i class="fas fa-sign-out-alt"></i>

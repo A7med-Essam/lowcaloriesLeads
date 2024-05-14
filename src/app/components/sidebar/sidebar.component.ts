@@ -50,6 +50,8 @@ export class SidebarComponent implements OnInit {
   showInquiryNotePermission: boolean = false;
   showFranchisePermission: boolean = false;
   cronBulkWhatsappMessagePermission: boolean = false;
+  mealItemsPermission: boolean = false;
+  logActivityPermission: boolean = false;
   constructor(
     private _AuthService: AuthService,
     private _PusherService: PusherService,
@@ -152,6 +154,10 @@ export class SidebarComponent implements OnInit {
 
     this.cronBulkWhatsappMessagePermission =
       this._GuardService.getPermissionStatus('cron_bulkWhatsapp');
+    this.logActivityPermission =
+      this._GuardService.getPermissionStatus('show_logs');
+    this.mealItemsPermission =
+      this._GuardService.getPermissionStatus('show_items');
   }
 
   logOut() {
