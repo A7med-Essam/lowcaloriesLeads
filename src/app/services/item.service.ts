@@ -8,10 +8,11 @@ import { ApiConfigService } from '../core/api-config.service';
 export class ItemService {
   constructor(private _ApiConfigService: ApiConfigService) {}
 
-  getItemLowcalories(page:number): Observable<any> {
-    return this._ApiConfigService.postReq3(`getItemLowcalories?page=${page}`, '');
+  getItemLowcalories(page:number,paginate:number): Observable<any> {
+    return this._ApiConfigService.postReq3(`getItemLowcalories?page=${page}`, {paginate});
   }
-  filterItems(page: number,filter:any):Observable<any>{
+  filterItems(page: number,filter:any,paginate:number):Observable<any>{
+    filter.paginate = paginate
     return this._ApiConfigService.postReq3(`getItemLowcalories?page=${page}`, filter);
   }
   updateMealItem(request :IUpdateMealItemRequest): Observable<any> {

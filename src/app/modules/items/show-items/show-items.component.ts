@@ -46,7 +46,7 @@ export class ShowItemsComponent implements OnInit {
     if (this.appliedFilters) {
       this.getOldFilters(page);
     } else {
-      this._ItemService.getItemLowcalories(page).subscribe({
+      this._ItemService.getItemLowcalories(page,this.currentPaginate).subscribe({
         next: (res) => {
           this.items = res.data.data;
           this.PaginationInfo = res.data;
@@ -56,7 +56,9 @@ export class ShowItemsComponent implements OnInit {
   }
 
   currentPage: number = 1;
+  currentPaginate: number = 50;
   paginate(e: any) {
+    this.currentPaginate = e.rows
     this.currentPage = e.first / e.rows + 1;
     this.getItems(e.first / e.rows + 1);
   }
@@ -95,7 +97,7 @@ export class ShowItemsComponent implements OnInit {
       }
     }
     this.appliedFilters = form.value;
-    this._ItemService.filterItems(1, form.value).subscribe((res) => {
+    this._ItemService.filterItems(1, form.value,this.currentPaginate).subscribe((res) => {
       this.items = res.data.data;
       this.PaginationInfo = res.data;
       this.filterModal = false;
@@ -104,7 +106,7 @@ export class ShowItemsComponent implements OnInit {
 
   getOldFilters(page: number) {
     this._ItemService
-      .filterItems(page, this.appliedFilters)
+      .filterItems(page, this.appliedFilters,this.currentPaginate)
       .subscribe((res) => {
         this.items = res.data.data;
         this.PaginationInfo = res.data;
@@ -167,6 +169,7 @@ export class ShowItemsComponent implements OnInit {
       item_id: row.id,
       category: row?.category,
       disLikes: row?.disLikes,
+      item: row?.item,
     });
   }
   setUpdateForm() {
@@ -175,6 +178,7 @@ export class ShowItemsComponent implements OnInit {
       category: new FormControl(null),
       disLikes: new FormControl(null),
       files: new FormControl(null),
+      item: new FormControl({value: null, disabled: true}),
     });
   }
   update(form: FormGroup) {

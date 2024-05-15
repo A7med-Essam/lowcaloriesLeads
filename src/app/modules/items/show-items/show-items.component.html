@@ -13,7 +13,7 @@
 </div>
 <div class="card">
     <p-table [value]="items" [paginator]="true" [rows]="PaginationInfo?.per_page" [totalRecords]="PaginationInfo?.total"
-        [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll"
+        [lazy]="true" (onPage)="paginate($event)" [showCurrentPageReport]="true" responsiveLayout="scroll" [rowsPerPageOptions]="[10, 25, 50, 100]"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
@@ -87,6 +87,11 @@
     [resizable]="false">
     <form [formGroup]="updateForm" (ngSubmit)='update(updateForm)'>
         <div class="row mx-0">
+            <div class="col-12 my-2">
+                <label for="">Item</label>
+                <input type="text" pInputText ngClass="w-100" formControlName='item'
+                    placeholder="Enter Item Name" />
+            </div>
             <div class="col-lg-6 col-12 my-2">
                 <label for="">Category</label>
                 <p-dropdown [options]="cateogries" optionLabel="name" optionValue="name" formControlName='category'
