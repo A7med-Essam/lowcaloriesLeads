@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GuardService } from 'src/app/services/guard.service';
 import { LogsService } from 'src/app/services/logs.service';
+import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
   selector: 'app-show-log-activities',
@@ -15,6 +16,7 @@ export class ShowLogActivitiesComponent implements OnInit {
   logs: any[] = [];
   PaginationInfo: any;
   filterModal: boolean = false;
+  detailsModal: boolean = false;
   appliedFilters: any = null;
   filterForm!: FormGroup;
   columns: any[] = [
@@ -27,13 +29,15 @@ export class ShowLogActivitiesComponent implements OnInit {
 
   constructor(
     private _logServices: LogsService,
-    private _GuardService: GuardService
+    private _GuardService: GuardService,
+    private _SurveyService: SurveyService
   ) {}
 
   ngOnInit(): void {
     this.createFilterForm();
     this.getPermission();
     this.getLogActivities();
+    this.getAgents();
   }
   getPermission() {
     this.createPermission = this._GuardService.getPermissionStatus('read_logs');
@@ -50,12 +54,65 @@ export class ShowLogActivitiesComponent implements OnInit {
       to: new FormControl(null),
     });
   }
-  showRow(code: any) {
-    if (code) {
-    }
+  currentRow: any;
+  showRow(row: any) {
+    this.detailsModal = true;
+    this.currentRow = row;
   }
 
-  filters: any;
+  filters = {
+    agents: [],
+    model: [
+      'MealCategories',
+      'Inquiry',
+      'sticky notes',
+      'agents',
+      'Schedule Jobs',
+      'Whatsapp Senders',
+      'query list',
+      'head mails',
+      'gift codes',
+      'complaints',
+      'target',
+      'dislikes',
+      'refund',
+      'OFFERS',
+      'paymentLink',
+      'calls',
+      'lost reasons',
+      'leads',
+      'data analytics',
+      'roles',
+      'branches',
+      'auth',
+      'customer modal details',
+      'Track Schedule Jobs',
+      'sql query',
+      'permissions',
+      'dislikes meals',
+      'users',
+      'Cron Jobs',
+    ],
+    operations: [
+      'view',
+      'show branches',
+      'delete',
+      'create',
+      'calculation',
+      'login',
+      'run bulk whatsapp',
+      'view numbers',
+      'attack',
+      'assign team',
+      'assign role',
+      'update',
+      'export',
+      'update notification',
+      'stopped bulk whatsapp',
+      'check remain bulk sent',
+      'logout',
+    ],
+  };
 
   currentPage: number = 1;
   paginate(e: any) {
@@ -70,15 +127,21 @@ export class ShowLogActivitiesComponent implements OnInit {
         next: (res: any) => {
           this.logs = res?.data?.data;
           this.PaginationInfo = res.data;
-
-          this.filters = {
-            agents: [...new Set(this.logs.map((e) => e.agent_name))],
-            model: [...new Set(this.logs.map((e) => e.model))],
-            operations: [...new Set(this.logs.map((e) => e.operation_type))],
-          };
+          // this.filters = {
+          //   agents: [...new Set(this.logs.map((e) => e.agent_name))],
+          //   model: [...new Set(this.logs.map((e) => e.model))],
+          //   operations: [...new Set(this.logs.map((e) => e.operation_type))],
+          // };
         },
       });
     }
+  }
+  getAgents() {
+    this._SurveyService.getAllAgents().subscribe({
+      next: (res) => {
+        this.filters.agents = res.data;
+      },
+    });
   }
   getOldFilters(page: number) {
     this._logServices

@@ -211,7 +211,7 @@ export class NavbarComponent implements OnInit {
               Mobile_no: this.currentCustomerMobile,
               // sub_from: 'web',
               paginate: 10,
-            })
+            },10)
             .subscribe((res) => {
               this.filter = this.allSub = res.data.data;
             });
@@ -495,7 +495,7 @@ export class NavbarComponent implements OnInit {
           Mobile_no: client,
           sub_from: 'payment link',
           paginate: 10,
-        })
+        },10)
         .subscribe((res) => {
           this.loadingTable = false;
           if (this.currentModel == 'paymentLink') {
@@ -515,7 +515,7 @@ export class NavbarComponent implements OnInit {
           Mobile_no: client,
           sub_from: 'web',
           paginate: 10,
-        })
+        },10)
         .subscribe((res) => {
           this.loadingTable = false;
           if (this.currentModel == 'webSubscription') {
@@ -535,7 +535,7 @@ export class NavbarComponent implements OnInit {
           Mobile_no: client,
           sub_from: 'mobile',
           paginate: 10,
-        })
+        },10)
         .subscribe((res) => {
           this.loadingTable = false;
           if (this.currentModel == 'mobileSubscription') {
@@ -555,7 +555,7 @@ export class NavbarComponent implements OnInit {
           Mobile_no: client,
           full_plan_name: 'Appointment',
           paginate: 10,
-        })
+        },10)
         .subscribe((res) => {
           this.loadingTable = false;
           if (this.currentModel == 'Clinic') {
@@ -642,7 +642,7 @@ export class NavbarComponent implements OnInit {
         .filterSubscriptions(1, {
           Mobile_no: client,
           paginate: 10,
-        })
+        },10)
         .subscribe((res) => {
           this.loadingTable = false;
           if (this.currentModel == 'allSub') {

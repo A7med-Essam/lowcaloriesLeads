@@ -22,7 +22,7 @@
 <div class="card">
     <p-table [value]="subscriptions" [paginator]="true" [rows]="PaginationInfo?.per_page"
         [totalRecords]="PaginationInfo?.total" [lazy]="true" (onLazyLoad)="sort($event)" (onPage)="paginate($event)"
-        [showCurrentPageReport]="true" responsiveLayout="scroll"
+        [showCurrentPageReport]="true" responsiveLayout="scroll"  [rowsPerPageOptions]="[10, 25, 50, 100, 500, 1000]"
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="caption">
             <h5 class="mb-4">Table Filters</h5>

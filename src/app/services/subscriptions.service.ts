@@ -17,8 +17,8 @@ export class SubscriptionsService {
     return this._ApiConfigService.postReq3(`exportManagerMobiles`, '');
   }
 
-  getSubscriptions(page: number): Observable<ISubscriptionsResponse> {
-    return this._ApiConfigService.postReq3(`getSubscriptions?page=${page}`, {paginate:100});
+  getSubscriptions(page: number,paginate:number): Observable<ISubscriptionsResponse> {
+    return this._ApiConfigService.postReq3(`getSubscriptions?page=${page}`, {paginate});
   }
 
   
@@ -26,13 +26,14 @@ export class SubscriptionsService {
     return this._ApiConfigService.postReq3(`getSubscriptions`, {withoutPagination:true});
   }
 
-  filterSubscriptions(page: number,filter:any): Observable<ISubscriptionsResponse>{
+  filterSubscriptions(page: number,filter:any,paginate:number): Observable<ISubscriptionsResponse>{
+    filter.paginate = 100;
+    filter.paginate = paginate;
     return this._ApiConfigService.postReq3(`getSubscriptions?page=${page}`, filter);
   }
 
   filterSubscriptionsWithoutPagination(page: number,filter:any): Observable<any>{
     filter.withoutPagination = true;
-    filter.paginate = 100;
     return this._ApiConfigService.postReq3(`getSubscriptions`, filter);
   }
 

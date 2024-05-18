@@ -1,9 +1,7 @@
 <div class="d-flex justify-content-end align-items-center">
     <div class="m-3">
-
         <p-button class="mb-3 mx-1" icon="pi pi-filter" label="Filter" (click)="filterModal = true;">
         </p-button>
-
     </div>
 </div>
 
@@ -13,9 +11,6 @@
         currentPageReportTemplate="Showing {{PaginationInfo?.from}} to {{PaginationInfo?.to}} of {{PaginationInfo?.total}} entries">
         <ng-template pTemplate="header">
             <tr>
-                <!-- <th class="text-center">
-                    <p-tableHeaderCheckbox #headerCheckbox (click)="selectAllRows(headerCheckbox)" [pSelectableRow]="giftCodes"></p-tableHeaderCheckbox>
-                </th> -->
                 <th class="text-center" *ngFor="let column of columns; let i = index" [pSortableColumn]="column.name">
                     <ng-container *ngIf="column.status">
                         {{ column.name }} <p-sortIcon [field]="column.name"></p-sortIcon>
@@ -24,32 +19,29 @@
                 <th class="text-center">Actions</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-code>
-            <tr [pSelectableRow]="code">
-                <!-- <td class="text-center">
-                    <p-tableCheckbox #tableCheckbox (click)="getSpecificRows(tableCheckbox)" [value]="code"></p-tableCheckbox>
-                </td> -->
+        <ng-template pTemplate="body" let-row>
+            <tr [pSelectableRow]="row">
                 <td class="text-center" *ngFor="let column of columns">
                     <ng-container *ngIf="column.status">
                         <ng-container [ngSwitch]="column.name">
                             <ng-container *ngSwitchCase="'created_at'">
-                                {{ code[column.name] | date }}
+                                {{ row[column.name] | date }}
                             </ng-container>
                             <ng-container *ngSwitchCase="'updated_at'">
-                                {{ code[column.name] | date }}
+                                {{ row[column.name] | date }}
                             </ng-container>
                             <ng-container *ngSwitchCase="'expired_at'">
-                                {{ code[column.name] | date }}
+                                {{ row[column.name] | date }}
                             </ng-container>
                             <ng-container *ngSwitchDefault>
-                                {{ code[column.name] }}
+                                {{ row[column.name] }}
                             </ng-container>
                         </ng-container>
                     </ng-container>
                 </td>
                 <td class="text-center">
-                    <button pButton type="button" icon="pi pi-eye" (click)="showRow(code)"
-                        class="m-1 p-button-sm"></button>
+                    <button *ngIf="row.from_details || row.to_details" pButton type="button" icon="pi pi-eye"
+                        (click)="showRow(row)" class="m-1 p-button-sm"></button>
 
                 </td>
             </tr>
@@ -66,22 +58,22 @@
             <div class="row mx-0">
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Agent Name</label>
-                    <p-dropdown [options]="filters?.agents" formControlName="agent_name" styleClass="w-100" appendTo="body"
-                        [filter]="true" placeholder="Select Option">
+                    <p-dropdown [options]="filters.agents" formControlName="agent_name" styleClass="w-100"
+                        appendTo="body" [filter]="true" placeholder="Select Option">
                     </p-dropdown>
                 </div>
 
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Model</label>
-                    <p-dropdown [options]="filters?.model" formControlName="model" styleClass="w-100" appendTo="body" placeholder="Select Option"
-                        [filter]="true">
+                    <p-dropdown [options]="filters.model" formControlName="model" styleClass="w-100" appendTo="body"
+                        placeholder="Select Option" [filter]="true">
                     </p-dropdown>
                 </div>
 
                 <div class="col-lg-6 col-12 my-2">
                     <label for="">Operation</label>
-                    <p-dropdown [options]="filters?.operations" formControlName="operation" styleClass="w-100" appendTo="body"
-                        [filter]="true" placeholder="Select Option">
+                    <p-dropdown [options]="filters.operations" formControlName="operation" styleClass="w-100"
+                        appendTo="body" [filter]="true" placeholder="Select Option">
                     </p-dropdown>
                 </div>
                 <div class="col-lg-6 col-12 my-2">
@@ -110,4 +102,89 @@
             </div>
         </div>
     </ng-template>
+</p-dialog>
+
+<p-dialog header="Details Modal" [(visible)]="detailsModal" [modal]="true" [style]="{width: '80vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="card">
+        <div class="card-header">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 200px;">Title</h6>
+                <h6 class="m-0">Details From</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive overflow-auto">
+                    <table class="table">
+                        <tbody>
+                            <tr *ngFor="let item of currentRow?.from_details?.[0] | keyvalue">
+                                <td width="200">{{item.key}}</td>
+                                <td>
+                                    <ng-container [ngSwitch]="item.key">
+                                        <ng-container *ngSwitchCase="'created_at'">
+                                            {{ currentRow?.from_details?.[0]?.created_at | date:'dd-MM-yyyy HH:mm:ss' }}
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'updated_at'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'expired_at'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'programs'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'sender_obj'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'permissions'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'file'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchDefault>
+                                            {{ item?.value }}
+                                        </ng-container>
+                                    </ng-container>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr *ngIf="currentRow?.to_details">
+        <div class="card-header" *ngIf="currentRow?.to_details">
+            <div class="text-muted d-flex align-items-center">
+                <h6 class="m-0" style="width: 200px;">Title</h6>
+                <h6 class="m-0">Details To</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive overflow-auto">
+                    <table class="table">
+                        <tbody>
+                            <tr *ngFor="let item of currentRow?.to_details?.[0] | keyvalue">
+                                <td width="200">{{item.key}}</td>
+                                <td>
+                                    <ng-container [ngSwitch]="item.key">
+                                        <ng-container *ngSwitchCase="'created_at'">
+                                            {{ currentRow?.to_details?.[0]?.created_at | date }}
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'updated_at'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'expired_at'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'programs'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'sender_obj'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'permissions'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="'file'">
+                                        </ng-container>
+                                        <ng-container *ngSwitchDefault>
+                                            {{ item?.value }}
+                                        </ng-container>
+                                    </ng-container>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </p-dialog>

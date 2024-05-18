@@ -42,13 +42,13 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     private _MessageService: MessageService,
     private _PaymentlinkService: PaymentlinkService,
     private _SurveyService: SurveyService,
-    private _LocalService:LocalService
+    private _LocalService: LocalService
   ) {}
 
   ngOnInit(): void {
     const filterTab = this._LocalService.getJsonValue('subscriptions_filter');
     if (filterTab) {
-      this._SubscriptionsService.subscription_filter.next(filterTab)
+      this._SubscriptionsService.subscription_filter.next(filterTab);
     }
     this._SubscriptionsService.subscription_filter
       .pipe(takeUntil(this.unsubscribe$))
@@ -90,7 +90,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     if (this.appliedFilters) {
       this.getOldFilters(page);
     } else {
-      this._SubscriptionsService.getSubscriptions(page).subscribe((res) => {
+      this._SubscriptionsService.getSubscriptions(page,this.currentPaginate).subscribe((res) => {
         this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
       });
@@ -115,7 +115,9 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     }
   }
 
+  currentPaginate: number = 100;
   paginate(e: any) {
+    this.currentPaginate = e.rows
     this.currentPage = e.first / e.rows + 1;
     this.getSubscriptions(e.first / e.rows + 1);
   }
@@ -181,7 +183,10 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         { title: 'Area', dataKey: sub?.location?.area_id },
         { title: 'Total Price', dataKey: sub?.total_price },
         { title: 'Code', dataKey: sub?.codes?.code },
-        { title: 'Discount', dataKey: sub?.codes ? sub?.codes?.percentage + '%' :'No Discount' },
+        {
+          title: 'Discount',
+          dataKey: sub?.codes ? sub?.codes?.percentage + '%' : 'No Discount',
+        },
       ];
 
       columns = columns.filter(
@@ -312,33 +317,33 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     this.appliedFilters = form.value;
     this._SubscriptionsService.subscription_filter.next(this.appliedFilters);
     this._SubscriptionsService
-      .filterSubscriptions(1, form.value)
+      .filterSubscriptions(1, form.value,this.currentPaginate)
       .subscribe((res) => {
         this.filterForm.get('code')?.reset();
         this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
       });
 
-      const deepClone = JSON.parse(JSON.stringify(form.value));
-      this.allFilteredSubscriptions = [];
-      this._SubscriptionsService
+    const deepClone = JSON.parse(JSON.stringify(form.value));
+    this.allFilteredSubscriptions = [];
+    this._SubscriptionsService
       .filterSubscriptionsWithoutPagination(1, deepClone)
       .subscribe((res) => {
         this.allFilteredSubscriptions = res.data;
       });
   }
-  allFilteredSubscriptions :any[] = [];
+  allFilteredSubscriptions: any[] = [];
 
   getOldFilters(page: number) {
     this._SubscriptionsService
-      .filterSubscriptions(page, this.appliedFilters)
+      .filterSubscriptions(page, this.appliedFilters,this.currentPaginate)
       .subscribe((res) => {
         this.subscriptions = this.transformObjects(res.data.data);
         this.PaginationInfo = res.data;
       });
 
-      const deepClone = JSON.parse(JSON.stringify(this.appliedFilters));
-      this._SubscriptionsService
+    const deepClone = JSON.parse(JSON.stringify(this.appliedFilters));
+    this._SubscriptionsService
       .filterSubscriptionsWithoutPagination(1, deepClone)
       .subscribe((res) => {
         this.allFilteredSubscriptions = res.data;
@@ -482,19 +487,18 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
         exportObservable = this._SubscriptionsService.exportByIds(
           this.specificRows
         );
-      } 
+      }
       // else if (this.appliedFilters) {
       //   const ids = this.subscriptions.map((obj: any) => obj.id);
       //   exportObservable = this._SubscriptionsService.exportByIds(ids);
-      // } 
+      // }
       // else {
       //   exportObservable = this._SubscriptionsService.exportAll();
       // }
-
       else {
         const ids = this.allFilteredSubscriptions.map((obj: any) => obj.id);
         exportObservable = this._SubscriptionsService.exportByIds(ids);
-      } 
+      }
       exportObservable.subscribe({
         next: (res) => {
           this.handleExportSuccess(res.data);
@@ -661,7 +665,7 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     this.subscriptions?.sort((a: any, b: any) => {
       const getValue = (obj: any, key: string) => {
         if (hasBrackets) {
-          const [keyWithoutBrackets] :any = key.match(/\[(.*?)\]/) || [];
+          const [keyWithoutBrackets]: any = key.match(/\[(.*?)\]/) || [];
           return obj?.[key.replace(/\s*\[.*?\]/, '')]?.[
             keyWithoutBrackets?.replace(/\[|\]/g, '')
           ];
@@ -743,10 +747,9 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
     }
   }
 
-
   updatePassword(input: HTMLInputElement) {
     const data = {
-      user_id: this.currentEditRow.user_id, 
+      user_id: this.currentEditRow.user_id,
       password: input.value,
     };
     this._SubscriptionsService.resetClientPassword(data).subscribe((res) => {
@@ -765,12 +768,10 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
           detail: 'could not update client password',
         });
       }
-
     });
   }
 
-
-  isExporting:boolean = false;
+  isExporting: boolean = false;
   exportMobile() {
     this.isExporting = true;
     this._SubscriptionsService.exportManagerMobiles().subscribe({
@@ -797,5 +798,4 @@ export class ShowSubscriptionComponent implements OnInit, OnDestroy {
       },
     });
   }
-  
 }
